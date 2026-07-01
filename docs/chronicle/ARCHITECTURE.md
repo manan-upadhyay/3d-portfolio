@@ -2,6 +2,42 @@
 
 How the app is wired, the canonical patterns to copy, and how to verify work.
 
+> [!NOTE]
+> **This document describes the v1.0 architecture as built** — and it stays
+> accurate: the wiring below is not changing in v1.1. For the *changes* v1.1
+> layers on top of it, see the addendum immediately below and the
+> [V1.1 Release Plan](V1.1-RELEASE-PLAN.md).
+
+---
+
+## 0. v1.1 addendum — engineering deltas
+
+v1.1 ("The Restraint Pass") is a content/UX/perf revamp, **not** a re-architecture.
+The stack, routing, stores, and folder map are unchanged. Engineering-facing work
+concentrates in three areas — full detail in the
+[combined action plan §7 (P0.5–P0.7), §9, §14](reports/synthesis/2026-07-01-combined-beta-action-plan.md):
+
+- **Performance / leak audit (P0).** Beta 1 surfaced session-long degradation on a
+  4K display. Re-verify the §3 cleanup contract on *every* effect: `gsap.context()`
+  + `ctx.revert()`, cancel every `requestAnimationFrame`, remove every listener,
+  kill every `ScrollTrigger`. Prime suspects: the pinned horizontal `Experience`,
+  the hero canvas/astrolabe (`useAstrolabe`), and `FaceParticles`. **Cap canvas
+  DPR at 2** (`Math.min(window.devicePixelRatio, 2)`) — 4K panels otherwise
+  multiply per-frame cost. Profile a 3-minute session for heap/listener/detached-
+  node growth as part of Verification.
+- **Analytics instrumentation (P0).** Register PostHog super-properties *before*
+  first capture (currently ~90% null device/browser), add `beta_round` /
+  `tracking_version`, session heartbeats (15/30/60s), and the v1.1 event catalog.
+  Instrument `/making-of` (`pages/MakingOf.jsx`) beyond pageview. See
+  [ANALYTICS.md](ANALYTICS.md) and action plan §14.
+- **Scroll tuning + security headers (P1).** Lower Lenis smoothing in
+  `lib/smoothScroll.js`; use native scroll on mobile / reduced-motion; make the
+  horizontal `Experience` timeline accept horizontal + keyboard input. Add
+  security headers to `vercel.json` (currently rewrites-only).
+
+Nothing here adds a dependency or a WebGL/3D surface — the CLAUDE.md stack lock
+still holds.
+
 ---
 
 ## 1. Folder map

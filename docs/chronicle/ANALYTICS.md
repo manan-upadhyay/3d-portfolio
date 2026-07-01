@@ -4,6 +4,16 @@
 voices, the Voice Hall, the Atelier reel…). This telemetry answers one question:
 **are they actually touched, or ignored?** — so UX changes are evidence-led.
 
+> [!IMPORTANT]
+> **v1.1 instrumentation fixes (P0).** Beta 1 exposed two gaps that must be fixed
+> before Beta 2, or the release is unmeasured: (1) **~90% null device/browser**
+> super-properties — register them *before* the first capture, not after; and
+> (2) **~36% `session_recap` coverage** — add heartbeats (15/30/60s) and
+> visibility-change capture. Also add `beta_round` / `tracking_version`
+> properties, fully instrument `/making-of`, and adopt the v1.1 event catalog.
+> Full catalog + rationale: [combined action plan §7 P0.6 + §14](reports/synthesis/2026-07-01-combined-beta-action-plan.md);
+> release context: [V1.1 Release Plan §4-C](V1.1-RELEASE-PLAN.md).
+
 ## Stack
 
 - **PostHog**. Initialized **once, eagerly** in [`src/main.jsx`](../../src/main.jsx)

@@ -2,22 +2,45 @@
 
 **Source:** 200+ Reddit beta testers, qualitative comment feedback  
 **Context:** First public beta test of the Chronicle portfolio  
-**Purpose:** Convert raw user comments into a truthful product/design improvement document before merging with analytics data  
-**Status:** Feedback-only document. This intentionally does **not** use analytics numbers yet; the next combined document should validate these patterns against behavior data.
+**Purpose:** The canonical user-perception truth document. Every design/copy/UX change in the next sprint must trace back to a pattern documented here or in the analytics report.  
+**Status:** FINAL for Beta 1. Integrated with analytics validation.  
+**Last updated:** 2026-07-01T14:58+05:30
+
+> [!IMPORTANT]
+> **For AI agents:** This document is the perception layer. The [analytics report](../analytics/2026-07-01-full-analytics-intelligence-report.md) is the behavior layer. The [combined action plan](../synthesis/2026-07-01-combined-beta-action-plan.md) is the execution layer. Read all three before starting any reform work. Every issue below includes a **Code Path** section pointing to the exact files and keys to change.
+
+> [!NOTE]
+> **How to read this document.** Individual comments are personal opinions and are quoted only as *illustrations* of a pattern — never as an instruction on their own. An action item is only justified when a **repeated sentiment across many users** lines up with **observed behavior in the analytics**. No single commenter — however senior, expert, or confident — sets the roadmap. When you see a quote below, treat it as one data point sampled from a cluster, not as a directive.
 
 ---
 
 ## 1. Executive truth
 
-The beta feedback is not saying “the site is bad.” It is saying something more useful and more dangerous:
+The beta feedback is not saying "the site is bad." It is saying something more useful and more dangerous:
 
 > **The portfolio is memorable, technically impressive, and visually distinctive — but the current execution over-signals AI, overload, and interaction confusion. For a developer portfolio, that creates a trust problem.**
 
-A meaningful group of users loved the creativity, atmosphere, interaction, sound, colors, and ambition. But the strongest repeated negative pattern is that the site feels “vibe coded,” “AI-generated,” overloaded, and less personally authored than it should. This is especially risky because the site’s goal is to prove craft, taste, originality, and senior frontend judgment.
+A meaningful group of users loved the creativity, atmosphere, interaction, sound, colors, and ambition. But the strongest repeated negative pattern is that the site feels "vibe coded," "AI-generated," overloaded, and less personally authored than it should. This is especially risky because the site's goal is to prove craft, taste, originality, and senior frontend judgment.
 
 The concept has value. The issue is not the cinematic direction itself. The issue is that the site currently looks like it is trying too hard to be cinematic before it proves the basics: clarity, authorship, usability, readable copy, direct hiring value, and original personal identity.
 
 The best path is **not** to delete the idea. The best path is to keep the soul, reduce the noise, and add stronger proof of human craft.
+
+### The competence-and-conversion signal
+
+Not all feedback was negative, and the positive cluster carries its own lesson. Alongside the loud "AI slop" reactions, a distinct group of comments read the site as **professionally competent** and were curious rather than dismissive — for example, "It's nice and functional, wonder which front-end design skills you used?", "it properly reflects your experience level", "competency with AI usage across copy, design, and coding", and "no red flags." One commenter with a conversion-rate-optimization background framed the highest-leverage lesson: **the hero does most of the conversion work, and it is not yet optimized for it** — "better hook, better CTA, better action path."
+
+We do not elevate any of these as authority. We treat them as a *cluster* and cross-check it against behavior — and the behavior agrees:
+
+- **The hero is the leverage point.** The biggest single section-to-section loss in the whole funnel is Origin → About (~16%; see [analytics §3](../analytics/2026-07-01-full-analytics-intelligence-report.md)). Whatever the hero fails to communicate, half the audience never recovers downstream. This is a well-established conversion principle (above-the-fold carries most of the work), and our own numbers reproduce it — so it is a *deduction*, not one person's opinion.
+- **Competence reads for a segment, not for everyone.** The same site that some call "AI slop" reads as "nice and functional" to others. That is polarization (see §2), and it means the fix is not to strip personality but to raise the floor of trust so the skeptical segment also sees competence.
+
+**What the data-plus-sentiment deduction asks of implementation (not any single quote):**
+1. The hero headline/subheadline must answer "why should I care about this developer?" within the first screen.
+2. CTAs must describe value and a clear next action (today's "Begin the Chronicle" communicates nothing).
+3. The path from hero → proof → contact must be short and obvious.
+
+> The related note "don't weigh advice from people who aren't your target audience too heavily" is sound, but we apply it as *our own* weighting rule (see §2 "Signal weighting"), not as deference to the person who said it.
 
 ---
 
@@ -25,30 +48,36 @@ The best path is **not** to delete the idea. The best path is to keep the soul, 
 
 | Feedback type | Pattern | Interpretation |
 |---|---:|---|
-| Strongly positive | “Cool site”, “beautiful portfolio”, “love the creativity”, “gorgeous concept”, “memorable” | The core creative direction has real pull. People notice it. It is not forgettable. |
-| Mixed positive | “Awesome, but AI copy/design”, “impressive, but tighten writing”, “good desktop, needs minimalism” | The site works emotionally, but execution needs restraint and authorship. |
-| Strongly negative | “AI slop”, “zero trust”, “burn it”, “scammy esoteric website” | The current branding can actively damage trust for some developer/recruiter audiences. |
-| Technical/UX feedback | Scroll lag, confusing icons, custom cursor, mobile readability, security headers | Real fixable product issues surfaced through testing. |
+| Strongly positive | "Cool site", "beautiful portfolio", "love the creativity", "gorgeous concept", "memorable" | The core creative direction has real pull. People notice it. It is not forgettable. |
+| Competence / professional validation | "nice and functional, wonder which front-end skills you used?", "properly reflects your experience level", "competency with AI usage", "no red flags" | A real segment reads the site as skilled and legitimate, not slop. The craft signal lands for target-audience-adjacent viewers. |
+| Mixed positive | "Awesome, but AI copy/design", "impressive, but tighten writing", "good desktop, needs minimalism" | The site works emotionally, but execution needs restraint and authorship. |
+| Strongly negative | "AI slop", "zero trust", "burn it", "scammy esoteric website" | The current branding can actively damage trust for some developer/recruiter audiences. |
+| Technical/UX feedback | Scroll lag, confusing icons, custom cursor, mobile readability, security headers, performance degradation over time | Real fixable product issues surfaced through testing. |
 
-**Main conclusion:** The site is polarizing. Polarization can be useful for a creative portfolio, but only if the positive group sees craft and the negative group still sees competence. Right now, some negative users are not just saying “not my taste”; they are saying “I would not trust this developer.” That is the part to fix first.
+**Main conclusion:** The site is polarizing. Polarization can be useful for a creative portfolio, but only if the positive group sees craft and the negative group still sees competence. Right now, some negative users are not just saying "not my taste"; they are saying "I would not trust this developer." That is the part to fix first.
+
+**Signal weighting (our rule, not any one commenter's):** Reddit skews toward a developer audience that is not identical to the primary target audience (hiring decision-makers, CTOs, founders). We weight a signal by (a) how many independent users repeat it and (b) whether it is corroborated by behavior — not by how loud or confident any single voice is. Under that rule, "AI slop" is real but partly a taste split from a non-target segment, whereas hero underperformance, text overload, missing proof, and contact friction are repeated *and* behaviorally confirmed — so those lead the roadmap.
 
 ---
 
 ## 3. Most repeated user patterns
 
-| Rank | Pattern | Frequency signal from comments | Severity | Why it matters |
-|---:|---|---|---|---|
-| 1 | AI / vibe-coded perception | Very high | Critical | Directly harms developer credibility. |
-| 2 | Too much text / information overload | Very high | Critical | Recruiters and clients skim; they will not read long fantasy copy. |
-| 3 | Confusing interactions and unclear affordances | High | High | Users do not know what to click, what is decorative, or where to go. |
-| 4 | Smooth scrolling / scroll choreography irritation | Medium-high | High | Scroll hijacking creates frustration even if visuals are polished. |
-| 5 | Visual congestion / lack of minimalism | Medium-high | High | The page feels heavy and tiring instead of premium. |
-| 6 | Mobile usability concerns | Medium | High | Mobile users notice confusing controls, readability, and spacing. |
-| 7 | Custom cursor distraction | Specific but important | Medium | A small effect is stealing attention from the actual content. |
-| 8 | Weak or confusing logo/map identity | Specific | Medium | The icon is not clearly communicating brand or navigation. |
-| 9 | Footer ending feels abrupt | Specific | Medium | The journey loses momentum at the conversion point. |
-| 10 | Missing real project visuals/images | Specific but severe | High | Portfolio needs proof; pure text increases “AI artifact” perception. |
-| 11 | Security headers | Specific technical issue | Medium | Easy credibility win for a developer portfolio. |
+| Rank | Pattern | Frequency signal | Severity | Analytics validation | Why it matters |
+|---:|---|---|---|---|---|
+| 1 | AI / vibe-coded perception | Very high | Critical | Reddit drove 38% of traffic; developer audience was intensely vocal | Directly harms developer credibility. |
+| 2 | Too much text / information overload | Very high | Critical | Avg scroll only 41.8%; contact reached by only 36.6%; median scroll milestones show fast movement (7-11s each) — users skim, don't read | Recruiters and clients skim; they will not read long fantasy copy. |
+| 3 | Hero underperformance | High (corroborated by behavior) | Critical | 16% drop Origin→About is the single biggest section loss; hero CTAs get 32 about / 18 contact clicks from 358 visitors | The hero carries most of the conversion work and isn't optimized for it — the biggest funnel leak starts here. |
+| 4 | Confusing interactions and unclear affordances | High | High | Map opened 55 times but rail only 14; theme 309 events vs voice 33; astrolabe dragged 97 but Voice Hall only 4 | Users do not know what to click, what is decorative, or where to go. |
+| 5 | Smooth scrolling / scroll choreography irritation | Medium-high | High | Avg scroll only 42%; biggest drop is Origin→About where scroll choreography first engages | Scroll hijacking creates frustration even if visuals are polished. |
+| 6 | Visual congestion / lack of minimalism | Medium-high | High | Section heatmap shows steady 13-17% dropoff per section — fatigue effect | The page feels heavy and tiring instead of premium. |
+| 7 | Performance degradation over time | New (specific) | High | Not instrumented (no performance metrics tracked) | A MacBook Pro M1 user reports performance issues the longer they stay — suggests memory leaks or unbounded animation/listener accumulation. |
+| 8 | Mobile usability concerns | Medium | High | Android converted 1 user at 2.78% — proving mobile CAN convert; but many mobile comments are negative | Mobile users notice confusing controls, readability, and spacing. |
+| 9 | Custom cursor distraction | Specific but important | Medium | Not directly tracked | A small effect is stealing attention from the actual content. |
+| 10 | Weak or confusing logo/map identity | Specific | Medium | Map opened 55 times but users confused about what the icon IS | The icon is not clearly communicating brand or navigation. |
+| 11 | Footer ending feels abrupt | Specific | Medium | Contact section reach only 36.6%; form abandonment 78% | The journey loses momentum at the conversion point. |
+| 12 | Missing real project visuals/images | Specific but severe | High | Only 12 project live-link clicks; Gajaakriti 9, Royal Tiles 3; zero GitHub clicks recorded | Portfolio needs proof; pure text increases "AI artifact" perception. |
+| 13 | "Vibe-coding" visual signals | New (specific) | High | Not directly tracked but correlates with AI perception pattern | Specific UI patterns (uppercase headings/"eyebrows", chips, pills) are detectable AI-generation signals. |
+| 14 | Security headers | Specific technical issue | Medium | N/A | Easy credibility win for a developer portfolio. |
 
 ---
 
@@ -60,10 +89,12 @@ Before fixing the negatives, preserve the strengths. The site has strong signals
 
 Representative feedback:
 
-> “Cool site.”  
-> “Love the whimsical theme!”  
-> “That’s a beautiful portfolio. I really love it, the concept, communication and experience is gorgeous.”  
-> “The overall storytelling approach is memorable and feels more intentional than the usual portfolio template.”
+> "Cool site."  
+> "Love the whimsical theme!"  
+> "That's a beautiful portfolio. I really love it, the concept, communication and experience is gorgeous."  
+> "The overall storytelling approach is memorable and feels more intentional than the usual portfolio template."
+
+**Analytics validation:** Returning visitors exist (Jun 30: 14 new / 6 returning) — people come back. `/making-of` got 9 organic visits — curiosity-driven exploration is real.
 
 **Truth:** The site is not generic in the usual boring portfolio-template way. People remember it. This is a real advantage.
 
@@ -84,9 +115,11 @@ Representative feedback:
 
 Representative feedback:
 
-> “The colors combination match the theme nicely.”  
-> “I like the colors too. Subtly astronomical.”  
-> “I love the overall vibe, and it’s interactive, the fonts used and how elegant it feels.”
+> "The colors combination match the theme nicely."  
+> "I like the colors too. Subtly astronomical."  
+> "I love the overall vibe, and it's interactive, the fonts used and how elegant it feels."
+
+**Analytics validation:** Theme switching is the #1 interactive feature at 309 events — users actively explore the visual system. All four sky modes get real usage (night 99, day 91, dusk 64, dawn 55).
 
 **Truth:** The visual palette is working. The astronomical/fantasy mood is memorable.
 
@@ -107,9 +140,11 @@ Representative feedback:
 
 Representative feedback:
 
-> “The scroll choreography and sound design are genuinely impressive, hard to pull off without feeling gimmicky but it works.”  
-> “The little interactions reward exploration without feeling gimmicky.”  
-> “All the interactive elements are great…”
+> "The scroll choreography and sound design are genuinely impressive, hard to pull off without feeling gimmicky but it works."  
+> "The little interactions reward exploration without feeling gimmicky."  
+> "All the interactive elements are great…"
+
+**Analytics validation:** Sound is near-universally accepted (309 heard, only 16 muted = 5.2% mute rate). Astrolabe dragged by 97 sessions (27%). Theme switching 309 events.
 
 **Truth:** The interactive ambition is appreciated by some users. It can differentiate you from a plain resume page.
 
@@ -120,25 +155,40 @@ Representative feedback:
 - Moving hidden/easter-egg interactions behind a clearer path.
 - Making all interactive elements visibly understandable.
 
+### 4.4 Read as competent and professional
+
+Representative feedback:
+
+> "It's nice and functional, wonder which front-end design skills you used?"
+> "It properly reflects your experience level. It reflects competency with AI usage across copy, design, and coding. It's pleasant and no red flags stick out to me."
+
+**Truth:** A real segment — including target-audience-adjacent viewers — reads the site as competent and legitimate, not as slop. This is the other half of the polarization: the same artifact reads as "skilled and curious-worthy" to some and "AI slop" to others. It confirms the concept is worth keeping and that the job is to raise the trust floor for the skeptical segment, not to strip personality. The hero-optimization point (§ below) stands regardless.
+
 ---
 
-## 5. Critical issue 1 — The site over-signals “AI-generated / vibe-coded”
+## 5. Critical issue 1 — The site over-signals "AI-generated / vibe-coded"
 
 ### What users said
 
 Representative feedback:
 
-> “Besides the fact that it looks very ‘vibe coded’, it’s awesome. Love the small intentional details. But the copy and design all look and sound like ‘AI’.”
+> "Besides the fact that it looks very 'vibe coded', it's awesome. Love the small intentional details. But the copy and design all look and sound like 'AI'."
 
-> “It’s a red flag when looking for a developer to get a fully vibe coded slop site.”
+> "It's a red flag when looking for a developer to get a fully vibe coded slop site."
 
-> “Everything including your post is AI generated.”
+> "Everything including your post is AI generated."
 
-> “The copy reads a bit AI-generated, which clashes with how much craft the visuals have.”
+> "The copy reads a bit AI-generated, which clashes with how much craft the visuals have."
 
-> “I smell Claude…”
+> "I smell Claude…"
 
-> “It screams ‘I told AI to give me a creative idea’.”
+> "It screams 'I told AI to give me a creative idea'."
+
+One comment in this cluster was unusually specific about *why* the site pattern-matches to "AI-generated," naming concrete UI tells rather than a vibe:
+
+> "…avoid common signals like eyebrows (these uppercase headings), chips, pills, etc. I also noticed a performance issue the longer I stayed on your website."
+
+We record the *signals* it points at (uppercase eyebrow headings, chips/pills, and performance decay over a session — see the "visual signals" table below and the performance-degradation pattern in §3), not the tools or products it name-drops. The value is the diagnosis, not the recommendation.
 
 ### Pattern
 
@@ -152,63 +202,85 @@ That distinction matters:
 
 For a senior frontend/full-stack portfolio, this is a direct branding risk.
 
+### Specific "vibe-coding" visual signals identified
+
+Across the "feels AI" cluster, the most useful signals point at **concrete, reproducible UI patterns** rather than taste. These patterns are present throughout the current codebase and are worth de-risking regardless of who named them:
+
+| Signal | Where it appears in codebase | Why it reads as AI |
+|---|---|---|
+| Uppercase "eyebrow" headings | `ChapterHeading` component, every section's `chapter-eyebrow` class | This is a Claude/GPT default UI pattern — "CHAPTER 01 · THE CRAFT" is exactly what an AI generates |
+| Chips/pills for categories | Contact inquiry chips, Arsenal skill badges, project tags | Rounded pill buttons are the #1 "vibe coded" visual tell |
+| Generic epic vocabulary | `chronicle.js` bundle: "realms", "charting", "summon", "raven", "quest", "craft" everywhere | AI models default to this fantasy register when told to be creative |
+| Overly polished phrasing | Every paragraph sounds like a first-draft Claude completion | No human writes this consistently — the uniformity itself is the signal |
+| Consistent visual density | Every section has the same level of polish and detail | Humans are uneven; AI output is uniform |
+
 ### Why this matters
 
-The site’s stated promise is craft, polish, storytelling, frontend engineering, and tiny details. If users think the concept/copy/design came from AI without enough personal taste, the portfolio undermines its own message.
+The site's stated promise is craft, polish, storytelling, frontend engineering, and tiny details. If users think the concept/copy/design came from AI without enough personal taste, the portfolio undermines its own message.
 
-The user does not need to know whether AI was actually used. The problem is **perception**. Hiring managers, senior developers, and CTOs judge by signal. If the signal says “template-like AI artifact,” they may not continue.
+The user does not need to know whether AI was actually used. The problem is **perception**. Hiring managers, senior developers, and CTOs judge by signal. If the signal says "template-like AI artifact," they may not continue.
 
 ### Root causes likely creating the AI perception
 
-1. Overly grand cinematic language.
-2. Too many fantasy metaphors stacked together.
-3. Long polished-sounding copy without enough concrete proof.
-4. Generic “epic journey / realm / chronicle” tone repeated too often.
+1. Overly grand cinematic language — every sentence in `chronicle.js` is "epic".
+2. Too many fantasy metaphors stacked together — "realms", "ravens", "chronicles", "charting", "quests" in rapid succession.
+3. Long polished-sounding copy without enough concrete proof — `hero.hook`, `about.intro`, `works.intro` are all abstract.
+4. Generic "epic journey / realm / chronicle" tone repeated too often — `chapters` object uses fantasy names for every section.
 5. Highly animated visual style without enough personal artifacts.
 6. Lack of real screenshots, code samples, diagrams, raw work, or project evidence.
-7. “Making-of” content may be perceived as self-indulgent if it reads like AI process narration instead of real engineering notes.
+7. "Making-of" content perceived as self-indulgent AI process narration.
+8. **Specific UI patterns** that AI models consistently generate: uppercase eyebrow labels, rounded pill chips, uniform card layouts, consistent density.
 
 ### Real solution options
 
-#### Option A — Conservative fix: rewrite copy only
+#### Option A — Targeted copy rewrite + de-AI-ing visual patterns
 
-Keep the design mostly intact, but rewrite all visible copy to sound more human, direct, and specific.
+**The minimum viable fix.** Rewrite copy AND remove specific visual tells.
 
-**Implementation:**
-- Replace grandiose lines with direct professional claims.
-- Use fewer adjectives.
-- Add concrete outcomes and constraints.
-- Use “I built” / “I shipped” / “I solved” language.
-- Keep Chronicle flavor in section labels, not in every paragraph.
+**Copy changes (files: `src/i18n/bundles/chronicle.js`, `plain.js`, all voice bundles):**
+- Replace `hero.hook`: "Five years charting production systems…" → concrete, specific, human
+- Replace `hero.ctaPrimary`: "Begin the Chronicle" → "View my work" or "See projects"
+- Replace `hero.ctaSecondary`: "Summon me →" → "Get in touch" or "Contact"
+- Replace `hero.lead`: "I architect" → "I build" (simpler, more human)
+- Replace `contact.submitIdle`: "Dispatch the Raven" → "Send message"
+- Replace `chapters.contact.sub`: "Send a Raven" → "Get in Touch" or "Let's Talk"
+- Cut `about.pullQuote` entirely — it's pure AI flavor
+- Rewrite `about.intro` array — replace metaphors with specifics
+- Rewrite `works.intro` — replace "realms" language with professional framing
 
-**Example direction:**
+**Visual pattern changes (files: `src/components/ChapterHeading.jsx`, `src/index.css`):**
+- Remove or redesign the `chapter-eyebrow` uppercase label pattern — this is the #1 "vibe coded" tell
+- Replace rounded pill chips with more distinctive interaction patterns
+- Vary visual density between sections — not every section needs the same level of detail
+- Add intentional roughness: one section should feel deliberately different from the others
 
-Before:
-> “Five years charting production systems across realms…”
-
-After:
-> “Full-stack developer with 5+ years building production React, Next.js, and Node.js systems for real business workflows.”
-
-A slightly branded version:
-> “I build polished frontend-heavy products with reliable full-stack foundations — from dashboards and CRMs to public-facing product experiences.”
-
-**Pros:** Fastest fix.  
-**Cons:** Does not fully solve “AI design” perception if visuals remain overloaded.
+**Pros:** Fastest, most targeted fix.  
+**Cons:** May not fully solve if visual architecture remains uniform.
 
 ---
 
-#### Option B — Balanced fix: create a “human-first” default layer
+#### Option B — Hero-first conversion redesign (highest-ROI, behavior-backed)
 
-Make the default portfolio simpler, clearer, and more professional. Keep Chronicle as the immersive layer for users who want to explore.
+**The highest-ROI fix.** The hero carries most of the conversion work (the largest funnel leak, ~16%, is Origin → About), so it warrants the majority of the effort.
 
-**Implementation:**
-- Hero immediately communicates name, role, stack, location/remote availability, and hiring intent.
-- Add a visible toggle/link: “Explore the Chronicle version” or “Enter interactive mode.”
-- Default mode prioritizes recruiter scanning.
-- Chronicle interactions remain as optional depth.
+**Implementation (files: `src/sections/Hero.jsx`, `src/i18n/bundles/*.js`):**
+- Hero immediately communicates: Name, role, stack, availability, and one compelling proof point
+- Better hook: What makes this developer worth hiring? Not "I architect production systems" — that could be any developer. What's specific?
+- Better CTA: "View my work" (primary) + "Download résumé" (secondary) + "Contact" (tertiary)
+- Better action path: The primary CTA should jump to projects with screenshots, not to "about" 
+- Reduce astrolabe prominence — it's beautiful but it's not doing conversion work
+- Add a concise proof strip in or just below the hero: "5+ yrs · React/Next.js/Node.js · 8 production apps · Lead Frontend at Capital Group"
 
-**Pros:** Best balance between job effectiveness and creativity.  
-**Cons:** Requires design restructuring.
+**Code path:**
+```
+src/sections/Hero.jsx — restructure copy hierarchy, CTA targets
+src/i18n/bundles/chronicle.js — hero.* keys
+src/i18n/bundles/plain.js — hero.* keys
+src/constants/index.js — personalInfo, chapters
+```
+
+**Pros:** Highest conversion impact per unit of effort; directly attacks the biggest measured funnel leak.  
+**Cons:** Requires careful integration with existing GSAP timeline.
 
 ---
 
@@ -217,7 +289,7 @@ Make the default portfolio simpler, clearer, and more professional. Keep Chronic
 Lean into the fact that it is experimental, but prove the craft with real decisions.
 
 **Implementation:**
-- Add visible “Why this exists” section in plain language.
+- Add visible "Why this exists" section in plain language.
 - Add design sketches, iterations, component breakdowns, performance decisions, accessibility choices, analytics learnings, and code snippets.
 - Show before/after screenshots.
 - Make it impossible to dismiss as a generated artifact because the process is clearly authored.
@@ -227,9 +299,9 @@ Lean into the fact that it is experimental, but prove the craft with real decisi
 
 ### Recommended solution
 
-Use **Option B + selected parts of Option C**.
+Use **Option B as the primary focus**, then apply **Option A** across remaining sections, with **selected parts of Option C** for the making-of page.
 
-The default visitor experience should become more direct and human. The Chronicle layer should remain, but it should no longer be the only way to understand you.
+The hero is where 80% of the conversion work happens. Fix it first.
 
 ### Acceptance criteria
 
@@ -242,7 +314,7 @@ After changes, a new tester should be able to answer within 10 seconds:
 - Why should I trust him?
 - Where do I click if I want to contact him?
 
-If users still mostly respond with “AI/vibe-coded,” the revision did not go far enough.
+If users still mostly respond with "AI/vibe-coded," the revision did not go far enough.
 
 ---
 
@@ -252,15 +324,23 @@ If users still mostly respond with “AI/vibe-coded,” the revision did not go 
 
 Representative feedback:
 
-> “Information overload, keep it simple/clean. Recruiters are not going to read all of this when they have hundreds/thousands of other candidates.”
+> "Information overload, keep it simple/clean. Recruiters are not going to read all of this when they have hundreds/thousands of other candidates."
 
-> “Overloaded with text that no one will read, and thousands of unnecessary details.”
+> "Overloaded with text that no one will read, and thousands of unnecessary details."
 
-> “Try to reduce text. People are scrolling and judgemental. Think like a doomscrolling client.”
+> "Try to reduce text. People are scrolling and judgemental. Think like a doomscrolling client."
 
-> “Looks very much overloaded and too much info, I’d get tired reading all that.”
+> "Looks very much overloaded and too much info, I'd get tired reading all that."
 
-> “There’s a bit much information.”
+> "There's a bit much information."
+
+### Analytics validation
+
+- **Avg max scroll: 41.8%** — most users never see the bottom half
+- **Median scroll milestone times: 7s → 10s → 11s** — users are moving FAST, not reading
+- **Contact section reach: 36.6%** — the conversion section is invisible to 63% of visitors
+- **Sections viewed: ~3.8 avg** out of 6 — users see roughly half the journey
+- **Session duration: 65.7s** — barely over a minute for a content-heavy site
 
 ### Pattern
 
@@ -275,16 +355,18 @@ The current site appears optimized for someone who wants to explore a world. But
 
 The current copy density likely creates fatigue before conviction.
 
-### Why this matters
+### Current copy audit (actual word counts from bundles)
 
-Your goal is not for every visitor to read everything. Your goal is for the right visitor to quickly understand value and then optionally go deeper.
+| Section | Approximate visible text | Problem |
+|---|---:|---|
+| Hero | ~50 words + rotating phrases | OK length but wrong content |
+| About | ~200 words + 4 principle cards + 4 discipline cards + 4 stat cards | 3x too much |
+| Experience | ~350 words across 5 waypoints + intro paragraph | Dense; eyebrow/chapter names add cognitive load |
+| Arsenal | Subtitle + ~32 skill badges | OK if interaction is clear |
+| Works | ~100 word intro + 8 project cards with 3-5 bullets each (~400 words) | Too many projects shown at once |
+| Contact | ~200 words + form + channels + expedition recap | Expedition recap adds significant visual weight |
 
-A senior developer portfolio should support two modes:
-
-- **Skim mode:** Clear, fast, factual, conversion-oriented.
-- **Deep mode:** Case studies, interaction, story, personality.
-
-Right now, the deep mode appears to dominate the first impression.
+**Total visible copy: ~1300+ words.** For a portfolio that should convert in 30-60 seconds, this is 3-4x too much.
 
 ### Real solution options
 
@@ -296,14 +378,24 @@ Suggested budgets:
 
 | Section | Maximum visible text |
 |---|---:|
-| Hero | 1 headline, 1 short subheadline, 2 CTAs |
-| About | 4–5 lines max |
+| Hero | 1 headline, 1 short subheadline, 2-3 CTAs, optional proof strip |
+| About | 3-4 lines max |
 | Work / experience | 3–5 cards, 2 bullets each |
 | Arsenal / skills | Grouped skill chips, no paragraphs unless expanded |
-| Projects | 3 featured projects, each with 3 proof bullets |
+| Projects | 3 featured projects, each with screenshot + 3 proof bullets |
 | Contact | 1 direct sentence + simple form |
 
-**Rule:** If a paragraph does not help hiring trust, remove it or hide it behind “Read more.”
+**Rule:** If a paragraph does not help hiring trust, remove it or hide it behind "Read more."
+
+**Code path:**
+```
+src/i18n/bundles/chronicle.js — all section copy keys
+src/i18n/bundles/plain.js — all section copy keys  
+src/i18n/bundles/scott.js, dwight.js, cow.js — matching keys
+src/sections/About.jsx — reduce rendered content
+src/sections/Works.jsx — show fewer projects by default
+src/sections/Experience.jsx — reduce waypoint copy
+```
 
 ---
 
@@ -316,23 +408,6 @@ Keep richer content, but hide it until users ask for it.
 - Expandable details second.
 - Dedicated case study pages third.
 - Making-of content separate and optional.
-
-**Example:**
-
-Project card visible:
-- Project name
-- What it does
-- Stack
-- 2 outcomes
-- Live link
-- Case study link
-
-Expanded:
-- Architecture
-- Challenges
-- Screenshots
-- Code decisions
-- Learnings
 
 ---
 
@@ -361,7 +436,7 @@ Use all three:
 
 1. Cut visible copy by 50–70%.
 2. Move detail into expandable or case-study layers.
-3. Add a recruiter/client TL;DR near the top.
+3. Add a recruiter/client TL;DR near the top (or integrate it into the hero, where the conversion leverage is highest).
 
 ### Acceptance criteria
 
@@ -371,34 +446,105 @@ Use all three:
 
 ---
 
-## 7. Critical issue 3 — Brand risk: the site may reduce trust in your developer skills
+## 7. Critical issue 3 — The hero is underperforming its conversion role
+
+### The deduction
+
+Above-the-fold does most of the conversion work on almost any landing page — a standard CRO principle, and one this beta reproduces: the biggest single funnel leak is Origin → About (~16%). Some feedback named it explicitly ("better hook, better CTA, better action path"), but the roadmap weight comes from the behavior, not the quote. If the hero doesn't communicate value fast, roughly a sixth of the audience leaves before anything else has a chance.
+
+### Current hero analysis
+
+Looking at `src/sections/Hero.jsx` and `chronicle.js`:
+
+| Hero element | Current state | Problem |
+|---|---|---|
+| Headline | "Manan Upadhyay" (name only) | No role, no value proposition |
+| Tagline | "I architect production systems / scalable platforms / resilient APIs / reusable UI systems" | Too abstract. Every developer "architects systems". What's specific? |
+| Hook | "Five years charting production systems where performance, trust, and craft decide the path." | Fantasy language. Doesn't say what you actually do or for whom. |
+| Primary CTA | "Begin the Chronicle" | This tells the visitor NOTHING about what they'll get. A recruiter doesn't want to "begin a chronicle" — they want to see work. |
+| Secondary CTA | "Summon me →" | Cute but unclear. Does this go to contact? Projects? |
+| Meta line | Coordinates + location | Nice flavor but not doing conversion work |
+| Astrolabe | 44vw on desktop, prominent | Beautiful but competing with copy for attention |
+
+### Analytics proof
+
+- **Hero → About drop: 16%** — the single biggest section loss
+- **Hero CTA split: 64% about / 36% contact** — most visitors are curious, not ready to hire. The hero doesn't convert curiosity to hiring intent.
+- **Astrolabe dragged: 97 sessions** — high engagement with decoration, lower engagement with professional content
+
+### What needs to change
+
+The hero must answer in 5 seconds:
+1. **Who:** Manan Upadhyay
+2. **What:** Full-stack developer, frontend-heavy
+3. **Proof:** 5+ years, named clients/domains, concrete claim
+4. **Action:** View work / Download résumé / Contact
+
+**Code path:**
+```
+src/sections/Hero.jsx — restructure layout, reduce astrolabe prominence, add proof elements
+src/i18n/bundles/chronicle.js → hero.lead, hero.hook, hero.ctaPrimary, hero.ctaSecondary, hero.phrases
+src/i18n/bundles/plain.js → same keys
+src/constants/index.js → personalInfo (may need additional fields)
+```
+
+### Hero copy direction
+
+**Current:**
+```
+I architect [production systems | scalable platforms | resilient APIs | reusable UI systems]
+Five years charting production systems where performance, trust, and craft decide the path.
+[Begin the Chronicle] [Summon me →]
+```
+
+**Recommended direction:**
+```
+Manan Upadhyay
+Full-stack developer — frontend-heavy, production-tested.
+
+I build polished React and Next.js applications for real business workflows — 
+dashboards, CRMs, SaaS tools, and public-facing products.
+
+5+ yrs · React / Next.js / Node.js · Lead Frontend at Capital Group via Infosys · 8 shipped products
+
+[See my work] [Download résumé] [Get in touch]
+```
+
+### Acceptance criteria
+
+- A recruiter can understand role fit from the hero alone without scrolling.
+- Primary CTA text describes what the visitor will see (not "Begin the Chronicle").
+- At least one proof point is visible above the fold.
+- Astrolabe remains but doesn't compete with the professional message.
+
+---
+
+## 8. Critical issue 4 — Brand risk: the site may reduce trust in your developer skills
 
 ### What users said
 
 Representative feedback:
 
-> “I would have ZERO trust in your dev skills after seeing that site.”
+> "I would have ZERO trust in your dev skills after seeing that site."
 
-> “Very bad branding for a dev.”
+> "Very bad branding for a dev."
 
-> “It looks like a scammy esoteric website.”
+> "It looks like a scammy esoteric website."
 
-> “If you care about craft, polish, storytelling, frontend engineering, and tiny details, show that with a more original design.”
+> "If you care about craft, polish, storytelling, frontend engineering, and tiny details, show that with a more original design."
+
+### Counter-signal (the positive cluster)
+
+> "It's nice and functional, wonder which front-end skills you used?"
+> "It properly reflects your experience level… no red flags stick out to me."
 
 ### Pattern
 
-Some users are not judging the site as a creative experiment. They are judging it as a hiring signal. In that context, the current presentation can backfire.
+The site is polarizing along audience lines:
+- **Developer/Reddit audience:** More likely to call it AI slop and question trust.
+- **Hiring decision-makers and target-adjacent viewers:** More likely to see competence and ask a genuine, curious question.
 
-The problem is not that the site is creative. The problem is that the creativity sometimes feels disconnected from professional proof.
-
-### Why this matters
-
-A portfolio has two jobs:
-
-1. Create interest.
-2. Create trust.
-
-The current beta strongly creates interest. The trust layer is weaker.
+Both clusters converge on the same gap: **concrete proof** is missing. The skeptical group wants code/screenshots to believe it's real; the favorable group is impressed but under-informed about the actual work. Adding real project evidence serves both.
 
 ### Real solution options
 
@@ -417,15 +563,23 @@ Every project should show:
 
 Do not let project cards be mostly poetic copy.
 
+**Code path:**
+```
+src/sections/Works.jsx — add image/video slots, restructure project cards
+src/constants/index.js — project data (add image paths, live URLs)
+src/i18n/bundles/chronicle.js → works.projects.* — rewrite to proof-focused bullets
+public/realms/ — project screenshots (need to be created/captured)
+```
+
 ---
 
-#### Option B — Add “engineering credibility blocks”
+#### Option B — Add "engineering credibility blocks"
 
 Add short blocks throughout the site:
 
 ```md
 Performance: optimized animation-heavy page for smooth desktop/mobile rendering.
-Architecture: Next.js app with analytics instrumentation and modular content system.
+Architecture: Vite + React 18 with analytics instrumentation and modular content system.
 UX: progressive disclosure, keyboard navigation, and reduced-motion fallbacks.
 ```
 
@@ -435,24 +589,20 @@ These should be factual, not inflated.
 
 #### Option C — Add screenshots, diagrams, and real artifacts
 
-This directly addresses the “zero images” complaint.
+This directly addresses the "zero images" complaint.
 
 Possible assets:
 
-- Product screenshots.
-- Dashboard screenshots.
+- Product screenshots (Gajaakriti Studio, Royal Tiles, Capital Group dashboards).
 - Before/after UI states.
 - Architecture diagram.
-- Component tree snapshot.
-- GitHub contribution/code screenshot.
-- Figma or design iteration screenshot.
 - Performance report screenshot.
 
-**Why it works:** Real artifacts reduce the “AI-generated text page” feeling.
+**Why it works:** Real artifacts reduce the "AI-generated text page" feeling.
 
 ### Recommended solution
 
-Add a “Proof of Work” layer before the most stylized content. This can still look cinematic, but it must be concrete.
+Add a "Proof of Work" layer before the most stylized content. This can still look cinematic, but it must be concrete.
 
 ### Acceptance criteria
 
@@ -460,23 +610,33 @@ A skeptical senior developer should see at least three pieces of hard proof befo
 
 ---
 
-## 8. Critical issue 4 — Confusing interactions and unclear affordances
+## 9. Critical issue 5 — Confusing interactions and unclear affordances
 
 ### What users said
 
 Representative feedback:
 
-> “Initial reaction... What do I do? Oh a compass, that’ll point me in the right direction, no it just spins.”
+> "Initial reaction... What do I do? Oh a compass, that'll point me in the right direction, no it just spins."
 
-> “Things that look clickable just get a border and do nothing.”
+> "Things that look clickable just get a border and do nothing."
 
-> “There are so many confusing icons button, not directly to the point.”
+> "There are so many confusing icons button, not directly to the point."
 
-> “I thought the icon is the logo, instead it’s like a site map.”
+> "I thought the icon is the logo, instead it's like a site map."
 
-> “The spinning compass is beautiful but unnecessary.”
+> "The spinning compass is beautiful but unnecessary."
 
-> “The buttons/icon floating, it’s scary to click… especially for those who are not tech savvy.”
+> "The buttons/icon floating, it's scary to click… especially for those who are not tech savvy."
+
+### Analytics proof
+
+| Control | Interactions | Discoverability |
+|---|---:|---|
+| Theme switcher | 309 events | Excellent — the pattern works |
+| Map | 55 opens, 23 jumps | Good — users find and use it |
+| Voice switcher | 33 opens | Poor — 9x less discoverable than theme |
+| Rail nav | 14 clicks | Poor — almost unused |
+| Astrolabe | 97 drags, 51 spins | High curiosity, but causes confusion |
 
 ### Pattern
 
@@ -484,13 +644,17 @@ The site has many objects that feel interactive, but their purpose is not always
 
 This creates cognitive friction.
 
-### Why this matters
-
-A portfolio can be playful, but navigation cannot be mysterious. If users are asking “What do I do?”, the site is losing them before content can persuade them.
-
 ### Real solution options
 
 #### Option A — Label every persistent icon
+
+**Code path:**
+```
+src/components/ControlCluster.jsx — add visible labels
+src/components/SkyControl.jsx — add visible labels
+src/components/SideRail.jsx — add labels on hover
+src/components/MapOverlay.jsx — keep as-is (working well)
+```
 
 For desktop:
 - Show tooltip on hover.
@@ -500,16 +664,6 @@ For desktop:
 For mobile:
 - Avoid hover-only explanations.
 - Add visible micro-labels or a first-time hint.
-
-Examples:
-
-```md
-Map
-Theme
-Voice
-Sound
-Contact
-```
 
 ---
 
@@ -533,13 +687,13 @@ If something only spins, do not make users think it will navigate unless it actu
 A subtle onboarding line near the hero:
 
 ```md
-Scroll for the quick story. Use the map if you want to jump around.
+Scroll for the quick story. Use the map (⌘K) to jump around.
 ```
 
 Or:
 
 ```md
-Prefer the practical version? Jump to work, projects, or contact.
+Prefer the practical version? Jump to projects, work, or contact.
 ```
 
 This preserves the vibe while reducing confusion.
@@ -552,7 +706,7 @@ If the compass/astrolabe is visually prominent, give it a useful role:
 
 - Rotate to reveal section names.
 - Click a marker to jump to sections.
-- Show “drag to explore” text.
+- Show "drag to explore" text.
 - After spin, open a clear menu or reveal a hidden feature.
 - If it remains purely playful, make it less central.
 
@@ -566,33 +720,40 @@ A first-time mobile user should not need to guess what any floating icon does.
 
 ---
 
-## 9. Critical issue 5 — Smooth scrolling and scroll choreography irritation
+## 10. Critical issue 6 — Smooth scrolling and scroll choreography irritation
 
 ### What users said
 
 Representative feedback:
 
-> “The smooth scrolling feels very non intuitive… I always get so irritated with smooth scrolling. Also it lags for me a bit.”
+> "The smooth scrolling feels very non intuitive… I always get so irritated with smooth scrolling. Also it lags for me a bit."
 
-> “What’s with the scrolling on all these AI sites? Not one has a smooth fast scroll, instead it’s buggy.”
+> "What's with the scrolling on all these AI sites? Not one has a smooth fast scroll, instead it's buggy."
 
-> “Fix the scrolling on Chapter 2 so you’re able to scroll sideways as well.”
+> "Fix the scrolling on Chapter 2 so you're able to scroll sideways as well."
 
-> “I’d probably trim a few of the animations on the first visit.”
+> "I'd probably trim a few of the animations on the first visit."
+
+### Analytics proof
+
+- **Avg scroll: 41.8%** — users aren't getting through
+- **Origin → About drop: 16%** — this is where custom scrolling first engages
+- **Median milestone times: 7-11s** — those who do scroll move FAST, fighting the smooth scroll
 
 ### Pattern
 
 Scroll choreography is appreciated by some users, but scroll hijacking is a common irritation. If scroll feels delayed, heavy, or unpredictable, users blame the whole site.
 
-### Why this matters
-
-Scrolling is the primary interface of a one-page portfolio. If scrolling feels wrong, the whole experience feels wrong.
-
 ### Real solution options
 
 #### Option A — Reduce smooth-scroll intensity
 
-If using Lenis or similar:
+**Code path:**
+```
+src/lib/smoothScroll.js — reduce Lenis lerp/smoothing values
+```
+
+If using Lenis:
 - Lower lerp/smoothing.
 - Reduce wheel multiplier if it feels sluggish.
 - Avoid excessive scroll lock/pinning.
@@ -604,6 +765,12 @@ Goal: cinematic but responsive.
 
 #### Option B — Disable custom smooth scrolling on mobile
 
+**Code path:**
+```
+src/lib/smoothScroll.js — add mobile detection check
+src/sections/Experience.jsx — horizontal timeline needs separate scroll handling
+```
+
 Mobile users are more sensitive to scroll interference.
 
 Use native scroll on:
@@ -614,25 +781,7 @@ Use native scroll on:
 
 ---
 
-#### Option C — Add reduced-motion mode
-
-Respect:
-
-```css
-@media (prefers-reduced-motion: reduce) {
-  /* disable heavy scroll animations */
-}
-```
-
-Also add a manual toggle:
-
-```md
-Reduce motion
-```
-
----
-
-#### Option D — Fix horizontal timeline expectation
+#### Option C — Fix horizontal timeline expectation
 
 For Chapter 2/timeline:
 - Support both vertical wheel and horizontal trackpad movement.
@@ -652,19 +801,82 @@ Keep scroll choreography, but make native-feeling responsiveness the priority. D
 
 ---
 
-## 10. Critical issue 6 — Visual congestion and lack of minimalism
+## 11. Critical issue 7 — Performance degradation over time (NEW)
+
+### What the user said
+
+> "I also noticed a performance issue the longer I stayed on your website (I am on a MacBook Pro M1 16GB running a 4k external display for reference)."
+
+### Pattern
+
+A MacBook Pro M1 with 16GB RAM and a 4K display is a HIGH-END machine. If performance degrades over time on this hardware, there is likely:
+
+1. **Memory leak** — GSAP ScrollTrigger instances, event listeners, or animation frames not being properly cleaned up on section unmount.
+2. **Unbounded listener accumulation** — scroll/resize/pointer listeners added without removal.
+3. **Canvas animation overhead** — the hero astrolabe's Canvas2D rendering may not properly pause when scrolled off-screen (though the current code does attempt this via ScrollTrigger level control).
+4. **Framer Motion re-renders** — AnimatePresence in the hero phrase rotator creates DOM churn.
+5. **4K display multiplier** — canvas rendering at 4K DPR significantly increases GPU load.
+
+### Why this matters
+
+Performance degradation over time is a **senior-level bug**. For a portfolio that claims engineering craft, a memory leak is the worst kind of credibility underminer — it proves the opposite of what the site claims.
+
+### Diagnostic code path
+
+```
+src/sections/Hero.jsx — check GSAP context cleanup, canvas RAF cleanup
+src/hooks/useAstrolabe.js — check animation frame lifecycle, DPR handling
+src/lib/smoothScroll.js — check Lenis listener cleanup
+src/sections/Experience.jsx — check ScrollTrigger pin cleanup
+src/sections/Tech.jsx — check orbital animation cleanup
+src/components/Layout.jsx — check global listener accumulation
+```
+
+### Real solution options
+
+#### Option A — Audit all animation lifecycles
+
+For every component:
+- Verify `gsap.context().revert()` on unmount
+- Verify `requestAnimationFrame` cancellation
+- Verify `ScrollTrigger.kill()` patterns
+- Verify `addEventListener` has matching `removeEventListener`
+- Check for closure-captured stale refs
+
+#### Option B — Profile in Chrome DevTools
+
+Run a timeline recording over 2-3 minutes of browsing:
+- Check for growing heap
+- Check for increasing listener count
+- Check for layout thrash in scroll handlers
+
+#### Option C — Throttle canvas DPR on high-resolution displays
+
+```js
+const dpr = Math.min(window.devicePixelRatio, 2); // cap at 2x
+```
+
+### Acceptance criteria
+
+- No measurable performance degradation after 3 minutes of browsing on an M1 MacBook.
+- Canvas rendering capped at 2x DPR.
+- Zero leaked GSAP contexts or dangling listeners on component unmount.
+
+---
+
+## 12. Critical issue 8 — Visual congestion and lack of minimalism
 
 ### What users said
 
 Representative feedback:
 
-> “First impression gives a quite congested look.”
+> "First impression gives a quite congested look."
 
-> “More minimalism would be better.”
+> "More minimalism would be better."
 
-> “Overloaded with text and thousands of unnecessary details.”
+> "Overloaded with text and thousands of unnecessary details."
 
-> “The simpler the better and easy to navigate, but don’t kill the vibe.”
+> "The simpler the better and easy to navigate, but don't kill the vibe."
 
 ### Pattern
 
@@ -715,37 +927,39 @@ Make sections feel editorial:
 
 ### Recommended solution
 
-Apply a “premium restraint pass” across the whole site.
+Apply a "premium restraint pass" across the whole site.
 
 Remove 30–50% of decorative details from the default path. Keep some secrets for explorers.
 
 ### Acceptance criteria
 
-A visitor should describe the first screen as “clear and premium,” not “congested.”
+A visitor should describe the first screen as "clear and premium," not "congested."
 
 ---
 
-## 11. Critical issue 7 — Mobile user experience is not clear enough
+## 13. Critical issue 9 — Mobile user experience is not clear enough
 
 ### What users said
 
 Representative feedback:
 
-> “This is my view on mobile… not user friendly.”
+> "This is my view on mobile… not user friendly."
 
-> “On my iPhone mini 13 the line in the image could use a little more space.”
+> "On my iPhone mini 13 the line in the image could use a little more space."
 
-> “The font you’re using for ‘where the road begins’ could use more letter spacing for readability.”
+> "The font you're using for 'where the road begins' could use more letter spacing for readability."
 
-> “Buttons/icons floating… scary to click.”
+> "Buttons/icons floating… scary to click."
+
+### Analytics proof
+
+- Android converted 1 user at 2.78% — **higher than macOS at 1.23%**
+- Mobile is viable if UX is simplified
+- Reddit mobile app drove 58 visitors (17% of all traffic)
 
 ### Pattern
 
 Mobile users are seeing the same creative system, but with less space and less context. What feels atmospheric on desktop can feel confusing or crowded on mobile.
-
-### Why this matters
-
-Many recruiters and Reddit users will open from mobile first. If mobile feels confusing, they may never check desktop.
 
 ### Real solution options
 
@@ -769,7 +983,7 @@ Actions:
 - Increase letter spacing where decorative fonts are used.
 - Increase line-height.
 - Avoid long fantasy headings on narrow screens.
-- Test on iPhone 13 mini width.
+- Test on iPhone 13 mini width (375px).
 - Use shorter section titles on mobile.
 
 ---
@@ -801,15 +1015,15 @@ A non-technical mobile visitor should know where to tap and how to contact you w
 
 ---
 
-## 12. Critical issue 8 — Custom cursor distracts from the experience
+## 14. Critical issue 10 — Custom cursor distracts from the experience
 
 ### What users said
 
 Representative feedback:
 
-> “The custom cursor is distracting and takes away from the interactivity a bit.”
+> "The custom cursor is distracting and takes away from the interactivity a bit."
 
-> “I would keep the custom cursor but just simplify it a bit. Maybe just one color, not as large, and remove the slight animation.”
+> "I would keep the custom cursor but just simplify it a bit. Maybe just one color, not as large, and remove the slight animation."
 
 ### Pattern
 
@@ -850,17 +1064,23 @@ No user should mention the cursor before they mention your work.
 
 ---
 
-## 13. Critical issue 9 — The compass/astrolabe creates mixed reactions
+## 15. Critical issue 11 — The compass/astrolabe creates mixed reactions
 
 ### What users said
 
 Representative feedback:
 
-> “I got myself in an endless loop trying to spin that spinny thing…”
+> "I got myself in an endless loop trying to spin that spinny thing…"
 
-> “Oh a compass, that’ll point me in the right direction, no it just spins.”
+> "Oh a compass, that'll point me in the right direction, no it just spins."
 
-> “The spinning compass is beautiful but unnecessary.”
+> "The spinning compass is beautiful but unnecessary."
+
+### Analytics proof
+
+- Dragged 97 sessions (27%) — high curiosity
+- Spun 51 sessions (14%) — meaningful engagement
+- **But:** Voice Hall only 4 users, Atelier funnel 0 — the astrolabe is NOT succeeding as a discovery gateway
 
 ### Pattern
 
@@ -870,7 +1090,7 @@ The object is memorable, but its function is ambiguous. It looks important. User
 
 #### Option A — Make it clearly playful
 
-Add microcopy:
+Add microcopy near the spin button:
 
 ```md
 Drag the astrolabe for a small surprise.
@@ -888,29 +1108,35 @@ Possible behavior:
 - Spin reveals section names.
 - Clicking a symbol jumps to that chapter.
 - A completed spin opens the map.
-- Hover shows “About”, “Work”, “Projects”, “Contact.”
+- Hover shows "About", "Work", "Projects", "Contact."
 
 ---
 
-#### Option C — Move it lower
+#### Option C — Move it lower in visual priority
 
-If it is not essential to first impression, move it after the professional intro.
+If it is not essential to first impression, reduce its size and prominence on both mobile and desktop to give the professional copy more space.
+
+**Code path:**
+```
+src/sections/Hero.jsx — adjust canvasWrapRef sizing classes
+src/hooks/useAstrolabe.js — simplify if moving to decorative role
+```
 
 ### Recommended solution
 
-Make the astrolabe functional or reduce its hero importance. Do not let a central object feel pointless.
+Make the astrolabe functional or reduce its hero importance. Do not let a central object feel pointless. Since the hero has to do the conversion work, anything competing with the professional message for attention — the astrolabe included — should either earn its place or step back.
 
 ---
 
-## 14. Critical issue 10 — Logo / icon identity is weak or confusing
+## 16. Critical issue 12 — Logo / icon identity is weak or confusing
 
 ### What users said
 
 Representative feedback:
 
-> “I find the fact the logo is just an icon a bit… Think it could be stronger.”
+> "I find the fact the logo is just an icon a bit… Think it could be stronger."
 
-> “I thought the icon is the logo, instead it’s like a site map.”
+> "I thought the icon is the logo, instead it's like a site map."
 
 ### Pattern
 
@@ -953,19 +1179,26 @@ Add a simple wordmark on desktop and a clearer compact brand mark on mobile. Kee
 
 ---
 
-## 15. Critical issue 11 — Footer/contact ending feels abrupt
+## 17. Critical issue 13 — Footer/contact ending feels abrupt
 
 ### What users said
 
 Representative feedback:
 
-> “You’ve built this awesome interactive journey but once we reach the end of the page it just stops.”
+> "You've built this awesome interactive journey but once we reach the end of the page it just stops."
 
-> “This could be a great space for you to inject some more of your creativity. Maybe something like ‘Don’t want the journey to end? Contact me and let’s continue the conversation.’”
+> "This could be a great space for you to inject some more of your creativity. Maybe something like 'Don't want the journey to end? Contact me and let's continue the conversation.'"
+
+### Analytics proof
+
+- Contact reach: 36.6%
+- Form starts: 9 (2.51% overall; 6.9% of contact reachers)
+- Form submits: 2 (0.56% overall; 22% of starters)
+- **78% form abandonment** — 7 out of 9 starters abandon
 
 ### Pattern
 
-The site builds a journey, but the ending may not create a strong final conversion moment.
+The site builds a journey, but the ending does not create a strong final conversion moment.
 
 ### Real solution options
 
@@ -974,60 +1207,57 @@ The site builds a journey, but the ending may not create a strong final conversi
 Example:
 
 ```md
-The map ends here. The next build does not have to.
-If you are hiring for a frontend-heavy full-stack role, let’s talk.
+Hiring for a frontend-heavy full-stack role? Let's continue the conversation.
 ```
 
 Buttons:
-- Email me
+- Send message
 - View résumé
 - LinkedIn
 - GitHub
 
 ---
 
-#### Option B — Add a “choose your next step” footer
+#### Option B — Simplify the contact form
 
-```md
-Want the practical version? Download résumé.
-Want proof? View projects.
-Want to talk? Send a message.
-Want the story? Read making-of.
+Current form has: name, email, inquiry type chips, and themed message placeholder. The form is fine structurally, but:
+
+- "Dispatch the Raven" as submit text is confusing
+- Themed error messages add cognitive load during frustration
+- The `raven-console` status area below the form adds visual weight
+
+**Code path:**
 ```
-
----
-
-#### Option C — Add social proof near footer
-
-- Years of experience.
-- Core stack.
-- Open to roles.
-- Available location/remote.
-- Best contact channel.
+src/sections/Contact.jsx — simplify form, clear CTA copy
+src/i18n/bundles/chronicle.js → contact.submitIdle, contact.errors.*, contact.status.*
+src/i18n/bundles/plain.js → same keys
+```
 
 ### Recommended solution
 
-Make the footer a conversion section, not just an ending.
+Make the footer a conversion section, not just an ending. Simplify form copy. Use direct language.
 
 ---
 
-## 16. Critical issue 12 — “Making-of” page may be hurting perception
+## 18. Critical issue 14 — "Making-of" page may be hurting perception
 
 ### What users said
 
 Representative feedback:
 
-> “That making-of page is… I have no words lol.”
+> "That making-of page is… I have no words lol."
 
-> “It looks like a more refined Claude artifact.”
+> "It looks like a more refined Claude artifact."
+
+### Analytics proof
+
+- `/making-of` got 9 visits in 24h — users ARE finding it
+- Atelier funnel reach: 0 — nobody reaches it through the designed path
+- 11 direct visits — all from direct URL or map navigation
 
 ### Pattern
 
 The making-of page can be powerful, but if it reads like AI-generated self-narration, it reinforces the worst criticism.
-
-### Why this matters
-
-A making-of page should prove process. If it instead feels like a victory lap for an AI-generated concept, it can reduce trust.
 
 ### Real solution options
 
@@ -1059,29 +1289,33 @@ Tone should be plain and specific.
 - Analytics events schema.
 - Before/after feedback changes.
 
----
-
-#### Option C — Move making-of lower in priority
-
-Do not promote it before the main professional proof is clear.
-
 ### Recommended solution
 
-Keep the page, but transform it from “cinematic self-description” into “engineering/design case study.”
+Keep the page, but transform it from "cinematic self-description" into "engineering/design case study."
 
 ---
 
-## 17. Critical issue 13 — Project section needs more concrete proof and visuals
+## 19. Critical issue 15 — Project section needs more concrete proof and visuals
 
 ### What users said
 
 Representative feedback:
 
-> “Zeeeero images whatsoever.”
+> "Zeeeero images whatsoever."
 
-> “Visitors want to see live projects, not read code.”
+> "Visitors want to see live projects, not read code."
 
-> “Make it personalized and custom.”
+> "Make it personalized and custom."
+
+### Analytics proof
+
+| Project | Clicks |
+|---|---:|
+| Gajaakriti Studio (live link) | 9 |
+| Royal Tiles Playground (live link) | 3 |
+| Source/GitHub links | 0 |
+
+**Interpretation:** Users want to SEE working output. Live demos win over source code. But even live link engagement is low (12 total from ~350 visitors) because the project cards are text-heavy and lack visual hooks.
 
 ### Pattern
 
@@ -1098,8 +1332,6 @@ Each project card should include:
 - Role/contribution.
 - Stack.
 
----
-
 #### Option B — Add short project videos/GIFs
 
 For interactive projects, short silent loops work well:
@@ -1107,8 +1339,6 @@ For interactive projects, short silent loops work well:
 - Shows real product behavior.
 - Optimized WebM/MP4.
 - No heavy autoplay if performance suffers.
-
----
 
 #### Option C — Add case-study pages
 
@@ -1128,33 +1358,41 @@ Add visuals to every featured project. A portfolio with cinematic UI but no proj
 
 ---
 
-## 18. Critical issue 14 — Security headers are an easy credibility win
+## 20. Critical issue 16 — Security headers are an easy credibility win
 
 ### What users said
 
 Representative feedback:
 
-> “Solid site, and great performance concerning the amount of animations. You can consider to add security headers.”
-
-### Pattern
-
-This is a practical developer credibility improvement. It is small but valuable.
+> "Solid site, and great performance concerning the amount of animations. You can consider to add security headers."
 
 ### Real solution options
 
-Add standard headers in Next.js config / hosting layer:
+Add standard headers in Vercel config (`vercel.json`):
 
-```js
-const securityHeaders = [
-  { key: 'X-Frame-Options', value: 'DENY' },
-  { key: 'X-Content-Type-Options', value: 'nosniff' },
-  { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-  { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
-  { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' }
-]
+```json
+{
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" },
+        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" }
+      ]
+    }
+  ]
+}
 ```
 
 Also consider a Content Security Policy after checking scripts, analytics, images, audio, and external assets.
+
+**Code path:**
+```
+vercel.json — add headers configuration
+```
 
 ### Recommended solution
 
@@ -1162,124 +1400,134 @@ Add baseline security headers immediately. Add CSP carefully after testing to av
 
 ---
 
-## 19. Actionable priority roadmap
+## 21. Actionable priority roadmap (updated with code paths)
 
 ## P0 — Fix immediately before next public push
 
-### 1. Reduce AI/vibe-coded perception
+### 1. Optimize the hero for conversion (biggest measured leak)
 
-**Problem:** Repeated comments say the copy/design looks AI-generated.  
-**Solution:** Rewrite hero/about/project copy in plain, specific, human language. Reduce fantasy density. Add real proof artifacts.  
-**Owner mindset:** This is not a copy polish task; it is a trust repair task.
+**Problem:** The hero carries most of the conversion work (Origin → About is the largest funnel drop, ~16%) but has a weak hook, unclear CTAs, and no proof.  
+**Solution:** Rewrite hero copy, change CTAs to action-descriptive text, add proof strip, reduce astrolabe dominance.  
+**Files:** `Hero.jsx`, `chronicle.js` hero.*, `plain.js` hero.*, `constants/index.js` personalInfo  
+**Success signal:** A recruiter can understand role fit from the hero alone.
 
-### 2. Cut visible text by 50–70%
+### 2. Reduce AI/vibe-coded perception
 
-**Problem:** Users repeatedly say it is overloaded.  
+**Problem:** Repeated comments say the copy/design looks AI-generated. Specific visual patterns (eyebrows, chips, pills) are named as tells.  
+**Solution:** Rewrite hero/about/project copy in plain, specific, human language. Remove or redesign `chapter-eyebrow` pattern. Reduce fantasy vocabulary density. Add real proof artifacts.  
+**Files:** All `src/i18n/bundles/*.js`, `ChapterHeading.jsx`, `index.css` (eyebrow styles)  
+**Success signal:** No tester calls it "Claude artifact" or "vibe coded"
+
+### 3. Cut visible text by 50–70%
+
+**Problem:** Users repeatedly say it is overloaded. Analytics confirm 41.8% avg scroll.  
 **Solution:** Keep summaries visible. Move details into expanders/case studies.  
-**Success signal:** A recruiter can skim the site in under 60 seconds and understand you.
+**Files:** All `src/i18n/bundles/*.js`, all `src/sections/*.jsx`  
+**Success signal:** A recruiter can skim the site in under 60 seconds.
 
-### 3. Make navigation and icons obvious
+### 4. Make navigation and icons obvious
 
 **Problem:** Users are confused by compass, floating icons, and map/logo identity.  
 **Solution:** Add labels, tooltips, mobile menu, and clear interactive states.  
-**Success signal:** No tester asks “What do I do?”
+**Files:** `ControlCluster.jsx`, `SkyControl.jsx`, `SideRail.jsx`  
+**Success signal:** No tester asks "What do I do?"
 
-### 4. Fix scroll feel
+### 5. Fix scroll feel
 
 **Problem:** Smooth scrolling feels laggy/non-intuitive for some users.  
 **Solution:** Reduce smoothing, disable on mobile/reduced-motion, support horizontal timeline scroll.  
+**Files:** `smoothScroll.js`, `Experience.jsx`  
 **Success signal:** No one complains about scroll blocking them.
 
-### 5. Simplify mobile controls
+### 6. Fix performance degradation
 
-**Problem:** Mobile users find controls confusing and scary to click.  
-**Solution:** Use one clear mobile menu and one primary CTA.  
-**Success signal:** Mobile user can reach work/contact without guessing.
+**Problem:** MacBook Pro M1 user reports performance issues over time — likely memory leak.  
+**Solution:** Audit all GSAP contexts, RAF loops, listeners for proper cleanup.  
+**Files:** All `src/sections/*.jsx`, `useAstrolabe.js`, `smoothScroll.js`, `Layout.jsx`  
+**Success signal:** No measurable degradation after 3 minutes of browsing.
 
 ---
 
 ## P1 — High-impact improvements
 
-### 6. Add real project screenshots and visual proof
+### 7. Add real project screenshots and visual proof
 
 **Problem:** Text-heavy portfolio increases AI artifact perception.  
 **Solution:** Add screenshots, short demos, diagrams, and project-specific proof.  
+**Files:** `Works.jsx`, `constants/index.js` (project data), `public/realms/` (images)  
 **Success signal:** Users talk about your work, not only the website shell.
 
-### 7. Rework the making-of page
+### 8. Rework the making-of page
 
-**Problem:** It may currently reinforce “AI slop” perception.  
+**Problem:** It may currently reinforce "AI slop" perception.  
 **Solution:** Convert into factual engineering/design case study with real artifacts.  
+**Files:** `Atelier.jsx`, `chronicle.js` atelier.*, `pages/MakingOf.jsx`  
 **Success signal:** Skeptical users see process and decision-making.
 
-### 8. Simplify custom cursor
+### 9. Simplify mobile controls
+
+**Problem:** Mobile users find controls confusing and scary to click.  
+**Solution:** Use one clear mobile menu and one primary CTA.  
+**Files:** `ControlCluster.jsx`, `Layout.jsx`, mobile-specific CSS in `index.css`  
+**Success signal:** Mobile user can reach work/contact without guessing.
+
+### 10. Simplify custom cursor
 
 **Problem:** Cursor distracts from content.  
 **Solution:** Smaller, calmer, one color, no constant animation, disable on touch/reduced-motion.  
+**Files:** Cursor component (if exists), `index.css` cursor styles  
 **Success signal:** Cursor disappears from user feedback.
 
-### 9. Improve footer as final conversion moment
+### 11. Improve footer as final conversion moment
 
-**Problem:** Journey ends abruptly.  
-**Solution:** Add creative but direct final CTA with resume/contact/social options.  
+**Problem:** Journey ends abruptly. 78% form abandonment.  
+**Solution:** Add creative but direct final CTA with resume/contact/social options. Simplify form copy.  
+**Files:** `Contact.jsx`, `chronicle.js` contact.*, footer components  
 **Success signal:** Users have a clear next step at the end.
 
 ---
 
 ## P2 — Medium-term refinement
 
-### 10. Make astrolabe either useful or less central
+### 12. Make astrolabe either useful or less central
 
-**Problem:** Users expect it to guide but it just spins.  
-**Solution:** Turn it into navigation/discovery or make it clearly decorative.  
-**Success signal:** Users understand its purpose.
+### 13. Strengthen logo/brand identity
 
-### 11. Strengthen logo/brand identity
+### 14. Add accessibility and reduced-motion polish
 
-**Problem:** Icon-only logo feels weak or confused with map.  
-**Solution:** Add wordmark or separate brand mark from nav icon.  
-**Success signal:** Users recognize what is brand vs what is navigation.
-
-### 12. Add accessibility and reduced-motion polish
-
-**Problem:** Heavy interactions may fatigue or exclude some users.  
-**Solution:** Reduced motion, keyboard navigation, aria labels, focus states, color contrast checks.  
-**Success signal:** Site feels premium and responsible, not just animated.
-
-### 13. Add baseline security headers
-
-**Problem:** Easy technical credibility gap.  
-**Solution:** Add headers and test.  
-**Success signal:** Security scan looks professional.
+### 15. Add baseline security headers
 
 ---
 
-## 20. Proposed revised product direction
+## 22. Proposed revised product direction
 
 The feedback suggests the best direction is:
 
 > **A clear senior developer portfolio with an optional cinematic Chronicle layer — not a cinematic Chronicle layer that hides the senior developer portfolio inside it.**
 
-### New hierarchy
+### New hierarchy (conversion-first)
 
-1. **Immediate professional clarity**  
-   Name, role, stack, availability, strongest value proposition.
+1. **Hero that converts** (the highest-leverage screen)  
+   Name, role, stack, proof, compelling CTAs with clear action paths.
 
 2. **Concrete proof**  
    Projects, screenshots, live demos, outcomes, stack, role.
 
-3. **Personality and atmosphere**  
-   Chronicle framing, themes, sound, astrolabe, easter eggs.
+3. **Professional credibility**  
+   Experience timeline, concise. Skills grouped by practical value.
 
-4. **Deep exploration**  
-   Making-of, voice modes, hidden interactions, case studies.
+4. **Personality and atmosphere**  
+   Chronicle framing, themes, sound, astrolabe, easter eggs — supporting, not leading.
 
-5. **Conversion**  
-   Simple contact path, resume, LinkedIn, GitHub, email.
+5. **Deep exploration**  
+   Making-of, voice modes, hidden interactions, case studies — optional.
+
+6. **Conversion**  
+   Simple contact path, resume, LinkedIn, GitHub, email — low friction.
 
 ---
 
-## 21. Suggested new copy direction
+## 23. Suggested new copy direction
 
 ### Current perceived issue
 
@@ -1291,122 +1539,37 @@ The copy sounds too polished, too metaphor-heavy, and too AI-like.
 - Specific.
 - Confident but not grandiose.
 - Senior but not corporate.
-- Creative but not cryptic.
+- Creative only where it adds flavor — not everywhere.
 - Direct enough for recruiters.
-
-### Hero copy options
-
-#### Option 1 — Direct senior developer positioning
-
-```md
-Full-stack developer building polished, production-ready web products.
-
-I work across React, Next.js, Node.js, and TypeScript — with a frontend-heavy eye for detail, interaction, and product quality.
-```
-
-#### Option 2 — Balanced Chronicle tone
-
-```md
-I build web products with the care of an engineer and the eye of a storyteller.
-
-5+ years across React, Next.js, Node.js, and production business systems — now open to senior full-stack/frontend-heavy roles.
-```
-
-#### Option 3 — More premium and concise
-
-```md
-Frontend-heavy full-stack developer.
-Polished interfaces. Reliable systems. Real products.
-```
-
-### CTA options
-
-```md
-View work
-Download résumé
-Contact me
-```
-
-or
-
-```md
-See projects
-Open résumé
-Start a conversation
-```
 
 ### Avoid phrases like
 
-- “Realms” repeated everywhere.
-- “Epic journey” repeated everywhere.
-- “Crafted by a cartographer” style lines in professional sections.
-- Too many adjectives: cinematic, immersive, magical, polished, tiny, intentional, handcrafted, etc.
+- "Realms" repeated everywhere.
+- "Epic journey" repeated everywhere.
+- "Crafted by a cartographer" style lines in professional sections.
+- Too many adjectives: cinematic, immersive, magical, polished, tiny, intentional, handcrafted.
 - Anything that sounds like a generated landing page.
+- "Begin the Chronicle" as a CTA (tells the visitor nothing about value).
+- "Summon me" / "Dispatch the Raven" (cute but confusing for non-immersed visitors).
+- "Charting realms" / "expedition" / "quest" in professional context.
+
+### Specific i18n keys that must change
+
+| Key | Current value | Problem | Direction |
+|---|---|---|---|
+| `hero.lead` | "I architect" | Abstract, AI-sounding | "I build" or specific claim |
+| `hero.hook` | "Five years charting production systems…" | Fantasy language, no specifics | Direct professional claim with proof |
+| `hero.ctaPrimary` | "Begin the Chronicle" | Zero value communicated | "See my work" / "View projects" |
+| `hero.ctaSecondary` | "Summon me →" | Unclear action | "Get in touch" / "Contact" |
+| `contact.submitIdle` | "Dispatch the Raven" | Confusing | "Send message" |
+| `contact.status.idle` | "The raven waits, quill trimmed…" | Over-themed | Simpler or removed |
+| `about.pullQuote` | "Every realm below began…" | Pure AI flavor, no info value | Cut or replace with proof |
+| `works.intro` | "Each realm is a production world…" | Fantasy language | Professional framing |
+| `chapters.contact.sub` | "Send a Raven" | Fantasy over function | "Get in Touch" / "Let's Talk" |
 
 ---
 
-## 22. Suggested structural redesign
-
-### Above the fold
-
-Must contain:
-
-- Name.
-- Role.
-- Stack/value proposition.
-- 2–3 CTAs.
-- Optional small creative line.
-- One interaction max.
-
-### Section 1 — Quick proof
-
-Three cards:
-
-1. Production frontend systems.
-2. Full-stack workflows.
-3. Product/design polish.
-
-Each with one concrete example.
-
-### Section 2 — Selected work
-
-Use screenshots first, text second.
-
-Each project:
-- Image/video.
-- What it is.
-- What you built.
-- Stack.
-- Live link.
-- Case study.
-
-### Section 3 — Experience
-
-Timeline, but less text.
-
-### Section 4 — Skills / Arsenal
-
-Grouped by practical value:
-- Frontend.
-- Backend.
-- Product/UI.
-- Tooling/DevOps.
-
-### Section 5 — Chronicle extras
-
-Move deeper interactions here:
-- Voice switcher.
-- Easter eggs.
-- Astrolabe secrets.
-- Making-of.
-
-### Section 6 — Contact
-
-Simple, direct, low friction.
-
----
-
-## 23. What not to do
+## 24. What not to do
 
 Do **not** respond to the feedback by making the site boring.
 
@@ -1422,7 +1585,7 @@ Do **not** become defensive about AI.
 
 The wrong fix:
 
-> “Actually I built this myself and AI only helped…”
+> "Actually I built this myself and AI only helped…"
 
 The right fix:
 
@@ -1438,9 +1601,19 @@ The right fix:
 
 > Make the UI self-explanatory through labels, hierarchy, and affordances.
 
+Do **not** let volume or confidence decide the roadmap.
+
+The wrong fix:
+
+> Treat every comment as an action item, and let the loudest or most credentialed voice set direction.
+
+The right fix:
+
+> Weight a signal by how many independent users repeat it *and* whether behavior confirms it. Feedback from closer to the actual target audience (hiring decision-makers) is a useful tilt, but no single person — however senior — is the roadmap. Ship what both the sentiment clusters and the analytics agree on: better hero, less text, more proof, fewer bugs.
+
 ---
 
-## 24. Beta testing truth summary
+## 25. Beta testing truth summary
 
 ### What the site currently proves well
 
@@ -1449,6 +1622,7 @@ The right fix:
 - You can build interactive frontend experiences.
 - You are willing to take creative risks.
 - The visual world has a distinctive mood.
+- A target-adjacent segment reads it as pleasant and competent, with no red flags.
 
 ### What the site currently fails to prove clearly enough
 
@@ -1457,34 +1631,16 @@ The right fix:
 - That recruiters can quickly understand your value.
 - That the interactions are purposeful, not just decorative.
 - That your actual project work is strong enough beyond the portfolio shell.
+- That the hero converts (it gets attention but doesn't direct it).
+- That the site performs well on sustained use.
 
 ### The single most important product truth
 
-> **The portfolio should feel less like “look at this cinematic AI-generated world” and more like “this is a sharp developer with taste, proof, and personality.”**
+> **The portfolio should feel less like "look at this cinematic AI-generated world" and more like "this is a sharp developer with taste, proof, and personality."**
 
----
+### The single most important conversion truth (behavior-backed)
 
-## 25. Next combined-document notes
-
-When combining this feedback document with analytics data, validate the following hypotheses:
-
-1. **Information overload hypothesis**  
-   User comments say too much text. Analytics should be checked for scroll depth, section reach, time-on-section, and contact reach.
-
-2. **Interaction confusion hypothesis**  
-   Comments say compass/icons are confusing. Analytics should be checked for astrolabe spins, map opens, voice switcher opens, and drop-offs after interaction.
-
-3. **Form/contact friction hypothesis**  
-   Comments say users are hesitant/confused. Analytics should be checked for contact-section reach vs form starts vs submissions.
-
-4. **Mobile usability hypothesis**  
-   Comments mention mobile confusion/readability. Analytics should be checked by OS/device for contact reach and conversions.
-
-5. **AI-perception hypothesis**  
-   Comments strongly mention AI/vibe-coded. Analytics cannot directly measure this, but it can be cross-checked against bounce behavior, Reddit referral quality, and project link clicks.
-
-6. **Making-of risk/opportunity hypothesis**  
-   Comments criticize making-of, but analytics may show whether users actually visit it. If it gets traffic, it needs urgent rewrite because it is a trust-sensitive page.
+> **The hero carries most of the conversion work — it's the biggest measured funnel leak. Better hook, better CTA, better action path.**
 
 ---
 
@@ -1492,13 +1648,15 @@ When combining this feedback document with analytics data, validate the followin
 
 For the next version, do not rebuild from scratch. Perform a focused repositioning pass:
 
-1. **Rewrite copy to sound human and specific.**
-2. **Cut visible text aggressively.**
-3. **Add real project visuals and proof.**
-4. **Clarify navigation/icons/compass.**
-5. **Make scroll feel native and responsive.**
-6. **Simplify mobile controls.**
-7. **Reframe making-of as an engineering case study.**
-8. **Keep the Chronicle atmosphere, but make it support the professional story.**
+1. **Optimize the hero for conversion** — hook, CTA, action path (biggest measured funnel leak).
+2. **Rewrite copy to sound human and specific** — especially kill the fantasy vocabulary in professional sections.
+3. **Cut visible text by 50-70%.**
+4. **Add real project visuals and proof.**
+5. **Remove AI-signal visual patterns** — redesign eyebrows, vary density, reduce pills/chips.
+6. **Clarify navigation/icons/compass.**
+7. **Fix scroll feel and performance degradation.**
+8. **Simplify mobile controls.**
+9. **Reframe making-of as an engineering case study.**
+10. **Keep the Chronicle atmosphere, but make it support the professional story.**
 
 The beta feedback is painful but extremely valuable. It shows the site has enough originality to get noticed, but it needs stronger restraint, clarity, and proof to convert attention into trust.

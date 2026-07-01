@@ -1,8 +1,12 @@
 # Chronicle Portfolio – Full Analytics Intelligence Report (July 1, 2026)
 
-# Chronicle portfolio – full analytics intelligence report
+**Generated:** July 1, 2026 · **Data sources:** PostHog Web Analytics + 5 Production Dashboards  
+**Time windows:** Last 24 hours (web snapshot) + Last 30 days (product analytics)  
+**Purpose:** The canonical behavior-data truth document for the Chronicle portfolio beta. Cross-referenced with the [Reddit feedback document](../feedback/2026-07-01-reddit-beta-feedback.md) for perception validation.  
+**Last updated:** 2026-07-01T14:58+05:30
 
-**Generated:** July 1, 2026 · **Data sources:** PostHog Web Analytics + 5 Production Dashboards **Time windows:** Last 24 hours (web snapshot) + Last 30 days (product analytics)
+> [!IMPORTANT]
+> **For AI agents:** This document is the behavior layer. The [feedback report](../feedback/2026-07-01-reddit-beta-feedback.md) is the perception layer. The [combined action plan](../synthesis/2026-07-01-combined-beta-action-plan.md) is the execution layer. Read all three before starting any reform work. Key metrics are highlighted with ⚠️ where they reveal problems. Each section includes a **What to fix** summary.
 
 ---
 
@@ -18,13 +22,15 @@
 
 ### Session quality (from session_recap, last 24h)
 
-- **Total session_recap events fired:** 123
+- **Total session_recap events fired:** 123 (⚠️ only 36% coverage — see data quality section)
 - **Avg session duration:** ~69 seconds (1 min 9 sec)
-- **Avg max scroll depth:** 43.9%
+- **⚠️ Avg max scroll depth:** 43.9%
 - **Avg sections viewed per session:** 3.81
-- **Sessions that reached contact section:** 41 (33.3% of session_recap pool)
+- **⚠️ Sessions that reached contact section:** 41 (33.3% of session_recap pool)
 - **Sessions that converted (contacted = true):** 0 in the last 24h
 - **Avg voices tried per session:** 0.08 (near-zero; voice adoption is low)
+
+**What this means:** Most visitors see about half the site in about a minute. They scroll fast (skimming, not reading), and most never reach the contact section. This validates the feedback that the site has too much text and doesn't convert fast enough.
 
 ### Top pages (last 24h)
 
@@ -34,53 +40,66 @@
 | upadhyaymanan.in/making-of | 9 | 9 |
 | Homepage + Facebook tracking param | 1 | 1 |
 
-**Actionable note:** `/making-of` is getting organic secondary traffic — 9 sessions voluntarily navigated there. This page is earning attention. Consider enriching it, adding a CTA, and linking it more prominently from the homepage.
+**Actionable note:** `/making-of` is getting organic secondary traffic — 9 sessions voluntarily navigated there. This page is earning attention. But the feedback says it reinforces "AI slop" perception — so it's a high-priority rewrite target, not something to amplify in its current form.
 
 ### Traffic sources (last 24h)
 
-| Source | Unique visitors |
-| --- | --- |
-| Direct | 204 (59%) |
-| Reddit (desktop [www.reddit.com](http://www.reddit.com)) | 73 (21%) |
-| Reddit (mobile app com.reddit.frontpage) | 58 (17%) |
-| Facebook (l.facebook.com) | 2 |
-| LinkedIn ([www.linkedin.com](http://www.linkedin.com)) | 2 |
-| Google (organic) | 1 |
-| GitHub | 1 |
+| Source | Unique visitors | % |
+| --- | --- | --- |
+| Direct | 204 | 59% |
+| Reddit (desktop www.reddit.com) | 73 | 21% |
+| Reddit (mobile app com.reddit.frontpage) | 58 | 17% |
+| Facebook (l.facebook.com) | 2 | <1% |
+| LinkedIn (www.linkedin.com) | 2 | <1% |
+| Google (organic) | 1 | <1% |
+| GitHub | 1 | <1% |
 
-**Critical insight:** Reddit is the #1 referral source at ~131 visitors combined (38% of all traffic with a known referrer). The site is going viral or being shared actively on Reddit. This is a huge acquisition lever — identify which subreddits and double down. There is currently almost zero SEO traffic (1 Google visitor) — entirely social-driven at this stage.
+**Critical insight:** Reddit is the #1 referral source at ~131 visitors combined (38% of all traffic with a known referrer). The site went viral on Reddit. This is a huge but temporary acquisition lever. **The "Direct" category at 204 visitors likely includes many Reddit users whose referrer was stripped** (Reddit mobile app, privacy extensions, etc.) — actual Reddit traffic may be 50%+ of all visitors.
+
+⚠️ **Google organic traffic: 1 visitor.** SEO is currently zero. This is expected for a beta launch but must be addressed for sustainable traffic.
 
 ### Geography (last 24h)
 
-| Country | Unique visitors |
-| --- | --- |
-| United States | 130 (38%) |
-| India | 39 (11%) |
-| United Kingdom | 26 (8%) |
-| Canada | 14 (4%) |
-| Germany | 11 |
-| Vietnam | 11 |
-| France | 10 |
-| Netherlands | 7 |
-| Australia | 7 |
-| Angola | 6 |
-| Pakistan | 6 |
-| Sweden, Spain, Italy, Belgium, Philippines | 5 each |
-| Algeria, Mexico, Indonesia, Finland | 3 each |
+| Country | Unique visitors | % |
+| --- | --- | --- |
+| United States | 130 | 38% |
+| India | 39 | 11% |
+| United Kingdom | 26 | 8% |
+| Canada | 14 | 4% |
+| Germany | 11 | 3% |
+| Vietnam | 11 | 3% |
+| France | 10 | 3% |
+| Netherlands | 7 | 2% |
+| Australia | 7 | 2% |
+| 20+ other countries | ~88 | 26% |
 
-**Actionable note:** Strong US dominance (38%) is great for senior-role hiring intent. Surprisingly diverse tail — 20 countries with visitors. India at 11% is notable for freelance/collaboration inquiries.
+**Actionable note:** Strong US dominance (38%) is ideal for senior-role hiring intent (US remote roles pay the most). India at 11% is notable for freelance/collaboration inquiries. Surprisingly diverse tail — 20+ countries with visitors.
 
 ### Devices & browsers (last 24h)
 
-**OS breakdown** (custom super-property; note ~309/343 show null — super property may not fire before first event, investigate):
+**⚠️ DATA QUALITY WARNING:** ~90% of sessions show null for device_os and device_browser. This is a tracking instrumentation bug (see Section 7). All device data below is from the ~10% with valid properties.
 
-- macOS: 16 | Windows: 11 | Android: 9 | Linux: 2
+**OS breakdown** (identified sessions only):
 
-**Browser breakdown** (same caveat on null rate):
+| OS | Visitors | % of identified |
+|---|---:|---:|
+| macOS | 16 | 42% |
+| Windows | 11 | 29% |
+| Android | 9 | 24% |
+| Linux | 2 | 5% |
 
-- Firefox: 20 | Chrome: 16 | Safari: 1 | Edge: 1
+**Browser breakdown** (identified sessions only):
 
-**Data quality flag:** ~90% of sessions show null for device_os and device_browser. This strongly suggests the super-property registration fires after the $pageview event, causing the custom super properties to not be attached to the first event. This is a tracking instrumentation bug — fix priority: high.
+| Browser | Visitors | % of identified |
+|---|---:|---:|
+| Firefox | 20 | 53% |
+| Chrome | 16 | 42% |
+| Safari | 1 | 3% |
+| Edge | 1 | 3% |
+
+**Insight:** Firefox leading Chrome skews toward developer/power-user audience (Reddit traffic). macOS at 42% is consistent with tech/design audience. Android at 24% of identified — the mobile segment is real and non-trivial.
+
+**What to fix:** Fix super property registration order before next beta — this data gap makes device-specific analysis nearly impossible.
 
 ---
 
@@ -88,7 +107,7 @@
 
 ### Visitor volume trend
 
-Traffic only started meaningfully on June 29 (12 visitors), spiked to 213 on June 30, and 133 on July 1 (partial day). The site is brand new or was just shared. All meaningful analytics data is from the last ~2–3 days, despite a 30-day window.
+Traffic only started meaningfully on June 29 (12 visitors), spiked to 213 on June 30, and 133 on July 1 (partial day). The site is brand new or was just shared. **All meaningful analytics data is from the last ~2–3 days**, despite a 30-day window.
 
 ### New vs. returning
 
@@ -96,92 +115,102 @@ Traffic only started meaningfully on June 29 (12 visitors), spiked to 213 on Jun
 - Jul 1: 16 new, 2 returning
 - Returning visitors exist — people are coming back, which is a strong signal for a portfolio.
 
-### Browser breakdown (30d, custom super-property)
+### ⚠️ Hero performance (the leverage point)
 
-| Browser | Unique visitors |
-| --- | --- |
-| None (not captured) | 325 |
-| Firefox | 20 |
-| Chrome | 18 |
-| Edge | 1 |
-| Safari | 1 |
+The hero is where most of the conversion work happens — a standard CRO principle, and the behavior data confirms it here:
 
-Among identified visitors: Firefox leads Chrome slightly, which skews toward developer/power-user audience.
+**Hero CTA split (30d):**
 
-### OS breakdown (30d)
+| CTA | Clicks | % |
+|---|---:|---:|
+| "About" (scroll to about section) | 32 | 64% |
+| "Contact" (scroll to contact) | 18 | 36% |
 
-| OS | Unique visitors |
-| --- | --- |
-| None (not captured) | 325 |
-| macOS | 18 |
-| Windows | 11 |
-| Android | 9 |
-| Linux | 2 |
+**Hero → About dropoff:** 16% of visitors leave before reaching About — the single biggest section-to-section loss.
 
-Among identified: macOS at 45%, consistent with tech/design audience. Android at 23% of identified — mobile segment is real and non-trivial.
+**Interpretation:**
+- 64% of CTA users are curious explorers → the hero hook isn't converting curiosity into hiring intent
+- 36% arrive ready to contact → but then face the 78% form abandonment problem
+- The 16% Origin→About drop means the hero fails to compel ~55 visitors to even scroll down
+- **Current hero CTAs ("Begin the Chronicle" / "Summon me →") tell the visitor nothing about professional value**
+
+**What to fix:** Rewrite hero hook, CTAs, and add a proof strip. This is the single highest-ROI change.
 
 ### Avg scroll depth (bounce proxy)
 
-- **41.79%** — visitors scroll roughly halfway down on average. More than half the page (contact, projects, etc.) is not being seen by the average visitor. This is the single most important number to improve.
-
-### Hero CTA split (30d)
-
-- **"About" clicked:** 32 (64%) — curious visitors, exploring who you are
-- **"Contact" clicked:** 18 (36%) — visitors arriving ready to hire
-
-**Actionable note:** The majority arrive curious, not ready to hire. The about section must do a better job converting curiosity into hiring intent. The 36% direct-to-contact rate is actually high for cold traffic — the hero copy is working for a subset.
+- **41.79%** ⚠️ — visitors scroll roughly halfway down on average. More than half the page (contact, projects, etc.) is not being seen by the average visitor. This is the single most important number to improve.
 
 ### First-touch engagement (30d)
 
-- **Sound first played:** 309 unique sessions — nearly everyone who lands hears the site. Sound autoplay/interaction is near-universal.
-- **Astrolabe dragged:** 97 unique sessions (27% of all visitors)
-- **Astrolabe spun:** 51 unique sessions (14%)
+| Engagement | Unique sessions | % of all visitors |
+|---|---:|---:|
+| Sound first played | 309 | 86% |
+| Astrolabe dragged | 97 | 27% |
+| Astrolabe spun | 51 | 14% |
 
-**Actionable note:** Sound is the #1 first-touch engagement moment by a massive margin. The astrolabe is engaged by a smaller but meaningful portion. These two elements are the hero's real interactive hooks.
+**Actionable note:** Sound is the #1 first-touch engagement moment by a massive margin. The astrolabe is engaged by a smaller but meaningful portion. These two elements are the hero's real interactive hooks — but neither does conversion work.
+
+**What to fix:** The hero's interactive elements (astrolabe, sound) are engagement-positive but conversion-neutral. The hero needs professional content that converts alongside the interactive elements.
 
 ---
 
 ## SECTION 3 — Engagement & discovery (last 30 days)
 
-### Section heatmap (unique sessions that viewed each section)
+### ⚠️ Section heatmap (unique sessions that viewed each section)
 
-| Section | Unique sessions |
-| --- | --- |
-| origin (hero) | 355 |
-| about | 299 (84%) |
-| work | 247 (70%) |
-| arsenal | 189 (53%) |
-| projects | 177 (50%) |
-| contact | 132 (37%) |
+| Section | Unique sessions | % of hero viewers | Drop from previous |
+| --- | ---: | ---: | ---: |
+| origin (hero) | 355 | 100% | — |
+| about | 299 | 84% | **-16%** ⚠️ biggest single drop |
+| work | 247 | 70% | -14% |
+| arsenal | 189 | 53% | -17% |
+| projects | 177 | 50% | -3% (arsenal→projects is low-friction) |
+| contact | 132 | 37% | -13% |
 
-**Dropoff pattern:** ~16% leave before reading About. ~30% leave before Work. ~47% leave before Arsenal. ~50% leave before Projects. Only 37% reach Contact. Each section loses ~13–17% of remaining visitors. The biggest single drop is Origin → About (16 percentage points). This is where the hero needs to do more work.
+**The critical funnel:**
+- 355 see the hero
+- 177 see projects (50%) — half your visitors never see your work
+- 132 see contact (37%) — nearly two-thirds never see how to reach you
+- 9 start the form (2.5%)
+- 2 submit (0.56%)
+
+**Each section loses ~13–17% of remaining visitors.** The biggest single drop is Origin → About (16 percentage points). This is where the hero needs to do more work.
+
+**What to fix:** 
+1. Make the hero retain more visitors (better hook, clearer value)
+2. Move projects earlier or make them reachable from the hero (currently section 5 of 6)
+3. Add floating/sticky contact CTA so it's accessible without reaching the bottom
 
 ### Scroll depth funnel (30d, n=240 who hit 25%)
 
-| Milestone | Visitors | Cumulative rate |
-| --- | --- | --- |
-| 25% scroll | 240 | 100% (base) |
-| 50% scroll | 180 | 75% |
-| 75% scroll | 139 | 58% |
-| 100% scroll | 94 | 39% |
+| Milestone | Visitors | Cumulative rate | ⚠️ Median time to reach |
+| --- | ---: | ---: | ---: |
+| 25% scroll | 240 | 100% (base) | 7s |
+| 50% scroll | 180 | 75% | 10s |
+| 75% scroll | 139 | 58% | 11s |
+| 100% scroll | 94 | 39% | — |
 
-39% of visitors who scrolled at all made it to the bottom. This is respectably high for a long single-page portfolio. Median time to hit each milestone: 7s → 10s → 11s (fast scrollers; people are moving quickly, not reading deeply).
+**Critical insight:** Median time from 25% to 75% is only 4 seconds (10s - 7s + 11s - 10s). Users are SCROLLING FAST — skimming, not reading. The content density is not matching user behavior. They're racing through copy-heavy sections.
 
-### Discovery funnel (30d)
+39% of visitors who scrolled at all made it to the bottom. This is respectably high for a long single-page portfolio — but those who don't scroll far enough never see projects or contact.
 
-| Step | Users | Conversion |
-| --- | --- | --- |
-| Landed on site | 358 | 100% |
+### ⚠️ Discovery funnel (30d) — deep features are invisible
+
+| Step | Users | Conversion from previous |
+| --- | ---: | ---: |
+| Landed on site | 358 | — |
 | Spun the astrolabe | 51 | 14.25% |
-| Opened the Voice Hall | 4 | 1.12% |
-| Reached the Atelier | 0 | 0% |
+| Opened the Voice Hall | 4 | 7.8% of spinners |
+| Reached the Atelier | 0 | **0%** ⚠️ |
 
-**Critical finding:** The Atelier has ZERO reach. Voice Hall has only 4 visitors (1.12% of all). These are the deepest, most unique layers of the site — they are essentially invisible. The path to discovery is too long or too obscure.
+**Critical finding:** The Atelier has **ZERO** funnel reach. Voice Hall has only 4 visitors (1.12% of all). The path to discovery (astrolabe → Voice Hall → Atelier) is fundamentally broken. Users DO visit the Atelier (11 direct visits), but through non-funnel paths (direct URL, map navigation).
+
+**What to fix:** Don't fix the discovery funnel — it's a P2 problem. Fix conversion first. The discovery path is a nice-to-have for explorers, not a conversion mechanism.
 
 ### Deep feature adoption (30d, unique sessions)
 
 | Feature | Unique sessions |
-| --- | --- |
+| --- | ---: |
 | Expedition reached | 106 |
 | Carousel opened | 40 |
 | Arsenal explored | 32 |
@@ -190,33 +219,39 @@ Among identified: macOS at 45%, consistent with tech/design audience. Android at
 | Atelier visited | 11 |
 | Persona card expanded | 3 |
 
-**Actionable notes:**
-
-- Expedition section is highly reached (106 sessions) — it's well-positioned in the scroll path.
-- Carousel is opened by 40 sessions — interactive gallery is working.
-- Build reel scrub (7) and persona card expand (3) are almost undiscovered — these interactive moments need better affordance/visual cues.
-- Atelier visits: 11 (despite 0 in the discovery funnel — these came through direct navigation, not the astrolabe → voice hall path).
+**What to fix:** Expedition (106) and carousel (40) are well-positioned in the scroll path and work. Build reel (7) and persona card (3) are almost invisible — either add interaction hints or simplify.
 
 ### Navigation style (30d)
 
-- **Map opened:** 55 times — the map is the most used navigation tool
-- **Map jumps (teleport):** 23 times — map is actively used for navigation, not just opened and closed
-- **Rail nav clicks:** 14 times — side rail is the least used navigation
+| Method | Events | Interpretation |
+|---|---:|---|
+| Map opened | 55 | Most-used navigation tool |
+| Map jumps (teleport) | 23 | Actively used for real navigation |
+| Rail nav clicks | 14 | Least used — consider removing or redesigning |
 
-**Actionable note:** The map is visitors' preferred navigation method over the rail. Consider promoting the map more visibly, or making the rail more prominent for mobile users.
+**What to fix:** The map works and users like it. The rail is nearly unused — either make it more prominent or remove it to reduce visual clutter. This choice affects visual congestion.
 
 ### Arsenal depth
 
-- **Avg tools hovered per session:** 1.03 — visitors who reach the arsenal barely explore it. They hover on 1 tool on average. The arsenal feels complete but under-explored.
+- **Avg tools hovered per session:** 1.03 — visitors who reach the arsenal barely explore it. They hover on 1 tool on average.
+
+**What to fix:** The arsenal "orbital" interaction may be beautiful but isn't inviting exploration. Consider a simpler grouped-list approach with clear categories.
 
 ### Project interest (30d)
 
-| Project | Link clicks |
-| --- | --- |
-| Gajaakriti Studio | 9 |
-| Royal Tiles Playground | 3 |
+| Project | Link clicks | Link type |
+| --- | ---: | --- |
+| Gajaakriti Studio | 9 | Live demo |
+| Royal Tiles Playground | 3 | Live demo |
+| All other projects | 0 | — |
 
-**Link type:** Only "live" links recorded (12 total). No source/GitHub links clicked. Visitors want to see live projects, not read code. Consider making live demos more prominent and ensuring every project has a working live link.
+**Only 12 project clicks from ~350 visitors.** No source/GitHub links clicked. Visitors want to see live projects, not read code.
+
+**What to fix:**
+1. Put Gajaakriti Studio first (3x more interest)
+2. Add screenshots to project cards (zero images currently)
+3. Make live demo CTAs more prominent
+4. Consider showing only 3 featured projects by default instead of all 8
 
 ---
 
@@ -225,12 +260,20 @@ Among identified: macOS at 45%, consistent with tech/design audience. Android at
 ### Voice discovery funnel (30d)
 
 | Step | Users | Conversion |
-| --- | --- | --- |
-| Opened voice switcher | 33 | 100% (base) |
-| Selected a voice | 13 | 39.4% |
-| Entered the Voice Hall | 2 | 6.06% |
+| --- | ---: | ---: |
+| Opened voice switcher | 33 | 9.2% of all visitors |
+| Selected a voice | 13 | 39.4% of openers |
+| Entered the Voice Hall | 2 | 6.06% of openers |
 
-Only 33 of 358 visitors (9.2%) even opened the voice switcher. Of those, 39% tried a voice. The Voice Hall — the deepest layer — was reached by only 2 people total. Median time from switcher to selection: 4 seconds (quick decision-making).
+⚠️ Only 33 of 358 visitors (9.2%) even opened the voice switcher. The Voice Hall was reached by only 2 people total.
+
+**Comparison:** Theme switcher gets 309 interactions. Voice switcher gets 33. **The theme control is 9x more discoverable.** They use the same visual pattern — why the gap?
+
+Likely reasons:
+- Theme switching has immediate, visible impact (entire page changes color)
+- Voice switching requires reading to notice the change
+- Theme is top-right (primary attention zone); voice is bottom-right
+- Voice concept is unfamiliar — users don't know what "voice" means in this context
 
 ### Voice popularity (30d, total selections)
 
@@ -242,7 +285,7 @@ Only 33 of 358 visitors (9.2%) even opened the voice switcher. Of those, 39% tri
 | cow | 2 |
 | dwight | 2 |
 
-"Plain" wins — visitors fall back to the default/neutral voice most. "Chronicle" (the signature voice) is second, which is encouraging. Easter egg voices (scott, cow, dwight) each have 2 selections — these are discoveries, not defaults.
+**"Plain" wins** — visitors fall back to the neutral voice most. This validates the feedback: users prefer direct, professional copy.
 
 ### Voices tried per session (30d)
 
@@ -253,22 +296,21 @@ Only 33 of 358 visitors (9.2%) even opened the voice switcher. Of those, 39% tri
 
 The voice system is deeply underutilized. 95% of sessions never try a single voice. The system is loved by the tiny fraction who find it, but the discovery path is too hidden.
 
+**What to fix:** P2 priority. Don't invest in voice discoverability until core conversion is fixed. But note that "plain" being #1 validates the copy rewrite direction.
+
 ### Easter egg unlocks (30d)
 
 - cow: 2 | scott: 2 | dwight: 1 — total 5 easter egg unlocks across all sessions
 
-The easter eggs are being found, but by a tiny number. These are the kind of moments visitors share — lean into making them more discoverable or hint at their existence.
-
-### Voice wishlist (summon form)
-
-- 1 submission recorded: persona = "test" (likely a self-test; no real user wishlist data yet)
-
 ### Sound engagement (30d)
 
-- **Heard the site:** 309 unique sessions
-- **Muted it:** 16 unique sessions (5.2% mute rate)
+| Metric | Value |
+|---|---:|
+| Heard the site | 309 sessions |
+| Muted it | 16 sessions |
+| **Mute rate** | **5.2%** |
 
-Excellent — 94.8% of visitors who triggered sound kept it on. Sound is additive, not annoying.
+**Excellent** — 94.8% of visitors who triggered sound kept it on. Sound is additive, not annoying. **Preserve sound as-is.**
 
 ### Theme preferences (30d, sky changes)
 
@@ -279,45 +321,44 @@ Excellent — 94.8% of visitors who triggered sound kept it on. Sound is additiv
 | dusk | 64 |
 | dawn | 55 |
 
-Total 309 theme switches. Night and day nearly tied. All four themes are being explored. Visitors are actively engaging with the sky/theme switcher — it's one of the most-used interactive features on the site.
+Total 309 theme switches. Night and day nearly tied. All four themes are being explored. **Theme switching is the most-used interactive feature on the entire site.** This proves the UI pattern for discoverability — use it as a model for other controls.
 
-**Actionable note:** Theme switching (309 events) dramatically outperforms voice switching (33 events). The theme control is more discoverable. Consider using this discoverability pattern to guide users toward the voice switcher.
+**What to fix:** Nothing — theme switching works. Consider making Night the default (slightly more popular).
 
 ---
 
 ## SECTION 5 — Conversion & revenue intent (last 30 days)
 
-### Master hiring funnel (30d)
+### ⚠️ Master hiring funnel (30d)
 
-| Step | Users | Overall rate |
-| --- | --- | --- |
-| Landed on site | 358 | 100% |
-| Reached contact section | 131 | 36.6% |
-| Started the form | 9 | 2.51% |
-| Submitted the form | 2 | 0.56% |
-| Sent successfully | 2 | 0.56% |
+| Step | Users | Overall rate | Step conversion |
+| --- | ---: | ---: | ---: |
+| Landed on site | 358 | 100% | — |
+| Reached contact section | 131 | 36.6% | 36.6% |
+| Started the form | 9 | 2.51% | 6.9% of contact reachers |
+| Submitted the form | 2 | 0.56% | 22% of starters |
+| Sent successfully | 2 | 0.56% | 100% of submits |
+
+**This is the most important data in the entire report.**
 
 **Key gaps:**
 
-1. **Reach → Start gap:** 131 reached contact, only 9 started the form (6.9% of those who saw it). The contact section is not compelling enough to prompt action. The CTA copy, form design, or trust signals need work.
-2. **Start → Submit gap:** 9 started, 2 submitted (22%). 7 people abandoned mid-form. This is the #1 form UX problem — likely too many fields, intimidating copy, or anxiety at the commitment point.
-3. Submit → Success: 100% (2/2) — the form itself sends correctly, no backend errors.
+1. **⚠️ Reach → Start gap:** 131 reached contact, only 9 started the form (**6.9%** of those who saw it). The contact section is not compelling enough to prompt action. The CTA copy ("Dispatch the Raven"), themed form language, and surrounding visual complexity likely create friction.
+
+2. **⚠️ Start → Submit gap:** 9 started, 2 submitted (**22%**). 7 people abandoned mid-form. This is the #1 form UX problem — likely too many fields, intimidating copy, or anxiety at the commitment point. The themed error messages ("The raven refuses to fly with an empty scroll") add cognitive load during a frustration moment.
+
+3. **Submit → Success: 100%** (2/2) — the form backend is healthy, no technical issues.
 
 ### Leads over time
 
 - Jun 29: 1 lead | Jun 30: 0 | Jul 1: 1 lead (in progress)
 - **Total leads in 30-day window: 2**
-- Both leads are "Senior role" inquiry type
-
-### Intent by inquiry type
-
-- **Senior role: 2** — 100% of conversions are senior full-time hiring inquiries
-- No freelance, collaborate, or other inquiries have converted yet
+- Both leads are "Senior role" inquiry type — the site IS attracting the right audience
 
 ### Form abandonment funnel
 
 - Started: 9 → Submitted: 2 (22%) → Succeeded: 2 (22%)
-- **78% abandonment rate from start to submit** — this is critically high
+- **⚠️ 78% abandonment rate from start to submit** — this is critically high
 
 ### Form errors
 
@@ -331,31 +372,36 @@ Total 309 theme switches. Night and day nearly tied. All four themes are being e
 | Résumé opened | 4 unique sessions |
 | Email copied | 2 unique sessions |
 
-Total soft intent signals: 14 unique sessions showed strong pre-contact intent. Combined with 2 actual conversions = 14 more potential leads who showed interest but didn't send a message. These people are qualified — the friction at the form is losing warm leads.
+Total soft intent signals: 14 unique sessions showed strong pre-contact intent. Combined with 2 actual conversions = **14 potential leads who showed interest but didn't convert.** These people are qualified — the friction at the form is losing warm leads.
 
 ### Channel breakdown (30d)
 
-- **GitHub:** 5 clicks
-- **LinkedIn:** 3 clicks
+| Channel | Clicks |
+|---|---:|
+| GitHub | 5 |
+| LinkedIn | 3 |
 
-GitHub is the preferred channel for visitors who click through. No other channels (email, Twitter/X, etc.) recorded.
+GitHub is the preferred channel. No other channels (email, Twitter/X, etc.) recorded.
 
-### Conversion by device (30d)
+### ⚠️ Conversion by device (30d)
 
-| OS | Landed | Reached contact | Started form | Sent |
-| --- | --- | --- | --- | --- |
+| OS | Landed | Reached contact | Form starts | Sent |
+| --- | ---: | ---: | ---: | ---: |
 | macOS | 81 | 79 (97.5%) | 8 (9.9%) | 1 (1.23%) |
 | Android | 36 | 28 (77.8%) | 1 (2.78%) | 1 (2.78%) |
-| Windows | 26 | 21 (80.8%) | 0 | 0 |
+| **Windows** | **26** | **21 (80.8%)** | **0** ⚠️ | **0** |
 | Linux | 4 | 3 (75%) | 0 | 0 |
 
-**Findings:**
+**⚠️ CRITICAL BUG:** Windows users reached contact at 80.8% but had ZERO form starts. 21 Windows users saw the contact section and none of them even clicked into a form field. This is almost certainly a rendering/UX bug (z-index, pointer-events, scroll container interference, or custom cursor blocking clicks on Windows Chrome/Edge).
 
-- macOS users have the highest contact-section reach rate (97.5%) — near-total engagement.
-- macOS has the most form starts but only 1 conversion (1.23%).
-- Android surprisingly converted 1 user at 2.78% — mobile conversion is happening.
-- Windows users: reached contact in 80.8% but zero form starts. This is a significant UX issue — something about the contact section/form experience on Windows (likely Chrome/Edge rendering) is preventing engagement.
-- Note: 211 visitors have no OS data and show 0% reach — this is the super-property data gap issue referenced above.
+**macOS** has the best contact reach (97.5%) but modest conversion (1.23%).
+
+**Android** has the highest conversion rate (2.78%) — mobile CAN convert. This is important: don't treat mobile as a dead channel.
+
+**What to fix:**
+1. Investigate and fix Windows Chrome/Edge contact form interaction (P0)
+2. Simplify form copy for all platforms
+3. Ensure mobile form has proper autofill and tap targets
 
 ---
 
@@ -363,58 +409,103 @@ GitHub is the preferred channel for visitors who click through. No other channel
 
 ### Session depth KPIs
 
-- **Avg time on site:** 65.66 seconds (1 min 5 sec)
-- **Avg max scroll %:** 41.79%
-- **Avg voices tried per session:** 0.084
-- **Avg sections viewed per session:** ~3.8 (derived)
+| Metric | Value | Health |
+|---|---:|---|
+| Avg time on site | 65.66s | ⚠️ Low for content-heavy site |
+| Avg max scroll % | 41.79% | ⚠️ Majority don't see bottom half |
+| Avg voices tried | 0.084 | Voice system nearly invisible |
+| Avg sections viewed | ~3.8 | About half the journey |
 
 ### Sections viewed per session distribution (30d)
 
-| Sections viewed | Sessions |
-| --- | --- |
-| 6 (all sections) | 39 |
-| 5 | 22 |
-| 3 | 22 |
-| 1 | 22 |
-| 2 | 18 |
-| 4 | 4 |
-| 0 | 4 |
+| Sections viewed | Sessions | Interpretation |
+| --- | ---: | --- |
+| 6 (all sections) | 39 | Deep engagers — top ~30% |
+| 5 | 22 | Near-complete viewers |
+| 3 | 22 | Partial viewers (typical) |
+| 2 | 18 | Quick scanners |
+| 1 | 22 | **Bounces** |
+| 0 | 4 | Instant bounces |
+| 4 | 4 | — |
 
-**Insight:** 39 sessions saw all 6 sections — these are the deep engagers (top ~30% of session_recap pool). 22 sessions saw only 1 section — quick bounces. The bimodal distribution suggests two clear visitor types: committed explorers and fast bouncers.
+**Bimodal distribution:** Two clear visitor types:
+1. **Committed explorers** (39 sessions, 6 sections) — these are the conversion candidates
+2. **Fast bouncers** (22 sessions, 1 section) — lost at the hero
+
+**What to fix:** Convert some of the "1 section" bouncers into "3+ section" viewers by improving the hero hook and scroll incentive.
 
 ### Time on site distribution (30d)
 
-Highly spread — most values in the 1–76 second range with 95 sessions in "other" (i.e., longer). The 12–23 second band dominates the identifiable buckets (3–5 sessions each), suggesting many visitors spend just enough time to get a first impression before leaving.
+Highly spread — most values in the 1–76 second range. The 12–23 second band dominates, suggesting many visitors spend just enough time to get a first impression before leaving.
+
+**What this means:** The hero has about 10-15 seconds to convince a visitor to stay. Currently, many leave in that window.
 
 ### Power users — keyboard shortcuts (30d)
 
-- **cmd+k:** 1 unique user
-- **shift+cmd+v:** 1 unique user
+| Shortcut | Users |
+|---|---:|
+| cmd+k (map) | 1 |
+| shift+cmd+v (Voice Hall) | 1 |
 
-2 power users found keyboard shortcuts. Both are almost certainly developers. These are high-value visitors.
-
-### Engaged → converted correlation (30d)
-
-- Sessions with 2+ voices tried: peaked at 2 (Jun 30), 1 (Jul 1)
-- Sessions that converted: 0 in the same window
-
-**Note:** Sample is too small to draw statistical conclusions, but the pattern is emerging — engaged users (2+ voices) have not yet converted. This could mean: (a) engagement and conversion are decoupled, or (b) the contact CTA isn't reaching engaged visitors effectively.
+2 power users found keyboard shortcuts. Both are almost certainly developers. These are high-value visitors — but the feature is essentially invisible.
 
 ---
 
-## SECTION 7 — Data quality issues & instrumentation gaps
+## SECTION 7 — ⚠️ Data quality issues & instrumentation gaps
 
-1. **Super property null rate (~90%):** device_os, device_browser, and other custom super properties are null for ~309/343 visitors. This suggests super properties are registered after the first $pageview fires. Fix: call `posthog.register()` synchronously before any event capture, ideally in the same script that initializes PostHog.
+These MUST be fixed before the next beta. Without reliable data, we can't measure whether our changes worked.
 
-2. **Atelier reached = 0 in discovery funnel:** Despite 11 atelier_view events in deep feature adoption, the funnel (pageview → astrolabe → voice hall → atelier) shows 0. This is because the funnel is ordered and gated — no one completed the exact sequential path. The atelier is being accessed directly (probably via direct link or map navigation), bypassing the intended discovery path.
+### 1. Super property null rate (~90%) — P0
 
-3. **Voice Hall reach = 1.12%:** The Voice Hall is the gateway to the deepest feature layer. At 1.12%, it's nearly invisible. The astrolabe → voice hall path has a 92% dropoff after the spin.
+**Problem:** device_os, device_browser, and other custom super properties are null for ~309/343 visitors.
 
-4. **session_recap coverage:** 123 session_recap events vs. 343 pageviews — only ~36% of sessions have a recap. This is expected (recap fires on page-leave; some visitors close abruptly), but means KPIs derived from session_recap represent a subset.
+**Root cause:** Super properties are registered after the first $pageview fires. PostHog auto-captures $pageview before `posthog.register()` runs.
 
-5. **Windows users: 0% form starts despite 81% contact-section reach:** This is anomalous and likely a rendering/UX bug on Windows browsers (Chrome/Edge). Investigate the contact section layout on Windows Chrome specifically.
+**Fix:** Call `posthog.register()` synchronously before any event capture. If autocapture/pageview fires before registration, disable automatic pageview and manually capture after registration.
 
-6. **/making-of page:** Getting 9 organic visits in 24h — likely linked from Reddit posts. No analytics tracking on this page beyond pageviews (no scroll_depth, no custom events). Instrument it.
+**Code path:**
+```
+src/lib/analytics.js — move posthog.register() before posthog.init() or disable auto pageview
+```
+
+### 2. Atelier funnel shows 0 despite 11 visits
+
+**Problem:** The sequential funnel (pageview → astrolabe → voice hall → atelier) shows 0 completions because no one completed the exact sequential path. Users visit the Atelier via direct link or map navigation.
+
+**Interpretation:** The designed discovery path is broken. The Atelier IS getting visits (11) through alternative paths. This is a P2 design issue, not a tracking issue.
+
+### 3. Session recap coverage: 36%
+
+**Problem:** Only 123 session_recap events vs 343 pageviews. Recap fires on page-leave; some visitors close abruptly (mobile tab close, rapid bounce).
+
+**Fix:** Add heartbeat events at 15s/30s/60s to capture data from short sessions. Add `visibilitychange` event. Keep page-leave recap but supplement it.
+
+### 4. Windows 0% form starts despite 81% contact reach
+
+**Problem:** Anomalous and almost certainly a rendering/UX bug.
+
+**Fix:** Test contact section specifically on Windows Chrome and Edge. Check:
+- Input field focus/click events
+- z-index stacking
+- pointer-events on overlapping elements  
+- Custom cursor interference
+- Scroll container trapping focus
+
+### 5. `/making-of` tracking
+
+**Problem:** Only pageview tracking, no scroll depth or custom events.
+
+**Fix:** Add section_view, scroll_depth, and CTA click tracking to the Atelier page.
+
+### 6. No performance metrics tracked
+
+**Problem:** A user reported performance degradation over time (M1 MacBook Pro with 4K display). We have no data to validate or diagnose this.
+
+**Fix:** Add performance monitoring:
+- Long task observer
+- Memory usage sampling (if available)
+- Frame rate drops
+- Or simply use Vercel Speed Insights more aggressively
 
 ---
 
@@ -422,38 +513,74 @@ Highly spread — most values in the 1–76 second range with 95 sessions in "ot
 
 ### P0 — Immediate (conversion critical)
 
-1. **Fix the form abandonment (78% drop).** 9 people start, 7 leave. Simplify the form: reduce fields, add social proof near the submit button, soften the commitment language. A "just say hi" entry point alongside the formal inquiry might help.
-2. **Fix Windows contact section bug.** 21 Windows users reached contact, 0 started the form. Inspect layout/overflow/z-index issues on Windows Chrome/Edge.
-3. **Fix super property registration order.** ~90% of sessions have null device properties — fire `posthog.register()` before the first event.
+| # | Action | Data evidence | Expected impact |
+|---:|---|---|---|
+| 1 | **Optimize hero for conversion** | 16% Origin→About drop (biggest single funnel leak); hero CTAs don't communicate value | Highest ROI change — better hook/CTA/action path will improve scroll depth, section reach, and downstream conversion |
+| 2 | **Fix form abandonment (78% drop)** | 9 people start, 7 leave. Contact reach→form start is only 6.9% | Direct revenue impact — reducing to 40% abandonment doubles leads |
+| 3 | **Fix Windows contact section bug** | 21 Windows users reached contact, 0 started the form | Recovers ~6-8% of all visitors from a total conversion blackout |
+| 4 | **Fix super property registration** | ~90% null device properties | Required for data-driven iteration in next beta |
+| 5 | **Add session heartbeat tracking** | 36% recap coverage misses short sessions | Required for reliable session quality measurement |
 
-### P1 — High impact (discovery & engagement)
+### P1 — High impact (trust & engagement)
 
-1. **Make the voice switcher more discoverable.** Theme switcher gets 309 interactions; voice switcher gets 33. They're likely near each other — investigate why theme is found 9x more. Add a subtle visual hint or tooltip nudging toward voice.
-2. **Amplify the Reddit moment.** Reddit is driving 38% of all referral traffic. Find the post/thread, engage with it, and consider posting follow-up content or comments. This is an active growth loop.
-3. **Add a CTA to /making-of.** 9 visitors in 24h — add a "hire me" or "contact" CTA at the bottom of the making-of page, since people reading it are already highly interested.
-4. **Improve hero to About transition.** 16% of visitors leave between hero and About. The scroll-down affordance or first-scroll hook needs work.
+| # | Action | Data evidence | Expected impact |
+|---:|---|---|---|
+| 1 | **Cut visible copy by 50-70%** | Scroll milestones reached in 7-11s (fast skimming); avg scroll 41.8% | Will improve scroll depth and section reach |
+| 2 | **Add project screenshots** | Only 12 project clicks from 350 visitors; zero images in current portfolio | Addresses the #1 "AI perception" issue alongside copy rewrite |
+| 3 | **Improve voice switcher discoverability** | Theme: 309 events vs Voice: 33 events (9x gap) | Align discovery pattern with theme switcher model |
+| 4 | **Rewrite `/making-of` as case study** | 9 visits in 24h but negative perception feedback | Convert curiosity into credibility |
+| 5 | **Move projects earlier** | Projects section at 50% reach; Gajaakriti 9 clicks vs Royal Tiles 3 | More visitors see proof before bouncing |
 
 ### P2 — Medium term (depth & personalization)
 
-1. **Build reel scrub and persona card expand are nearly undiscovered** (7 and 3 sessions). Either add interaction hints (e.g., hover states, animated indicators) or simplify the UX so the interactive nature is self-evident.
-2. **Gajaakriti Studio is 3x more clicked than Royal Tiles Playground.** Reorder projects section by interest signal — put Gajaakriti Studio first. Consider adding more projects or featuring the most-clicked one higher.
-3. **Instrument /making-of fully.** It's earning organic traffic. Add scroll_depth, section_view, and a contact CTA with proper tracking.
-4. **The Atelier has zero funnel reach.** Consider surfacing a teaser or hint earlier in the scroll (before the astrolabe), or adding an alternative entry point (map jump, section link).
+| # | Action | Data evidence |
+|---:|---|---|
+| 1 | **Fix discovery funnel** | Voice Hall: 4 users; Atelier funnel: 0 |
+| 2 | **Reorder projects by interest** | Gajaakriti 3x more clicked than Royal Tiles |
+| 3 | **Improve arsenal interaction** | Avg 1.03 tools hovered — barely explored |
+| 4 | **Consider removing or redesigning rail nav** | Only 14 clicks vs map's 55 opens |
+| 5 | **Night theme as default** | Night 99 vs day 91 changes |
 
 ### P3 — Optimization
 
-1. **Night and Day themes are nearly tied** — consider making Night the default (it's the #1 choice, slightly). Test whether a darker default increases time-on-site.
-2. **Easter eggs (cow, scott, dwight) are found by very few.** Add an extremely subtle hint — one line of text, an unusual hover state — that signals "there are secrets here" without revealing them.
-3. **Contact section reaching only 37% of visitors.** Add a floating/sticky CTA element that appears after 75% scroll to surface contact intent for deep scrollers who don't reach the bottom.
-4. **Mobile (Android) converts at 2.78% vs macOS at 1.23%.** Mobile is not a dead channel — ensure the contact form is fully mobile-optimized with large tap targets and autofill support.
+| # | Action | Data evidence |
+|---:|---|---|
+| 1 | **Easter egg discoverability hints** | Only 5 total unlocks |
+| 2 | **Mobile-specific sticky CTA** | Android converts at 2.78% — mobile is viable |
+| 3 | **Floating CTA after engagement** | Contact reach only 37% — surface contact for deep scrollers |
+
+---
+
+## SECTION 9 — North-star metrics for next beta
+
+These are the measurable targets for the next testing round, based on current baselines and reasonable improvement goals.
+
+| Metric | Current baseline | Next beta target | Measurement |
+|---|---:|---:|---|
+| Avg max scroll | 41.8% | 50–55% | session_recap |
+| Contact section reach | 36.6% | 45–55% | section_view_contact |
+| Hero → About retention | 84% | 90%+ | section heatmap |
+| Projects section reach | 50% | 60%+ | section_view_projects |
+| Form start rate overall | 2.51% | 5–8% | contact_form_start |
+| Form start among contact reachers | 6.9% | 12–20% | funnel analysis |
+| Form submit among starters | 22% | 50–70% | contact_form_submit |
+| Form abandonment | 78% | <40% | funnel analysis |
+| Overall lead conversion | 0.56% | 1.0–2.0% | contact_success |
+| Resume opens | 4 sessions | 15–25 per 350 users | resume_open |
+| GitHub/LinkedIn clicks | 8 total | 20+ total | channel_open |
+| Device/browser null rate | ~90% | <5% | super property audit |
+| Session recap coverage | ~36% | 60%+ | heartbeat events |
+| Windows form starts | 0 | >0, comparable to macOS | platform QA |
+| "AI/slop" comments | Very frequent | Rare/minority | qualitative |
+| "Confusing" comments | Frequent | Rare/minority | qualitative |
 
 ---
 
 ## Summary numbers for quick reference
 
 | Metric | Last 24h | Last 30 days |
-| --- | --- | --- |
-| Unique visitors | 343 | ~358 (all concentrated Jun 29–Jul 1) |
+| --- | ---: | ---: |
+| Unique visitors | 343 | ~358 (concentrated Jun 29–Jul 1) |
 | Sessions | 343 | ~358 |
 | Avg session duration | 69s | 65.7s |
 | Avg max scroll | 43.9% | 41.8% |
@@ -471,3 +598,6 @@ Highly spread — most values in the 1–76 second range with 95 sessions in "ot
 | Reddit traffic share | 38% | — |
 | Top inquiry type | — | Senior role (100%) |
 | Keyboard shortcut users | — | 2 (power devs) |
+| **Windows form starts** | — | **0** ⚠️ |
+| **Project clicks** | — | **12 total** |
+| **Gajaakriti vs Royal Tiles** | — | **9 vs 3** |

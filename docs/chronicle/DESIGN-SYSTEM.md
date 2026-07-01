@@ -4,6 +4,60 @@ The visual & motion language. **Every component must consume these tokens**, not
 raw values. Tokens are defined in [`src/index.css`](../../src/index.css) and
 [`tailwind.config.js`](../../tailwind.config.js).
 
+> [!NOTE]
+> **The tokens and motion language below are stable through v1.1.** What v1.1
+> changes is *how much* of them we deploy at once — a restraint pass. See the
+> addendum immediately below and the [V1.1 Release Plan](V1.1-RELEASE-PLAN.md).
+
+---
+
+## 0. v1.1 addendum — the restraint pass
+
+Beta 1 said the design is memorable but **over-signals AI, overloads the reader,
+and feels congested**. The tokens are not the problem; the *density* is. v1.1
+applies a **premium restraint pass** across the default path. Rationale + evidence:
+[V1.1 Release Plan §2, §4-A](V1.1-RELEASE-PLAN.md) and
+[feedback §5, §10](reports/feedback/2026-07-01-reddit-beta-feedback.md).
+
+**Remove the "vibe-coded" visual tells** (repeatedly named by testers, present in
+the codebase — the highest-value design changes):
+
+- **Uppercase "eyebrow" headings** (`chapter-eyebrow` / `ChapterHeading`, e.g.
+  "CHAPTER 01 · THE CRAFT") are the #1 AI tell. Redesign: drop chapter numbering
+  or move to a quiet normal-case inline label, lighter weight.
+- **Pill / chip uniformity** (contact inquiry chips, Arsenal skill badges, project
+  tags) reads as generated UI. Break the uniformity — don't ship one rounded-pill
+  treatment everywhere.
+- **Uniform section density.** Every section currently carries the same polish
+  level; humans are uneven. Deliberately make some sections calmer/simpler.
+
+**Raise breathing room and hierarchy:**
+
+- Increase whitespace and section margins; fewer cards per view; one strong
+  visual moment per section rather than many competing details.
+- Design layouts for a copy budget **50–70% smaller** (copy lives in i18n
+  bundles; the layout must be built for the shorter budget — release plan §4-A).
+- Add an above-the-fold **proof strip** to the hero (years · stack · shipped ·
+  role) using existing tokens — muted, mono, low-key.
+
+**Input & motion restraint:**
+
+- **Custom cursor** (`Cursor.jsx`): simplify (smaller, one color, animate only on
+  meaningful hover) or default-off; must be disabled on touch / reduced-motion —
+  verify.
+- Trim first-visit decorative motion; keep motion that communicates state or
+  reveals content, cut motion that only impresses.
+- **Mobile:** collapse the floating control cluster into one labelled menu; tap
+  targets ≥ 44px; more letter-spacing/line-height on decorative headings at
+  narrow widths.
+
+**Controls must be legible:** label every persistent control (Map/Theme/Sound/
+Voice). The `SkyControl` theme switcher (309 interactions in Beta 1) is the model
+for discoverability — the Voice control (33) should borrow its affordance.
+
+> Guardrail for the whole pass: **remove 30–50% of default-path decorative
+> detail; keep the secrets for explorers.** Restraint is the senior-taste signal.
+
 ---
 
 ## 1. Color tokens

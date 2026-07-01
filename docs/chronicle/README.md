@@ -24,10 +24,18 @@ older `docs/*.md` (pre-revamp template).
 | 07 | [The Atelier (revamp)](sections/07-the-atelier.md) | `sections/Atelier.jsx` + `components/Observatory.jsx` | **built (v2)** — acts + Observatory + webhooks |
 | 08 | [The Codebase Atlas](sections/08-codebase-atlas.md) | `components/CodebaseAtlas.jsx` | **built** (Atelier Act II) |
 
+## Current cycle: v1.1 ("The Restraint Pass")
+v1.0 has shipped; v1.1 is a major revamp driven by the Beta-1 data. Start at the
+[V1.1 Release Plan](V1.1-RELEASE-PLAN.md) (goal, prioritized issues, workstreams,
+ROI, success metrics), then the [combined action plan](reports/synthesis/2026-07-01-combined-beta-action-plan.md)
+for file-level detail. ARCHITECTURE and DESIGN-SYSTEM each carry a `§0 v1.1
+addendum` for their domain.
+
 ## Reports (dated snapshots)
 Time-ranged analytics + beta feedback live under [`reports/`](reports/) — see its
 [README](reports/README.md) for layout and naming. These are point-in-time
-snapshots, not evergreen canon; new ones are added dated, never overwritten.
+snapshots, not evergreen canon; new ones are added dated, never overwritten. They
+are the **evidence base** for the v1.1 plan.
 
 Each section spec ends with **Acceptance criteria** — a section is done only when
 all boxes pass in dark+light, at 360/768/1280/1920, with reduced-motion + touch
