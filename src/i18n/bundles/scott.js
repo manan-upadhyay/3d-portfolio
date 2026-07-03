@@ -20,11 +20,13 @@ export default {
   },
 
   hero: {
-    lead: 'I am basically',
-    phrases: ['the world’s best boss', 'a friend, first', 'an entrepreneur', 'an idea man'],
-    hook: 'Sometimes I’ll start a sentence and I don’t even know where it’s going — I just hope I find it along the way. The web apps, though? Those I finish. Every time.',
-    ctaPrimary: 'Let’s be friends',
-    ctaSecondary: 'Call me →',
+    lead: 'I build',
+    phrases: ['the world’s best web apps', 'production React systems', 'full-stack everything', 'apps people actually use'],
+    hook: 'Full-stack developer, 5+ years. React, Next.js, Node.js. Sometimes I start a sentence and I don’t know where it’s going — but the web apps? Those I finish. Every time.',
+    proof: ['5+ yrs · React / Next.js / Node.js'],
+    ctaPrimary: 'See my work',
+    ctaSecondary: 'Let’s be friends',
+    ctaResume: 'Résumé',
     scroll: 'Scroll, please',
     spin: 'Give it a whirl',
   },
@@ -410,6 +412,24 @@ export default {
       why: 'Why I Did It This Way',
       repoCta: 'See It On GitHub',
     },
+    reckoning: {
+      eyebrow: 'The Feedback',
+      title: 'What the people said',
+      intro: 'I gave the internet my baby and the internet had NOTES. 200+ comments. I read every one — some twice, one while crying. Then I fixed the site. That’s leadership.',
+      saidHead: 'They said',
+      changedHead: 'I did',
+      items: [
+        { said: 'Looks AI-made.', changed: 'Rewrote it to sound like a person. Me. A person.' },
+        { said: 'Too many words.', changed: 'Cut half the words. The best half stayed.' },
+        { said: 'The top doesn’t sell you.', changed: 'Now it sells me. Hard. Tastefully hard.' },
+        { said: 'No project pictures.', changed: 'Added real pictures of real work.' },
+        { said: 'Scrolling’s weird, buttons are scary.', changed: 'Fixed the scroll. Labelled the buttons.' },
+      ],
+      notes: 'Also I made it faster and I did not read what DPR means but it’s capped at 2 and I feel great about it.',
+      ctaLine: 'You made it this far. We’re basically friends now. Let’s talk.',
+      ctaContact: 'Let’s be friends',
+      ctaResume: 'Résumé',
+    },
     offmap: {
       title: 'The Real Me (Get Comfortable)',
       intro: 'There are three sides to me. Minimum. Pick one and click — I’ll tell you everything.',
@@ -455,8 +475,7 @@ export default {
     footerHint: 'enter to speak · esc to close',
     categories: {
       core: 'The Professionals',
-      office: 'The Office',
-      bestiary: 'The Animal Kingdom',
+      sealed: 'The Secret Ones',
     },
     request: {
       section: 'Summon',
@@ -485,12 +504,25 @@ export default {
     clueSubmit: 'Boom',
     clueAria: 'Answer the clue: {{hint}}',
     clueWrong: 'Nope. Not the word. It’s okay, guessing is a process.',
+    clueCloser: 'Okay, warmer — {{hint}}',
+    clueGiveaway: 'Fine, I’ll just tell you. It’s',
+    clueTapUnlock: 'boom, tap it',
     more: '{{count}} more voices. Like a party. In here.',
   },
 
   footer: {
     quote: '“That’s what she said.”',
     atelierLink: 'The making-of. Behind the scenes. Pretty much a documentary.',
+    closeHead: 'Let’s be friends.',
+    closeSub: 'Open to senior roles, collaborations, and mutually beneficial friendships. I reply fast.',
+    getInTouch: 'Let’s talk',
+    resume: 'Résumé',
+  },
+  stickyCta: {
+    text: 'Seen enough?',
+    cta: 'Let’s talk',
+    resume: 'Grab my résumé',
+    dismiss: 'Not now',
   },
 
   makingOf: {

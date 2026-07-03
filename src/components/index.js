@@ -1,6 +1,6 @@
 // Reusable UI components — shared across sections. Import via `from '../components'`.
-export { default as BuildReel } from './BuildReel';
 export { default as ChapterHeading } from './ChapterHeading';
+export { default as CommitGraph } from './CommitGraph';
 export { default as ClueUnlock } from './ClueUnlock';
 export { default as CodebaseAtlas } from './CodebaseAtlas';
 export { default as CompassRose } from './CompassRose';
@@ -17,6 +17,7 @@ export { default as Magnet } from './Magnet';
 export { default as Marginalia, Annotated } from './Marginalia';
 export { default as MapDivider } from './MapDivider';
 export { default as MapOverlay } from './MapOverlay';
+export { default as MobileMenu } from './MobileMenu';
 export { default as Observatory } from './Observatory';
 export { default as PersonaTriptych } from './PersonaTriptych';
 export { default as RavenBurst } from './RavenBurst';
@@ -25,6 +26,9 @@ export { default as ScrollReveal } from './ScrollReveal';
 export { default as SideRail } from './SideRail';
 export { default as SkyControl } from './SkyControl';
 export { default as SoundControl } from './SoundControl';
+export { default as StickyCta } from './StickyCta';
 export { default as SunArc } from './SunArc';
+export { default as ThemeWheel } from './ThemeWheel';
 export { default as VoiceHall } from './VoiceHall';
+export { default as VolumeDial } from './VolumeDial';
 export { default as VoiceTransition } from './VoiceTransition';

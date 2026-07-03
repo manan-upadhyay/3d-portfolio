@@ -1,11 +1,10 @@
 import { lazy, Suspense, useState, useEffect, useRef } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { Map } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
 import Hero from '../sections/Hero';
-import { ErrorBoundary, SideRail, MapOverlay } from '../components';
+import { ErrorBoundary, SideRail, MapOverlay, StickyCta } from '../components';
+import { personalInfo } from '../constants';
 import { useExpedition } from '../hooks/useExpedition';
-import { restoreScroll } from '../lib/smoothScroll';
+import { restoreScroll, scrollToTop } from '../lib/smoothScroll';
 import { sound } from '../lib/sound';
 import { track, trackOnce } from '../lib/analytics';
 
@@ -28,7 +27,6 @@ const SectionLoader = () => (
  * scroll position the visitor stepped out from.
  */
 const Chronicle = () => {
-  const { t } = useTranslation();
   const { activeId } = useOutletContext();
   const [mapOpen, setMapOpen] = useState(false);
   useExpedition(); // accumulate session scroll distance → the Phase 5 recap
@@ -58,16 +56,29 @@ const Chronicle = () => {
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
+  // The mobile MobileMenu (in Layout) is route-agnostic; it opens the map by
+  // dispatching this event, which only the Chronicle (owner of the map state) hears.
+  useEffect(() => {
+    const openMap = () => setMapOpen(true);
+    window.addEventListener('chronicle:open-map', openMap);
+    return () => window.removeEventListener('chronicle:open-map', openMap);
+  }, []);
+
   return (
     <>
       <SideRail activeId={activeId} onOpenMap={() => setMapOpen(true)} visible={activeId !== 'origin'} />
-      {/* mobile map button (side-rail is desktop-only) */}
-      <button onClick={() => setMapOpen(true)} aria-label={t('nav.openMap')}
-        className="md:hidden fixed top-5 left-5 z-40 grid place-items-center w-11 h-11 rounded-full"
-        style={{ background: 'var(--color-card-bg)', border: '1px solid var(--color-card-border)', backdropFilter: 'blur(20px)' }}>
-        <Map size={18} style={{ color: 'var(--color-ember)' }} />
+      {/* Desktop wordmark — a real name-based brand mark, distinct from the map
+          icon (Beta 1: "thought the icon is the logo"). Fades in once past the
+          hero, where the giant name already carries identity. Clicks home.
+          (On mobile the map lives in the MobileMenu; no separate map button.) */}
+      <button onClick={() => scrollToTop()} data-cursor="hover"
+        aria-label={`${personalInfo.name} — back to top`} title={personalInfo.name}
+        className={`hidden md:block fixed top-6 left-6 z-40 font-chronicle text-[15px] font-semibold tracking-tight transition-opacity duration-500 ${activeId !== 'origin' ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        style={{ color: 'var(--color-text)' }}>
+        {personalInfo.name}
       </button>
       <MapOverlay open={mapOpen} onClose={() => setMapOpen(false)} activeId={activeId} />
+      <StickyCta activeId={activeId} />
 
       <Hero />
 

@@ -33,16 +33,24 @@ const Marginalia = ({ id, children }) => {
   const [open, setOpen] = useState(false);
   const [pos, setPos] = useState(null);
   const triggerRef = useRef(null);
+  const ptr = useRef('mouse');
   const tipId = useId();
   const note = t(`marginalia.${id}`);
 
-  // Anchor the portalled note to the trigger (centered above it). Recomputed on
-  // open and kept in sync while open (scroll/resize) so it tracks the phrase.
+  // Anchor the portalled note to the trigger — centered above it, flipping below
+  // near the top edge, and CLAMPED within the viewport so it never runs off-screen
+  // on small screens (Beta 2 mobile bug). Kept in sync while open (scroll/resize).
   const place = useCallback(() => {
     const el = triggerRef.current;
     if (!el) return;
     const r = el.getBoundingClientRect();
-    setPos({ left: r.left + r.width / 2, top: r.top });
+    const margin = 12;
+    const w = Math.min(280, window.innerWidth * 0.78);
+    const half = w / 2;
+    const center = r.left + r.width / 2;
+    const left = Math.max(margin + half, Math.min(window.innerWidth - margin - half, center));
+    const below = r.top < 120;
+    setPos({ left, top: below ? r.bottom : r.top, below });
   }, []);
 
   useLayoutEffect(() => {
@@ -71,7 +79,8 @@ const Marginalia = ({ id, children }) => {
 
   // Self-contained: stop clicks/keys from reaching a parent (e.g. the contact
   // submit button) so revealing the note never also triggers the parent action.
-  const toggle = (e) => { e.stopPropagation(); setOpen((o) => !o); };
+  // Only tap/pen toggle on click (mouse uses hover); we do NOT open on focus, so
+  // a touch tap — which fires focus AND click — opens in a SINGLE tap, not two.
   const onKeyDown = (e) => {
     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); setOpen((o) => !o); }
   };
@@ -85,11 +94,10 @@ const Marginalia = ({ id, children }) => {
       data-cursor="hover"
       aria-describedby={open ? tipId : undefined}
       aria-expanded={open}
-      onPointerEnter={(e) => { if (e.pointerType === 'mouse') setOpen(true); }}
+      onPointerEnter={(e) => { ptr.current = e.pointerType; if (e.pointerType === 'mouse') setOpen(true); }}
       onPointerLeave={(e) => { if (e.pointerType === 'mouse') setOpen(false); }}
-      onFocus={() => setOpen(true)}
-      onBlur={() => setOpen(false)}
-      onClick={toggle}
+      onPointerDown={(e) => { ptr.current = e.pointerType; }}
+      onClick={(e) => { e.stopPropagation(); if (ptr.current !== 'mouse') setOpen((o) => !o); }}
       onKeyDown={onKeyDown}
     >
       {children}
@@ -105,7 +113,7 @@ const Marginalia = ({ id, children }) => {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.16 }}
               className="marginalia__note"
-              style={{ ...TIP_STYLE, left: pos.left, top: pos.top }}
+              style={{ ...TIP_STYLE, left: pos.left, top: pos.top, transform: pos.below ? 'translate(-50%, 8px)' : 'translate(-50%, calc(-100% - 8px))' }}
             >
               {note}
             </motion.span>

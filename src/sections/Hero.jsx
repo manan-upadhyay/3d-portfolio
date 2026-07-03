@@ -3,11 +3,11 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { personalInfo, chapters } from '../constants';
+import { personalInfo } from '../constants';
 import { useThemeStore } from '../store/useThemeStore';
 import { scrollToSection } from '../lib/smoothScroll';
 import { useAstrolabe } from '../hooks/useAstrolabe';
-import { RefreshCcw } from 'lucide-react';
+import { RefreshCcw, Download } from 'lucide-react';
 import { sound } from '../lib/sound';
 import { track, trackOnce } from '../lib/analytics';
 import CompassRose from '../components/CompassRose';
@@ -20,6 +20,9 @@ const Hero = () => {
   const isDark = resolvedTheme === 'dark';
   const prefersReduced = useReducedMotion();
   const [phraseIdx, setPhraseIdx] = useState(0);
+  // Mobile-only one-time "tap to spin" hint (the whole astrolabe is the tap target
+  // on touch — see below). Shown once per session, then never nags again.
+  const [spinHint, setSpinHint] = useState(false);
 
   const rootRef = useRef(null);
   const langRef = useRef(i18n.language);
@@ -35,6 +38,12 @@ const Hero = () => {
   const phrases = useMemo(() => {
     const p = t('hero.phrases', { returnObjects: true });
     return Array.isArray(p) && p.length ? p : [t('hero.lead')];
+  }, [t]);
+  // Above-the-fold proof strip — years · stack · shipped · role. Voiced per
+  // bundle (`hero.proof`); data-accurate to constants (5+ yrs, 20+ shipped).
+  const proof = useMemo(() => {
+    const p = t('hero.proof', { returnObjects: true });
+    return Array.isArray(p) ? p : [];
   }, [t]);
   const longestPhrase = phrases.reduce((a, b) => (b.length > a.length ? b : a), phrases[0]);
   // Clamp so the index can never point past the current voice's phrase list.
@@ -52,6 +61,23 @@ const Hero = () => {
     setPhraseIdx(0);
   }
 
+  // The one-time mobile spin hint: a beat after landing (touch only), auto-dismiss.
+  useEffect(() => {
+    if (prefersReduced) return undefined;
+    let seen = false;
+    try { seen = sessionStorage.getItem('spinHintSeen') === '1'; } catch { /* private mode */ }
+    if (seen || !window.matchMedia('(pointer: coarse)').matches) return undefined;
+    const inT = setTimeout(() => setSpinHint(true), 2600);
+    const outT = setTimeout(() => setSpinHint(false), 9000);
+    return () => { clearTimeout(inT); clearTimeout(outT); };
+  }, [prefersReduced]);
+
+  const dismissSpinHint = () => {
+    setSpinHint(false);
+    try { sessionStorage.setItem('spinHintSeen', '1'); } catch { /* private mode */ }
+  };
+  const spinAstrolabe = () => { sound.suppressReward(); sound.unlock(); track('astrolabe_spin'); astrolabeRef.current?.spin(); dismissSpinHint(); };
+
   // (Re)start the rotation whenever the voice's phrase list changes.
   useEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -66,10 +92,9 @@ const Hero = () => {
     const ctx = gsap.context(() => {
       if (reduce) return; // elements rest at their natural (visible) state
       gsap.timeline({ defaults: { ease: 'power3.out' } })
-        .from('.hero-eyebrow', { opacity: 0, y: 16, duration: 0.7 })
-        .from('.hero-line > span', { yPercent: 120, duration: 1, stagger: 0.12 }, '-=0.3')
+        .from('.hero-line > span', { yPercent: 120, duration: 1, stagger: 0.12 })
         .from('.hero-tagline', { opacity: 0, y: 18, duration: 0.8 }, '-=0.5')
-        .from('.hero-hook', { opacity: 0, y: 18, duration: 0.8 }, '-=0.6')
+        .from('.hero-proof', { opacity: 0, y: 14, duration: 0.7 }, '-=0.55')
         .from('.hero-cta', { opacity: 0, y: 16, duration: 0.7 }, '-=0.5')
         .from('.hero-meta', { opacity: 0, duration: 0.7 }, '-=0.4')
         .from('.hero-cue', { opacity: 0, duration: 0.8 }, '-=0.3');
@@ -117,9 +142,21 @@ const Hero = () => {
     let cancelled = false;
     sound.onUnlock(() => {
       if (cancelled) return;
-      const r = rootRef.current?.getBoundingClientRect();
-      const visible = r && r.bottom > window.innerHeight * 0.5; // hero still on screen
-      if (visible) astrolabeRef.current?.spin();
+      // Defer a beat: the global first-gesture unlock fires on the pointerDOWN that
+      // opened the menu — BEFORE that control's onClick can call suppressReward().
+      // Re-checking after a tick lets the suppress flag (and the menu state) settle,
+      // so the spin+sound never fire off-screen from nowhere.
+      setTimeout(() => {
+        if (cancelled) return;
+        if (sound.consumeRewardSuppressed()) return;
+        // Only reward when the HERO is what the visitor is looking at: on screen AND
+        // nothing overlaid (the mobile menu sheet). Otherwise the needle would spin
+        // + gear-sound off-screen while they tap menu items — sound from nowhere.
+        if (document.querySelector('.mobile-sheet')) return;
+        const r = rootRef.current?.getBoundingClientRect();
+        const visible = r && r.bottom > window.innerHeight * 0.5;
+        if (visible) astrolabeRef.current?.spin();
+      }, 140);
     });
     return () => { cancelled = true; };
   }, [prefersReduced]);
@@ -200,8 +237,8 @@ const Hero = () => {
       <div
         ref={canvasWrapRef}
         aria-hidden="true"
-        className="absolute z-[3] pointer-events-none aspect-square left-1/2 -translate-x-1/2 top-[6%] w-[62vw] max-w-[280px] opacity-60
-                   md:left-auto md:translate-x-0 md:right-[4%] md:top-1/2 md:-translate-y-1/2 md:w-[min(44vw,560px)] md:max-w-none md:opacity-100"
+        className="absolute z-[3] pointer-events-none aspect-square left-1/2 -translate-x-1/2 top-[3%] w-[62vw] max-w-[300px] opacity-[0.32]
+                   md:left-auto md:translate-x-0 md:right-[5%] md:top-1/2 md:-translate-y-1/2 md:w-[min(36vw,440px)] md:max-w-none md:opacity-[0.82]"
       >
         <canvas ref={canvasRef} className="block w-full h-full" />
         {/* Shared compass rose at the heart of the instrument (assembles in last). */}
@@ -215,23 +252,15 @@ const Hero = () => {
         </motion.div>
       </div>
 
-      {/* Spin control — a subtle button that flicks the alidade into a free spin
-          (winds up, coasts to a natural stop on real flywheel friction).
-          Hidden under reduced motion, where the needle doesn't animate. Mirrors
-          the astrolabe's responsive box, then sits at the box's PIVOT (needle
-          centre) on mobile — where the instrument floats above the copy, so it
-          never lands on the title — and drops to the lower rim on desktop, where
-          the instrument lives off to the right in clear space. */}
-      {!prefersReduced && (
-        <div
-          className="absolute z-20 pointer-events-none aspect-square left-1/2 -translate-x-1/2 top-[6%] w-[62vw] max-w-[280px]
-                     md:left-auto md:translate-x-0 md:right-[4%] md:top-1/2 md:-translate-y-1/2 md:w-[min(44vw,560px)] md:max-w-none"
-        >
+      {/* ===== Spin control — flicks the needle into a free spin (real flywheel
+          friction). Hidden under reduced motion. Two distinct treatments: ===== */}
 
-          <div className="absolute left-1/2 -translate-x-1/2 w-11 h-11
-                          top-1/2 -translate-y-1/2
-                          md:top-auto md:bottom-0 md:translate-y-1/2">
-            {/* Breathing attention halo (behind the button). */}
+      {/* DESKTOP: a discrete button on the instrument's lower rim, where the
+          astrolabe lives off to the right in clear space. */}
+      {!prefersReduced && (
+        <div className="hidden md:block absolute z-20 pointer-events-none aspect-square
+                        right-[5%] top-1/2 -translate-y-1/2 w-[min(36vw,440px)]">
+          <div className="absolute left-1/2 -translate-x-1/2 w-11 h-11 bottom-0 translate-y-1/2">
             <motion.span
               className="absolute inset-0 rounded-full pointer-events-none"
               style={{ border: '1px solid var(--color-ember)' }}
@@ -241,15 +270,11 @@ const Hero = () => {
             />
             <motion.button
               type="button"
-              onClick={() => { track('astrolabe_spin'); astrolabeRef.current?.spin(); }}
+              onClick={spinAstrolabe}
               data-cursor="hover"
               aria-label={t('hero.spin')}
               className="pointer-events-auto relative grid place-items-center w-11 h-11 rounded-full backdrop-blur-sm"
-              style={{
-                background: 'rgba(var(--hero-scrim-rgb), 0.5)',
-                border: '1px solid var(--color-card-border)',
-                color: 'var(--color-ember)',
-              }}
+              style={{ background: 'rgba(var(--hero-scrim-rgb), 0.5)', border: '1px solid var(--color-card-border)', color: 'var(--color-ember)' }}
               initial={{ opacity: 0, scale: 0.6 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 2.1, type: 'spring', stiffness: 220, damping: 18 }}
@@ -258,6 +283,46 @@ const Hero = () => {
             >
               <RefreshCcw size={17} strokeWidth={1.75} />
             </motion.button>
+          </div>
+        </div>
+      )}
+
+      {/* MOBILE: the WHOLE instrument is the tap target (a bright button in the
+          middle read as a disconnected dot; at the bottom rim it collided with the
+          title on short devices). A subtle rotate glyph at the pivot signals "this
+          responds", and a one-time hint teaches the gesture — both sit at the box
+          centre, which stays clear of the title on every screen size. */}
+      {!prefersReduced && (
+        <div className="md:hidden absolute z-20 aspect-square left-1/2 -translate-x-1/2 top-[3%] w-[62vw] max-w-[300px]">
+          <button
+            type="button"
+            onClick={spinAstrolabe}
+            aria-label={t('hero.spin')}
+            className="absolute inset-[8%] rounded-full pointer-events-auto"
+          />
+          {/* subtle hub affordance at the pivot (part of the instrument, not a button) */}
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 grid place-items-center pointer-events-none">
+            <motion.span
+              className="absolute w-10 h-10 rounded-full"
+              style={{ border: '1px solid var(--color-ember)' }}
+              animate={{ scale: [1, 1.8], opacity: [0.4, 0] }}
+              transition={{ delay: 2, duration: 2.6, repeat: Infinity, ease: 'easeOut' }}
+            />
+            <span className="grid place-items-center w-9 h-9 rounded-full"
+              style={{ color: 'var(--color-ember)', background: 'rgba(var(--hero-scrim-rgb), 0.32)', border: '1px solid var(--color-card-border)', opacity: 0.72 }}>
+              <RefreshCcw size={15} strokeWidth={1.75} />
+            </span>
+            <AnimatePresence>
+              {spinHint && (
+                <motion.span
+                  className="absolute top-full mt-3 whitespace-nowrap px-3 py-1.5 rounded-full text-[10px] tracking-[0.18em] uppercase"
+                  style={{ background: 'var(--color-card-bg)', border: '1px solid var(--color-card-border)', color: 'var(--color-text-muted)' }}
+                  initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 6 }}
+                >
+                  {t('hero.spinHint')}
+                </motion.span>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       )}
@@ -276,8 +341,6 @@ const Hero = () => {
       {/* ===== Copy ===== */}
       <div ref={copyRef} className="relative z-10 h-full max-w-7xl mx-auto px-6 sm:px-12 flex flex-col justify-end pb-28 md:justify-center md:pb-0">
         <div className="max-w-xl">
-          <div className="hero-eyebrow chapter-eyebrow mb-5">{t('common.chapterLabel')} {chapters.origin.no} · {t('chapters.origin.label')}</div>
-
           <h1 className="font-chronicle font-semibold leading-[0.86] tracking-tight" style={{ color: 'var(--color-text)' }}>
             <span className="hero-line block overflow-hidden pb-[0.18em] -mb-[0.14em]"><span className="block text-[clamp(56px,12vw,150px)]">{firstName}</span></span>
             <span className="hero-line block overflow-hidden pb-[0.18em] -mb-[0.14em]"><span className="block text-[clamp(56px,12vw,150px)]">{lastName}</span></span>
@@ -306,27 +369,40 @@ const Hero = () => {
             </span>
           </p>
 
-          <p className="hero-hook mt-5 max-w-md text-[15px] sm:text-[17px] leading-[27px]" style={{ color: 'var(--color-text-muted)' }}>
-            {t('hero.hook')}
-          </p>
+          {/* Proof strip — the one quiet, subtle signal of role-fit under the name
+              (years · stack · role). The prose intro lives in About; the hero stays
+              minimal and cinematic. Stacks cleanly on mobile. */}
+          {proof.length > 0 && (
+            <ul className="hero-proof mt-7 flex flex-col sm:flex-row sm:items-center gap-y-1.5 sm:gap-x-3 font-mono text-[11px] tracking-[0.1em] uppercase" style={{ color: 'var(--color-text-muted)' }}>
+              {proof.map((item, i) => (
+                <li key={item} className="flex items-center gap-3">
+                  {i > 0 && <span aria-hidden="true" className="hidden sm:inline opacity-40" style={{ color: 'var(--color-ember)' }}>·</span>}
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          )}
 
-          <div className="hero-cta mt-9 flex flex-wrap items-center gap-5">
-            <button onClick={() => { track('hero_cta', { target: 'about' }); scrollToSection('about'); }} data-cursor="hover" className="btn-primary">{t('hero.ctaPrimary')}</button>
-            <button onClick={() => { track('hero_cta', { target: 'contact' }); scrollToSection('contact'); }} data-cursor="hover" className="text-[15px] font-medium link-hover" style={{ color: 'var(--color-text)' }}>
+          <div className="hero-cta mt-9 flex flex-wrap items-center gap-3">
+            <button onClick={() => { track('hero_cta', { target: 'projects' }); scrollToSection('projects'); }} data-cursor="hover" className="btn-primary">{t('hero.ctaPrimary')}</button>
+            <button onClick={() => { track('hero_cta', { target: 'contact' }); scrollToSection('contact'); }} data-cursor="hover" className="btn-secondary">
               {t('hero.ctaSecondary')}
             </button>
+            <a href={personalInfo.resumeLink} target="_blank" rel="noopener noreferrer" onClick={() => track('hero_cta', { target: 'resume' })} data-cursor="hover" className="btn-secondary">
+              <Download size={15} strokeWidth={1.75} /> {t('hero.ctaResume')}
+            </a>
           </div>
 
-          <div className="hero-meta mt-10 flex items-center gap-3 font-mono text-[11px] tracking-[0.18em] uppercase" style={{ color: 'var(--color-text-muted)' }}>
-            <span style={{ color: 'var(--color-ember)' }}>{personalInfo.coordinates}</span>
-            <span className="opacity-50">·</span>
-            <span>{personalInfo.location}</span>
+          <div className="hero-meta mt-8 font-mono text-[11px] tracking-[0.14em] uppercase" style={{ color: 'var(--color-text-muted)' }}>
+            {personalInfo.location}
           </div>
         </div>
       </div>
 
-      {/* Scroll cue */}
-      <div className="hero-cue absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2">
+      {/* Scroll cue — desktop only. On a phone it's redundant (scrolling is the
+          assumed gesture) and, sitting below the CTAs, it pulls the eye away from
+          them; the cramped hero is better without it. */}
+      <div className="hero-cue absolute bottom-8 left-1/2 -translate-x-1/2 z-10 hidden md:flex flex-col items-center gap-2">
         <span className="text-[10px] tracking-[0.35em] uppercase" style={{ color: 'var(--color-text-muted)' }}>{t('hero.scroll')}</span>
         <div className="w-px h-12 overflow-hidden" style={{ background: 'var(--color-card-border)' }}>
           <div className="w-px h-5 animate-[scrollcue_1.8s_ease-in-out_infinite]" style={{ background: 'var(--color-ember)' }} />

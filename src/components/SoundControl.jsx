@@ -7,8 +7,9 @@ import { useCoachmark } from '../store/useCoachmark';
 import { sound } from '../lib/sound';
 
 const JELLY = { type: 'spring', stiffness: 320, damping: 24, mass: 0.7 };
-const COLLAPSED = 48;
-const EXPANDED = 248;
+const COLLAPSED = 48;        // the resting button (a circle)
+const EXPANDED_H = 176;      // expands UPWARD to reveal a vertical volume slider
+const SLIDER_LEN = EXPANDED_H - COLLAPSED - 28; // rotated range length
 
 /**
  * Sound control — the audio half of the bottom-right control cluster (Phase 4).
@@ -114,9 +115,9 @@ const SoundControl = () => {
       </AnimatePresence>
 
       <motion.div
-        animate={{ width: expanded ? EXPANDED : COLLAPSED }}
+        animate={{ height: expanded ? EXPANDED_H : COLLAPSED }}
         transition={JELLY}
-        className="h-12 flex flex-row-reverse items-center overflow-hidden rounded-full"
+        className="w-12 flex flex-col-reverse items-center overflow-hidden rounded-full"
         style={{
           background: 'var(--color-card-bg)',
           border: '1px solid var(--color-card-border)',
@@ -133,6 +134,7 @@ const SoundControl = () => {
           whileTap={{ scale: 0.88 }}
           transition={JELLY}
           aria-label={live ? t('sound.toggleOff') : t('sound.toggleOn')}
+          title={live ? t('sound.toggleOff') : t('sound.toggleOn')}
           aria-pressed={live}
           className="relative grid place-items-center flex-shrink-0 w-12 h-12"
         >
@@ -159,24 +161,19 @@ const SoundControl = () => {
           </span>
         </motion.button>
 
-        {/* revealed controls (left of the button, clipped when collapsed) */}
+        {/* revealed vertical slider (ABOVE the button, clipped when collapsed) —
+            a rotated range input, so the control grows up, never sideways. */}
         <motion.div
           animate={{ opacity: expanded ? 1 : 0 }}
           transition={{ duration: 0.2, delay: expanded ? 0.06 : 0 }}
-          className="flex items-center gap-3 pl-4 pr-1 flex-shrink-0"
-          style={{ width: EXPANDED - COLLAPSED }}
+          className="grid place-items-center flex-shrink-0"
+          style={{ width: COLLAPSED, height: EXPANDED_H - COLLAPSED }}
         >
-          <span
-            className="text-[10px] tracking-[0.18em] uppercase font-medium whitespace-nowrap"
-            style={{ color: enabled ? 'var(--color-ember)' : 'var(--color-text-muted)' }}
-          >
-            {live ? t('sound.on') : armed ? t('sound.ready') : t('sound.off')}
-          </span>
           <input
             ref={liveBar}
             type="range" min={0} max={1} step={0.01} value={volume}
-            onChange={onVolume} aria-label={t('sound.volume')}
-            className="vol-slider flex-1" style={{ minWidth: 70 }}
+            onChange={onVolume} aria-label={t('sound.volume')} aria-orientation="vertical"
+            className="vol-slider" style={{ width: SLIDER_LEN, transform: 'rotate(-90deg)' }}
           />
         </motion.div>
       </motion.div>

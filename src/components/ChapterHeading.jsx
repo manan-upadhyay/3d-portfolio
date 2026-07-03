@@ -1,41 +1,25 @@
 import { motion } from 'framer-motion';
-import { useTranslation } from 'react-i18next';
 
 /**
- * ChapterHeading — the shared "story chapter" section header.
- * Replaces the ad-hoc sectionSubText/sectionHeadText markup repeated across sections.
+ * ChapterHeading — the shared section header.
  *
- * Props:
- *  - no:      chapter number, e.g. "01"
- *  - eyebrow: small label, e.g. "The Craft"
- *  - title:   large serif title, e.g. "Origin."
- *  - align:   'left' | 'center'
+ * As of v1.1 the "Chapter NN · Label" eyebrow is GONE: it duplicated the SideRail
+ * (which already carries the chapter number + name) and added clutter above every
+ * title. The big serif title now stands on its own, under a short map-line rule.
+ * (`no` / `eyebrow` props are still accepted from callers but intentionally unused.)
  */
-const ChapterHeading = ({ no, eyebrow, title, align = 'left', className = '' }) => {
-  const { t } = useTranslation();
+const ChapterHeading = ({ title, align = 'left', className = '' }) => {
   const isCenter = align === 'center';
 
   return (
     <div className={`${isCenter ? 'text-center flex flex-col items-center' : ''} ${className}`}>
-      <motion.span
-        className="chapter-eyebrow"
-        initial={{ opacity: 0, y: 8 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-      >
-        {no ? `${t('common.chapterLabel')} ${no}` : null}
-        {no && eyebrow ? <span aria-hidden="true">·</span> : null}
-        {eyebrow}
-      </motion.span>
-
       <motion.h2
-        className="font-chronicle font-semibold leading-[0.95] mt-3 text-[clamp(40px,7vw,76px)]"
+        className="font-chronicle font-semibold leading-[0.95] text-[clamp(40px,7vw,76px)]"
         style={{ color: 'var(--color-text)' }}
         initial={{ opacity: 0, y: 14 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: 0.05 }}
+        transition={{ duration: 0.6 }}
       >
         {title}
       </motion.h2>
@@ -46,7 +30,7 @@ const ChapterHeading = ({ no, eyebrow, title, align = 'left', className = '' }) 
         initial={{ scaleX: 0, opacity: 0 }}
         whileInView={{ scaleX: 1, opacity: 0.7 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.8, delay: 0.15, ease: 'easeOut' }}
+        transition={{ duration: 0.8, delay: 0.1, ease: 'easeOut' }}
       />
     </div>
   );

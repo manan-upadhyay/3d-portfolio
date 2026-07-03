@@ -18,11 +18,13 @@ export default {
   },
 
   hero: {
-    lead: 'I am',
-    phrases: ['Assistant to the Regional Manager', 'a beet farmer', 'a sheriff’s deputy', 'the best'],
-    hook: 'Bears. Beets. Battlestar Galactica. Also: production-grade web applications, delivered with zero tolerance for failure and faster than 80% of all snakes.',
-    ctaPrimary: 'Begin',
-    ctaSecondary: 'Contact HQ →',
+    lead: 'I build',
+    phrases: ['production web systems', 'React applications', 'full-stack machines', 'zero-fault interfaces'],
+    hook: 'Full-stack developer. 5+ years. React, Next.js, Node.js — production-grade, delivered with zero tolerance for failure and faster than 80% of all snakes.',
+    proof: ['5+ yrs · React / Next.js / Node.js'],
+    ctaPrimary: 'See my work',
+    ctaSecondary: 'Contact HQ',
+    ctaResume: 'Résumé',
     scroll: 'Descend',
     spin: 'Free-spin it',
   },
@@ -408,6 +410,24 @@ export default {
       why: 'The Justification',
       repoCta: 'Inspect The Source',
     },
+    reckoning: {
+      eyebrow: 'The Audit',
+      title: 'Weaknesses, identified and eliminated',
+      intro: 'Beta released. 200+ critiques received. A lesser man would wither. I catalogued every one, cross-referenced the telemetry, and corrected the record. Fact:',
+      saidHead: 'Complaint',
+      changedHead: 'Correction',
+      items: [
+        { said: 'Looks AI-generated.', changed: 'Purged the tells. This was authored by a human. That human is me.' },
+        { said: 'Excessive text.', changed: 'Reduced by half. Every surviving word earns its place.' },
+        { said: 'The hero underperforms.', changed: 'Rebuilt to state fact on the first screen: role, stack, proof.' },
+        { said: 'No project images.', changed: 'Evidence submitted. As in a court of law.' },
+        { said: 'Scroll and controls confuse.', changed: 'Scroll corrected. Every control now labelled.' },
+      ],
+      notes: 'Performance audited, leaks eliminated, DPR capped at 2, accessibility honored. A Schrute does not ship a memory leak.',
+      ctaLine: 'You have reached the end. This indicates competence. Contact me.',
+      ctaContact: 'Contact HQ',
+      ctaResume: 'Résumé',
+    },
     offmap: {
       title: 'The Man Behind the Manager',
       intro: 'A superior man has multiple dimensions. I have three. Select one. Investigate.',
@@ -453,8 +473,7 @@ export default {
     footerHint: 'enter to speak · esc to close',
     categories: {
       core: 'Authorized Personnel',
-      office: 'The Office',
-      bestiary: 'Livestock',
+      sealed: 'Classified',
     },
     request: {
       section: 'Requisition',
@@ -483,12 +502,25 @@ export default {
     clueSubmit: 'Breach',
     clueAria: 'Answer the clue: {{hint}}',
     clueWrong: 'Incorrect. Access denied. Reread the clue. Do not fail again.',
+    clueCloser: 'Second clue authorised — {{hint}}',
+    clueGiveaway: 'Override. The password is',
+    clueTapUnlock: 'tap to breach',
     more: '{{count}} more concealed. Locate them. That is an order.',
   },
 
   footer: {
     quote: '“Fact.”',
     atelierLink: 'The schematics — how this site was engineered. Question authority.',
+    closeHead: 'Make contact.',
+    closeSub: 'Available for senior roles and collaborations. Responses are prompt and superior.',
+    getInTouch: 'Contact HQ',
+    resume: 'Résumé',
+  },
+  stickyCta: {
+    text: 'Convinced yet?',
+    cta: 'Contact HQ',
+    resume: 'Acquire résumé',
+    dismiss: 'Dismiss',
   },
 
   makingOf: {

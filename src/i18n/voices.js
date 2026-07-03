@@ -43,8 +43,7 @@ export const POPOVER_SEALED_LIMIT = 3;
 // section order; the visible label is i18n (`voiceHall.categories.<id>`).
 export const CATEGORIES = [
   { id: 'core', order: 0 },
-  { id: 'office', order: 1 },
-  { id: 'bestiary', order: 2 },
+  { id: 'sealed', order: 1 },
 ];
 
 // `glyph` is a short serif MONOGRAM (no emoji per the design system) used as the
@@ -74,11 +73,12 @@ export const voices = [
     sample: 'That’s what she said.',
     locked: true,
     pinned: true, // dormant "marked voice" flag — popover surfacing is hidden for now
-    category: 'office',
+    category: 'sealed',
     glyph: 'Ms',
     popoverOrder: 2,
     trigger: 'boss',
     hint: 'Type what’s printed on the world’s best mug.',
+    hint2: 'Rhymes with “floss”. The title he gives himself, over and over.',
     info: {
       name: 'Michael Scott',
       source: 'The Office (US)',
@@ -90,11 +90,12 @@ export const voices = [
     label: 'Assistant (to the) Manager',
     sample: 'Fact. Bears. Beets.',
     locked: true,
-    category: 'office',
+    category: 'sealed',
     glyph: 'Dw',
     popoverOrder: 3,
     trigger: 'beets',
     hint: 'Type what grows in rows at Schrute Farms.',
+    hint2: 'The crop, plural. “Bears. ______. Battlestar Galactica.”',
     info: {
       name: 'Dwight Schrute',
       source: 'The Office (US)',
@@ -106,11 +107,12 @@ export const voices = [
     label: 'Moo',
     sample: 'Moo moo, moo moo moo.',
     locked: true,
-    category: 'bestiary',
+    category: 'sealed',
     glyph: 'Mo',
     popoverOrder: 4,
     trigger: 'moo',
     hint: 'Type what the cow says.',
+    hint2: 'Three letters. Starts with M. The only word it knows.',
     info: {
       name: 'A cow',
       source: 'Planet Earth',

@@ -23,15 +23,17 @@ export default {
 
   hero: {
     lead: 'I build',
-    phrases: ['production systems', 'scalable platforms', 'resilient APIs', 'reusable UI systems'],
-    hook: 'Five years building production web platforms where performance, reliability, and craft drive results.',
-    ctaPrimary: 'View my work',
-    ctaSecondary: 'Contact me →',
+    phrases: ['production web apps', 'React frontends', 'full-stack systems', 'polished interfaces'],
+    hook: 'Full-stack developer — 5+ years, frontend-heavy. React, Next.js, Node.js, TypeScript. Lead Frontend at Capital Group via Infosys. Open to senior roles.',
+    proof: ['5+ yrs · React / Next.js / Node.js'],
+    ctaPrimary: 'See my work',
+    ctaSecondary: 'Contact me',
+    ctaResume: 'Résumé',
     spin: 'Spin the pointer',
   },
 
   about: {
-    pullQuote: '“Every project below began as an empty repository and a blinking cursor.”',
+    pullQuote: 'Five years, 20+ releases, six industries — all shipped to production.',
     intro: [
       'I build production web platforms with a focus on solid architecture and the details users feel but never see.',
       'Five years and twenty-plus releases across six industries. I own features end to end — [[endToEnd|from an empty repository to production monitoring]] — and do my best work on hard, ambiguous problems.',
@@ -120,7 +122,7 @@ export default {
     noResult: 'No section found — try “skills”, “experience”, or “contact”.',
     footerHint: 'enter to go · esc to close',
     actions: {
-      voices: 'Voices',
+      voices: 'Persona',
       resume: 'Resume',
       themeLight: 'Light mode',
       themeDark: 'Dark mode',
@@ -128,9 +130,9 @@ export default {
   },
 
   voiceHall: {
-    title: 'Voices',
-    subtitle: 'Pick the writing voice — or request one that isn’t here yet.',
-    searchPlaceholder: 'Search voices…',
+    title: 'Personas',
+    subtitle: 'Pick the writing persona — or request one that isn’t here yet.',
+    searchPlaceholder: 'Search personas…',
     nowNarrating: 'Current voice',
     tryHint: 'Pick a voice — the whole site, this panel included, re-reads itself in that style.',
     close: 'Close',
@@ -139,9 +141,8 @@ export default {
     found: '{{count}}/{{total}} found',
     footerHint: 'enter to select · esc to close',
     categories: {
-      core: 'Core',
-      office: 'The Office',
-      bestiary: 'Animals',
+      core: 'Personas',
+      sealed: 'Hidden',
     },
     request: {
       section: 'Request',
@@ -206,34 +207,29 @@ export default {
   // The Atelier — straight, factual register. Full coverage so plain never falls
   // back into the cinematic voice mid-section.
   atelier: {
-    eyebrow: 'Colophon',
+    eyebrow: 'Making-Of',
     title: 'How this site was built',
-    confession: 'It cleared every bar but mine.',
+    confession: 'The making-of, minus the mystique.',
     confessionSub:
-      'The site was a finished, presentable build about forty commits ago — it met every standard a portfolio needs to meet. I held it to a higher one. I have a hard time leaving any detail half-right, so I spent roughly another 200 hours on the things most people never notice: easing, timing, the analytics that confirm which features actually get used, the small frictions that decide whether something feels solid. "Good enough" isn\'t a standard I work to — beating my last version is.',
+      'The honest version: why this site exists, how it’s built, what beta testers flagged, and what I changed. Everything below is real — a live analytics panel, the actual codebase map, the commit graph — the process itself, not screenshots of it.',
     acts: { build: 'The Build', engine: 'Infrastructure', hidden: 'Details & extras' },
-    reel: {
-      title: 'Build timeline',
-      range: 'Jun 20 – 30 · 10 days',
+    commits: {
+      title: 'Commit history',
+      range: 'Straight from this repo’s git log',
       caption:
-        'Drag the marker, click a day, or use the arrow keys to step through what shipped, one day at a time.',
-      scene: 'Day',
-      commits: 'commits',
-      hint: 'move across to scrub · click a day · ← → to step',
-      aria: 'The build, day by day',
-      prev: 'Previous day',
-      next: 'Next day',
-      scenes: {
-        foundation: { title: 'Foundation', blurb: 'A pure-CSS starfield and a Canvas2D astrolabe for the hero — built without any images.' },
-        canon: { title: 'Structure & navigation', blurb: 'The section/chapter system, side-rail navigation, and the scroll choreography.' },
-        realms: { title: 'Projects & command map', blurb: 'The cinematic project cards and a searchable ⌘K map of every section.' },
-        journey: { title: 'Experience & skills', blurb: 'A pinned horizontal experience timeline and an interactive skills field.' },
-        voice: { title: 'Multi-voice system', blurb: 'A full i18next layer — the whole site re-skins through five writing voices, built to scale to fifteen.' },
-        sky: { title: 'Theme & sound', blurb: 'Five time-aware themes from SunCalc, plus a synthesized Web Audio cue system with zero asset weight.' },
-        recap: { title: 'Session recap', blurb: 'A client-side panel that reads device and connection details and maps your location — nothing stored or sent.' },
-        atelier: { title: 'Making-of & send animation', blurb: 'The /making-of page, the voice picker, the interactive hero, and the bird animation on form send.' },
-        polish: { title: 'Polish & backend', blurb: 'Accessibility, reduced-motion support, a performance pass, and the live contact backend.' },
-        observatory: { title: 'Analytics & SEO', blurb: 'After the site was built, I instrumented it — privacy-first product analytics, structured-data SEO, and a custom logger with a console banner for anyone who opens DevTools.' },
+        'Each square is a day I committed to this repository — the whole build, pulled directly from git. This is the real history, not a mock-up.',
+      less: 'Less',
+      more: 'More',
+      tip_one: '{{count}} commit',
+      tip_other: '{{count}} commits',
+      busyUnit: '{{count}} in a day',
+      streakUnit: '{{count}} days',
+      aria: 'A calendar heatmap of daily commits to this repository',
+      stats: {
+        commits: 'Commits',
+        days: 'Days building',
+        busiest: 'Busiest day',
+        streak: 'Longest streak',
       },
     },
     stats: {
@@ -357,6 +353,24 @@ export default {
       why: 'Why it’s built this way',
       repoCta: 'View the source',
     },
+    reckoning: {
+      eyebrow: 'The revision',
+      title: 'What the beta changed',
+      intro: 'v1.0 reached ~358 visitors in three days and drew 200+ comments — praise and sharp criticism. I read all of it, checked it against the analytics, and shipped a revision. The honest split:',
+      saidHead: 'They said',
+      changedHead: 'I changed',
+      items: [
+        { said: 'Looks AI-generated.', changed: 'Redesigned the eyebrow, replaced glass cards with opaque surfaces, rewrote the copy plainer, and rebuilt About as an editorial layout.' },
+        { said: 'Too much text.', changed: 'Cut visible copy by about half; detail moved behind disclosure.' },
+        { said: 'The hero doesn’t sell the developer.', changed: 'Value-first hook, an above-the-fold proof strip, and CTAs that point at the work.' },
+        { said: 'No project images.', changed: 'Real screenshots now lead the featured projects.' },
+        { said: 'Buggy scroll, confusing controls.', changed: 'Snappier scroll, native on mobile, and a label on every control.' },
+      ],
+      notes: 'Under the hood: canvas DPR capped at 2×, animation lifecycles leak-audited, reduced-motion and touch honored, AA-contrast text — and the analytics rebuilt so the next round is judged on data.',
+      ctaLine: 'If that’s the kind of product thinking you’re hiring for, let’s talk.',
+      ctaContact: 'Contact me',
+      ctaResume: 'Résumé',
+    },
     offmap: {
       title: 'Away from the keyboard',
       intro: 'Three sides of who I am outside the work — open one to read more.',
@@ -382,9 +396,8 @@ export default {
     },
     builtWith: 'Built with',
     manifesto: [
-      'Honestly, this site is less about impressing anyone and more about a need I cannot switch off — to push past the normal version of a thing, try a concept I have not tried, and get my hands on technology I have not used yet. The portfolio was just the excuse to do it.',
-      'I genuinely love this work: the code, the problem-solving, the moment a complicated system finally clicks. I am drawn to the problems big enough to stretch me — the ones that push me to the edge of what I know — because that is where the work gets interesting.',
-      'Under all of that is a simple set of values: accountability, clients who are glad they worked with me, quality that holds up, and real attention to detail. Everything above is just me proving I hold myself to that.',
+      'Honestly, this site is less about impressing anyone and more about a habit I can’t switch off: pushing past the normal version of a thing, trying an idea I haven’t tried, using a tool I haven’t used yet. The portfolio was the excuse.',
+      'What I care about is simpler than it looks here: work that holds up under load, clients glad they worked with me, and the details most people skip. The rest of this page is just me holding myself to that in public.',
     ],
     sign: '— Manan Upadhyay',
   },
@@ -402,6 +415,9 @@ export default {
     clueSubmit: 'Unlock',
     clueAria: 'Answer the clue: {{hint}}',
     clueWrong: 'That’s not it — check the clue and try again.',
+    clueCloser: 'Getting closer — {{hint}}',
+    clueGiveaway: 'The answer is',
+    clueTapUnlock: 'tap to unlock',
     more: '{{count}} more in the Voice Hall',
     openHall: 'Browse all voices',
     hallTeaserSome: '{{count}} hidden voices to find',
@@ -412,6 +428,16 @@ export default {
   footer: {
     quote: '“The journey is the reward.”',
     atelierLink: 'The making-of — how this site was built',
+    closeHead: 'Let’s work together.',
+    closeSub: 'Open to senior full-stack roles and collaborations. I usually reply within a day.',
+    getInTouch: 'Contact me',
+    resume: 'Résumé',
+  },
+  stickyCta: {
+    text: 'Seen enough?',
+    cta: 'Contact me',
+    resume: 'Download résumé',
+    dismiss: 'Dismiss',
   },
 
   makingOf: {

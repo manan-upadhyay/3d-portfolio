@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { Fragment, useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, useReducedMotion } from 'framer-motion';
 import {
@@ -51,6 +51,15 @@ const CodebaseAtlas = () => {
   const [selected, setSelected] = useState(null);
   const rowRefs = useRef(new Map());
   const treeRef = useRef(null);
+  const detailRef = useRef(null);
+
+  /* Touch: the "why" renders INLINE under the tapped row (see below), so we just
+     nudge that row comfortably into view; desktop keeps the sticky side panel. */
+  const isTouch = () => !!window.matchMedia?.('(hover: none)').matches;
+  const revealRow = (id) => {
+    if (!isTouch()) return;
+    requestAnimationFrame(() => rowRefs.current.get(id)?.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' }));
+  };
 
   /* Boundary-aware scroll chaining — keep the wheel inside the tree while it can
      still scroll that way; once it hits the top/bottom edge, hand the wheel back
@@ -91,6 +100,7 @@ const CodebaseAtlas = () => {
     setSelected(node.id);
     if (node.children) toggle(node.id);
     playCue('blip');
+    revealRow(node.id); // touch: keep the row + its inline reasoning in view
   };
 
   const jumpTo = (id) => {
@@ -152,38 +162,52 @@ const CodebaseAtlas = () => {
           const isSel = selected === node.id;
           const Glyph = isDir ? (isOpen ? FolderOpen : Folder) : (GLYPHS[node.glyph] || FileCode);
           return (
-            <motion.button
-              key={node.id}
-              ref={(el) => { if (el) rowRefs.current.set(node.id, el); else rowRefs.current.delete(node.id); }}
-              type="button"
-              role="treeitem"
-              aria-level={depth + 1}
-              aria-expanded={isDir ? isOpen : undefined}
-              aria-selected={isSel}
-              tabIndex={i === 0 ? 0 : -1}
-              data-cursor="hover"
-              className={`atlas__row${isSel ? ' is-selected' : ''}${node.hotspot ? ' is-hotspot' : ''}`}
-              style={{ paddingLeft: `${10 + depth * 18}px` }}
-              onClick={() => activate(node)}
-              onKeyDown={(e) => onKeyDown(e, row, i)}
-              initial={reduce ? false : { opacity: 0, x: -6 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.22, ease: 'easeOut' }}
-            >
-              <span className="atlas__chevron" aria-hidden="true">
-                {isDir ? <ChevronRight size={13} className={isOpen ? 'is-open' : ''} /> : null}
-              </span>
-              <Glyph size={14} strokeWidth={1.6} className="atlas__glyph" aria-hidden="true" />
-              <span className="atlas__name">{node.name}</span>
-              {node.hotspot ? <span className="atlas__star" aria-hidden="true" /> : null}
-            </motion.button>
+            <Fragment key={node.id}>
+              <motion.button
+                ref={(el) => { if (el) rowRefs.current.set(node.id, el); else rowRefs.current.delete(node.id); }}
+                type="button"
+                role="treeitem"
+                aria-level={depth + 1}
+                aria-expanded={isDir ? isOpen : undefined}
+                aria-selected={isSel}
+                tabIndex={i === 0 ? 0 : -1}
+                data-cursor="hover"
+                className={`atlas__row${isSel ? ' is-selected' : ''}${node.hotspot ? ' is-hotspot' : ''}`}
+                style={{ paddingLeft: `${10 + depth * 18}px` }}
+                onClick={() => activate(node)}
+                onKeyDown={(e) => onKeyDown(e, row, i)}
+                initial={reduce ? false : { opacity: 0, x: -6 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.22, ease: 'easeOut' }}
+              >
+                <span className="atlas__chevron" aria-hidden="true">
+                  {isDir ? <ChevronRight size={13} className={isOpen ? 'is-open' : ''} /> : null}
+                </span>
+                <Glyph size={14} strokeWidth={1.6} className="atlas__glyph" aria-hidden="true" />
+                <span className="atlas__name">{node.name}</span>
+                {node.hotspot ? <span className="atlas__star" aria-hidden="true" /> : null}
+              </motion.button>
+              {/* Mobile-only: the node's reasoning INLINE right under its own row (the
+                  desktop side panel scrolls off a phone). Hidden on desktop via CSS. */}
+              {isSel && (node.blurb || node.signal) && (
+                <div className="atlas__inline" style={{ marginLeft: `${10 + depth * 18}px` }}>
+                  {node.blurb ? <p className="atlas__detail-blurb">{node.blurb}</p> : null}
+                  {node.signal ? (
+                    <div className="atlas__signal">
+                      <span className="atlas__signal-label">{t('atelier.atlas.why')}</span>
+                      <p className="atlas__signal-text">{node.signal}</p>
+                    </div>
+                  ) : null}
+                </div>
+              )}
+            </Fragment>
           );
         })}
       </div>
 
       {/* the side column — the live detail + the hotspots rail + the repo link */}
       <aside className="atlas__side">
-        <div className="atlas__detail" aria-live="polite">
+        <div ref={detailRef} className="atlas__detail" aria-live="polite">
           {activeNode ? (
             <>
               <span className="atlas__detail-path exp-mono">{activeNode.name}</span>

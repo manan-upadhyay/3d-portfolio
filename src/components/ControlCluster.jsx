@@ -3,11 +3,11 @@ import VoiceSwitcher from './VoiceSwitcher';
 import SoundControl from './SoundControl';
 
 /**
- * Bottom-right control cluster — a fixed flex row that hosts the visitor-facing
- * controls. Layout contract: **[Voice switcher] · [Sound control]** (voice left,
- * sound right). The sound control (Phase 4) expands on hover; because the row is
- * normal flex flow, growing it naturally pushes the voice button left. The theme
- * toggle stays top-right (unchanged).
+ * Bottom-right control cluster — **[Persona] · [Sound]** (Persona left, Sound
+ * right), bottom-aligned. The Sound control expands *upward* (vertically) on
+ * hover rather than sideways, so its slider never widens the row and can't push
+ * the Persona control left (the old frustration). The theme toggle stays
+ * top-right (unchanged).
  */
 const ControlCluster = ({ activeId }) => (
   <motion.div

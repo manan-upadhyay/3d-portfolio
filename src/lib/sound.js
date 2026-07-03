@@ -37,6 +37,8 @@ export const CONFIG = {
   blip: { peak: 0.11 },             // arsenal hover pluck
   detent: { peak: 0.085 },          // build-reel sprocket tick (per frame crossed)
   settle: { peak: 0.12 },           // build-reel playhead landing thunk
+  click: { peak: 0.14 },            // physical prev/next key — press (bright) + release (soft)
+  volumeTick: { peak: 0.05 },       // apple-slider drag tick — pitch rises with the level
   hoverNote: { peak: 0.085 },       // observatory analytics-chip hover note (pitched)
   // ── Face-particle "gathering" — the grains rushing into the portrait. TWEAK ME:
   //    • grains  = how many ticks (more = busier/faster-feeling)
@@ -222,6 +224,15 @@ const CUES = {
     swoosh(t0, { dur: 0.09, peak: CONFIG.settle.peak * 0.4, type: 'lowpass', from: 760, to: 200, q: 0.7 });
   },
 
+  // A physical button — a sharp contact transient + a low body "thock". `up:true`
+  // is the softer, lower release, so a full press+release reads as a real key
+  // bottoming out then springing back (the addictive two-stage click).
+  click(t0, { up = false } = {}) {
+    const pk = CONFIG.click.peak * (up ? 0.5 : 1);
+    swoosh(t0, { dur: up ? 0.016 : 0.022, peak: pk, type: 'bandpass', from: up ? 2400 : 3200, to: up ? 1400 : 1900, q: 8 });
+    blip(t0, { freq: up ? 120 : 160, glideTo: up ? 78 : 96, type: 'triangle', dur: up ? 0.05 : 0.07, peak: pk * 0.7, attack: 0.001 });
+  },
+
   // Observatory analytics hover — a soft glassy bell, pitched by the chip's index
   // in its group across a pentatonic scale, so sweeping the field fast resolves to
   // music (no two adjacent semitones, so it can never sound like noise). The
@@ -244,6 +255,15 @@ const CUES = {
       const f = c.freqMin + Math.random() * (c.freqMax - c.freqMin);
       blip(t0 + dt, { freq: f, type: 'sine', dur: 0.045, peak: c.peak * (0.35 + 0.65 * p), attack: 0.002 });
     }
+  },
+
+  // Apple-volume drag tick — a tiny, dry pitched blip whose frequency rises with
+  // the level (0..1), so sliding up sounds like it's "filling". Time-gated by the
+  // caller so a fast drag ratchets softly instead of buzzing.
+  volumeTick(t0, { level = 0.5 } = {}) {
+    const f = 320 + level * 900; // ~320Hz at silent → ~1220Hz at full
+    blip(t0, { freq: f, type: 'sine', dur: 0.045, peak: CONFIG.volumeTick.peak, attack: 0.002 });
+    blip(t0, { freq: f * 2, type: 'sine', dur: 0.025, peak: CONFIG.volumeTick.peak * 0.3, attack: 0.001 });
   },
 
   // Sound just turned on — a soft confirmation so the toggle is audible.
@@ -570,7 +590,12 @@ function loadBeds() {
 /** Resume the context (must be called from inside a user gesture). */
 function unlock() {
   if (!ensureContext()) return;
-  if (pageActive && ctx.state === 'suspended') ctx.resume().catch(() => {});
+  // A user gesture is itself proof the page is active — resume UNCONDITIONALLY.
+  // (Previously this was gated on `pageActive`, which relied on
+  // `document.hasFocus()`; that returns false on many mobile browsers, so the
+  // context never resumed on phones and no sound ever played after the tap.)
+  pageActive = true;
+  if (ctx.state === 'suspended') ctx.resume().catch(() => {});
   const wasLocked = !unlocked;
   unlocked = true;
   applyMaster();
@@ -615,10 +640,12 @@ function arm() {
   window.addEventListener('keydown', onGesture, { once: true });
   window.addEventListener('touchstart', onGesture, { once: true, passive: true });
 
-  pageActive = document.visibilityState !== 'hidden' && document.hasFocus();
-  const sync = () => setPageActive(document.visibilityState !== 'hidden' && document.hasFocus());
+  // Gate on document VISIBILITY only. `document.hasFocus()` is unreliable on
+  // mobile (the URL bar / soft keyboard steal focus, and Safari often reports
+  // false), which used to keep the page "inactive" and suspend audio on phones.
+  pageActive = document.visibilityState !== 'hidden';
+  const sync = () => setPageActive(document.visibilityState !== 'hidden');
   document.addEventListener('visibilitychange', sync);
-  window.addEventListener('blur', () => setPageActive(false));
   window.addEventListener('focus', sync);
 }
 
@@ -654,11 +681,22 @@ function isUnlocked() {
   return unlocked;
 }
 
+// When the FIRST unlock is triggered by a control the visitor is *looking at*
+// somewhere other than the hero (the mobile menu, the volume dial), the hero's
+// one-shot "reward" (auto-spinning the astrolabe with a synced sound) fires
+// off-screen — a phantom noise from nowhere. A menu/control calls suppressReward()
+// right before it unlocks; the hero's reward callback consumes the flag and skips.
+let rewardSuppressed = false;
+function suppressReward() { rewardSuppressed = true; }
+function consumeRewardSuppressed() { const v = rewardSuppressed; rewardSuppressed = false; return v; }
+
 export const sound = {
   arm,
   unlock,
   onUnlock,
   isUnlocked,
+  suppressReward,
+  consumeRewardSuppressed,
   setEnabled,
   setVolume,
   playCue,

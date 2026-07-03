@@ -214,11 +214,12 @@ export function mountAstrolabe(canvas, wrap, { bearingEl, onSpeed } = {}) {
     let frameSpeed = null; // explicit rad/s for the gear sound (free spin path)
     if (reduce) {
       cur = -Math.PI / 2;
-    } else if (introDone && isOverlayOpen()) {
+    } else if (isOverlayOpen()) {
       // A menu/modal is in front (the instrument is blurred behind and no longer
-      // the focus). Go dormant: hold the needle still and report zero motion so
-      // the gear sound falls silent — cursor moves inside the overlay must not
-      // swing the alidade or make a sound.
+      // the focus). Go dormant REGARDLESS of intro state: hold the needle still and
+      // report zero motion so no gear sound plays behind the overlay — a theme
+      // change re-mounts the instrument (re-running its intro), and taps inside the
+      // menu must never swing the alidade or make a sound.
       frameSpeed = 0;
     } else if (!introDone) {
       // Dramatic multi-turn spin that decelerates into "up" (Origin).

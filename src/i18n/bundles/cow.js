@@ -17,11 +17,13 @@ export default {
   },
 
   hero: {
-    lead: 'Moo moo',
-    phrases: ['moo', 'moo moo', 'moo moo moo', 'mooooo'],
-    hook: 'Moo moo moo, moo moo moo moo moo. Moo moo — moo, moo, moo moo moo moo moo.',
-    ctaPrimary: 'Moo',
-    ctaSecondary: 'Moo →',
+    lead: 'I moo',
+    phrases: ['moo web apps', 'moo moo React', 'full-stack moo', 'moo interfaces'],
+    hook: 'Moo moo moo — React, Next.js, Node.js. Moo moo moo moo, moo moo moo moo moo moo moo moo moo.',
+    proof: ['5+ moos · React / Next.js / Node.js'],
+    ctaPrimary: 'See the moo',
+    ctaSecondary: 'Moo me',
+    ctaResume: 'Moo (résumé)',
     scroll: 'Moo',
     spin: 'Moo moo moo',
   },
@@ -306,6 +308,24 @@ export default {
       why: 'Moo moo moo',
       repoCta: 'Moo moo GitHub',
     },
+    reckoning: {
+      eyebrow: 'The Moo',
+      title: 'Moo moo moo moo',
+      intro: 'Moo moo moo moo moo — moo moo 200+ moo. Moo moo moo, moo moo moo moo moo moo:',
+      saidHead: 'Moo',
+      changedHead: 'Moo moo',
+      items: [
+        { said: 'Moo moo moo (AI).', changed: 'Moo moo moo moo moo.' },
+        { said: 'Moo moo moo moo.', changed: 'Moo moo moo.' },
+        { said: 'Moo moo moo moo moo.', changed: 'Moo moo moo moo.' },
+        { said: 'Moo moo (moo).', changed: 'Moo moo moo moo.' },
+        { said: 'Moo moo, moo moo.', changed: 'Moo moo moo moo.' },
+      ],
+      notes: 'Moo moo moo moo moo, moo moo moo moo moo (DPR moo 2).',
+      ctaLine: 'Moo moo moo moo moo. Moo moo.',
+      ctaContact: 'Moo me',
+      ctaResume: 'Moo (résumé)',
+    },
     offmap: {
       title: 'Moo Moo Moo',
       intro: 'Moo moo moo moo. Moo moo moo moo moo.',
@@ -329,6 +349,16 @@ export default {
   footer: {
     quote: '“Moo.”',
     atelierLink: 'Moo moo — moo moo moo moo moo.',
+    closeHead: 'Moo moo moo.',
+    closeSub: 'Moo moo moo moo moo — moo moo moo moo. Moo moo moo.',
+    getInTouch: 'Moo me',
+    resume: 'Moo (résumé)',
+  },
+  stickyCta: {
+    text: 'Moo moo?',
+    cta: 'Moo me',
+    resume: 'Moo (résumé)',
+    dismiss: 'Moo',
   },
 
   makingOf: {
@@ -348,8 +378,7 @@ export default {
     footerHint: 'moo moo · moo moo',
     categories: {
       core: 'Moo',
-      office: 'Moo Moo',
-      bestiary: 'Moo Moo Moo',
+      sealed: 'Moo Moo',
     },
     request: {
       section: 'Moo',
@@ -381,6 +410,9 @@ export default {
     clueSubmit: 'Moo',
     clueAria: 'Moo moo moo: {{hint}}',
     clueWrong: 'Moo. Moo moo moo moo moo.',
+    clueCloser: 'Moo — {{hint}}',
+    clueGiveaway: 'Moo moo',
+    clueTapUnlock: 'moo moo moo',
     more: 'Moo {{count}} moo',
   },
 };

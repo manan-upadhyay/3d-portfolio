@@ -45,6 +45,13 @@
   --color-ember-rgb: 217, 119, 46;
   --color-gold: #B88A2E;
   --color-gold-rgb: 184, 138, 46;
+  /* Commit-graph intensity scale — lazily reads the themed ember, so it adapts
+     to every sky without per-theme overrides. l0 = empty day. */
+  --commit-l0: color-mix(in srgb, var(--color-text) 9%, transparent);
+  --commit-l1: rgba(var(--color-ember-rgb), 0.3);
+  --commit-l2: rgba(var(--color-ember-rgb), 0.52);
+  --commit-l3: rgba(var(--color-ember-rgb), 0.74);
+  --commit-l4: rgba(var(--color-ember-rgb), 0.96);
   --color-parchment: #F5F0E6;
   --color-ink: #1F1B16;
 
@@ -56,10 +63,25 @@
   --obs-realms: #B8860B;   /* amber   — Projects */
   --obs-intent: #C53D6A;   /* rose    — Contact intent */
 
+  /* Sky-mode identity hues — the swatch each of the 5 theme modes wears on the
+     mobile radial theme wheel. Representative of the sky itself, so they stay the
+     same in light + dark (not theme-derived). `auto` = neutral (it follows time). */
+  /* Nature-inspired, DEEPER for legibility, and each mode a distinct hue so dawn
+     and day never read alike: sage → burnt orange → clear-sky blue → terracotta
+     → periwinkle-indigo. Dawn is warm, day is cool — unmistakably different. */
+  /* MUTED + earthy so they live in the same warm world as the ember accent and the
+     cream/parchment surfaces — sophisticated, never neon. Each mode a distinct but
+     desaturated tone; `auto` has none of its own (it borrows the resolved sky). */
+  --sky-auto: #7F9A6B;   /* (unused — auto inherits the resolved sky) */
+  --sky-dawn: #D18268;   /* sunrise — warm coral (rich enough to glow on cream) */
+  --sky-day:  #D89A33;   /* noon — rich golden amber (distinct warm yellow) */
+  --sky-dusk: #B15A43;   /* sunset — rust terracotta (loved) */
+  --sky-night: #7C84AE;  /* night — muted slate blue (loved) */
+
   /* Background gradients */
   --gradient-bg: linear-gradient(135deg, #F8F3E9 0%, #F1E9D8 40%, #EADFC7 70%, #E3D6BC 100%);
   --gradient-hero: linear-gradient(180deg, #F8F3E9 0%, #F0E7D5 55%, #E7DAC2 100%);
-  --gradient-card: linear-gradient(135deg, rgba(255,252,245,0.92) 0%, rgba(243,236,222,0.92) 100%);
+  --gradient-card: linear-gradient(135deg, rgba(255,252,245,1) 0%, rgba(243,236,222,1) 100%);
   --gradient-accent: linear-gradient(135deg, #4F46E5 0%, #6366F1 50%, #818CF8 100%);
   --gradient-map-line: linear-gradient(90deg, transparent, var(--color-ember) 30%, var(--color-gold) 70%, transparent);
 
@@ -121,7 +143,7 @@
   /* Background gradients */
   --gradient-bg: linear-gradient(135deg, #0B0F1A 0%, #141B2C 50%, #0B0F1A 100%);
   --gradient-hero: linear-gradient(180deg, #0B0F1A 0%, #141B2C 50%, #0B0F1A 100%);
-  --gradient-card: linear-gradient(135deg, rgba(20,27,44,0.9) 0%, rgba(11,15,26,0.9) 100%);
+  --gradient-card: linear-gradient(135deg, rgba(20,27,44,1) 0%, rgba(11,15,26,1) 100%);
   --gradient-accent: linear-gradient(135deg, #6366F1 0%, #818CF8 50%, #A78BFA 100%);
   --gradient-map-line: linear-gradient(90deg, transparent, var(--color-ember) 30%, var(--color-gold) 70%, transparent);
 
@@ -490,11 +512,31 @@ h1, h2, h3, h4, h5, h6 {
 .btn-secondary:active { transform: translateY(-1px) scale(0.99); }
 
 /* ===== Form fields ===== */
+/* Defensive isolation for the Summon inputs (v1.1 Workstream B — Windows contact
+   funnel showed 0 form starts). Guarantees nothing in the card's stacking context
+   can sit over a field and swallow a click/focus: the inputs own their own layer
+   and always accept pointer input, regardless of sibling overlays or z-index. */
+.form-field {
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
+}
 /* The Summon inputs clear the default outline; restore a visible keyboard-focus
    ring (WCAG 2.4.7). box-shadow is used so it shows regardless of inline border. */
 .form-field:focus-visible {
   border-color: var(--color-ember);
   box-shadow: 0 0 0 3px rgba(var(--color-ember-rgb), 0.28);
+}
+
+/* Invalid field — red edge + a quick shake so the eye lands on it (both forms). */
+.form-field[aria-invalid="true"],
+.voice-summon__input[aria-invalid="true"] {
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 3px rgba(var(--color-error-rgb), 0.22);
+  animation: clue-shake 0.32s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .form-field[aria-invalid="true"], .voice-summon__input[aria-invalid="true"] { animation: none; }
 }
 
 /* ===== Volume slider (music player) ===== */
@@ -671,14 +713,71 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-/* ===== Journey waypoints ===== */
-.wp .realm-card {
-  opacity: 0.62;
-  transform: scale(0.97);
-  transition: opacity 0.45s ease, transform 0.45s ease, border-color 0.45s ease, box-shadow 0.45s ease;
+/* ===== The Journey — intentional horizontal timeline (v1.1) =====
+   Cards hang from the timeline by a thread and sway with velocity-driven
+   pendulum physics (see Experience.jsx). No scroll-hijack — native horizontal
+   scroll + desktop physical prev/next keys. */
+.exp-strip {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 50%;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.exp-strip::-webkit-scrollbar { display: none; }
+.exp-strip:focus-visible .exp-line { background: rgba(var(--color-ember-rgb), 0.5); }
+
+.exp-track {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  width: max-content;
+  padding: 44px clamp(1.5rem, calc(50vw - 190px), 50vw) 8px;
+  --card-h: clamp(430px, 58vh, 520px);
+}
+.exp-line {
+  position: absolute;
+  left: 0; right: 0; top: 44px;
+  height: 1px;
+  background: var(--color-card-border);
+  transition: background 0.3s ease;
+}
+
+.wp {
+  position: relative;
+  flex: 0 0 auto;
+  width: clamp(300px, 82vw, 380px);
+  scroll-snap-align: center;
 }
 .wp-node {
-  transition: background 0.4s ease, box-shadow 0.4s ease, width 0.4s ease, height 0.4s ease;
+  position: absolute;
+  top: 0; left: 50%;
+  width: 12px; height: 12px;
+  margin: -6px 0 0 -6px;
+  transform: rotate(45deg);
+  background: var(--color-gold);
+  z-index: 2;
+  transition: background 0.4s ease, box-shadow 0.4s ease, width 0.4s ease, height 0.4s ease, margin 0.4s ease;
+}
+.wp-hang {
+  transform-origin: top center;
+  transform: rotate(calc(var(--sway, 0deg) * var(--m, 1)));
+  will-change: transform;
+  padding-top: 44px; /* the thread length */
+}
+.wp-thread {
+  position: absolute;
+  top: 0; left: 50%;
+  width: 1px; height: 44px;
+  background: var(--color-card-border);
+}
+.wp .realm-card {
+  height: var(--card-h);
+  opacity: 0.6;
+  transform: scale(0.97);
+  transition: opacity 0.45s ease, transform 0.45s ease, border-color 0.45s ease, box-shadow 0.45s ease;
 }
 .wp-active .realm-card {
   opacity: 1;
@@ -689,11 +788,85 @@ h1, h2, h3, h4, h5, h6 {
 .wp-active .wp-node {
   background: var(--color-ember);
   box-shadow: 0 0 16px var(--color-ember);
-  width: 16px;
-  height: 16px;
+  width: 16px; height: 16px; margin: -8px 0 0 -8px;
 }
+
+/* Physical prev/next key — raised, presses in (Framer squash adds the haptic). */
+.exp-key {
+  display: grid;
+  place-items: center;
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  color: var(--color-ember);
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset, 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: opacity 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.exp-key:disabled { opacity: 0.3; cursor: default; }
+.exp-key:not(:disabled):hover { border-color: rgba(var(--color-ember-rgb), 0.5); }
+.exp-key:not(:disabled):active { box-shadow: 0 1px 3px rgba(0, 0, 0, 0.28) inset; }
+
+/* Mobile floating carousel arrows — overlaid on the card edges so the paging
+   controls and the card are always co-visible (fixes the iPhone-SE fit). The
+   wrapper centres the button on the card and stays out of the way; the button
+   fades out at the ends. */
+.exp-arrow-wrap {
+  position: absolute;
+  top: 44px; bottom: 8px;
+  display: grid;
+  place-items: center;
+  z-index: 5;
+  pointer-events: none;
+}
+.exp-arrow-wrap--l { left: 6px; }
+.exp-arrow-wrap--r { right: 6px; }
+.exp-arrow {
+  pointer-events: auto;
+  display: grid;
+  place-items: center;
+  width: 44px; height: 44px;
+  border-radius: 999px;
+  color: var(--color-ember);
+  background: color-mix(in srgb, var(--color-card-bg) 80%, transparent);
+  border: 1px solid var(--color-card-border);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-card);
+  transition: opacity 0.3s ease;
+}
+.exp-arrow:disabled { opacity: 0; pointer-events: none; }
+
+/* Scroll-progress affordance (signals there's more timeline off-screen). */
+.exp-progress {
+  position: relative;
+  flex: 1;
+  max-width: 160px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--color-card-border);
+  overflow: hidden;
+}
+.exp-progress > span {
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
+  background: var(--gradient-map-line);
+  transition: transform 0.18s ease-out;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .wp .realm-card { opacity: 1; transform: none; }
+  .wp-hang { transform: none; }
+}
+
+/* Mobile: the fixed card height clipped taller waypoints (3 bullets + tags ran
+   past 430px). Let the card grow to its content instead, with a floor so short
+   cards (e.g. "The Horizon Ahead") don't collapse. Extra bottom padding gives the
+   pendulum sway room so the swing doesn't clip against the strip's hidden edge. */
+@media (max-width: 767px) {
+  .exp-track { --card-h: auto; padding-bottom: 28px; }
+  .wp .realm-card { height: auto; min-height: 420px; }
 }
 
 /* ===== Hero fog drift ===== */
@@ -831,7 +1004,7 @@ h1, h2, h3, h4, h5, h6 {
   max-width: min(280px, 78vw);
   padding: 10px 13px;
   border-radius: 12px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Plus Jakarta Sans", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 12.5px;
@@ -932,24 +1105,27 @@ h1, h2, h3, h4, h5, h6 {
   background-clip: text;
 }
 
-/* ===== Chronicle: Chapter eyebrow ===== */
+/* ===== Chronicle: Chapter eyebrow =====
+   Deliberately quiet. The old treatment — ALL-CAPS + 0.32em tracking + a leading
+   accent rule, identical on every section — is one of the most reliable
+   "AI-generated" visual tells (see the v1.1 Restraint Pass). This reads as a
+   hand-set editorial label: natural case, modest tracking, muted tone. The
+   chapter numeral keeps a whisper of ember via `.chapter-eyebrow__no`. */
 .chapter-eyebrow {
   display: inline-flex;
-  align-items: center;
-  gap: 10px;
+  align-items: baseline;
+  gap: 8px;
   font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: var(--color-ember);
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--color-text-muted);
 }
 
-.chapter-eyebrow::before {
-  content: '';
-  width: 28px;
-  height: 1px;
-  background: var(--gradient-map-line);
+.chapter-eyebrow__no {
+  color: var(--color-ember);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
 }
 
 /* ===== Chronicle: Ink / map divider stroke ===== */
@@ -991,31 +1167,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ===== Chronicle: tag runes (tech-stack chips) ===== */
-/* On-theme ember chips — never the generic UI accent (which is indigo). */
-.tag-rune {
-  display: inline-flex;
-  align-items: center;
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1;
-  padding: 5px 11px;
-  border-radius: 8px;
-  background: rgba(var(--color-ember-rgb), 0.10);
-  color: var(--color-ember);
-  border: 1px solid rgba(var(--color-ember-rgb), 0.22);
-  transition: background 0.25s ease, border-color 0.25s ease;
-}
-
-.tag-rune:hover {
-  background: rgba(var(--color-ember-rgb), 0.16);
-  border-color: rgba(var(--color-ember-rgb), 0.42);
-}
-
-.tag-rune--sm {
-  font-size: 11px;
-  padding: 4px 9px;
-}
 
 /* ===== Chronicle: Custom cursor (dot + ring + backlight) ===== */
 .cursor-dot,
@@ -1046,10 +1197,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 .cursor-backlight {
   z-index: 5;
-  width: 460px;
-  height: 460px;
+  /* Calmer + smaller per Beta 1 ("simplify it — one color, not as large"): a
+     tighter, fainter backlight that supports focus instead of stealing it. */
+  width: 320px;
+  height: 320px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(var(--color-accent-rgb), 0.10) 0%, rgba(var(--color-ember-rgb), 0.05) 38%, transparent 70%);
+  background: radial-gradient(circle, rgba(var(--color-ember-rgb), 0.06) 0%, rgba(var(--color-ember-rgb), 0.03) 40%, transparent 70%);
   mix-blend-mode: screen;
   transition: opacity 0.5s ease;
 }
@@ -1079,11 +1232,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ===== Chronicle: parchment card accent ===== */
+/* Opaque material surface — not glassmorphism. The old `backdrop-filter: blur`
+   over a near-solid gradient was the C3 "frosted glass" tell (common-ai-signs.md);
+   the tokens are now fully opaque and the blur is gone. Elevation comes from tone
+   + border + the hover glow, not translucency. */
 .realm-card {
   position: relative;
   background: var(--gradient-card);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--color-card-border);
   border-radius: 20px;
   transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
@@ -1493,6 +1648,31 @@ h1, h2, h3, h4, h5, h6 {
 @media (min-width: 860px) { .voice-hall__grid { grid-template-columns: 1fr; } }
 @media (min-width: 1024px) { .voice-hall__grid { grid-template-columns: 1fr 1fr; } }
 
+/* ── Minimal single-column layout (v1.1 revamp) ────────────────────────────
+   The current voice IS the header (crest = its glyph), so the Hall is one
+   scannable object: a scrolling roster + a collapsed "Summon" disclosure. */
+.voice-hall__crest.font-chronicle { font-size: 17px; font-weight: 600; }
+.voice-hall__body {
+  flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 2px 18px 14px;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.voice-hall__list { display: grid; gap: 9px; grid-template-columns: 1fr; }
+.voice-hall__summon { margin-top: 12px; }
+.voice-hall__summontoggle {
+  display: flex; align-items: center; gap: 9px; width: 100%;
+  padding: 11px 14px; border-radius: 14px;
+  font-size: 13px; font-weight: 500; color: var(--color-text);
+  border: 1px dashed var(--color-card-border);
+  background: color-mix(in srgb, var(--color-primary) 40%, transparent);
+  transition: border-color 0.18s ease, background 0.18s ease;
+}
+.voice-hall__summontoggle:hover { border-color: rgba(var(--color-ember-rgb), 0.45); background: rgba(var(--color-ember-rgb), 0.06); }
+/* embedded summon (no longer a bordered right-rail) — sit flush under the toggle */
+.voice-hall__summon .voice-summon { border: none !important; background: transparent; }
+.voice-hall__summon .voice-summon__form { overflow: visible; padding: 12px 2px 4px; }
+
 /* live "Now narrating" spotlight at the head of the column */
 .voice-spotlight {
   display: flex; align-items: center; gap: 16px;
@@ -1588,6 +1768,16 @@ h1, h2, h3, h4, h5, h6 {
 }
 .clue-unlock__go:hover { background: rgba(var(--color-ember-rgb), 0.24); }
 .clue-unlock__wrong { display: block; margin-top: 6px; font-size: 11px; color: var(--color-error); }
+/* Last-resort reveal — the answer handed over as a one-tap unlock pill (ember,
+   inviting, not an error) so a stuck visitor always has a way through. */
+.clue-unlock__reveal {
+  display: inline-flex; align-items: center; gap: 6px; margin-top: 8px;
+  padding: 5px 11px; border-radius: 999px; font-size: 11.5px; line-height: 1.2;
+  color: var(--color-ember); background: rgba(var(--color-ember-rgb), 0.12);
+  border: 1px solid rgba(var(--color-ember-rgb), 0.4); transition: background 0.18s ease;
+}
+.clue-unlock__reveal:hover { background: rgba(var(--color-ember-rgb), 0.2); }
+.clue-unlock__reveal b { font-weight: 700; letter-spacing: 0.02em; }
 @keyframes clue-shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
 
 /* --- "Summon a Voice" — the persistent right rail --- */
@@ -1595,10 +1785,6 @@ h1, h2, h3, h4, h5, h6 {
   position: relative; overflow: hidden; min-height: 0;
   display: flex; flex-direction: column;
   border-top: 1px solid var(--color-card-border);
-  background:
-    radial-gradient(90% 60% at 100% 0%, rgba(var(--color-ember-rgb), 0.12), transparent 60%),
-    radial-gradient(90% 70% at 0% 100%, rgba(var(--color-gold-rgb), 0.1), transparent 60%),
-    color-mix(in srgb, var(--color-card-bg) 60%, transparent);
 }
 @media (min-width: 860px) {
   .voice-summon { border-top: none; border-left: 1px solid var(--color-card-border); }
@@ -2315,15 +2501,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* built-with chips */
-.atelier-tech { display: flex; flex-wrap: wrap; gap: 8px; }
-.atelier-chip {
-  padding: 6px 12px;
-  border-radius: 9999px;
-  font-size: 12px;
-  color: var(--color-text);
-  background: rgba(var(--color-ember-rgb), 0.06);
-  border: 1px solid var(--color-card-border);
-}
 
 /* the field guide — subtle interactions + how to trigger them */
 .atelier-eggs {
@@ -2425,11 +2602,16 @@ h1, h2, h3, h4, h5, h6 {
 .obs-ring--dashed { stroke-dasharray: 2 7; opacity: 0.6; }
 .obs-spoke { stroke: rgba(var(--color-gold-rgb), 0.09); stroke-width: 0.6; transition: stroke 0.2s ease; }
 .obs-spoke.is-active { stroke: rgba(var(--color-gold-rgb), 0.5); stroke-width: 1; }
-.obs-orbit { transform-origin: 200px 200px; animation: obs-spin 120s linear infinite; }
+.obs-orbit { transform-origin: 200px 200px; animation: obs-spin 64s linear infinite; }
 .obs-orbit.is-static, .obs-orbit.is-paused { animation-play-state: paused; }
 .obs-orbit.is-static { animation: none; }
 @keyframes obs-spin { to { transform: rotate(360deg); } }
-@media (hover: none) { .obs-orbit { animation: none; } } /* calm + static on touch */
+/* Desktop: the field pauses while hovered, so a star is easy to aim at (and it
+   also pauses on an active selection via .is-paused from JS). */
+@media (hover: hover) { .observatory__viz:hover .obs-orbit:not(.is-static) { animation-play-state: paused; } }
+/* Touch: keep revolving for life (a touch slower) — the chips below are the real
+   interaction, and a selection still pauses it via .is-paused. */
+@media (hover: none) { .obs-orbit { animation-duration: 92s; } }
 
 .obs-node { cursor: pointer; }
 .obs-node__hit { fill: transparent; } /* generous pointer target around each star */
@@ -2508,6 +2690,35 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.5;
   color: var(--color-text-muted);
 }
+
+/* Mobile inline inspector — on a phone the readout beneath the orbit scrolls off
+   the top the moment you reach the chips, so the tapped event's detail is shown
+   INLINE, right under its own chip group (where the finger already is). Desktop
+   keeps the orbit readout and hides this. */
+.observatory__inline-detail { display: none; }
+.observatory__mobile-hint { display: none; }
+@media (hover: none) {
+  .observatory__readout { display: none; }
+  .observatory__mobile-hint {
+    display: block;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--color-text-muted);
+    margin: 2px 0 4px;
+  }
+  .observatory__inline-detail {
+    display: block;
+    margin-top: 12px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: var(--color-card-bg);
+    border: 1px solid color-mix(in srgb, var(--g, var(--color-card-border)) 45%, var(--color-card-border));
+    text-align: left;
+    animation: obsDetailIn 0.24s ease;
+  }
+  .observatory__inline-detail .observatory__readout-meta { justify-content: flex-start; }
+}
+@keyframes obsDetailIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
 
 /* the event index — every instrumented event, grouped + always visible */
 .observatory__index { display: flex; flex-direction: column; gap: 16px; }
@@ -2660,13 +2871,45 @@ h1, h2, h3, h4, h5, h6 {
   background: rgba(var(--color-ember-rgb), 0.05);
   border: 1px solid var(--color-card-border);
 }
+/* Ruled off the top, not a colored left-stripe (L3 tell — common-ai-signs.md). */
 .observatory__footnote {
   font-size: 13.5px;
   line-height: 1.55;
   max-width: 72ch;
   color: var(--color-text-muted);
-  border-left: 2px solid var(--color-gold);
-  padding-left: 14px;
+  border-top: 1px solid var(--color-card-border);
+  padding-top: 12px;
+}
+
+/* ===== Atelier — The Reckoning (beta feedback → changes) ===== */
+.atelier-reckon__list {
+  border-top: 1px solid var(--color-card-border);
+}
+.atelier-reckon__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem 2.5rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--color-card-border);
+}
+.atelier-reckon__said { color: var(--color-text-muted); font-size: 14.5px; line-height: 1.5; }
+.atelier-reckon__changed { color: var(--color-text); font-size: 14.5px; line-height: 1.5; }
+.atelier-reckon__tag {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  opacity: 0.65;
+}
+.atelier-reckon__tag--fix { color: var(--color-ember); opacity: 1; }
+.atelier-reckon__notes { font-size: 12.5px; line-height: 1.65; color: var(--color-text-muted); max-width: 72ch; }
+.atelier-reckon__ctaline { font-size: clamp(20px, 2.4vw, 30px); line-height: 1.2; color: var(--color-text); max-width: 22ch; }
+.atelier-reckon__ctarow { display: flex; flex-wrap: wrap; gap: 1rem; }
+@media (max-width: 640px) {
+  .atelier-reckon__row { grid-template-columns: 1fr; gap: 0.5rem; padding: 1rem 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2678,6 +2921,27 @@ h1, h2, h3, h4, h5, h6 {
 .atlas { display: grid; gap: 18px; }
 @media (min-width: 860px) {
   .atlas { grid-template-columns: minmax(0, 1fr) minmax(0, 300px); gap: 24px; align-items: start; }
+}
+/* Mobile: single-column tree that flows in the page. The tapped node's reasoning
+   renders INLINE right under its row (.atlas__inline), so the desktop side detail
+   is hidden and the tree isn't a cramped nested scroll box. */
+@media (max-width: 859px) {
+  .atlas__tree { max-height: none; overflow: visible; }
+  .atlas__detail { display: none; }
+}
+.atlas__inline { display: none; }
+@media (max-width: 859px) {
+  .atlas__inline {
+    display: block;
+    margin: 2px 8px 6px;
+    padding: 10px 13px;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--color-gold) 7%, var(--color-card-bg));
+    border: 1px solid color-mix(in srgb, var(--color-gold) 22%, var(--color-card-border));
+    font-family: "Plus Jakarta Sans", sans-serif;
+    animation: obsDetailIn 0.22s ease;
+  }
+  .atlas__inline .atlas__detail-blurb { margin-top: 0; }
 }
 
 /* the tree */
@@ -2817,6 +3081,63 @@ h1, h2, h3, h4, h5, h6 {
 /* on small screens the portrait sits below the text, a touch smaller */
 @media (max-width: 1023px) { .atelier-face { max-width: 320px; } }
 
+/* Mobile draggable lens puck (revealed by FaceParticles on touch devices). It's
+   positioned/sized entirely from JS (transform + width/height); this is just its
+   look: a soft glass disc with an ember rim that reads as "grab and drag me". */
+.atelier-face__lens {
+  display: none;               /* JS flips to grid once the portrait forms */
+  position: absolute;
+  top: 0; left: 0;
+  place-items: center;
+  border-radius: 50%;
+  padding: 0;
+  color: var(--color-ember);
+  background: radial-gradient(circle at 50% 38%, rgba(var(--color-ember-rgb), 0.16), rgba(var(--color-ember-rgb), 0.05) 60%, transparent 72%);
+  border: 1.5px solid rgba(var(--color-ember-rgb), 0.55);
+  box-shadow: 0 6px 22px -6px rgba(0,0,0,0.5), 0 0 0 6px rgba(var(--color-ember-rgb), 0.06);
+  touch-action: none;
+  cursor: grab;
+  z-index: 3;
+  animation: lensBreathe 2.4s ease-in-out infinite;
+}
+.atelier-face__lens:active { cursor: grabbing; animation: none; }
+@keyframes lensBreathe {
+  0%, 100% { box-shadow: 0 6px 22px -6px rgba(0,0,0,0.5), 0 0 0 6px rgba(var(--color-ember-rgb), 0.06); }
+  50%      { box-shadow: 0 6px 22px -6px rgba(0,0,0,0.5), 0 0 0 11px rgba(var(--color-ember-rgb), 0.02); }
+}
+.atelier-face__lens-hint {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%) rotate(0deg); /* stays upright; puck rot is on the parent */
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--color-text-muted);
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.atelier-face__gyro {
+  display: none;               /* JS shows it only where a tilt permission is needed (iOS) */
+  position: absolute;
+  bottom: 8px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--color-ember);
+  background: var(--color-card-bg);
+  border: 1px solid rgba(var(--color-ember-rgb), 0.4);
+  box-shadow: var(--shadow-card);
+}
+@media (prefers-reduced-motion: reduce) { .atelier-face__lens { animation: none; } }
+
 /* the manifesto */
 .atelier-manifesto { max-width: 64ch; }
 .atelier-manifesto__p {
@@ -2832,34 +3153,155 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* the Realms → Atelier nod (the unnumbered seventh realm) */
-.works-nod { display: flex; justify-content: center; text-align: center; }
-.works-nod__btn {
-  display: inline-flex;
+.works-nod { display: flex; justify-content: center; }
+.works-nod__card {
+  display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  max-width: 46ch;
+  text-align: center;
+  gap: 14px;
+  width: 100%;
+  max-width: 620px;
+  padding: clamp(28px, 4vw, 44px) clamp(24px, 4vw, 48px);
+  border-radius: 20px;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  transition: border-color 0.3s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
+}
+.works-nod__card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(var(--color-ember-rgb), 0.5);
+  box-shadow: 0 18px 40px -18px rgba(var(--color-ember-rgb), 0.45);
+}
+.works-nod__eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-ember);
 }
 .works-nod__line {
   font-style: italic;
-  font-size: clamp(17px, 2.4vw, 21px);
-  line-height: 1.4;
-  color: var(--color-text-muted);
-  transition: color 0.25s ease;
+  font-size: clamp(18px, 2.6vw, 24px);
+  line-height: 1.35;
+  color: var(--color-text);
+  max-width: 46ch;
 }
-.works-nod__btn:hover .works-nod__line { color: var(--color-text); }
 .works-nod__cta {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 12.5px;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 4px;
+  padding: 12px 26px;
+  border-radius: 999px;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
   font-weight: 600;
-  letter-spacing: 0.04em;
-  color: var(--color-ember);
+  letter-spacing: 0.01em;
   transition: gap 0.2s ease;
 }
-.works-nod__btn:hover .works-nod__cta { gap: 8px; }
+.works-nod__card:hover .works-nod__cta { gap: 11px; }
+
+/* ===== Commit graph (Making-Of) — GitHub-style heatmap from real git history ===== */
+.commit-graph { --cell: 13px; --cell-gap: 4px; }
+.commit-graph__scroll { position: relative; overflow-x: auto; overflow-y: hidden; padding-bottom: 4px; }
+.commit-graph__grid { display: inline-block; min-width: max-content; }
+.commit-graph__months {
+  display: grid;
+  grid-auto-columns: calc(var(--cell) + var(--cell-gap));
+  grid-auto-flow: column;
+  height: 16px;
+  margin-bottom: 4px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+}
+.commit-graph__month { grid-row: 1; white-space: nowrap; }
+.commit-graph__cols { display: flex; gap: var(--cell-gap); }
+.commit-graph__col { display: flex; flex-direction: column; gap: var(--cell-gap); }
+.commit-cell {
+  width: var(--cell);
+  height: var(--cell);
+  border-radius: 3px;
+  background: var(--commit-l0);
+  display: inline-block;
+}
+.commit-cell--pad { background: transparent; }
+.commit-cell--l0 { background: var(--commit-l0); }
+.commit-cell--l1 { background: var(--commit-l1); }
+.commit-cell--l2 { background: var(--commit-l2); }
+.commit-cell--l3 { background: var(--commit-l3); }
+.commit-cell--l4 { background: var(--commit-l4); }
+
+/* One-time reveal: cells pop in column-by-column when the grid enters view. */
+.commit-graph__grid .commit-graph__cols .commit-cell { opacity: 0; transform: scale(0.4); }
+.commit-graph__grid.is-in .commit-graph__cols .commit-cell {
+  animation: commitPop 0.42s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation-delay: var(--cell-delay, 0s);
+}
+@keyframes commitPop { to { opacity: 1; transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) {
+  .commit-graph__grid .commit-graph__cols .commit-cell { opacity: 1; transform: none; animation: none; }
+}
+
+.commit-graph__tip {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 8px));
+  margin-left: calc(var(--cell) / 2);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 7px 11px;
+  border-radius: 8px;
+  white-space: nowrap;
+  pointer-events: none;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  box-shadow: var(--shadow-card);
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+.commit-graph__tip strong { font-size: 12px; color: var(--color-text); }
+.commit-graph__tip span { font-size: 11px; color: var(--color-text-muted); }
+
+.commit-graph__legend {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 14px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+.commit-graph__legend .commit-cell { width: 11px; height: 11px; }
+
+.commit-graph__stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px 12px;
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid var(--color-card-border);
+}
+@media (min-width: 640px) { .commit-graph__stats { grid-template-columns: repeat(4, 1fr); } }
+.commit-graph__stat-value {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(26px, 3.4vw, 38px);
+  line-height: 1;
+  color: var(--color-text);
+}
+.commit-graph__stat-label {
+  margin-top: 6px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
 
 /* The quiet doorway to the Atelier in the global footer. */
 .atelier-footer-link:hover { color: var(--color-ember) !important; }
@@ -2948,3 +3390,261 @@ h1, h2, h3, h4, h5, h6 {
   50%      { opacity: 0; transform: scale(1); }
 }
 
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Mobile control sheet — the "Site Feel" instruments (theme wheel + volume dial)
+   Designed as a matched pair: two equal-height rounded wells on one shared plate.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.sheet-divider {
+  height: 1px; margin: 14px 2px; border: 0;
+  background: linear-gradient(90deg, transparent, var(--color-card-border) 20%, var(--color-card-border) 80%, transparent);
+}
+
+/* The two controls sit directly on the sheet — no wells, no borders (minimal).
+   Theme wheel to the LEFT, sound dial to the RIGHT. Top padding reserves room for
+   the wheel's outer arc label so the top ("Auto") never clips against the sheet. */
+.feel-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  /* horizontal room so the wheel's side labels (Night on the left, Dawn on the
+     right) never clip against the sheet edges */
+  padding: 20px 30px 12px;
+}
+.feel-well {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ── Theme wheel (RDR2 weapon-wheel): a segmented rim where only the ACTIVE
+   sector's OUTER arc carries colour, a serif name in the hub, drag the ball. ── */
+.theme-wheel {
+  position: relative; touch-action: none;
+  user-select: none; -webkit-user-select: none;
+}
+.theme-wheel__svg { position: absolute; inset: 0; overflow: visible; }
+.theme-wheel__icon {
+  position: absolute; display: grid; place-items: center;
+  width: 30px; height: 30px; transform: translate(-50%, -50%);
+  transition: color 0.25s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  color: var(--color-text-muted);
+}
+.theme-wheel__hub {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  display: grid; place-items: center; text-align: center;
+  pointer-events: none; z-index: 4;
+}
+/* SVG curved label hugging the outer side of the active theme's arc — a clean,
+   UPPERCASE label with airy tracking (reads like a title, not a word). */
+.theme-wheel__name {
+  font-family: "Plus Jakarta Sans", "Inter", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+/* The current-mode name, arced across the top of the wheel (SVG textPath). */
+.theme-wheel__arc-text {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.theme-wheel__caption {
+  margin-top: 4px; font-size: 8.5px; letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.theme-wheel__ball {
+  position: absolute; left: 50%; top: 50%;
+  width: 22px; height: 22px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: color-mix(in srgb, var(--color-card-bg) 92%, var(--sky-swatch, var(--color-ember)));
+  border: 1px solid color-mix(in srgb, var(--sky-swatch, var(--color-ember)) 45%, var(--color-card-border));
+  box-shadow: 0 4px 12px rgba(0,0,0,0.35), 0 0 0 4px color-mix(in srgb, var(--sky-swatch, var(--color-ember)) 12%, transparent);
+  z-index: 3;
+}
+.theme-wheel__balldot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--sky-swatch, var(--color-ember));
+  box-shadow: 0 0 8px color-mix(in srgb, var(--sky-swatch, var(--color-ember)) 70%, transparent);
+}
+/* the idle "grab me" halo emanating from the resting ball */
+.theme-wheel__halo {
+  position: absolute; left: 50%; top: 50%;
+  width: 22px; height: 22px; margin-left: -11px; margin-top: -11px;
+  border-radius: 50%; z-index: 1; pointer-events: none;
+}
+
+/* ── Apple-style volume dial — a liquid capsule that fills bottom→top, with a
+   jelly overshoot on release (spring) and a wobbling meniscus surface. ── */
+.vol-apple {
+  position: relative; touch-action: none;
+  user-select: none; -webkit-user-select: none;
+  overflow: hidden;
+  border-radius: 22px;
+  /* a soft frosted-glass track (adaptive: light-frost in dark, grey-frost in light) */
+  background: color-mix(in srgb, var(--color-text) 9%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-text) 11%, transparent);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.14);
+  cursor: ns-resize;
+}
+.vol-apple__fill {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  /* the liquid takes the ACTIVE SKY's (muted) hue (--vol-hue): a gentle gradient
+     that stays in one soft register — no stark white top, no neon bottom — so it
+     harmonises with the frosted glass and the ember accents. */
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--vol-hue, var(--color-ember)) 62%, white) 0%,
+    color-mix(in srgb, var(--vol-hue, var(--color-ember)) 84%, white) 52%,
+    color-mix(in srgb, var(--vol-hue, var(--color-ember)) 96%, black) 100%);
+  box-shadow: inset 0 2px 6px rgba(255,255,255,0.16);
+  will-change: height;
+}
+/* a soft meniscus highlight where the liquid meets air */
+.vol-apple__surface {
+  position: absolute; left: 0; right: 0; top: -1px; height: 6px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.5), rgba(255,255,255,0));
+  border-radius: 50%;
+}
+.vol-apple__icon {
+  position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%);
+  z-index: 2; color: #fff; pointer-events: none;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.4));
+}
+
+/* ── The sheet itself + its cards — one cohesive, aesthetic surface set ─────── */
+/* Frosted-glass sheet — translucent so the blurred page shows through, a bright
+   top rim + inner highlight for the "pane of glass" read, and a strong blur. */
+.mobile-sheet {
+  /* Frosted glass that keeps the THEME's character (no bright white wash): a
+     translucent theme-tinted pane + a heavy blur, so the blurred page — warm on
+     day, deep on night — reads through it. A faint ember glow + a subtle rim,
+     nothing that lifts it to grey. */
+  background:
+    radial-gradient(130% 60% at 50% 0%, rgba(var(--color-ember-rgb), 0.05), transparent 60%),
+    color-mix(in srgb, var(--color-card-bg) 55%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--color-text) 14%, transparent);
+  box-shadow:
+    0 -24px 70px rgba(0,0,0,0.42),
+    inset 0 1px 0 color-mix(in srgb, var(--color-text) 12%, transparent);
+  backdrop-filter: blur(48px) saturate(1.5);
+  -webkit-backdrop-filter: blur(48px) saturate(1.5);
+}
+/* Glassy cards — a translucent, THEME-tinted pane with its own blur (a second
+   layer of glass), not a bright white box. */
+.sheet-card {
+  position: relative;
+  background: color-mix(in srgb, var(--color-card-bg) 34%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-text) 12%, transparent);
+  border-radius: 16px;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--color-text) 8%, transparent);
+  backdrop-filter: blur(14px) saturate(1.3);
+  -webkit-backdrop-filter: blur(14px) saturate(1.3);
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.12s ease;
+}
+.sheet-card:active { transform: scale(0.99); background: color-mix(in srgb, var(--color-card-bg) 52%, transparent); }
+.sheet-card--active {
+  background: rgba(var(--color-ember-rgb), 0.13);
+  border-color: rgba(var(--color-ember-rgb), 0.42);
+}
+
+/* ── Menu hierarchy — gentle CTAs ▸ explore list ▸ quiet making-of footnote ──
+   The two actions are inviting, not insistent: elegant soft buttons, Contact just
+   a touch warmer than Résumé so it leads without shouting. */
+.menu-cta {
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+  height: 50px; border-radius: 14px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 14px; font-weight: 600; letter-spacing: 0.005em;
+  color: var(--color-text);
+  transition: transform 0.14s ease, background 0.2s ease, border-color 0.2s ease;
+}
+.menu-cta svg { color: var(--color-ember); opacity: 0.9; }
+.menu-cta:active { transform: scale(0.98); }
+.menu-cta--filled {            /* Contact — a soft, warm invitation */
+  background: rgba(var(--color-ember-rgb), 0.10);
+  border: 1px solid rgba(var(--color-ember-rgb), 0.30);
+}
+.menu-cta--filled:active { background: rgba(var(--color-ember-rgb), 0.16); }
+.menu-cta--outline {           /* Résumé — a calm neutral companion */
+  background: color-mix(in srgb, var(--color-card-bg) 30%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-text) 13%, transparent);
+}
+.menu-cta--outline:active { background: color-mix(in srgb, var(--color-card-bg) 46%, transparent); }
+
+/* Explore — a subtle grouped list (Navigate / Persona), clearly secondary */
+.menu-list {
+  border-radius: 14px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-card-bg) 20%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-text) 9%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.menu-row {
+  display: flex; align-items: center; gap: 12px;
+  width: 100%; height: 50px; padding: 0 15px;
+  text-align: left;
+  transition: background 0.15s ease;
+}
+.menu-row + .menu-row { border-top: 1px solid color-mix(in srgb, var(--color-text) 8%, transparent); }
+.menu-row:active { background: color-mix(in srgb, var(--color-text) 7%, transparent); }
+.menu-row__icon { color: var(--color-ember); display: inline-flex; flex: none; opacity: 0.9; }
+.menu-row__label {
+  flex: 1; font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 14.5px; font-weight: 500; color: var(--color-text);
+}
+.menu-row__chev { color: var(--color-text-muted); flex: none; }
+
+/* Making-of — a quiet footnote, not a peer of the actions above */
+.menu-footlink {
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  width: 100%; margin-top: 16px; padding: 6px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 12px; font-weight: 500; letter-spacing: 0.03em;
+  color: var(--color-text-muted);
+  transition: color 0.2s ease;
+}
+.menu-footlink svg { opacity: 0.75; }
+.menu-footlink:active { color: var(--color-ember); }
+
+/* ── Light-theme (dawn/day) menu — its OWN treatment. The dark themes are moody
+   glass; the light ones must feel warm, bright and clean — a frosted CREAM, never
+   the flat grey it defaulted to. A warm cream tint dominates the blur, a soft
+   ember bloom warms the top, and the surfaces are crisp warm-white. ────────── */
+.light .mobile-sheet {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,251,243,0.18) 44%, transparent 74%),
+    radial-gradient(130% 58% at 50% 0%, rgba(var(--color-ember-rgb), 0.12), transparent 60%),
+    color-mix(in srgb, #FFFAF1 76%, transparent);
+  border-top: 1px solid rgba(255,255,255,0.7);
+  box-shadow:
+    0 -24px 72px rgba(120,86,52,0.18),
+    inset 0 1.5px 0 rgba(255,255,255,0.8);
+}
+.light .sheet-card,
+.light .menu-list {
+  background: rgba(255,253,248,0.52);
+  border-color: rgba(120,86,52,0.14);
+}
+.light .menu-row + .menu-row { border-top-color: rgba(120,86,52,0.11); }
+.light .menu-cta--outline {
+  background: rgba(255,253,248,0.55);
+  border-color: rgba(120,86,52,0.18);
+}
+.light .menu-cta--filled {
+  background: rgba(var(--color-ember-rgb), 0.13);
+  border-color: rgba(var(--color-ember-rgb), 0.34);
+}
+/* Light dial — a warm-toned track + inner depth so the rich hue reads with
+   presence on cream (on dark it already glows against the ink). */
+.light .vol-apple {
+  background: rgba(120,86,52,0.08);
+  border-color: rgba(120,86,52,0.16);
+  box-shadow: inset 0 1px 4px rgba(120,86,52,0.16);
+}
+.light .vol-apple__fill { box-shadow: inset 0 2px 7px rgba(255,255,255,0.4), inset 0 -14px 22px -10px rgba(120,60,30,0.25); }
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-wheel__icon { transition: none; }
+  .sheet-card:active { transform: none; }
+}

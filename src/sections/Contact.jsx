@@ -87,13 +87,18 @@ const Contact = () => {
   const [inquiry, setInquiry] = useState(inquiries[0]);
   const honeypotRef = useRef(null); // bot trap — humans never fill this
   const submitRef = useRef(null);   // raven burst erupts from the button
+  const nameRef = useRef(null);
+  const emailRef = useRef(null);
+  const msgRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [errorField, setErrorField] = useState(null); // which field to highlight
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
     setError('');
+    setErrorField(null);
   };
 
   // Set a random on-theme error variant; interpolate {{email}} for the
@@ -112,8 +117,14 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSuccess(false);
-    if (!form.name || !form.email || !form.message) return failValidation('required');
-    if (!EMAIL_RE.test(form.email)) return failValidation('email');
+    // On a validation error, jump the visitor straight to the offending field
+    // (focus + highlight) so there's nothing to hunt for.
+    const fail = (field, ref, key) => { setErrorField(field); ref.current?.focus(); return failValidation(key); };
+    if (!form.name) return fail('name', nameRef, 'required');
+    if (!form.email) return fail('email', emailRef, 'required');
+    if (!EMAIL_RE.test(form.email)) return fail('email', emailRef, 'email');
+    if (!form.message) return fail('message', msgRef, 'required');
+    setErrorField(null);
 
     setError('');
     setLoading(true);
@@ -140,6 +151,7 @@ const Contact = () => {
 
   const inputCls = 'form-field w-full py-3.5 px-4 rounded-xl outline-none border transition-colors duration-300';
   const inputStyle = { background: 'var(--color-card-bg)', borderColor: 'var(--color-card-border)', color: 'var(--color-text)' };
+  const fieldStyle = (field) => (errorField === field ? { ...inputStyle, borderColor: 'var(--color-error)' } : inputStyle);
 
   return (
     <>
@@ -192,13 +204,16 @@ const Contact = () => {
               style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, opacity: 0 }}
             />
             <div className="grid sm:grid-cols-2 gap-4">
-              <input name="name" value={form.name} onChange={handleChange} placeholder={t('contact.placeholders.name')}
-                className={inputCls} style={inputStyle} aria-label="Your name" aria-required="true" />
-              <input name="email" type="email" value={form.email} onChange={handleChange} placeholder={t('contact.placeholders.email')}
-                className={inputCls} style={inputStyle} aria-label="Your email" aria-required="true" />
+              <input ref={nameRef} name="name" value={form.name} onChange={handleChange} placeholder={`${t('contact.placeholders.name')} *`}
+                autoComplete="name" enterKeyHint="next" aria-invalid={errorField === 'name'}
+                className={inputCls} style={fieldStyle('name')} aria-label="Your name" aria-required="true" />
+              <input ref={emailRef} name="email" type="email" value={form.email} onChange={handleChange} placeholder={`${t('contact.placeholders.email')} *`}
+                autoComplete="email" inputMode="email" enterKeyHint="next" aria-invalid={errorField === 'email'}
+                className={inputCls} style={fieldStyle('email')} aria-label="Your email" aria-required="true" />
             </div>
-            <textarea name="message" rows={4} value={form.message} onChange={handleChange}
-              placeholder={t('contact.messagePlaceholders', { returnObjects: true })[inquiry] || t('contact.placeholders.message')}
+            <textarea ref={msgRef} name="message" rows={4} value={form.message} onChange={handleChange} aria-invalid={errorField === 'message'}
+              placeholder={`${t('contact.messagePlaceholders', { returnObjects: true })[inquiry] || t('contact.placeholders.message')} *`}
+              autoComplete="off"
               className={`${inputCls} resize-none flex-1 min-h-[140px]`} style={inputStyle} aria-label="Your message" aria-required="true" />
 
             <div className="flex flex-col sm:flex-row gap-3">

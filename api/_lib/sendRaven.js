@@ -21,25 +21,37 @@ const hash = (s) => {
   return h.toString(36);
 };
 
-const emailHtml = ({ name, email, message, inquiry }) => `
-  <div style="background:#0B0F1A;padding:32px 0;font-family:Inter,Segoe UI,Helvetica,Arial,sans-serif;">
-    <div style="max-width:560px;margin:0 auto;background:#141B2C;border:1px solid rgba(129,140,248,0.18);border-radius:16px;overflow:hidden;">
-      <div style="padding:24px 28px;border-bottom:1px solid rgba(129,140,248,0.15);">
-        <p style="margin:0;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#E8965A;">A raven has landed</p>
-        <h1 style="margin:6px 0 0;font-size:22px;color:#ECE7DB;font-family:Georgia,serif;">New message from the Chronicle</h1>
-      </div>
-      <div style="padding:24px 28px;color:#ECE7DB;">
-        ${inquiry ? `<p style="margin:0 0 14px;"><span style="display:inline-block;padding:4px 12px;border-radius:999px;background:rgba(232,150,90,0.14);border:1px solid rgba(232,150,90,0.4);color:#E8965A;font-size:12px;">${esc(inquiry)}</span></p>` : ''}
-        <p style="margin:0 0 4px;font-size:13px;color:#9AA3B5;">From</p>
-        <p style="margin:0 0 18px;font-size:15px;">${esc(name)} &lt;<a href="mailto:${esc(email)}" style="color:#818CF8;text-decoration:none;">${esc(email)}</a>&gt;</p>
-        <p style="margin:0 0 4px;font-size:13px;color:#9AA3B5;">Message</p>
-        <div style="font-size:15px;line-height:1.6;white-space:pre-wrap;border-left:2px solid rgba(232,150,90,0.5);padding-left:14px;">${esc(message)}</div>
-      </div>
-      <div style="padding:16px 28px;border-top:1px solid rgba(129,140,248,0.15);">
-        <p style="margin:0;font-size:12px;color:#9AA3B5;font-style:italic;font-family:Georgia,serif;">Reply directly to this email to answer ${esc(name)}.</p>
-      </div>
-    </div>
+// A "summon a voice" request comes through the same endpoint as the contact
+// form, tagged with this inquiry. Both emails share the same plain style, but the
+// heading/badge/subject differ so the two are trivial to tell apart in the inbox.
+const VOICE_INQUIRY = 'Voice request';
+
+// Plain, readable email — no themed background, default surface, simple type.
+// The goal is legibility in any client, not a branded card. A small coloured
+// badge (blue = message, purple = voice request) is the one differentiator.
+const emailHtml = ({ name, email, message, inquiry }) => {
+  const isVoice = inquiry === VOICE_INQUIRY;
+  const heading = isVoice ? 'New voice request' : 'New message';
+  // Contact inquiries show their chip (Senior role, Contract…); voice requests
+  // show a fixed purple "Voice request" badge.
+  const badgeColor = isVoice ? '#7c3aed' : '#1a56db';
+  const badgeText = isVoice ? 'Voice request' : inquiry;
+  const badge = badgeText
+    ? `<span style="display:inline-block;margin-left:8px;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:600;color:${badgeColor};background:${badgeColor}14;border:1px solid ${badgeColor}55;">${esc(badgeText)}</span>`
+    : '';
+  const bodyLabel = isVoice ? 'The request' : 'Message';
+  return `
+  <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;color:#1a1a1a;max-width:560px;margin:0 auto;padding:8px 4px;">
+    <p style="margin:0 0 20px;font-size:17px;font-weight:600;">
+      ${heading}${badge}
+    </p>
+    <p style="margin:0 0 4px;font-size:13px;color:#666;">From</p>
+    <p style="margin:0 0 18px;">${esc(name)} &lt;<a href="mailto:${esc(email)}" style="color:#1a56db;">${esc(email)}</a>&gt;</p>
+    <p style="margin:0 0 4px;font-size:13px;color:#666;">${bodyLabel}</p>
+    <div style="white-space:pre-wrap;border-left:3px solid ${badgeColor}55;padding-left:14px;margin:0 0 24px;">${esc(message)}</div>
+    <p style="margin:0;font-size:13px;color:#666;">Reply directly to this email to answer ${esc(email)}.</p>
   </div>`;
+};
 
 /**
  * @returns {{ ok: true, id?: string } | { ok: false, code: 'NOT_CONFIGURED'|'INVALID'|'SEND_FAILED' }}
@@ -62,13 +74,16 @@ export async function sendRaven({ name, email, message, inquiry, company } = {})
 
   const resend = new Resend(apiKey);
   const to = process.env.RESEND_TO || 'upadhyaymanan01@gmail.com';
-  const from = process.env.RESEND_FROM || 'The Chronicle <onboarding@resend.dev>';
+  const from = process.env.RESEND_FROM || 'Portfolio Contact <onboarding@resend.dev>';
 
   const { data, error } = await resend.emails.send({
     from,
     to: [to],
     replyTo: email,
-    subject: `${inquiry ? `[${inquiry}] ` : ''}New raven from ${name}`,
+    subject: inquiry === VOICE_INQUIRY
+      // e.g. name = "Voice request — Gandalf" → "Voice request: Gandalf"
+      ? `Voice request: ${name.replace(/^Voice request\s*[—-]\s*/, '')}`
+      : `${inquiry ? `[${inquiry}] ` : ''}New message from ${name}`,
     text: `${inquiry ? `Inquiry: ${inquiry}\n` : ''}From: ${name} <${email}>\n\n${message}`,
     html: emailHtml({ name, email, message, inquiry }),
     idempotencyKey: `contact/${hash(`${email}|${inquiry}|${message}`)}`,

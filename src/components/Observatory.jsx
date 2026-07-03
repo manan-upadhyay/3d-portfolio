@@ -112,6 +112,7 @@ const Observatory = () => {
                   key={node.id}
                   className={`obs-node obs-node--${node.group}${selected === node.id ? ' is-active' : ''}`}
                   onMouseEnter={() => pick(node.id)}
+                  onClick={() => pick(node.id)}
                 >
                   <circle className="obs-node__hit" cx={node.x} cy={node.y} r={11} />
                   <circle className="obs-node__dot" cx={node.x} cy={node.y} r={3.4} />
@@ -151,6 +152,7 @@ const Observatory = () => {
             visible so discovery never requires a blind hover. */}
         <div className="observatory__index" onMouseLeave={() => pick(null)}>
           <p className="observatory__index-hint">{t('atelier.observatory.indexHint')}</p>
+          <p className="observatory__mobile-hint">{t('atelier.observatory.tapHint')}</p>
           {constellation.groups.map((g) => (
             <div key={g.id} className={`observatory__group observatory__group--${g.id}`}>
               <div className="observatory__group-head">
@@ -167,13 +169,26 @@ const Observatory = () => {
                       aria-pressed={selected === e.id}
                       onMouseEnter={() => pick(e.id)}
                       onFocus={() => pick(e.id)}
-                      onClick={() => pick(e.id)}
+                      onClick={() => pick(selected === e.id ? null : e.id)}
                     >
                       {e.id}
                     </button>
                   </li>
                 ))}
               </ul>
+              {/* Mobile-only: the selected event's detail, inline right under its own
+                  group (CSS hides this on desktop, which uses the orbit readout). */}
+              {active && active.group === g.id && (
+                <div className="observatory__inline-detail">
+                  <span className="observatory__readout-name exp-mono">{active.id}</span>
+                  <span className={`observatory__readout-meta observatory__readout-meta--${active.group}`}>
+                    <span className="observatory__legend-dot" aria-hidden="true" />
+                    {t(`atelier.observatory.groups.${active.group}`)}
+                    <span className="observatory__readout-cadence">{t(`atelier.observatory.cadence.${active.once ? 'once' : 'repeat'}`)}</span>
+                  </span>
+                  <span className="observatory__readout-where">{active.where}</span>
+                </div>
+              )}
             </div>
           ))}
         </div>

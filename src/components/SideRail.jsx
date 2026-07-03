@@ -19,6 +19,7 @@ const Row = ({ no, glyph, label, kbd, active, expanded, onClick, ariaLabel }) =>
     onClick={onClick}
     data-cursor="hover"
     aria-label={ariaLabel}
+    title={ariaLabel}
     aria-current={active ? 'true' : undefined}
     className="relative flex items-center w-full h-9 rounded-xl"
   >

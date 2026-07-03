@@ -1,21 +1,24 @@
 import { useEffect } from 'react';
-import { Outlet, useLocation, Link } from 'react-router-dom';
+import { Outlet, useLocation, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Linkedin, Github, Download, ArrowUpRight } from 'lucide-react';
+import { personalInfo, summon } from '../constants';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { useThemeStore } from '../store/useThemeStore';
 import { useVoiceStore } from '../store/useVoiceStore';
-import { useSmoothScroll, getLenis } from '../lib/smoothScroll';
+import { useSmoothScroll, getLenis, scrollToSection } from '../lib/smoothScroll';
 import { useActiveSection } from '../hooks/useActiveSection';
 import { useEngagementAnalytics } from '../hooks/useEngagementAnalytics';
 import { useVisitStore } from '../hooks/useExpedition';
 import { sound } from '../lib/sound';
-import { track, trackOnce, registerContext } from '../lib/analytics';
-import { readVisitor } from '../lib/visitor';
+import { track, trackOnce, registerContext, capturePageview } from '../lib/analytics';
 import { useSoundStore } from '../store/useSoundStore'; // rehydrate sound prefs into the engine at boot
 import Cursor from './Cursor';
 import SkyControl from './SkyControl';
 import ControlCluster from './ControlCluster';
+import MobileMenu from './MobileMenu';
+import DayNightToggle from './DayNightToggle';
 import EasterEggListener from './EasterEggListener';
 import VoiceTransition from './VoiceTransition';
 import VoiceHall from './VoiceHall';
@@ -47,6 +50,7 @@ const Layout = () => {
   const { resolvedTheme } = useThemeStore();
   const isDark = resolvedTheme === 'dark';
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   useSmoothScroll();
   const activeId = useActiveSection();
   useEngagementAnalytics(activeId, pathname); // section_view + scroll_depth
@@ -62,26 +66,27 @@ const Layout = () => {
     // Analytics — "did they ever hear the site?" (fire-once on first unlock).
     sound.onUnlock(() => track('sound_first_play'));
 
-    // Super properties — attached to EVERY event (incl. autocaptured clicks) so
-    // every chart/funnel can be sliced by device + initial prefs. Uses only the
-    // SYNCHRONOUS device snapshot (readVisitor) — no IP/geolocation call (PostHog
-    // derives country server-side). Voice/theme are kept fresh by their stores.
-    const v = readVisitor();
+    // Store-derived super-properties. The device/static ones (device_os/browser,
+    // beta_round, tracking_version…) are registered SYNCHRONOUSLY in main.jsx
+    // before the first pageview (the null-rate fix); these three need the stores,
+    // which are ready by mount. Voice/theme stay fresh via their own effects.
     registerContext({
-      device_os: v.os,
-      device_browser: v.browser,
-      device_gpu: v.gpu,
-      device_cores: v.cores,
-      device_touch: v.touch,
-      screen_w: v.screen?.w ?? null,
-      screen_h: v.screen?.h ?? null,
-      language: v.language,
       returning_visitor: useVisitStore.getState().visits > 1,
       sound_enabled: useSoundStore.getState().enabled,
-      reduced_motion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
       voice: useVoiceStore.getState().voice,
     });
+
+    // Session heartbeats — capture the depth of SHORT sessions that the
+    // page-leave recap misses (Beta 1 recap coverage was only ~36%). One-shot each.
+    const beats = [15, 30, 60].map((s) =>
+      setTimeout(() => track('session_heartbeat', { seconds: s }), s * 1000));
+    return () => beats.forEach(clearTimeout);
   }, []);
+
+  // Pageviews — captured manually (auto-pageview is off; see main.jsx) on initial
+  // mount and every SPA route change, so both `/` and `/making-of` are tracked and
+  // every pageview carries the super-properties registered before render.
+  useEffect(() => { capturePageview(); }, [pathname]);
 
   // Keep the resolved theme as a live super-property so every event/heatmap can
   // be split by dark vs light.
@@ -106,10 +111,15 @@ const Layout = () => {
       style={{ background: isDark ? 'var(--color-primary)' : 'var(--gradient-hero)' }}>
       <div className={isDark ? 'aurora-bg' : 'sunrise-bg'} />
 
-      {/* persistent chrome — present on every route */}
+      {/* persistent chrome — present on every route. On md: down the scattered
+          floating controls collapse into a single MobileMenu (Workstream E). */}
       <Cursor />
-      <div className="fixed top-5 right-5 z-40"><SkyControl /></div>
-      <ControlCluster activeId={activeId} />
+      <div className="hidden md:block fixed top-5 right-5 z-40"><SkyControl /></div>
+      {/* The sun/moon flip stayed a crowd favourite — keep it on mobile too (the
+          full 5-mode sky picker also lives in the MobileMenu). */}
+      <div className="md:hidden fixed top-4 right-4 z-40"><DayNightToggle /></div>
+      <div className="hidden md:contents"><ControlCluster activeId={activeId} /></div>
+      <MobileMenu activeId={activeId} />
       <EasterEggListener />
       <VoiceTransition />
       <VoiceHall />
@@ -117,21 +127,52 @@ const Layout = () => {
 
       <Outlet context={{ activeId }} />
 
-      <footer className="py-10 text-center border-t" style={{ borderColor: 'var(--color-card-border)' }}>
-        {/* The quiet, always-reachable doorway to the Atelier (hidden while there). */}
-        {pathname !== '/making-of' && (
-          <Link to="/making-of" data-cursor="hover"
-            className="atelier-footer-link font-chronicle italic text-[15px] inline-block mb-4 transition-colors"
-            style={{ color: 'var(--color-text-muted)' }}>
-            {t('footer.atelierLink')}
-          </Link>
-        )}
-        <p className="font-chronicle italic text-[17px]" style={{ color: 'var(--color-text-muted)' }}>
-          {t('footer.quote')}
-        </p>
-        <p className="text-xs mt-2" style={{ color: 'var(--color-text-muted)' }}>
-          {t('footer.credit', { year: new Date().getFullYear() })}
-        </p>
+      {/* Final conversion scene — the journey closes on a clear ask, not a dead
+          end (v1.1 Workstream B). Doubles as the /making-of closing CTA. */}
+      <footer className="border-t" style={{ borderColor: 'var(--color-card-border)' }}>
+        <div className="max-w-3xl mx-auto px-6 py-20 text-center">
+          <h2 className="font-chronicle font-semibold leading-[1.05] text-[clamp(32px,5vw,54px)]" style={{ color: 'var(--color-text)' }}>
+            {t('footer.closeHead')}
+          </h2>
+          <p className="mt-4 text-[16px] leading-[26px] max-w-md mx-auto" style={{ color: 'var(--color-text-muted)' }}>
+            {t('footer.closeSub')}
+          </p>
+
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-5 gap-y-3">
+            <button
+              type="button" data-cursor="hover" className="btn-primary"
+              onClick={() => { track('footer_cta', { target: 'contact' }); if (pathname === '/') scrollToSection('contact'); else navigate('/'); }}>
+              {t('footer.getInTouch')}
+            </button>
+            <a href={personalInfo.resumeLink} download={summon.resumeFileName} data-cursor="hover"
+              onClick={() => track('footer_cta', { target: 'resume' })}
+              className="inline-flex items-center gap-2 text-[15px] font-medium link-hover" style={{ color: 'var(--color-text)' }}>
+              <Download size={15} /> {t('footer.resume')}
+            </a>
+            <a href={personalInfo.linkedin} target="_blank" rel="noopener noreferrer" data-cursor="hover"
+              onClick={() => track('footer_cta', { target: 'linkedin' })}
+              className="inline-flex items-center gap-2 text-[15px] font-medium link-hover" style={{ color: 'var(--color-text-muted)' }}>
+              <Linkedin size={15} /> LinkedIn
+            </a>
+            <a href={personalInfo.github} target="_blank" rel="noopener noreferrer" data-cursor="hover"
+              onClick={() => track('footer_cta', { target: 'github' })}
+              className="inline-flex items-center gap-2 text-[15px] font-medium link-hover" style={{ color: 'var(--color-text-muted)' }}>
+              <Github size={15} /> GitHub
+            </a>
+          </div>
+
+          {/* The quiet, always-reachable doorway to the Atelier (hidden while there). */}
+          {pathname !== '/making-of' && (
+            <Link to="/making-of" data-cursor="hover"
+              className="atelier-footer-link font-chronicle italic text-[14px] inline-flex items-center gap-1.5 mt-12 transition-colors"
+              style={{ color: 'var(--color-text-muted)' }}>
+              {t('footer.atelierLink')} <ArrowUpRight size={13} />
+            </Link>
+          )}
+          <p className="text-xs mt-6" style={{ color: 'var(--color-text-muted)' }}>
+            {t('footer.credit', { year: new Date().getFullYear() })}
+          </p>
+        </div>
       </footer>
 
       <Analytics />

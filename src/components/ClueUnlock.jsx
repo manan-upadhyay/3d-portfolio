@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { CornerDownLeft } from 'lucide-react';
+import { CornerDownLeft, KeyRound } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useVoiceStore } from '../store/useVoiceStore';
 import { playCue } from '../lib/sound';
@@ -27,7 +27,21 @@ const ClueUnlock = ({ voice, onUnlocked, autoFocus = true }) => {
   const { unlockVoice, setVoice } = useVoiceStore();
   const [answer, setAnswer] = useState('');
   const [wrong, setWrong] = useState(false);
+  // Progressive help: 0 misses = just the row clue; 1 miss = a sharper second
+  // clue; 2+ misses = reveal the answer outright as a one-tap unlock. Beta 1
+  // showed visitors gave up after a single wrong guess and never reached these
+  // voices — escalating help turns a dead-end into a guaranteed payoff.
+  const [misses, setMisses] = useState(0);
   const inputRef = useRef(null);
+
+  // Land straight in the unlocked voice — shared by a correct answer and the
+  // final "reveal" tap, so the payoff (switch + decode sound) is identical.
+  const openIt = (via) => {
+    track(`voice_clue_${via}`, { voice: voice.id });
+    unlockVoice(voice.id); // record the discovery…
+    setVoice(voice.id);    // …then the instant payoff: switch + decode sound
+    onUnlocked?.(voice.id);
+  };
 
   // Best-effort focus (desktop). On iOS a programmatic focus outside the tap
   // gesture won't raise the keyboard — the field is fully visible, so the
@@ -44,15 +58,16 @@ const ClueUnlock = ({ voice, onUnlocked, autoFocus = true }) => {
     if (!norm(answer).includes(voice.trigger)) {
       playCue('error');
       setWrong(true);
+      setMisses((m) => m + 1);
       track('voice_clue_miss', { voice: voice.id });
       inputRef.current?.focus();
       return;
     }
-    track('voice_clue_solved', { voice: voice.id }); // discovered via the on-screen clue
-    unlockVoice(voice.id); // record the discovery…
-    setVoice(voice.id);    // …then the instant payoff: switch + decode sound
-    onUnlocked?.(voice.id);
+    openIt('solved'); // discovered via the on-screen clue
   };
+
+  // The last-resort "reveal" tap — hands the answer over and unlocks in one go.
+  const reveal = () => { setAnswer(voice.trigger); openIt('revealed'); };
 
   return (
     <motion.form
@@ -82,7 +97,19 @@ const ClueUnlock = ({ voice, onUnlocked, autoFocus = true }) => {
           <CornerDownLeft size={13} />
         </button>
       </div>
-      {wrong && <span className="clue-unlock__wrong" role="status">{t('voice.clueWrong')}</span>}
+      {/* Escalating help. First miss: a sharper second clue. Second+ miss: give
+          the answer away as a one-tap unlock so no one is ever stuck. */}
+      {misses === 1 && (
+        <span className="clue-unlock__wrong" role="status">
+          {t('voice.clueCloser', { hint: voice.hint2 || voice.hint })}
+        </span>
+      )}
+      {misses >= 2 && (
+        <button type="button" onClick={reveal} data-cursor="hover" className="clue-unlock__reveal" role="status">
+          <KeyRound size={12} className="flex-shrink-0" />
+          <span>{t('voice.clueGiveaway')} <b>{voice.trigger}</b> — {t('voice.clueTapUnlock')}</span>
+        </button>
+      )}
     </motion.form>
   );
 };

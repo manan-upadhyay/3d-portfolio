@@ -129,6 +129,17 @@ export function registerContext(props) {
   try { posthog.register(props); } catch { /* ignore */ }
 }
 
+/**
+ * Manually emit a `$pageview`. Automatic pageview capture is DISABLED at init so
+ * that super-properties (registered synchronously in main.jsx) attach to the very
+ * first pageview — the fix for Beta 1's ~90% null device rate. Called on initial
+ * mount + every SPA route change (Layout), so `/making-of` is tracked too.
+ */
+export function capturePageview() {
+  if (!on) return;
+  try { posthog.capture('$pageview'); } catch { /* ignore */ }
+}
+
 /** Report a caught exception (wired from ErrorBoundary). */
 export function captureError(error, extra) {
   if (!on) return;

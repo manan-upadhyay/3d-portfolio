@@ -222,6 +222,7 @@ clean, and it looks like a *moment* — not a list.
 |---|---|
 | [V1.1-RELEASE-PLAN.md](docs/chronicle/V1.1-RELEASE-PLAN.md) | **Current cycle.** The v1.0→v1.1 revamp ("Restraint Pass"): goal, prioritized issues, workstreams, ROI, success metrics, expected output. Read this before starting reform work |
 | [reports/](docs/chronicle/reports/) | Dated Beta-1 truth documents — [analytics](docs/chronicle/reports/analytics/2026-07-01-full-analytics-intelligence-report.md) (behavior), [feedback](docs/chronicle/reports/feedback/2026-07-01-reddit-beta-feedback.md) (perception), [combined action plan](docs/chronicle/reports/synthesis/2026-07-01-combined-beta-action-plan.md) (file-level execution detail) |
+| [common-ai-signs.md](docs/chronicle/common-ai-signs.md) | **Anti-Slop Codex** — the do-not-ship blocklist of AI-generated design tells (typography, color, layout, motion, copy) paired with our human alternatives + a §9 audit checklist. Run any section against it before "done" |
 | [LEGENDARY-ROADMAP.md](docs/chronicle/LEGENDARY-ROADMAP.md) | Planned "wonder" features — decisions, rationale, open questions, task tracking |
 | [TACTILE-MOMENTS.md](docs/chronicle/TACTILE-MOMENTS.md) | Phase 8 — deliberate intent-gated interactions (TM-1…TM-9): astrolabe sky-scrub, kinetic headings, contextual cursor, voice-aware portrait, etc. Source of truth for that set |
 | [DESIGN-SYSTEM.md](docs/chronicle/DESIGN-SYSTEM.md) | Color tokens, type scale, spacing, motion language, CSS utilities, component inventory, a11y |

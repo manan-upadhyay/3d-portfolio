@@ -57,7 +57,7 @@ export const summon = {
   resumeFileName: 'Manan_Upadhyay_Resume.pdf',
   channels: [
     { key: 'email', value: personalInfo.email, href: `mailto:${personalInfo.email}` },
-    { key: 'linkedin', value: 'in/manan-upadhyay', href: personalInfo.linkedin },
+    { key: 'linkedin', value: 'in/mananupadhyay01', href: personalInfo.linkedin },
     { key: 'github', value: 'manan-upadhyay', href: personalInfo.github },
     { key: 'location', value: `${personalInfo.location} · 23.02°N 72.57°E`, href: null },
   ],
@@ -384,12 +384,11 @@ export const atelier = {
   // Headline instrument metrics. `value` is data; the label is voiced
   // (t('atelier.stats.<key>')). `count` cells animate via CountUp; literals
   // (e.g. "0 KB") render as-is. Sourced from `git log` + the file census:
-  //   commits → `git log --since=2026-06-20 --oneline | wc -l` (the revamp, 63)
   //   lines   → `wc -l` of hand-written src/ (js/jsx/ts/css ≈ 13K)
   //   voices  → src/i18n/bundles/* (chronicle, plain, scott, dwight, cow)
+  // (commits now live in the CommitGraph — real git history — not a hand figure.)
   stats: [
     { key: 'hours', value: '200+', count: true },
-    { key: 'commits', value: '63', count: true },
     { key: 'phases', value: '7', count: true },
     { key: 'voices', value: '5', count: true },
     { key: 'lines', value: '13K', count: false },
@@ -403,23 +402,9 @@ export const atelier = {
   // the post-ship hardening: product analytics, structured-data SEO, the bespoke
   // logger + console banner. Drives the Canvas2D `BuildTimeline`; the flag label
   // is voiced.
-  // "The Director's Reel" — the build told as a film in ten scenes, one per day.
-  // Each scene is a day's signature feature. `commits` are presented as a steady
-  // daily cadence (≈6/day, 63 total) rather than the raw lumpy git log. `glyph`
-  // keys a lucide icon in BuildReel.jsx; the act number is the array index + 1.
-  // Voiced copy: t('atelier.reel.scenes.<id>.title' / '.blurb').
-  reel: [
-    { id: 'foundation', day: 'Jun 20', commits: 6, glyph: 'sparkles' },
-    { id: 'canon', day: 'Jun 21', commits: 6, glyph: 'map' },
-    { id: 'realms', day: 'Jun 22', commits: 6, glyph: 'grid' },
-    { id: 'journey', day: 'Jun 23', commits: 6, glyph: 'route' },
-    { id: 'voice', day: 'Jun 24', commits: 7, glyph: 'drama' },
-    { id: 'sky', day: 'Jun 25', commits: 7, glyph: 'sky' },
-    { id: 'recap', day: 'Jun 26', commits: 6, glyph: 'fingerprint' },
-    { id: 'atelier', day: 'Jun 27', commits: 6, glyph: 'feather' },
-    { id: 'polish', day: 'Jun 28', commits: 6, glyph: 'gem' },
-    { id: 'observatory', day: 'Jun 29–30', commits: 7, glyph: 'activity' },
-  ],
+  // The build's commit history is no longer hand-modelled here — the Making-Of
+  // now renders the REAL git log via CommitGraph (src/constants/commitHistory.js,
+  // generated from `git log`). Voiced copy: t('atelier.commits.*').
   // The ledger. `built` = the six shipped "wonder" phases; `cut` = the
   // senior-judgment column — things deliberately removed OR refused outright,
   // each with a real engineering payoff. ids key the voiced copy:
@@ -508,7 +493,6 @@ export const atelier = {
           { id: 'voice_hall_open', where: 'Voice Hall overlay opened' },
           { id: 'voice_unlocked', where: 'A sealed voice unlocked' },
           { id: 'voice_summon_submit', where: '“Summon a voice” request sent' },
-          { id: 'buildreel_scrub', where: 'Build reel scrubbed', once: true },
         ] },
         { id: 'realms', events: [
           { id: 'carousel_open', where: 'A realm opened in the carousel', once: true },

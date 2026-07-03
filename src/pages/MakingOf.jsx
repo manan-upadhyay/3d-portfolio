@@ -24,6 +24,22 @@ const MakingOf = () => {
   // The Atelier is the "did they go behind the curtain?" signal (beyond the raw
   // /making-of pageview — a named event keeps it in the same funnel vocabulary).
   useEffect(() => { track('atelier_view'); }, []);
+
+  // Scroll-depth on /making-of (Beta 1 tracked only the pageview here). Fire each
+  // 25/50/75/100 milestone once so we can see how far the case study is read.
+  useEffect(() => {
+    const seen = new Set();
+    const onScroll = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = max > 0 ? Math.round((window.scrollY / max) * 100) : 100;
+      [25, 50, 75, 100].forEach((m) => {
+        if (pct >= m && !seen.has(m)) { seen.add(m); track('atelier_scroll_depth', { pct: m }); }
+      });
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
   return (
     <main className="pt-20">
       {/* The return doorway — sits where the journey's nav would be. */}

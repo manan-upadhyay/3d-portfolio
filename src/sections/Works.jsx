@@ -57,7 +57,7 @@ const Cover = ({ project, parallaxRef }) => {
   }, [project.name, count]);
 
   return (
-    <div className="group relative w-full h-full min-h-[320px] lg:min-h-[440px] overflow-hidden rounded-3xl realm-card" data-cursor="hover">
+    <div className="group relative w-full h-full min-h-[320px] lg:min-h-[440px] overflow-hidden rounded-3xl realm-card">
       {/* parallax layer — carousel image stack lives here so it drifts on scroll */}
       <div ref={parallaxRef} className="absolute inset-0 will-change-transform" style={{ top: '-8%', bottom: '-8%', height: '116%' }}>
         {count > 0 ? (
@@ -69,13 +69,13 @@ const Cover = ({ project, parallaxRef }) => {
               loading={i === 0 ? 'eager' : 'lazy'}
               decoding="async"
               aria-hidden={i !== safe}
-              className="absolute inset-0 w-full h-full object-contain transition-all duration-700 group-hover:scale-105"
+              className="absolute inset-0 w-full h-full object-contain transition-all duration-[900ms] ease-out group-hover:scale-[1.03]"
               style={{ opacity: i === safe ? 1 : 0 }}
             />
           ))
         ) : hasArt ? (
           <img src={coverSrc(project.name)} alt={project.name}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            className="w-full h-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.03]" />
         ) : (
           <div className="w-full h-full grid place-items-center"
             style={{ background: 'radial-gradient(120% 120% at 70% 20%, rgba(var(--color-ember-rgb),0.12), transparent 55%), var(--gradient-card)' }}>
@@ -169,9 +169,14 @@ const RealmPlate = ({ project, index }) => {
           </ul>
         )}
 
-        <div className="mt-6 flex flex-wrap gap-2">
-          {project.tags.map((tag) => (
-            <span key={tag.name} className="tag-rune">#{tag.name}</span>
+        {/* Stack as a mono spec line, not a row of chips (Beta 1 named "pills"
+            as an AI tell). Rhymes with the hero proof strip + About stat labels. */}
+        <div className="mt-6 flex flex-wrap items-center gap-x-2.5 gap-y-1 font-mono text-[11.5px] tracking-[0.04em]" style={{ color: 'var(--color-text-muted)' }}>
+          {project.tags.map((tag, i) => (
+            <span key={tag.name} className="flex items-center gap-2.5">
+              {i > 0 && <span aria-hidden="true" className="opacity-40" style={{ color: 'var(--color-ember)' }}>·</span>}
+              <span>{tag.name}</span>
+            </span>
           ))}
         </div>
 
@@ -213,7 +218,7 @@ const RealmCard = ({ project }) => {
   const { t } = useTranslation();
   return (
   <ScrollReveal direction="up" className="w-full">
-    <div className="realm-card h-full p-6 flex flex-col" data-cursor="hover">
+    <div className="realm-card h-full p-6 flex flex-col">
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="chapter-eyebrow !text-[10px] mb-1">{project.company}</p>
@@ -222,9 +227,12 @@ const RealmCard = ({ project }) => {
         {project.isNDA && <span className="wax-seal wax-seal--nda flex-shrink-0"><Lock size={10} /> {t('works.nda')}</span>}
       </div>
       <p className="mt-3 text-[13.5px] leading-[21px] flex-1" style={{ color: 'var(--color-text-muted)' }}>{t(`works.projects.${project.id}.description`)}</p>
-      <div className="mt-4 pt-4 flex flex-wrap gap-2 border-t" style={{ borderColor: 'var(--color-card-border)' }}>
-        {project.tags.map((tag) => (
-          <span key={tag.name} className="tag-rune tag-rune--sm">#{tag.name}</span>
+      <div className="mt-4 pt-4 flex flex-wrap items-center gap-x-2 gap-y-1 border-t font-mono text-[10.5px] tracking-[0.04em]" style={{ borderColor: 'var(--color-card-border)', color: 'var(--color-text-muted)' }}>
+        {project.tags.map((tag, i) => (
+          <span key={tag.name} className="flex items-center gap-2">
+            {i > 0 && <span aria-hidden="true" className="opacity-40" style={{ color: 'var(--color-ember)' }}>·</span>}
+            <span>{tag.name}</span>
+          </span>
         ))}
       </div>
     </div>
@@ -274,15 +282,16 @@ const Works = () => {
         </div>
       )}
 
-      {/* The subtle nod: the portfolio itself as the unnumbered seventh realm —
-          no card (you're already standing in it), just a quiet doorway into the
-          Atelier (its own /making-of route). We remember the scroll position so
+      {/* The seventh realm — this very site. A prominent doorway into the
+          Making-Of (its own /making-of route), so it's actually discovered (beta
+          analytics showed ~1% found it). We remember the scroll position so
           returning lands the visitor right back here. */}
-      <ScrollReveal direction="up" className="works-nod mt-16">
-        <button type="button" data-cursor="hover" className="works-nod__btn"
-          onClick={() => { rememberScroll(); navigate('/making-of'); }}>
+      <ScrollReveal direction="up" className="works-nod mt-20">
+        <button type="button" data-cursor="hover" className="works-nod__card"
+          onClick={() => { track('making_of_enter', { from: 'works' }); rememberScroll(); navigate('/making-of'); }}>
+          <span className="works-nod__eyebrow font-mono">{t('atelier.eyebrow')}</span>
           <span className="works-nod__line font-chronicle">{t('works.nod')}</span>
-          <span className="works-nod__cta">{t('works.nodCta')} <ArrowUpRight size={15} /></span>
+          <span className="works-nod__cta">{t('works.nodCta')} <ArrowUpRight size={16} /></span>
         </button>
       </ScrollReveal>
     </>

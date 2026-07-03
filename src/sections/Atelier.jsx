@@ -2,8 +2,9 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Hammer, Scissors, Compass, RefreshCcw, AudioLines, CloudSun, Drama, Map, Send, Fingerprint, Terminal } from 'lucide-react';
 import { SectionWrapper } from '../hoc';
-import { atelier } from '../constants';
-import { ChapterHeading, ScrollReveal, CountUp, BuildReel, Observatory, CodebaseAtlas, PersonaTriptych, FaceParticles } from '../components';
+import { atelier, personalInfo } from '../constants';
+import { ChapterHeading, ScrollReveal, CountUp, CommitGraph, Observatory, CodebaseAtlas, PersonaTriptych, FaceParticles } from '../components';
+import { track } from '../lib/analytics';
 
 /* lucide glyph per field-guide entry (icon id → component). */
 const EGG_ICONS = { compass: Compass, refresh: RefreshCcw, audio: AudioLines, sky: CloudSun, drama: Drama, map: Map, send: Send, fingerprint: Fingerprint, terminal: Terminal };
@@ -149,13 +150,13 @@ const Atelier = () => {
         <Act num="I" eyebrow={t('atelier.acts.build')}>
           <ScrollReveal direction="up" delay={0.05} className="realm-card atelier-card p-6 sm:p-8">
             <div className="flex items-baseline justify-between gap-4 flex-wrap">
-              <span className="atelier-sublabel">{t('atelier.reel.title')}</span>
-              <span className="atelier-card__hint exp-mono">{t('atelier.reel.range')}</span>
+              <span className="atelier-sublabel">{t('atelier.commits.title')}</span>
+              <span className="atelier-card__hint exp-mono">{t('atelier.commits.range')}</span>
             </div>
             <div className="mt-6">
-              <BuildReel data={atelier.reel} />
+              <CommitGraph />
             </div>
-            <p className="atelier-card__caption mt-6">{t('atelier.reel.caption')}</p>
+            <p className="atelier-card__caption mt-6">{t('atelier.commits.caption')}</p>
           </ScrollReveal>
 
           <ScrollReveal direction="up" className="mt-14">
@@ -231,10 +232,45 @@ const Atelier = () => {
 
           <ScrollReveal direction="up" className="mt-12">
             <span className="atelier-sublabel">{t('atelier.builtWith')}</span>
-            <div className="atelier-tech mt-4">
-              {atelier.tech.map((name) => (
-                <span key={name} className="atelier-chip exp-mono">{name}</span>
+            <div className="atelier-tech mt-4 flex flex-wrap items-center gap-x-2.5 gap-y-1 exp-mono text-[12px]" style={{ color: 'var(--color-text-muted)' }}>
+              {atelier.tech.map((name, i) => (
+                <span key={name} className="flex items-center gap-2.5">
+                  {i > 0 && <span aria-hidden="true" className="opacity-40" style={{ color: 'var(--color-ember)' }}>·</span>}
+                  <span>{name}</span>
+                </span>
               ))}
+            </div>
+          </ScrollReveal>
+        </Act>
+        {/* Act IV — The Reckoning: the honest beta feedback → what changed. The
+            most un-fakeable proof of human iteration on the whole page. */}
+        <Act num="IV" eyebrow={t('atelier.reckoning.eyebrow')} title={t('atelier.reckoning.title')} intro={t('atelier.reckoning.intro')}>
+          <ScrollReveal direction="up" className="atelier-reckon mt-8">
+            <ul className="atelier-reckon__list">
+              {t('atelier.reckoning.items', { returnObjects: true }).map((it, i) => (
+                <li key={i} className="atelier-reckon__row">
+                  <span className="atelier-reckon__said">
+                    <span className="atelier-reckon__tag">{t('atelier.reckoning.saidHead')}</span>{it.said}
+                  </span>
+                  <span className="atelier-reckon__changed">
+                    <span className="atelier-reckon__tag atelier-reckon__tag--fix">{t('atelier.reckoning.changedHead')}</span>{it.changed}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <p className="atelier-reckon__notes exp-mono mt-8">{t('atelier.reckoning.notes')}</p>
+            <div className="atelier-reckon__cta mt-10">
+              <p className="atelier-reckon__ctaline font-chronicle">{t('atelier.reckoning.ctaLine')}</p>
+              <div className="atelier-reckon__ctarow mt-5">
+                <a href={`mailto:${personalInfo.email}`} data-cursor="hover" className="btn-primary"
+                  onClick={() => track('atelier_cta', { target: 'contact' })}>
+                  {t('atelier.reckoning.ctaContact')}
+                </a>
+                <a href={personalInfo.resumeLink} target="_blank" rel="noopener noreferrer" data-cursor="hover" className="btn-secondary"
+                  onClick={() => track('atelier_cta', { target: 'resume' })}>
+                  {t('atelier.reckoning.ctaResume')}
+                </a>
+              </div>
             </div>
           </ScrollReveal>
         </Act>

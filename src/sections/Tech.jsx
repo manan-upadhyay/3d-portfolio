@@ -166,7 +166,7 @@ const OrbitalField = () => {
         style={{ left: CX, top: CY, width: 180, height: 180,
           background: 'radial-gradient(circle, rgba(var(--color-ember-rgb),0.16) 0%, transparent 65%)' }}>
         <div className="relative grid place-items-center rounded-full"
-          style={{ width: 104, height: 104, background: 'var(--gradient-card)', backdropFilter: 'blur(10px)',
+          style={{ width: 104, height: 104, background: 'var(--gradient-card)',
             border: '1px solid rgba(var(--color-ember-rgb),0.4)', boxShadow: '0 0 30px rgba(var(--color-ember-rgb),0.18) inset, 0 0 24px rgba(var(--color-ember-rgb),0.12)' }}>
           <span className="absolute rounded-full" style={{ inset: 9, border: '1px solid rgba(var(--color-ember-rgb),0.18)' }} />
           {/* <Compass size={40} strokeWidth={1.25} style={{ color: 'var(--color-ember)' }} /> */}
@@ -253,7 +253,6 @@ const Clusters = () => (
                   background: primary ? 'rgba(var(--color-ember-rgb),0.1)' : 'rgba(var(--color-accent-rgb),0.06)',
                   border: `1px solid ${primary ? 'rgba(var(--color-ember-rgb),0.4)' : 'var(--color-card-border)'}`,
                 }}>
-                {primary && <span aria-hidden="true">✦</span>}
                 {s.name}
               </span>
             );
@@ -279,10 +278,12 @@ const Tech = () => {
     return () => { mq.removeEventListener('change', update); rm.removeEventListener('change', update); };
   }, []);
 
-  // Space hum — its level follows the section's scroll proximity: it rises as the
-  // Arsenal approaches the centre of the viewport and fades as it leaves, peaking
-  // when the section is framed (a natural distance falloff). Safe when muted.
+  // Space hum — the ambience of the orbital field. It ONLY belongs with the orbit,
+  // so it's gated to the desktop orbital layout; on mobile (the grouped-cluster
+  // fallback, no orbit) there's nothing for it to score, so it never plays. Its
+  // level then follows scroll proximity (a natural distance falloff). Safe when muted.
   useEffect(() => {
+    if (!orbital) { sound.hum.stop(); return undefined; }
     const ctx = gsap.context(() => {
       ScrollTrigger.create({
         trigger: sectionRef.current,
@@ -292,7 +293,7 @@ const Tech = () => {
       });
     }, sectionRef);
     return () => { sound.hum.stop(); ctx.revert(); };
-  }, []);
+  }, [orbital]);
 
   return (
     <div ref={sectionRef}>

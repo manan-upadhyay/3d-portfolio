@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Feather, Check, Lock, Info, ArrowRight, ChevronDown } from 'lucide-react';
+import { Drama, Check, Lock, Info, ArrowRight, ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useVoiceStore } from '../store/useVoiceStore';
 import { useCoachmark } from '../store/useCoachmark';
@@ -298,7 +298,8 @@ const VoiceSwitcher = ({ activeId }) => {
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label={t('voice.ariaOpen')}
-        className="grid place-items-center w-12 h-12 rounded-full"
+        title={t('voice.ariaOpen')}
+        className="flex items-center gap-2 h-11 pl-2 pr-3.5 rounded-full"
         style={{
           background: 'var(--color-card-bg)',
           border: '1px solid var(--color-card-border)',
@@ -307,11 +308,17 @@ const VoiceSwitcher = ({ activeId }) => {
           boxShadow: 'var(--shadow-card)',
         }}
       >
+        {/* Masks, not a feather — signals "different personalities" and reads as
+            distinct from the Sound control. A visible label lifts discoverability
+            (the labelled Sky control gets ~9× the usage of the old icon-only one). */}
         <span
-          className="grid place-items-center w-9 h-9 rounded-full"
+          className="grid place-items-center w-7 h-7 rounded-full flex-shrink-0"
           style={{ background: 'rgba(var(--color-ember-rgb),0.16)', color: 'var(--color-ember)' }}
         >
-          <Feather size={15} />
+          <Drama size={15} />
+        </span>
+        <span className="text-[12.5px] font-medium tracking-wide" style={{ color: 'var(--color-text)' }}>
+          {t('voice.menuTitle')}
         </span>
       </motion.button>
     </div>
