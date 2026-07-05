@@ -1,11 +1,8 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Map } from 'lucide-react';
-import { scrollToSection, scrollToTop } from '../lib/smoothScroll';
-import { track } from '../lib/analytics';
+import { scrollToTop } from '../lib/smoothScroll';
 import { useThemeStore } from '../store/useThemeStore';
-import { chapterList } from '../constants';
 
 // Springy "jelly" physics — a touch of overshoot, settles naturally.
 const JELLY = { type: 'spring', stiffness: 320, damping: 22, mass: 0.7 };
@@ -60,10 +57,14 @@ const Row = ({ no, glyph, label, kbd, active, expanded, onClick, ariaLabel }) =>
 
 /**
  * Collapsible glass side-rail (breedlove-style). Collapsed it's a slim pill of
- * chapter numbers, vertically centred; on hover it springs open to reveal the
- * chapter labels. Persistent across the whole page.
+ * section numbers, vertically centred; on hover it springs open to reveal the
+ * labels. Persistent across the route. Reused on BOTH routes (v2.0 pass 2 / audit
+ * #7): the Chronicle passes the six chapters + a Map/Making-of footer; the Atelier
+ * passes its acts + a "back to the Chronicle" footer. Purely presentational — the
+ * caller supplies resolved `items` ({ id, no, label, onClick }) and footer
+ * `actions` ({ key, label, ariaLabel, glyph, onClick, kbd }).
  */
-const SideRail = ({ activeId, onOpenMap, visible }) => {
+const SideRail = ({ items, activeId, actions = [], visible, ariaLabel, crestLabel }) => {
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
   const { resolvedTheme } = useThemeStore();
@@ -79,7 +80,7 @@ const SideRail = ({ activeId, onOpenMap, visible }) => {
       className="hidden md:block fixed left-4 top-1/2 z-40"
       style={{ translateY: '-50%', pointerEvents: visible ? 'auto' : 'none' }}
       aria-hidden={!visible}
-      aria-label="Chapters"
+      aria-label={ariaLabel || 'Chapters'}
     >
       <motion.div
         animate={{ width: expanded ? EXPANDED : COLLAPSED }}
@@ -97,7 +98,7 @@ const SideRail = ({ activeId, onOpenMap, visible }) => {
           ariaLabel={t('nav.toTop')}
           onClick={scrollToTop}
           expanded={expanded}
-          label="Manan Upadhyay"
+          label={crestLabel || 'Manan Upadhyay'}
           glyph={
             <img
               src={crest}
@@ -112,28 +113,33 @@ const SideRail = ({ activeId, onOpenMap, visible }) => {
 
         <span className="my-1 h-px mx-2" style={{ background: 'var(--color-card-border)' }} />
 
-        {chapterList.map((c) => (
+        {items.map((c) => (
           <Row
             key={c.id}
             no={c.no}
-            label={t(`chapters.${c.id}.label`)}
+            label={c.label}
             active={activeId === c.id}
             expanded={expanded}
-            ariaLabel={t(`chapters.${c.id}.label`)}
-            onClick={() => { track('rail_nav', { id: c.id }); scrollToSection(c.id); }}
+            ariaLabel={c.label}
+            onClick={c.onClick}
           />
         ))}
 
-        <span className="my-1 h-px mx-2" style={{ background: 'var(--color-card-border)' }} />
+        {actions.length > 0 && (
+          <span className="my-1 h-px mx-2" style={{ background: 'var(--color-card-border)' }} />
+        )}
 
-        <Row
-          ariaLabel={t('nav.openMap')}
-          onClick={onOpenMap}
-          expanded={expanded}
-          label={t('nav.map')}
-          kbd
-          glyph={<Map size={17} style={{ color: 'var(--color-ember)' }} />}
-        />
+        {actions.map((a) => (
+          <Row
+            key={a.key}
+            ariaLabel={a.ariaLabel || a.label}
+            onClick={a.onClick}
+            expanded={expanded}
+            label={a.label}
+            kbd={a.kbd}
+            glyph={a.glyph}
+          />
+        ))}
       </motion.div>
     </motion.nav>
   );

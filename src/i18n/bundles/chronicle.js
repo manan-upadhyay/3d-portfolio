@@ -20,6 +20,7 @@ export default {
     toTop: 'To top',
     map: 'Map',
     openMap: 'Open the map',
+    makingOf: 'Making-of',
     navigate: 'Navigate',
     navigateSub: 'Jump to any chapter',
     menu: 'Menu',
@@ -170,8 +171,12 @@ export default {
     enterRealm: 'Enter the realm',
     source: 'Source',
     ndaSealed: "[[nda|Sealed under NDA]] — details limited to what's permissible.",
-    chartMore: 'Chart {{count}} more realms',
-    furl: 'Furl the map',
+    ndaArch: 'Abstracted architecture — sealed under NDA',
+    // Load-bearing controls stay plain even in the themed default voice — a
+    // skimmer shouldn't have to decode a verb to expand the list (persona audit
+    // 2026-07-05, item 10; the Contact de-theming precedent from v1.1).
+    chartMore: 'Show {{count}} more projects',
+    furl: 'Show fewer',
     fullStory: 'The full story',
     // The nod to the unnumbered seventh realm — this very site (see the Atelier).
     nod: 'Six realms charted. The seventh is the one you are standing in.',
@@ -459,6 +464,12 @@ export default {
         busiest: 'Busiest day',
         streak: 'Longest streak',
       },
+    },
+    ci: {
+      title: 'The Gate',
+      on: 'Runs on',
+      caption:
+        'Every commit above crosses the same gate before it can merge — lint, types, and a clean build, on every push and every pull request. Green, or it never ships.',
     },
     stats: {
       hours: 'Hours poured',

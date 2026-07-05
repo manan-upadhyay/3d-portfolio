@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Outlet, useLocation, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Linkedin, Github, Download, ArrowUpRight } from 'lucide-react';
-import { personalInfo, summon } from '../constants';
+import { personalInfo } from '../constants';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { useThemeStore } from '../store/useThemeStore';
@@ -148,7 +148,7 @@ const Layout = () => {
               {t('footer.getInTouch')}
             </button>
             <div className="footer-actions__links">
-              <a href={personalInfo.resumeLink} download={summon.resumeFileName} data-cursor="hover"
+              <a href={personalInfo.resumeLink} target="_blank" rel="noopener noreferrer" data-cursor="hover"
                 onClick={() => track('footer_cta', { target: 'resume' })}
                 className="footer-actions__link link-hover" style={{ color: 'var(--color-text)' }}>
                 <Download size={15} /> {t('footer.resume')}

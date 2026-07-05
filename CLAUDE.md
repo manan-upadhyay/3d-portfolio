@@ -51,11 +51,17 @@ of the six-chapter spine and no longer inline in the scroll page. The scroll
 page (`/`, `pages/Chronicle.jsx`) **ends at Contact**; the Atelier renders
 standalone at `/making-of` (`pages/MakingOf.jsx`, lazy-loading `sections/Atelier.jsx`)
 as a shareable "behind the curtain" page. It stays *deliberately absent* from
-`chapters`/`chapterList` — so it never appears in the `SideRail` nav or the ⌘K
-map (those stay the six-realm journey). It's reached from the doorway at the foot
-of The Realms (`works.nod`/`works.nodCta` → navigates to `/making-of`, remembering
-the scroll position so the return lands you back there) or the quiet footer link
-(`footer.atelierLink`); a fixed return doorway (`makingOf.back`) leads home. Its
+`chapters`/`chapterList` — so it never becomes a seventh chapter and never appears
+in the ⌘K map (that stays the six-realm journey). The `SideRail`, however, is now
+**reused on both routes** and carries a subtle doorway to it: on `/` the rail's
+footer adds a quiet **Making-of** action (below the Map action, `nav.makingOf`);
+on `/making-of` the same rail lists the Atelier's own **acts** (`constants.atelierActs`
+— Build / Engine / Hidden / off-map, active-tracked via `useActiveSection(ATELIER_IDS)`)
+plus a quiet "return to the Chronicle" action (`makingOf.back`). It's also reached
+from the doorway at the foot of The Realms (`works.nod`/`works.nodCta` → navigates
+to `/making-of`, remembering the scroll position so the return lands you back there)
+or the quiet footer link (`footer.atelierLink`); on mobile (rail hidden) the fixed
+top return doorway (`makingOf.back`) leads home. Its
 non-copy data (headline metrics, the build-timeline shape, ledger/cut/tech ids)
 lives in `constants.atelier`; all labels are voiced under the bundles' `atelier.*`
 (+ `makingOf.*`) keys. See [LEGENDARY-ROADMAP](docs/chronicle/LEGENDARY-ROADMAP.md) §7.
@@ -63,9 +69,11 @@ lives in `constants.atelier`; all labels are voiced under the bundles' `atelier.
 **Routing.** The app is a two-route SPA (`react-router-dom`): `/` (the Chronicle)
 and `/making-of` (the Atelier) share one shell — `components/Layout.jsx` (smooth
 scroll, the global controls, footer, analytics; renders route content through
-`<Outlet/>`). `App.jsx` is just the router. Route-scoped chrome (`SideRail`,
-`MapOverlay`, the mobile map button, the ⌘K handler) lives in `pages/Chronicle.jsx`;
-the Atelier's only chrome is its return doorway. `vercel.json` rewrites client
+`<Outlet/>`). `App.jsx` is just the router. Route-scoped chrome (`MapOverlay`,
+the mobile map button, the ⌘K handler) lives in `pages/Chronicle.jsx`; the
+`SideRail` is shared (a presentational component fed route-specific `items` +
+footer `actions` by each page). The Atelier's chrome is its acts `SideRail`
+(desktop) + a mobile return doorway. `vercel.json` rewrites client
 routes to `index.html` (excluding `/api`) so `/making-of` is directly shareable.
 
 Chapters are defined **once** in `src/constants/index.js` — `chapters` (keyed by

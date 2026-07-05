@@ -160,25 +160,167 @@ signal readout. The Chronicle layer holds together.
 
 ## 3. Prioritized worklist
 
-| # | Priority | Item | Personas hit | Effort |
-|---|---|---|---|---|
-| 1 | 🔴 | Menu coach tip: never float over content; tie to the idle FAB or fold into first menu-open | Drive-by, non-technical, everyone on mobile | S |
-| 2 | 🟠 | StickyCta yields while works-footer controls ("more projects" / making-of doorway) are on screen | Drive-by, CTO | S |
-| 3 | 🟠 | Voice entice bubble: auto-dismiss on scroll-past; never in projects/contact | CTO, hiring manager | S |
-| 4 | 🟠 | One résumé behavior everywhere (open-in-tab) | Hiring manager | S |
-| 5 | 🟠 | Correspondence email row: wrap or tap-to-expand (match expedition cells) | Non-technical | S |
-| 6 | 🟠 | `commitHistory.js` generated at build time (`prebuild` from `git log`) | Skeptic dev | M |
-| 7 | 🟠 | `/making-of` act-level jump strip at the cold open (ids exist already) | Explorer, drive-by | M |
-| 8 | 🟠 | Dynamic-type pass: verify at 120% font scale; lift sub-11px labels | Older visitors, a11y | M |
-| 9 | 🟡 | NDA plates: abstract architecture diagram as the visual | CTO | M |
-| 10 | 🟡 | De-theme load-bearing control labels in the default voice ("Show 5 more projects") | CTO, drive-by | S |
-| 11 | 🟡 | `scroll-snap-stop: always` on Experience waypoints | Low-dexterity | S |
-| 12 | 🟡 | Verify public repo link pre-Beta 2 (Atlas `repo`) | Skeptic dev | S |
-| 13 | 🟡 | Expedition jargon: nudge the plain voice near the panel / plain labels | Non-technical | S |
-| 14 | 🟡 | Post-unlock sound hint ("change the theme — listen") | Non-technical | S |
+| # | Priority | Item | Personas hit | Effort | Status |
+|---|---|---|---|---|---|
+| 1 | 🔴 | Menu coach tip: never float over content; tie to the idle FAB or fold into first menu-open | Drive-by, non-technical, everyone on mobile | S | ✅ resolved (2026-07-05 p2) — already FAB-anchored; fixed the reload re-show |
+| 2 | 🟠 | StickyCta yields while works-footer controls ("more projects" / making-of doorway) are on screen | Drive-by, CTO | S | 🚫 no change (owner) — see log |
+| 3 | 🟠 | Voice entice bubble: auto-dismiss on scroll-past; never in projects/contact | CTO, hiring manager | S | ✅ done (2026-07-05 p2) |
+| 4 | 🟠 | One résumé behavior everywhere (open-in-tab) | Hiring manager | S | ✅ done (2026-07-05) |
+| 5 | 🟠 | Correspondence email row: wrap or tap-to-expand (match expedition cells) | Non-technical | S | ✅ done (2026-07-05) — chose **wrap** (see log) |
+| 6 | 🟠 | `commitHistory.js` generated at build time (`prebuild` from `git log`) | Skeptic dev | M | ✅ done (2026-07-05) |
+| 7 | 🟠 | `/making-of` act-level jump strip at the cold open (ids exist already) | Explorer, drive-by | M | ✅ done (2026-07-05 p2) — persistent acts SideRail + mobile Navigate drawer |
+| 8 | 🟠 | Dynamic-type pass: verify at 120% font scale; lift sub-11px labels | Older visitors, a11y | M | ◐ verified (2026-07-05) — see log |
+| 9 | 🟡 | NDA plates: abstract architecture diagram as the visual | CTO | M | ✅ done (2026-07-05) |
+| 10 | 🟡 | De-theme load-bearing control labels in the default voice ("Show 5 more projects") | CTO, drive-by | S | ✅ done (2026-07-05) |
+| 11 | 🟡 | `scroll-snap-stop: always` on Experience waypoints | Low-dexterity | S | 🚫 won't do (owner) — multi-card fling is intentional UX |
+| 12 | 🟡 | Verify public repo link pre-Beta 2 (Atlas `repo`) | Skeptic dev | S | ✅ done (2026-07-05) |
+| 13 | 🟡 | Expedition jargon: nudge the plain voice near the panel / plain labels | Non-technical | S | ✋ dropped (2026-07-05) — see log |
+| 14 | 🟡 | Post-unlock sound hint ("change the theme — listen") | Non-technical | S | 🚫 won't do (owner) — let visitors discover it themselves |
 
 **The pattern across personas:** the site's *content* now converts — the
 remaining friction is almost entirely **floating chrome discipline** (tips,
 bubbles, sticky CTA all competing for the same corners as real controls) and
 **trust plumbing** (commit data freshness, repo link, résumé consistency).
 Nothing here argues for new features; it argues for fewer interruptions.
+
+---
+
+## 4. Resolution log — 2026-07-05 (pass 1)
+
+Worked the trust-plumbing + CTO/civilian-clarity cluster (items 4, 5, 6, 9, 10,
+12, 13) plus the item-8 verification. `npm run lint` / `typecheck` / `build`
+all clean; runtime verified via headless CDP (real scrolls + clicks) on `/` and
+`/making-of`, no console errors either route.
+
+- **#4 — one résumé behavior (open-in-tab).** All five résumé entry points now
+  use `target="_blank" rel="noopener noreferrer"` and dropped `download`:
+  [Hero.jsx](../../../../src/sections/Hero.jsx) (already), [Contact.jsx](../../../../src/sections/Contact.jsx),
+  the footer in [Layout.jsx](../../../../src/components/Layout.jsx), [StickyCta.jsx](../../../../src/components/StickyCta.jsx),
+  and the mobile menu / ⌘K map (already open-in-tab). Verified: 4 rendered `.pdf`
+  links all `target=_blank`, no `download`.
+- **#5 — correspondence readability.** *Chose wrap, not tap-to-expand.* A first
+  pass made every row a tap-to-expand `<button>` and moved navigation onto a
+  trailing arrow — but that traded away whole-row tap-to-navigate on **all**
+  channels (LinkedIn, GitHub, location) to solve a truncation that only bites the
+  email on narrow widths. Net negative, so reverted. Final:
+  [Contact.jsx](../../../../src/sections/Contact.jsx) keeps whole-row navigation
+  on every channel and the value simply **wraps** (`truncate` → `break-all`) — the
+  long email is always fully readable on any width, zero controls added (the
+  audit's own "or simply wrap" option). Verified: 3 navigable channel links, email
+  value `break-all`.
+- **#6 — commit graph generated at build time + shown as CI architecture.**
+  (a) [scripts/gen-commit-history.mjs](../../../../scripts/gen-commit-history.mjs)
+  regenerates [commitHistory.js](../../../../src/constants/commitHistory.js) from
+  `git log --all`, wired as `prebuild`; NON-FATAL on shallow clones (CI/Vercel)
+  so it keeps the committed snapshot and never breaks the build; `WINDOW_START`
+  stays an editorial choice, every count around it is real. CI now checks out at
+  `fetch-depth: 0`. (b) New **`CiPipeline`** ("The Gate") in Act I of the Atelier,
+  directly under the commit trail: the real [ci.yml](../../../../.github/workflows/ci.yml)
+  as a quiet mono step-chain (checkout → node 24 → npm ci → lint → typecheck →
+  build → *merge-ready*), triggers `push → main` / `every pull request`. Data
+  mirrors the workflow 1:1 in `constants.atelier.ci`; framing voiced under
+  `atelier.ci.*` (all five voices). Verified: 7 steps + pass badge render, no
+  errors. (Side effect: lint was already red at HEAD — fixed the pre-existing
+  `ThemeWheel` unused import + two `FaceParticles` ref-cleanup warnings so the
+  showcased gate is actually green.)
+- **#9 — NDA plates get an abstract architecture diagram.** Chose the *procedural
+  SVG schematic* approach (owner-selected). New **`NdaSchematic`** draws generic,
+  product-agnostic tiers (Client → Web App → Auth/API Gateway → Services/Store,
+  auto-flowed) from a per-project `architecture` column spec + shared `ARCH_TIERS`
+  label map (EN-only technical labels, no real data — carries "a real platform
+  exists" without breaching the NDA). Renders full-bleed on the featured NDA
+  plate cover and as a compact banner on the secondary NDA cards, replacing the
+  blank serif monogram. Verified: 6 tiers, resolved theme colors (ember
+  connectors, readable labels), 546×320 SVG.
+- **#10 — de-theme load-bearing controls in the default voice.** `chronicle`'s
+  `works.chartMore` / `works.furl` now read "Show N more projects" / "Show fewer"
+  (was "Chart N more realms" / "Furl the map"), matching the plain voice and the
+  v1.1 Contact-de-theming precedent. Easter-egg voices keep their character.
+- **#12 — public repo link.** `atelier.atlas.repo` corrected from `…/3d-portfolio`
+  to the owner-confirmed public repo `https://github.com/manan-upadhyay/portfolio`.
+- **#13 — expedition jargon. Dropped.** A `PlainNudge` link ("Prefer plain words?")
+  under the recap "Reading" grid disrupted the panel's title/layout orientation,
+  so it was removed entirely (component, render, CSS, and the `recap.plainNudge`
+  keys across all five bundles). The `plain` voice already relabels the whole
+  recap (Hardware / Browser & OS) for anyone who selects it; a dedicated nudge
+  wasn't worth the layout cost. Left open if revisited with a non-intrusive spot.
+- **#8 — dynamic-type verification.** Verified at 120% document font-size on a
+  390 px viewport: **0 px horizontal overflow** on `/making-of`. Did **not**
+  blanket-lift the ~19 sub-11px labels — most are intentional letter-spaced
+  decorative eyebrows, and a true fix is a holistic px→rem conversion (the audit
+  itself scopes this 🟠/M as "at minimum verify at 120%"). **Deferred** as its
+  own workstream; flagged here for the owner rather than half-done inconsistently.
+
+---
+
+## 5. Resolution log — 2026-07-05 (pass 2)
+
+Worked the floating-chrome cluster (#1, #3), the making-of navigation (#7), and
+the owner's calls on #2/#11/#14. Also added always-available Atelier navigation
+(a new ask beyond the audit). `lint` / `typecheck` / `build` clean; both rails +
+the entice timing verified via headless CDP with real scroll offsets.
+
+- **New — Atelier navigation in the SideRail (both routes).** The `SideRail` is
+  now a reusable presentational component fed route-specific `items` + footer
+  `actions`. On `/` it keeps the six chapters + the Map action and adds a **quiet
+  Making-of doorway** (`nav.makingOf`, a muted-glyph footer action — always
+  reachable, never a seventh chapter). On `/making-of` the **same rail** lists the
+  Atelier's acts (shared `constants.atelierActs`, active-tracked by a generalized
+  `useActiveSection(ids)`) with a quiet "return to the Chronicle" action; the
+  desktop top return-doorway is hidden (`md:hidden`) since the rail replaces it,
+  mobile keeps it. `MobileMenu` now reuses `atelierActs` too (DRY). Canon updated
+  in [CLAUDE.md](../../../../CLAUDE.md). Verified: `/` rail = 6 chapters + Map +
+  Making-of; `/making-of` rail = 4 acts + Return, active act highlighted.
+- **#7 — making-of act navigation.** Considered done by the above: the acts are
+  now reachable from a persistent rail (desktop) and the existing Navigate drawer
+  (mobile) — the explorer can jump to any act without committing to the full reel.
+  A literal "TOC strip at the cold open" is now redundant, so it wasn't added.
+- **#3 — voice entice bubble.** Rewrote the timing
+  ([VoiceSwitcher.jsx](../../../../src/components/VoiceSwitcher.jsx)): it now
+  **arms only at the Arsenal** (was arsenal *or* projects *or* contact), shows a
+  beat later, and **auto-dismisses after 8s** (was ~11s). Reaching Projects or
+  Contact drops it immediately — cancelling a still-pending show. Verified: note
+  never lingers into projects/contact (polled absent across the projects dwell).
+- **#1 — menu coach tip.** Investigated reproducibility. It is **already
+  FAB-anchored** (fixed to the bottom-right corner with a tail pointing at the
+  FAB — not a mid-scroll floater; the audit's y≈703 reading was just content
+  behind that corner), mobile-only (`md:hidden`), and once-per-session. The one
+  real defect: the 10s auto-hide didn't persist `menuCoachSeen`, so a **reload
+  re-showed it**. Fixed ([MobileMenu.jsx](../../../../src/components/MobileMenu.jsx)):
+  auto-hide now also sets the flag. **Repro (before fix):** mobile viewport (<768px)
+  · fresh session (new tab / private window) · wait ~2.6s without tapping the FAB
+  · the tip shows for ~7.4s; reload the tab → it showed again. The user "couldn't
+  reproduce" most likely because they were on desktop (hidden) or had already
+  triggered it in-session.
+- **#2 — StickyCta over "more projects". No change (owner).** The overlap only
+  occurs when the "more projects" button is pinned to the very bottom of the
+  viewport; a small scroll fully reveals the works-footer controls. Not worth the
+  added yield logic.
+- **#11 — `scroll-snap-stop`. Won't do (owner).** Letting a long fling cross
+  several Experience cards at once is the intended, non-restrictive UX; forcing a
+  stop per card would be the more irritating behaviour.
+- **#14 — post-unlock sound hint. Won't do (owner).** Discovering what sound does
+  is left to the visitor — no extra nudge.
+
+---
+
+## 6. Remaining observations to act on
+
+The 🟡 per-persona observations from §2 that were **not** in the worklist and are
+still open — captured here so nothing is lost. (Everything in §3 is now resolved,
+declined, or deferred per the logs above; the only deferred worklist item is the
+holistic dynamic-type px→rem pass, #8.)
+
+| # | Priority | Observation | §2 source | Persona | Effort |
+|---|---|---|---|---|---|
+| R1 | 🟡 | Journey "Oath" card buries the LL.B. (degree + law degree + bar exam in one bullet) — surface the law credential as a quiet second line under the role | 2.2 | Hiring manager | S |
+| R2 | 🟡 | "Usually replies within a day" appears twice on the Contact screen (intro + footer sub) — keep one | 2.2 | Hiring manager | S |
+| R3 | 🟡 | Arsenal constellation lines only connect ring-siblings — add cross-stack links (React↔Next↔TS) so it reads like a dependency map, not decoration | 2.3 | Skeptic dev | M |
+| R4 | 🟡 | Three hero CTAs stack on 390px and push the location line low — consider two on mobile (See my work · Get in touch), résumé stays in the menu | 2.4 | Drive-by | S |
+| R5 | 🟡 | Voice Hall "Summon a new voice" doorway is near-invisible next to the discovery counter — give the "all voices found" state a louder invite | 2.6 | Explorer | S |
+| R6 | 🟡 | Lens puck "drag over me" hint never reappears after first dismiss — re-show after ~30s idle on the portrait (session-scoped) | 2.6 | Explorer | S |
+| — | 🟠 | **Deferred:** holistic dynamic-type pass (px→rem) so browser font-scaling lifts the whole UI, not just verified-safe at 120% (worklist #8) | 2.7 | Older / a11y | M |
+
+**Nothing here is load-bearing for conversion** — R1/R2 are copy polish, R3/R5/R6
+are explorer-depth niceties, R4 is a mobile-layout tidy. Good candidates for a
+future polish pass, not a blocker for Beta 2.

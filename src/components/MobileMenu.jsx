@@ -11,7 +11,7 @@ import { useVoiceStore } from '../store/useVoiceStore';
 import { useSoundStore } from '../store/useSoundStore';
 import { sound } from '../lib/sound';
 import { pushOverlay, popOverlay } from '../lib/uiOverlay';
-import { personalInfo, chapterList } from '../constants';
+import { personalInfo, chapterList, atelierActs } from '../constants';
 import { voicesByCategory, SEALED_VOICES, voiceById } from '../i18n/voices';
 import { scrollToSection, requestSection, getLenis } from '../lib/smoothScroll';
 import { track } from '../lib/analytics';
@@ -66,14 +66,8 @@ const ExploreRow = ({ icon: Icon, label, onClick }) => (
 );
 
 // The Atelier's own nav sections (v2.0 C5) — the making-of page gets a Navigate
-// drawer too, listing its acts instead of the Chronicle chapters. Ids match the
-// Act/section anchors in sections/Atelier.jsx; labels are voiced.
-const ATELIER_SECTIONS = [
-  { id: 'build', no: 'I', labelKey: 'atelier.acts.build' },
-  { id: 'engine', no: 'II', labelKey: 'atelier.acts.engine' },
-  { id: 'hidden', no: 'III', labelKey: 'atelier.acts.hidden' },
-  { id: 'offmap', no: '—', labelKey: 'atelier.offmap.title' },
-];
+// drawer too, listing its acts (shared `atelierActs`, also drives the /making-of
+// SideRail) instead of the Chronicle chapters.
 
 // ── Navigate drawer — a scannable numbered chapter list (faster than a map plate
 // on a phone, and it never clips). On /making-of it lists the Atelier's acts. ──
@@ -82,7 +76,7 @@ const NavDrawer = ({ activeId, onTravel, isChronicle }) => {
   if (!isChronicle) {
     return (
       <div className="flex flex-col gap-2 pb-1">
-        {ATELIER_SECTIONS.map((p) => (
+        {atelierActs.map((p) => (
           <button key={p.id} type="button" onClick={() => onTravel(p.id)}
             className="sheet-card flex items-center gap-3.5 h-14 px-3 text-left">
             <span className="grid place-items-center w-8 h-8 rounded-full font-chronicle text-[13px] font-semibold flex-shrink-0"
@@ -269,7 +263,12 @@ const MobileMenu = ({ activeId }) => {
     try { seen = sessionStorage.getItem('menuCoachSeen') === '1'; } catch { /* private mode */ }
     if (seen) return undefined;
     const inT = setTimeout(() => setShowTip(true), 2600);
-    const outT = setTimeout(() => setShowTip(false), 10000);
+    // Auto-hide AND remember it (audit #1): without persisting here, ignoring the
+    // tip for 10s left `menuCoachSeen` unset, so a reload re-showed it every time.
+    const outT = setTimeout(() => {
+      setShowTip(false);
+      try { sessionStorage.setItem('menuCoachSeen', '1'); } catch { /* private mode */ }
+    }, 10000);
     return () => { clearTimeout(inT); clearTimeout(outT); };
   }, []);
   const dismissTip = () => {

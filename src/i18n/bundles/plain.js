@@ -79,6 +79,7 @@ export default {
     realm: 'Project',
     enterRealm: 'View project',
     ndaSealed: "[[nda|Under NDA]] — details limited to what's permissible.",
+    ndaArch: 'Abstract architecture (details under NDA)',
     chartMore: 'Show {{count}} more projects',
     furl: 'Show less',
     fullStory: 'Full details',
@@ -238,6 +239,12 @@ export default {
         busiest: 'Busiest day',
         streak: 'Longest streak',
       },
+    },
+    ci: {
+      title: 'Continuous integration',
+      on: 'Runs on',
+      caption:
+        'Every commit runs the same checks before it can merge — lint, type-check, and a production build, on every push and every pull request. It has to pass to ship.',
     },
     stats: {
       hours: 'Hours invested',

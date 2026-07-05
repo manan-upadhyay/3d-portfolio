@@ -55,6 +55,8 @@ const FaceParticles = ({ src = '/atelier/portrait.webp' }) => {
     let raf = 0;
     let ro = null;
     let io = null;
+    let lensEl = null;       // captured at listener-attach time so cleanup is stable
+    let gyroEl = null;
     let running = false;     // is the rAF loop currently scheduled?
     let formed = false;      // has assembly finished (→ freeze, never loop again)?
     let onScreen = false;
@@ -495,12 +497,13 @@ const FaceParticles = ({ src = '/atelier/portrait.webp' }) => {
         wrap.addEventListener('pointermove', onPointerMove);
         wrap.addEventListener('pointerleave', onPointerLeave);
       } else if (coarse && lensRef.current) {
-        const el = lensRef.current;
-        el.addEventListener('pointerdown', onLensDown);
-        el.addEventListener('pointermove', onLensMove);
-        el.addEventListener('pointerup', onLensUp);
-        el.addEventListener('pointercancel', onLensUp);
-        gyroRef.current?.addEventListener('click', enableGyro);
+        lensEl = lensRef.current;
+        lensEl.addEventListener('pointerdown', onLensDown);
+        lensEl.addEventListener('pointermove', onLensMove);
+        lensEl.addEventListener('pointerup', onLensUp);
+        lensEl.addEventListener('pointercancel', onLensUp);
+        gyroEl = gyroRef.current;
+        gyroEl?.addEventListener('click', enableGyro);
       }
 
       ro = new ResizeObserver(layout);
@@ -528,14 +531,13 @@ const FaceParticles = ({ src = '/atelier/portrait.webp' }) => {
       wrap.removeEventListener('pointerleave', onPointerLeave);
       window.removeEventListener('deviceorientation', onOrient);
       window.removeEventListener('devicemotion', onMotion);
-      const el = lensRef.current;
-      if (el) {
-        el.removeEventListener('pointerdown', onLensDown);
-        el.removeEventListener('pointermove', onLensMove);
-        el.removeEventListener('pointerup', onLensUp);
-        el.removeEventListener('pointercancel', onLensUp);
+      if (lensEl) {
+        lensEl.removeEventListener('pointerdown', onLensDown);
+        lensEl.removeEventListener('pointermove', onLensMove);
+        lensEl.removeEventListener('pointerup', onLensUp);
+        lensEl.removeEventListener('pointercancel', onLensUp);
       }
-      gyroRef.current?.removeEventListener('click', enableGyro);
+      gyroEl?.removeEventListener('click', enableGyro);
       ro?.disconnect();
       io?.disconnect();
       sprites.clear();

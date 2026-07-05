@@ -206,7 +206,7 @@ const Contact = () => {
                 className="btn-primary flex-1 disabled:opacity-70">
                 {loading ? (<><Loader2 size={18} className="animate-spin" /> {t('contact.submitLoading')}</>) : (<>{t('contact.submitIdle')} <Send size={16} /></>)}
               </button>
-              <a href={personalInfo.resumeLink} download={summon.resumeFileName} data-cursor="hover"
+              <a href={personalInfo.resumeLink} target="_blank" rel="noopener noreferrer" data-cursor="hover"
                 onClick={() => track('resume_open', { from: 'contact' })}
                 className="btn-secondary" aria-label={`${t('contact.resumeCta')} (PDF)`}>
                 <Download size={16} /> {t('contact.resumeCta')}
@@ -258,10 +258,14 @@ const Contact = () => {
                   <Icon size={17} style={{ color: 'var(--color-ember)' }} />
                 </span>
               );
+              // The value WRAPS instead of truncating (persona audit item 5): the
+              // long email is always fully readable on any width, and whole-row
+              // navigation stays intact on every channel. `break-all` lets the
+              // address wrap mid-string; short values never wrap.
               const Labels = (
                 <span className="flex-1 min-w-0">
                   <span className="block text-[11px] uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>{label}</span>
-                  <span className="block text-[14px] truncate" style={{ color: 'var(--color-text)' }}>{value}</span>
+                  <span className="block text-[14px] break-all" style={{ color: 'var(--color-text)' }}>{value}</span>
                 </span>
               );
               const Arrow = (

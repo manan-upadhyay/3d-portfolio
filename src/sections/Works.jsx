@@ -6,7 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Github, ArrowUpRight, Lock, Star, ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 import { SectionWrapper } from '../hoc';
 import { projects, chapters } from '../constants';
-import { ChapterHeading, ScrollReveal, Annotated } from '../components';
+import { ChapterHeading, ScrollReveal, Annotated, NdaSchematic } from '../components';
 import { useThemeStore } from '../store/useThemeStore';
 import { rememberScroll } from '../lib/smoothScroll';
 import { track, trackOnce } from '../lib/analytics';
@@ -76,6 +76,15 @@ const Cover = ({ project, parallaxRef }) => {
         ) : hasArt ? (
           <img src={coverSrc(project.name)} alt={project.name}
             className="w-full h-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.03]" />
+        ) : project.isNDA && project.architecture ? (
+          // NDA realms have no screenshot — carry an ABSTRACT system schematic
+          // (generic tiers, no real data) instead of a blank monogram so the
+          // plate still proves a real platform exists (persona audit item 9).
+          <div className="nda-schem-wrap w-full h-full grid place-items-center"
+            style={{ background: 'radial-gradient(120% 120% at 70% 20%, rgba(var(--color-ember-rgb),0.12), transparent 55%), var(--gradient-card)' }}>
+            <NdaSchematic architecture={project.architecture} label={t('works.ndaArch')} />
+            <span className="nda-schem-wrap__note exp-mono">{t('works.ndaArch')}</span>
+          </div>
         ) : (
           <div className="w-full h-full grid place-items-center"
             style={{ background: 'radial-gradient(120% 120% at 70% 20%, rgba(var(--color-ember-rgb),0.12), transparent 55%), var(--gradient-card)' }}>
@@ -265,6 +274,11 @@ const RealmCard = ({ project }) => {
         {project.isNDA && <span className="wax-seal wax-seal--nda flex-shrink-0"><Lock size={10} /> {t('works.nda')}</span>}
       </div>
       <p className="mt-3 text-[13.5px] leading-[21px] flex-1" style={{ color: 'var(--color-text-muted)' }}>{t(`works.projects.${project.id}.description`)}</p>
+      {project.isNDA && project.architecture && (
+        <div className="nda-schem-mini mt-4" title={t('works.ndaArch')}>
+          <NdaSchematic architecture={project.architecture} label={t('works.ndaArch')} />
+        </div>
+      )}
       <div className="mt-4 pt-4 flex flex-wrap items-center gap-x-2 gap-y-1 border-t font-mono text-[10.5px] tracking-[0.04em]" style={{ borderColor: 'var(--color-card-border)', color: 'var(--color-text-muted)' }}>
         {project.tags.map((tag, i) => (
           <span key={tag.name} className="flex items-center gap-2">

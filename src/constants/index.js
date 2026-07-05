@@ -80,6 +80,17 @@ export const chapters = {
 // Ordered array with `id` injected — for iteration (SideRail rows, Map pins).
 export const chapterList = Object.entries(chapters).map(([id, c]) => ({ id, ...c }));
 
+// The Atelier's own "acts" — the structural nav for the /making-of route (its
+// SideRail + the mobile Navigate drawer). `id` matches the section anchors in
+// sections/Atelier.jsx; labels are voiced (labelKey). NOT part of `chapters`
+// (the six-realm journey stays intact); this is the coda's own local map.
+export const atelierActs = [
+  { id: 'build', no: 'I', labelKey: 'atelier.acts.build' },
+  { id: 'engine', no: 'II', labelKey: 'atelier.acts.engine' },
+  { id: 'hidden', no: 'III', labelKey: 'atelier.acts.hidden' },
+  { id: 'offmap', no: '—', labelKey: 'atelier.offmap.title' },
+];
+
 // Disciplines (chapter 01). `iconKey` maps to a line icon in the component and
 // also keys the copy: t(`about.services.<iconKey>.title` / `.description`).
 const services = [
@@ -202,6 +213,27 @@ export const journey = [
   { id: 'horizon', year: 'Now', tech: [], kind: 'cta' },
 ];
 
+// Generic, product-agnostic architecture tiers — abstract boxes for the NDA
+// plates' system schematic (persona audit 2026-07-05, item 9). These are
+// deliberately generic (Client / API Gateway / Data Store …), NOT the real
+// service names, so an NDA plate can carry "a real platform lives here" proof
+// without breaching anything. EN-only technical labels, exempt from voice like
+// the atlas tags. Keys are referenced by each NDA project's `architecture`
+// (an ordered list of columns; NdaSchematic auto-flows every node in a column
+// to every node in the next). Drives NdaSchematic.jsx.
+export const ARCH_TIERS = {
+  client: 'Client',
+  web: 'Web App',
+  auth: 'Auth',
+  api: 'API Gateway',
+  service: 'Services',
+  worker: 'Workers',
+  store: 'Data Store',
+  cache: 'Cache',
+  realtime: 'Realtime',
+  report: 'Reporting',
+};
+
 // Featured realms — ordered to lead with live, clickable proof, then close on
 // enterprise credibility (Capital Group, NDA). Order here IS the Realm I..IV
 // order rendered in The Realms section.
@@ -291,6 +323,9 @@ const featuredProjects = [
     source_code_link: '',
     live_demo_link: '',
     isNDA: true,
+    // Abstract tiers only (see ARCH_TIERS) — an advisor-facing reporting app
+    // behind SSO, no real service names.
+    architecture: [['client'], ['web'], ['auth', 'api'], ['service', 'report']],
     proof: [
       { k: 'role', v: 'Lead frontend, from scratch' },
       { k: 'outcome', v: '4 production releases' },
@@ -315,6 +350,7 @@ const otherProjects = [
     source_code_link: '',
     live_demo_link: '',
     isNDA: true,
+    architecture: [['client'], ['web'], ['api'], ['service', 'store']],
   },
   {
     id: 'srifin',
@@ -360,6 +396,7 @@ const otherProjects = [
     source_code_link: '',
     live_demo_link: '',
     isNDA: true,
+    architecture: [['client'], ['web', 'realtime'], ['api'], ['service', 'store']],
   },
   {
     id: 'fantasy-cricket',
@@ -451,6 +488,25 @@ export const atelier = {
     'PostHog', 'Vercel Analytics', 'Speed Insights',
   ],
   techCore: ['React 18', 'GSAP · ScrollTrigger', 'Web Audio', 'Canvas2D', 'i18next', 'Zustand'],
+  // "The Gate" — the CI pipeline every commit in the graph above passed through
+  // (.github/workflows/ci.yml). NON-COPY data only: the real trigger + ordered
+  // stages, mirrored 1:1 from the workflow so it can't drift. `glyph` keys a
+  // lucide icon in CiPipeline.jsx; `label`/`cmd` are technical narration
+  // (EN-only, exempt from voice like the atlas chips). Framing copy is voiced
+  // under t('atelier.ci.title' / '.caption'). Drives the CiPipeline component.
+  ci: {
+    file: '.github/workflows/ci.yml',
+    triggers: ['push → main', 'every pull request'],
+    steps: [
+      { id: 'checkout', glyph: 'branch', label: 'checkout', cmd: 'actions/checkout' },
+      { id: 'node', glyph: 'node', label: 'node 24', cmd: 'setup-node · npm cache' },
+      { id: 'install', glyph: 'package', label: 'install', cmd: 'npm ci' },
+      { id: 'lint', glyph: 'scan', label: 'lint', cmd: 'eslint · 0 warnings' },
+      { id: 'types', glyph: 'braces', label: 'types', cmd: 'tsc --noEmit' },
+      { id: 'build', glyph: 'hammer', label: 'build', cmd: 'vite build' },
+    ],
+    pass: 'merge-ready',
+  },
   // "Off the map" — the three sides of the person behind the build, as an
   // interactive triptych (PersonaTriptych). `glyph` keys a lucide icon; `chips`
   // are proper-noun names (data). Voiced copy: t('atelier.personas.<id>.label'
@@ -551,7 +607,7 @@ export const atelier = {
   // `glyph` keys a lucide icon map in the component; `hotspot: true` surfaces a node
   // in the curated rail (its order is `hotspots` below). `repo` is the public source.
   atlas: {
-    repo: 'https://github.com/manan-upadhyay/3d-portfolio',
+    repo: 'https://github.com/manan-upadhyay/portfolio',
     hotspots: ['constants', 'i18n', 'analytics', 'sound', 'smoothScroll', 'vite', 'hoc'],
     tree: [
       { id: 'src', name: 'src/', type: 'dir', glyph: 'folder', children: [

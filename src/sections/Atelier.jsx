@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Hammer, Scissors, Compass, RefreshCcw, AudioLines, CloudSun, Drama, Map, Send, Fingerprint, Terminal, Plus } from 'lucide-react';
 import { SectionWrapper } from '../hoc';
 import { atelier } from '../constants';
-import { ChapterHeading, ScrollReveal, CountUp, CommitGraph, Observatory, CodebaseAtlas, PersonaTriptych, FaceParticles } from '../components';
+import { ChapterHeading, ScrollReveal, CountUp, CommitGraph, CiPipeline, Observatory, CodebaseAtlas, PersonaTriptych, FaceParticles } from '../components';
 
 /* lucide glyph per field-guide entry (icon id → component). */
 const EGG_ICONS = { compass: Compass, refresh: RefreshCcw, audio: AudioLines, sky: CloudSun, drama: Drama, map: Map, send: Send, fingerprint: Fingerprint, terminal: Terminal };
@@ -182,6 +182,19 @@ const Atelier = () => {
               <CommitGraph />
             </div>
             <p className="atelier-card__caption mt-6">{t('atelier.commits.caption')}</p>
+          </ScrollReveal>
+
+          {/* The Gate — the CI pipeline every one of those commits crossed. Sits
+              right under the trail so the two read as one thought: cadence, then
+              the discipline that gated it (persona audit 2026-07-05, item 6). */}
+          <ScrollReveal direction="up" delay={0.05} className="realm-card atelier-card p-6 sm:p-8 mt-8">
+            <div className="flex items-baseline justify-between gap-4 flex-wrap">
+              <span className="atelier-sublabel">{t('atelier.ci.title')}</span>
+              <span className="atelier-card__hint exp-mono">{atelier.ci.file}</span>
+            </div>
+            <div className="mt-6">
+              <CiPipeline />
+            </div>
           </ScrollReveal>
 
           <ScrollReveal direction="up" className="mt-14">

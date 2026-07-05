@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { X, ArrowRight, Download } from 'lucide-react';
-import { personalInfo, summon } from '../constants';
+import { personalInfo } from '../constants';
 import { scrollToSection } from '../lib/smoothScroll';
 import { track, trackOnce } from '../lib/analytics';
 
@@ -58,7 +58,7 @@ const StickyCta = ({ activeId }) => {
               {t('stickyCta.cta')} <ArrowRight size={14} />
             </button>
             <a
-              href={personalInfo.resumeLink} download={summon.resumeFileName} data-cursor="hover"
+              href={personalInfo.resumeLink} target="_blank" rel="noopener noreferrer" data-cursor="hover"
               onClick={() => track('sticky_cta_click', { target: 'resume' })}
               aria-label={t('stickyCta.resume')}
               className="hidden sm:grid place-items-center w-9 h-9 rounded-full transition-colors"

@@ -1151,6 +1151,37 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid rgba(var(--color-ember-rgb), 0.4);
 }
 
+/* ===== NDA plates: abstract system schematic (persona audit item 9) ===== */
+/* The featured NDA plate fills its whole cover; the compact card gets a short
+   banner strip. Both draw the same theme-tokened boxes-and-arrows. */
+.nda-schem-wrap { position: relative; }
+.nda-schem-wrap__note {
+  position: absolute; bottom: 14px; left: 0; right: 0; text-align: center;
+  font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--color-text-muted); opacity: 0.7; pointer-events: none;
+}
+.nda-schem-mini {
+  height: 96px;
+  border: 1px solid var(--color-card-border);
+  border-radius: 14px;
+  background: radial-gradient(120% 120% at 70% 20%, rgba(var(--color-ember-rgb), 0.08), transparent 60%);
+  display: grid; place-items: center; padding: 10px;
+}
+.nda-schem { width: 100%; height: 100%; max-width: 560px; max-height: 320px; padding: 6%; }
+.nda-schem-mini .nda-schem { padding: 0; }
+.nda-schem__box {
+  fill: var(--color-card-bg);
+  stroke: var(--color-card-border);
+  stroke-width: 1;
+}
+.nda-schem__label {
+  fill: var(--color-text-muted);
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.01em;
+}
+.nda-schem__edge { fill: none; stroke: rgba(var(--color-ember-rgb), 0.5); stroke-width: 1.4; }
+.nda-schem__arrow { fill: rgba(var(--color-ember-rgb), 0.65); stroke: none; }
+
 /* ===== Chronicle: tag runes (tech-stack chips) ===== */
 
 /* ===== Chronicle: Custom cursor (dot + ring + backlight) ===== */
@@ -3298,6 +3329,55 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-text-muted);
+}
+
+/* ===== CiPipeline — "The Gate": the CI workflow as a quiet step-chain ===== */
+.ci-pipeline__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.ci-pipeline__on {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.ci-pipeline__triggers { display: flex; flex-wrap: wrap; gap: 8px; }
+.ci-pipeline__trigger {
+  font-size: 11px; padding: 3px 9px; border-radius: 999px;
+  color: var(--color-ember);
+  background: rgba(var(--color-ember-rgb), 0.08);
+  border: 1px solid rgba(var(--color-ember-rgb), 0.22);
+}
+/* The ordered gate. Wraps freely; a 1px connector bridges each stage in the gap
+   so it reads as one flow (checkout → … → build → merge-ready) without clutter. */
+.ci-chain {
+  list-style: none; margin: 20px 0 0; padding: 0;
+  display: flex; flex-wrap: wrap; align-items: stretch; gap: 11px;
+}
+.ci-step {
+  position: relative;
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 13px; border-radius: 12px;
+  background: var(--color-card-bg); border: 1px solid var(--color-card-border);
+}
+.ci-step:not(:last-child)::after {
+  content: ''; position: absolute; right: -11px; top: 50%;
+  width: 11px; height: 1px; background: var(--color-card-border);
+}
+.ci-step__icon {
+  display: grid; place-items: center; width: 28px; height: 28px;
+  border-radius: 8px; flex-shrink: 0;
+  color: var(--color-ember); background: rgba(var(--color-ember-rgb), 0.1);
+}
+.ci-step__body { display: flex; flex-direction: column; min-width: 0; }
+.ci-step__label { font-size: 12.5px; font-weight: 600; letter-spacing: 0.02em; color: var(--color-text); }
+.ci-step__cmd { font-size: 10px; color: var(--color-text-muted); }
+.ci-step--pass { background: rgba(var(--color-success-rgb), 0.08); border-color: rgba(var(--color-success-rgb), 0.4); }
+.ci-step--pass .ci-step__icon { color: var(--color-success); background: rgba(var(--color-success-rgb), 0.14); }
+.ci-step--pass .ci-step__label { color: var(--color-success); }
+/* Staggered rise when the chain enters view. */
+.ci-chain .ci-step { opacity: 0; transform: translateY(6px); }
+.ci-chain.is-in .ci-step { animation: ci-rise 0.5s ease both; animation-delay: calc(var(--i) * 0.06s); }
+@keyframes ci-rise { to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .ci-chain .ci-step { opacity: 1; transform: none; animation: none; }
 }
 
 /* The quiet doorway to the Atelier in the global footer. */

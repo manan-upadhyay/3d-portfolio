@@ -1,9 +1,12 @@
 import { lazy, Suspense, useState, useEffect, useRef } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { Map, Hammer } from 'lucide-react';
 import Hero from '../sections/Hero';
 import { ErrorBoundary, SideRail, MapOverlay, StickyCta } from '../components';
+import { chapterList } from '../constants';
 import { useExpedition } from '../hooks/useExpedition';
-import { restoreScroll, consumeSectionRequest } from '../lib/smoothScroll';
+import { restoreScroll, consumeSectionRequest, scrollToSection } from '../lib/smoothScroll';
 import { sound } from '../lib/sound';
 import { track, trackOnce } from '../lib/analytics';
 
@@ -27,8 +30,25 @@ const SectionLoader = () => (
  */
 const Chronicle = () => {
   const { activeId } = useOutletContext();
+  const { t } = useTranslation();
+  const navigate = useNavigate();
   const [mapOpen, setMapOpen] = useState(false);
   useExpedition(); // accumulate session scroll distance → the Phase 5 recap
+
+  // Rail data: the six chapters, then a Map action + a quiet doorway to the
+  // Atelier (audit — always-available making-of nav, kept subtle: an extra
+  // footer action below the map, never a seventh "chapter").
+  const railItems = chapterList.map((c) => ({
+    id: c.id, no: c.no, label: t(`chapters.${c.id}.label`),
+    onClick: () => { track('rail_nav', { id: c.id }); scrollToSection(c.id); },
+  }));
+  const railActions = [
+    { key: 'map', label: t('nav.map'), ariaLabel: t('nav.openMap'), kbd: true,
+      glyph: <Map size={17} style={{ color: 'var(--color-ember)' }} />, onClick: () => setMapOpen(true) },
+    { key: 'makingOf', label: t('nav.makingOf'), ariaLabel: t('nav.makingOf'),
+      glyph: <Hammer size={16} style={{ color: 'var(--color-text-muted)' }} />,
+      onClick: () => { track('making_of_enter', { from: 'rail' }); navigate('/making-of'); } },
+  ];
 
   // Returning from the Atelier: an explicit destination (e.g. "Contact" tapped
   // on /making-of) wins; otherwise drop the visitor back at the doorway they left.
@@ -70,7 +90,7 @@ const Chronicle = () => {
 
   return (
     <>
-      <SideRail activeId={activeId} onOpenMap={() => setMapOpen(true)} visible={activeId !== 'origin'} />
+      <SideRail activeId={activeId} items={railItems} actions={railActions} visible={activeId !== 'origin'} />
       <MapOverlay open={mapOpen} onClose={() => setMapOpen(false)} activeId={activeId} />
       <StickyCta activeId={activeId} />
 

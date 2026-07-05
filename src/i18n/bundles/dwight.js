@@ -128,6 +128,7 @@ export default {
     enterRealm: 'Enter the territory',
     source: 'Schematics',
     ndaSealed: '[[nda|Classified]]. I have said too much already. This conversation is over.',
+    ndaArch: 'Abstracted schematic — classified',
     chartMore: 'Reveal {{count}} more conquests',
     furl: 'Seal the records',
     fullStory: 'The full report',
@@ -285,6 +286,12 @@ export default {
       title: 'The Operations Log',
       range: 'Extracted directly from the repository. Verified.',
       caption: 'Every square is a day of committed operations. One disciplined campaign. Fact.',
+    },
+    ci: {
+      title: 'Quality Control Checkpoint',
+      on: 'Runs on',
+      caption:
+        'Every commit is inspected before it enters the codebase — lint, types, build, verified on every push and every pull request. Failure is not permitted. Standards are not optional.',
     },
     stats: {
       hours: 'Hours deployed',

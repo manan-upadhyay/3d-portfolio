@@ -102,6 +102,7 @@ export default {
     enterRealm: 'Moo moo',
     source: 'Moo',
     ndaSealed: 'Moo moo moo moo — moo moo moo moo moo moo.',
+    ndaArch: 'Moo moo moo — moo moo.',
     chartMore: 'Moo {{count}} moo moo',
     furl: 'Moo moo moo',
     fullStory: 'Moo moo moo',
@@ -217,6 +218,11 @@ export default {
       title: 'Moo Moo Moo',
       range: 'Moo moo moo git moo. Moo.',
       caption: 'Moo moo moo moo moo moo — moo moo moo moo. Moo.',
+    },
+    ci: {
+      title: 'Moo Moo Gate',
+      on: 'Moo',
+      caption: 'Moo moo moo moo moo — moo, moo, moo — moo moo moo moo moo. Moo moo moo.',
     },
     stats: {
       hours: 'Moo moo',

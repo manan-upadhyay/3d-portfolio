@@ -130,6 +130,7 @@ export default {
     enterRealm: 'Check it out',
     source: 'The Code',
     ndaSealed: 'I’d tell you, but then I’d have to… you know. It’s [[nda|an NDA thing]]. Very official.',
+    ndaArch: 'The secret blueprint. Redacted.',
     chartMore: 'Show {{count}} more hits',
     furl: 'Okay, that’s enough greatness',
     fullStory: 'The whole saga',
@@ -287,6 +288,12 @@ export default {
       title: 'Every Time I Hit Save',
       range: 'Straight from the repo. The REAL one.',
       caption: 'Every square is a day I shipped. One glorious, caffeinated burst. Boom.',
+    },
+    ci: {
+      title: 'The Rules. I Make Them.',
+      on: 'Runs on',
+      caption:
+        'Every single commit has to pass The Test before it gets in. Lint. Types. Build. Green, or it does not ship. That is not being mean. That is leadership.',
     },
     stats: {
       hours: 'Hours of me',

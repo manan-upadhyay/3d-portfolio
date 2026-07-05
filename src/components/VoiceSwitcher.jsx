@@ -107,8 +107,12 @@ const VoiceRow = ({ v, active, locked, onSelect }) => {
   );
 };
 
-// Sections that count as "deep enough in the journey" to surface the entice note.
-const NOTE_AT = ['arsenal', 'projects', 'contact'];
+// The note surfaces once the visitor reaches the Arsenal (engaged, but still one
+// section short of the conversion zone)…
+const NOTE_ARM_AT = 'arsenal';
+// …and must never linger into the conversion sections (audit #3): reaching either
+// drops it immediately.
+const NOTE_DISMISS_AT = ['projects', 'contact'];
 
 // Module-scoped so it survives section changes AND route swaps (the cluster lives
 // in the shared shell and never remounts between routes): the entice note gets
@@ -147,20 +151,24 @@ const VoiceSwitcher = ({ activeId }) => {
     return () => { document.removeEventListener('pointerdown', onDown); window.removeEventListener('keydown', onKey); popOverlay(); };
   }, [open]);
 
-  // One-time entice note — once the visitor is engaged (reached the Arsenal or
-  // beyond), a catchy bubble invites them to try the voices. Auto-dismisses ~11s;
-  // permanently dismissed once they engage with the control.
-  // Once the visitor reaches a deep section, claim the coachmark stage a beat
-  // later (which preempts the Sound hint — closing it if it's still up) and yield
-  // it after a spell. Timers are stored in a ref and cleared only on unmount, so
-  // ongoing scrolling (which changes `activeId`) can never cancel the note's show
-  // or its auto-dismiss mid-flight.
+  // One-time entice note. It arms when the visitor first reaches the Arsenal,
+  // shows a beat later (claiming the coachmark stage — which preempts the Sound
+  // hint), and auto-dismisses after 8s. Reaching Projects/Contact drops it at
+  // once (audit #3: 8s or the conversion sections, whichever comes first) —
+  // including cancelling a still-pending show. Timers live in a ref so ordinary
+  // scrolling can't cancel an in-flight show/dismiss.
   useEffect(() => {
-    if (enticeArmed || open || !NOTE_AT.includes(activeId)) return;
+    // Never survive into the conversion sections.
+    if (enticeArmed && NOTE_DISMISS_AT.includes(activeId)) {
+      enticeTimers.current.forEach(clearTimeout);
+      releaseCoach('voice');
+      return;
+    }
+    if (enticeArmed || open || activeId !== NOTE_ARM_AT) return;
     enticeArmed = true;
     enticeTimers.current = [
       setTimeout(() => requestCoach('voice'), 700),
-      setTimeout(() => releaseCoach('voice'), 11700),
+      setTimeout(() => releaseCoach('voice'), 8700), // ~8s of visibility, then yield
     ];
   }, [activeId, open, requestCoach, releaseCoach]);
 
