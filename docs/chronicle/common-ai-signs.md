@@ -39,7 +39,7 @@ anti-convergence bet. This doc keeps that bet honest.
 |---|---|---|---|
 | T1 | **Inter everywhere** (or its cousins Roboto / system-ui) as the single default for headings + body. | Inter is the literal default in nearly every AI tool, component library, and builder. | Commit to an **opinionated, non-default typeface** with a real voice — an editorial serif for display, a distinctive grotesk for body. Pair two families *deliberately* (contrast, not sameness). |
 | T2 | **The trendy AI combos**: Space Grotesk + Instrument Serif, Geist, "one italic serif accent word" dropped into otherwise-sans copy. | These specific pairings are so over-generated they now *signal* AI. | If you use a serif accent, make it a **system-wide editorial decision**, not a lone italicized word for "sophistication." Earn the contrast. |
-| T3 | **All-caps section labels** + tiny tracked-out eyebrows on every section. | Uniform ALL-CAPS "SECTION" labels are a copy-paste layout reflex. | Use **real typographic hierarchy** — size, weight, and rhythm — to signal sections. If an eyebrow exists, it should carry narrative meaning (a chapter number, a place-name), not just decorate. |
+| T3 | **Content-free eyebrows** — a default-tracked ALL-CAPS "SECTION" / "FEATURES" label stamped identically above every block, saying nothing. | Uniform, meaningless labels are a copy-paste layout reflex. | The uppercase kicker with a leading rule is a **century-old editorial device** and allowed — *ours* is restored deliberately (v2.0 pass): it carries **narrative weight** (chapter number, place-name, card heading) and the site's own map-line gradient. The tell is emptiness and default styling, not the device itself. |
 | T4 | **Uniform type scale** — one heading size, one body size, mechanical line-height everywhere. | No optical adjustment = no human hand. | Vary scale with **intent and drama**. Big where it's a moment, quiet where it's connective tissue. Tune leading and measure per context. |
 
 **Our stance:** The Chronicle's type is voice-bearing (i18n bundles) and
@@ -66,7 +66,7 @@ heading isn't a *moment*, it isn't done (CLAUDE.md §4).
 | # | The AI tell | Why it reads as machine | The human move |
 |---|---|---|---|
 | L1 | **The canonical skeleton**: hero → 3 feature cards → testimonials → pricing → CTA → footer, in that exact order. | AI learned the single most-repeated page structure and reproduces it verbatim. | A **narrative spine** with distinct moments (Origin → Craft → Journey → Arsenal → Realms → Summon). Each section is its own experience, not a slot in a template. |
-| L2 | **Badge-above-the-H1** — a little pill ("✨ Now with AI") centered directly over the headline. | The most over-generated hero opener. | If a label sits above a heading it's a **chapter marker with story weight** (number + place), never a decorative pill. |
+| L2 | **The decorative announcement pill** — "✨ Now with AI" centered over the H1, or rows of identical default-styled chips used as filler. | The most over-generated hero opener; uniform chip rows signal zero editorial judgment. | **Pills are normal web design** — they predate AI by a decade (Bootstrap badges, Material chips) and are *allowed* when they carry **function or taxonomy** (a stack tag, a selected state, a real category) in **our own tokens** (`.tag-rune`, wax seals). The tell is a pill that *announces nothing*, styled at framework defaults, repeated identically. Don't delete the vocabulary; write something worth saying in it. |
 | L3 | **The colored left-border card** — a 3–4px stripe (purple/blue/gradient) on the left edge of a card or blockquote. | *"As reliable a sign of AI as em-dashes are for text."* The single most recognizable component tell. | **No stripe-on-the-left cards.** Differentiate cards by content, composition, and typography — or don't use cards at all where a richer layout fits. |
 | L4 | **Identical icon-card grids** — 3 (or 6) equal cards, lucide/emoji icon top-left, title, two lines of body, same padding/radius/height. | Uniform sizing = visual flatness = no editorial judgment. | **Asymmetry and hierarchy.** Vary card weight, break the grid, let the most important thing be biggest. Editorial plates over uniform tiles (see The Realms). |
 | L5 | **Numbered 1-2-3 step sequences** and **stat-banner rows** (4 metrics in a horizontal strip). | Default "process" and "credibility" modules. | Stats and steps must be **composed into the story** (our Atelier metrics, the expedition recap), not dropped as a generic banner. |
@@ -182,7 +182,7 @@ Run before marking any section done (pairs with CLAUDE.md's "Definition of done"
 **Typography**
 - [ ] No undifferentiated Inter/Roboto/system default; typefaces are chosen and paired with intent.
 - [ ] No lone italic-serif "accent word" for cheap sophistication.
-- [ ] Hierarchy comes from scale/weight/rhythm, not ALL-CAPS eyebrows on everything.
+- [ ] Every eyebrow/kicker carries real content (chapter number, place, heading) — none are content-free decoration.
 
 **Color & surface**
 - [ ] Zero generic purple/indigo→blue gradient or ambient glow "hero blob."
@@ -192,7 +192,7 @@ Run before marking any section done (pairs with CLAUDE.md's "Definition of done"
 
 **Layout**
 - [ ] Not the hero→3-cards→stats→CTA skeleton; the section is its own moment.
-- [ ] No badge-pill above the H1; no colored-left-border cards.
+- [ ] No content-free announcement pill above the H1; functional pills (stack tags, states) use our tokens, not framework defaults. No colored-left-border cards.
 - [ ] No uniform icon-card grid where hierarchy/asymmetry would be stronger.
 - [ ] Composition isn't reflexively dead-centered; spacing is optical, not mechanical.
 - [ ] No emoji in UI.

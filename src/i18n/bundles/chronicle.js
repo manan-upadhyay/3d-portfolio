@@ -158,6 +158,7 @@ export default {
   arsenal: {
     subtitle: 'The tools I reach for across the stack — hover a skill to trace its constellation.',
     coreLabel: 'The Arsenal',
+    coreLegend: 'the brighter the body, the deeper the mastery',
   },
 
   works: {
@@ -171,6 +172,7 @@ export default {
     ndaSealed: "[[nda|Sealed under NDA]] — details limited to what's permissible.",
     chartMore: 'Chart {{count}} more realms',
     furl: 'Furl the map',
+    fullStory: 'The full story',
     // The nod to the unnumbered seventh realm — this very site (see the Atelier).
     nod: 'Six realms charted. The seventh is the one you are standing in.',
     nodCta: 'See how this site was built',
@@ -178,6 +180,7 @@ export default {
     // `company`, `tags`, links and gallery stay data in constants.
     projects: {
       gajaakriti: {
+        lead: 'A luxury wedding studio’s galleries, made to load like a film — not a folder.',
         description: 'Dynamic media-heavy website and admin panel for a premium Ahmedabad-based wedding photography and films studio with optimized media delivery.',
         highlights: [
           'Built a modern Next.js website with dynamic landing pages, portfolio, blogs, testimonials, and admin panel',
@@ -187,6 +190,7 @@ export default {
         ],
       },
       'royal-tiles': {
+        lead: 'Design a floor in the browser, watch it render live, walk out with an order-ready PDF.',
         description: 'Interactive tile design and ordering tool where users select layouts, tile designs, fills, preview results live, and download order-ready PDF templates.',
         highlights: [
           'Built a custom floor visualization tool with live preview and downloadable PDF templates',
@@ -197,6 +201,7 @@ export default {
         ],
       },
       'advisor-portfolio': {
+        lead: 'An enterprise portfolio-analysis platform, architected from the first commit.',
         description: 'Advisor-facing portfolio analysis platform built from scratch with Next.js, Okta authentication, Highcharts data visualization, and enterprise deployment tooling.',
         highlights: [
           'Built the frontend application from scratch — system design, reusable UI, route protection, API integration, sprint-wise delivery',
@@ -254,17 +259,10 @@ export default {
       'Open to senior full-stack roles & collaborations — usually replies within a day.',
     theMessage: 'The Message',
     correspondence: 'Correspondence',
-    inquiries: ['Senior role', 'Contract', 'Collaboration', 'Just saying hi'],
     placeholders: {
       name: 'Your name',
       email: 'Your email',
-      message: 'Tell me about the role or project…',
-    },
-    messagePlaceholders: {
-      'Senior role': 'Tell me about the team, the role, and the stack…',
-      Contract: 'Share the scope, timeline, and what you need shipped…',
-      Collaboration: 'What should we build together? Pitch me the idea…',
-      'Just saying hi': 'Say hello — what brought you here?',
+      message: 'Tell me about the role, the project — or just say hi…',
     },
     submitIdle: 'Send message',
     submitLoading: 'Sending…',
@@ -439,15 +437,15 @@ export default {
     title: 'How the map was drawn',
     confession: 'The making-of, minus the mystique.',
     confessionSub:
-      'The honest version: why this site exists, how it’s built, what beta users flagged, and what I changed. Everything below is the real thing — a live analytics panel, the actual codebase map, the build reel — not screenshots of a process, but the process itself.',
+      'How this site is built, what was cut, and what hides in plain sight — all of it the real thing, not screenshots of a process.',
     acts: { build: 'The Build', engine: 'The Engine Room', hidden: 'The Hidden Layer' },
     // The commit trail — a GitHub-style heatmap drawn from this repo's real git
     // history (CommitGraph + src/constants/commitHistory.js). All figures are data.
     commits: {
       title: 'The Commit Trail',
-      range: 'Straight from this repo’s git log',
+      range: 'The build window, straight from this repo’s git log',
       caption:
-        'Every square is a day I shipped to this repository — the whole build, drawn straight from its own git history. Not a mock-up: this is the real thing.',
+        'Every square is a day I shipped to this repository — one intense burst, drawn from its own git history.',
       less: 'Less',
       more: 'More',
       tip_one: '{{count}} commit',
@@ -489,12 +487,10 @@ export default {
       threejs: { title: 'Three.js & the whole WebGL layer', why: 'An early build leaned on a 3D library for depth. I tore it out and rebuilt the same sense of space with layered CSS, parallax, and a hand-drawn Canvas2D astrolabe — dropping a heavy dependency and keeping the initial JS well under budget. Depth, without the download.' },
       tracking: { title: 'Cookie banners, cross-session tracking & surveillance analytics', why: 'The site does measure itself — but the senior call was how. PostHog runs cookieless (memory-only persistence), fully anonymous (no accounts, no identify(), no cross-session identity), and hard-disabled the instant Do-Not-Track is set. No consent banner, because there is nothing to consent to: nothing is sold, nothing follows you off the page. The analytics serve the craft — which moments get touched — not the surveillance.' },
       componentLib: { title: 'A pre-built UI kit or paid template', why: 'Every component here is bespoke — Tailwind for layout, CSS variables for theme, nothing lifted from a library. More work, but full pixel control and none of the bloat or that unmistakable look-alike-template feel.' },
-      statusLine: { title: 'The “how did he know?” status line', why: 'Region + moon phase near the hero. Built, reviewed, cut — it edged from wonder toward creepy, and the time-driven palette already carried the magic.' },
-      battery: { title: 'The battery readout', why: 'Removed: the Battery Status API lies on some platforms (macOS Chrome reports 100% while charging). A card that “reads you” must never show data it cannot trust.' },
     },
     eggs: {
       title: 'The Field Guide',
-      intro: 'Most of the craft here is quiet on purpose — it answers only when you reach for it. Here is where to find what hides in plain sight.',
+      intro: 'The quiet craft — tap any entry to learn where it hides.',
       astrolabe: {
         title: 'The living needle',
         how: 'Sweep your cursor across the hero astrolabe — the needle follows your hand, and a gear-mechanism sound turns at exactly the speed you move it.',
@@ -539,7 +535,7 @@ export default {
       hub: 'session recap',
       hubNote: 'Every named event folds into one tidy per-visit summary, flushed as you leave — the whole journey in a single row.',
       indexHint: 'Every star is a real event. Sweep the field — or choose one from the ledger — and the instrument names it and where it fires.',
-      tapHint: 'The field revolves on its own. Tap any event below — the orbit points to it and its detail opens right here.',
+      tapHint: 'One real event at a time — tap the card to read the next.',
       cadence: { once: 'Once per visit', repeat: 'Every time' },
       metrics: {
         events: 'Product events',
@@ -557,50 +553,27 @@ export default {
       panels: {
         privacy: {
           title: 'Privacy-first by design',
-          body: 'PostHog runs cookieless and fully anonymous — no accounts, no identify(), memory-only persistence — and hard-disables the moment Do-Not-Track is set. No consent banner, because there is nothing to consent to.',
+          body: 'Cookieless, anonymous, memory-only — and hard-disabled the moment Do-Not-Track is set.',
         },
         discoverability: {
           title: 'Built to be found',
-          body: 'Five JSON-LD schemas (Person, WebSite, ProfilePage, Organization, address), Open Graph and Twitter cards, canonical URLs, and an application-name that claims the Google Knowledge Panel — so machines and humans read it the same way.',
+          body: 'Five JSON-LD schemas, Open Graph cards, canonical URLs — machines and humans read it the same way.',
         },
         observability: {
-          title: 'Watched, so it never breaks quietly',
-          body: 'A zero-dependency structured logger with scoped tags and a production debug key, exceptions caught from the error boundary and relayed to a Discord channel the instant they occur, and Vercel Speed Insights tracking Core Web Vitals from real visits.',
+          title: 'Never breaks quietly',
+          body: 'A structured logger, exceptions relayed to Discord the instant they occur, Core Web Vitals from real visits.',
         },
       },
-      webhooks: {
-        title: 'The alert path',
-        caption: 'Two webhooks carry word the instant it matters — a thrown exception, a fresh deploy — straight to where I already keep watch. No dashboard to babysit; the news finds me.',
-        hop: 'webhook',
-      },
-      footnote: 'Thirty-three events, thirteen super-properties, five dashboards, five schemas — and not a single cookie. Senior work is not just shipping the moment; it is proving the moment lands.',
     },
     atlas: {
       eyebrow: 'The Codebase',
       title: 'How the map is built',
       intro: 'Open the structure itself — a hand-drawn chart of the repository. Walk it like a map; each file tells you not what it does, but why it sits where it does.',
       hotspots: 'Start here',
+      browseAll: 'Walk the full tree',
       prompt: 'Open a folder, or pick a landmark — every file carries the reasoning behind it.',
       why: 'Why it’s built this way',
       repoCta: 'See the originals',
-    },
-    reckoning: {
-      eyebrow: 'The Reckoning',
-      title: 'What the beta changed',
-      intro: 'v1.0 shipped to ~358 visitors in three days and drew 200+ comments — some praise, some sharp. I read all of it, cross-checked it against the analytics, and shipped a revision. The honest split:',
-      saidHead: 'They said',
-      changedHead: 'I changed',
-      items: [
-        { said: 'Over-signals AI / “vibe-coded”.', changed: 'Redesigned the eyebrow tell, dropped the glass cards for opaque surfaces, rewrote the copy human-first, and rebuilt About as an editorial spread.' },
-        { said: 'Too much text — recruiters won’t read it.', changed: 'Cut visible copy by roughly half and pushed the depth behind disclosure.' },
-        { said: 'The hero doesn’t sell the developer.', changed: 'A value-first hook, an above-the-fold proof strip, and CTAs that point straight at the work.' },
-        { said: 'Zero project images.', changed: 'Real screenshots now lead the featured realms.' },
-        { said: 'Buggy scroll, confusing controls.', changed: 'Snappier scroll, native on mobile, and a label on every control.' },
-      ],
-      notes: 'Under the hood: canvas DPR capped at 2×, animation lifecycles leak-audited, reduced-motion and touch honored, AA-contrast text — and the analytics rebuilt so the next beta is judged on data, not vibes.',
-      ctaLine: 'If this is the kind of product thinking you’re hiring for, let’s talk.',
-      ctaContact: 'Get in touch',
-      ctaResume: 'Résumé',
     },
     offmap: {
       title: 'The cartographer, off the map',
@@ -627,8 +600,7 @@ export default {
     },
     builtWith: 'Built with',
     manifesto: [
-      'Honestly? I built this because I get restless with the normal version of a thing — it was an excuse to try ideas I hadn’t tried and tools I hadn’t used yet, and to see how far past “done” I could push before I ran out of patience. (I didn’t.)',
-      'What I actually care about is smaller than a hero shot: work that holds up under load, clients glad they trusted me, and the details most people let slide. The rest of this page is just me holding myself to that in public.',
+      'I built this because I get restless with the normal version of a thing. What I actually care about is smaller than a hero shot: work that holds up under load, and the details most people let slide.',
     ],
     sign: '— Manan',
   },

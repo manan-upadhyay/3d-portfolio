@@ -46,7 +46,6 @@ export const personalInfo = {
   ],
   // Hero narrative copy (heroLead / heroPhrases / heroHook) now lives in the
   // Voice bundles — src/i18n/bundles/* (key group `hero`).
-  coordinates: '23.02°N 72.57°E',
 };
 
 // The Summon (chapter 05) — contact COPY now lives in the Voice bundles
@@ -59,7 +58,7 @@ export const summon = {
     { key: 'email', value: personalInfo.email, href: `mailto:${personalInfo.email}` },
     { key: 'linkedin', value: 'in/mananupadhyay01', href: personalInfo.linkedin },
     { key: 'github', value: 'manan-upadhyay', href: personalInfo.github },
-    { key: 'location', value: `${personalInfo.location} · 23.02°N 72.57°E`, href: null },
+    { key: 'location', value: personalInfo.location, href: null },
   ],
 };
 
@@ -221,6 +220,12 @@ const featuredProjects = [
     source_code_link: '',
     live_demo_link: 'https://gajaakriti.com/',
     isNDA: false,
+    // Proof strip (facts, not copy — labels are voiced via works.proofLabels.*)
+    proof: [
+      { k: 'role', v: 'Solo, end-to-end' },
+      { k: 'outcome', v: 'Optimized 4K media delivery' },
+      { k: 'scale', v: 'Full site + admin panel' },
+    ],
     // Realm screenshots in display order. Lives under public/realms/<slug>/.
     // `themed: true` swaps to public/realms/<slug>/<light|dark>/ per theme.
     gallery: {
@@ -252,6 +257,11 @@ const featuredProjects = [
     live_demo_link: 'https://florra.tatkrit.com/login',
     live_demo_label: 'Visit platform',
     isNDA: false,
+    proof: [
+      { k: 'role', v: 'Solo build' },
+      { k: 'outcome', v: 'PNG → editable SVG, in-browser' },
+      { k: 'scale', v: 'Live preview → order-ready PDF' },
+    ],
     gallery: {
       slug: 'royal-tiles',
       themed: true,
@@ -281,6 +291,11 @@ const featuredProjects = [
     source_code_link: '',
     live_demo_link: '',
     isNDA: true,
+    proof: [
+      { k: 'role', v: 'Lead frontend, from scratch' },
+      { k: 'outcome', v: '4 production releases' },
+      { k: 'scale', v: 'Capital Group (enterprise)' },
+    ],
   },
 ];
 
@@ -410,9 +425,10 @@ export const atelier = {
   // each with a real engineering payoff. ids key the voiced copy:
   // t('atelier.phases.<id>.title' / '.why') and t('atelier.cuts.<id>…').
   built: ['voice', 'marginalia', 'sky', 'sound', 'recap', 'eggs', 'telemetry'],
-  // Lead with the architecture refusals (biggest payoff — bundle, perf, privacy),
-  // then the two built-then-removed refinements.
-  cut: ['assets', 'threejs', 'tracking', 'componentLib', 'statusLine', 'battery'],
+  // Lead with the architecture refusals (biggest payoff — bundle, perf, privacy).
+  // v2.0 feedback pass: the two built-then-removed refinements (statusLine,
+  // battery) were cut from the page — low value next to the refusals.
+  cut: ['assets', 'threejs', 'tracking', 'componentLib'],
   // The "field guide" — the deliberately-subtle interactions most visitors never
   // find. `icon` keys a lucide glyph in Atelier.jsx; the name + how-to-trigger
   // copy is voiced: t('atelier.eggs.<id>.title' / '.how').
@@ -428,11 +444,13 @@ export const atelier = {
     { id: 'console', icon: 'terminal' },
   ],
   // "Built with" — proper-noun tech names are data, rendered as chips.
+  // `techCore` marks the load-bearing subset, rendered highlighted (v2.0 W10).
   tech: [
     'React 18', 'Vite', 'GSAP · ScrollTrigger', 'Lenis', 'Framer Motion',
     'Zustand', 'i18next', 'Web Audio', 'Canvas2D', 'SunCalc', 'Resend',
     'PostHog', 'Vercel Analytics', 'Speed Insights',
   ],
+  techCore: ['React 18', 'GSAP · ScrollTrigger', 'Web Audio', 'Canvas2D', 'i18next', 'Zustand'],
   // "Off the map" — the three sides of the person behind the build, as an
   // interactive triptych (PersonaTriptych). `glyph` keys a lucide icon; `chips`
   // are proper-noun names (data). Voiced copy: t('atelier.personas.<id>.label'
@@ -515,13 +533,8 @@ export const atelier = {
         ] },
       ],
     },
-    // The alert path — webhook routes that page Manan where he already is. `source`
-    // and `channel` are data (proper nouns); the framing is voiced under
-    // t('atelier.observatory.webhooks.*'). URLs are secrets and never rendered.
-    webhooks: [
-      { id: 'alerts', source: 'PostHog', channel: '#alerts', glyph: 'alert' },
-      { id: 'deploys', source: 'GitHub', channel: '#deploys', glyph: 'git' },
-    ],
+    // (v2.0 W7: the webhook flow diagram was cut from the page; the count lives
+    // on in the metric strip and the observability panel's one-liner.)
     // The three instrument panels beneath the constellation. `glyph` keys a lucide
     // icon in Observatory.jsx; `tags` are proper-noun capability chips (data).
     // Voiced copy: t('atelier.observatory.panels.<id>.title' / '.body').

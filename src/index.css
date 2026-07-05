@@ -73,8 +73,8 @@
      cream/parchment surfaces — sophisticated, never neon. Each mode a distinct but
      desaturated tone; `auto` has none of its own (it borrows the resolved sky). */
   --sky-auto: #7F9A6B;   /* (unused — auto inherits the resolved sky) */
-  --sky-dawn: #D18268;   /* sunrise — warm coral (rich enough to glow on cream) */
-  --sky-day:  #D89A33;   /* noon — rich golden amber (distinct warm yellow) */
+  --sky-dawn: #E58F70;   /* sunrise — fresh coral (v2.0: was muddier #D18268) */
+  --sky-day:  #EFA93F;   /* noon — clean honey gold (v2.0: was mustard #D89A33) */
   --sky-dusk: #B15A43;   /* sunset — rust terracotta (loved) */
   --sky-night: #7C84AE;  /* night — muted slate blue (loved) */
 
@@ -537,33 +537,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 @media (prefers-reduced-motion: reduce) {
   .form-field[aria-invalid="true"], .voice-summon__input[aria-invalid="true"] { animation: none; }
-}
-
-/* ===== Volume slider (music player) ===== */
-.vol-slider {
-  -webkit-appearance: none;
-  appearance: none;
-  height: 4px;
-  border-radius: 999px;
-  background: rgba(var(--color-ember-rgb), 0.25);
-  outline: none;
-  cursor: pointer;
-}
-.vol-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--color-ember);
-  box-shadow: 0 0 8px rgba(var(--color-ember-rgb), 0.5);
-}
-.vol-slider::-moz-range-thumb {
-  width: 12px;
-  height: 12px;
-  border: none;
-  border-radius: 50%;
-  background: var(--color-ember);
 }
 
 /* ===== Canvas Loader ===== */
@@ -1077,6 +1050,9 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 50%;
   background: #22C55E;
   position: relative;
+  /* Never let a flex row squash the dot into an ellipse (v2.0 M2 — the mobile
+     availability line wraps and the default flex-shrink deformed it). */
+  flex: none;
 }
 
 .status-dot::after {
@@ -1106,20 +1082,29 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ===== Chronicle: Chapter eyebrow =====
-   Deliberately quiet. The old treatment — ALL-CAPS + 0.32em tracking + a leading
-   accent rule, identical on every section — is one of the most reliable
-   "AI-generated" visual tells (see the v1.1 Restraint Pass). This reads as a
-   hand-set editorial label: natural case, modest tracking, muted tone. The
-   chapter numeral keeps a whisper of ember via `.chapter-eyebrow__no`. */
+   The classic editorial kicker — uppercase, wide-tracked, with a short leading
+   rule — restored in the v2.0 feedback pass (owner call). This is a century-old
+   print device, not an AI tell; what the Codex now bans is the *content-free,
+   default-styled* version (see common-ai-signs.md §3 L2). Ours carries story
+   weight (chapter markers, card headings) and the site's own map-line gradient. */
 .chapter-eyebrow {
   display: inline-flex;
-  align-items: baseline;
-  gap: 8px;
+  align-items: center;
+  gap: 10px;
   font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 12.5px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--color-ember);
+}
+
+.chapter-eyebrow::before {
+  content: '';
+  width: 28px;
+  height: 1px;
+  flex: none;
+  background: var(--gradient-map-line);
 }
 
 .chapter-eyebrow__no {
@@ -1244,7 +1229,11 @@ h1, h2, h3, h4, h5, h6 {
   transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
-.realm-card:hover {
+/* No blanket :hover glow — most realm-cards are static surfaces (the commit
+   graph, contact panels, the field guide), and a hover response on a
+   non-clickable box reads as a broken affordance (v2.0 W4). Interactive cards
+   opt in explicitly with .realm-card--live. */
+.realm-card--live:hover {
   border-color: rgba(var(--color-ember-rgb), 0.45);
   box-shadow: var(--shadow-card), 0 0 30px rgba(var(--color-ember-rgb), 0.08);
 }
@@ -1395,6 +1384,18 @@ h1, h2, h3, h4, h5, h6 {
   padding: 13px 15px;
   background: var(--color-card-bg);
   min-width: 0;
+  /* now a <button> (tap-to-expand, v2.0 M3) — keep the cell look */
+  text-align: left;
+  appearance: none;
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+}
+/* Tapped open: the value un-truncates and wraps in place; tap again to fold. */
+.expedition-cell.is-open .expedition-cell__value {
+  white-space: normal;
+  overflow: visible;
+  overflow-wrap: anywhere;
 }
 .expedition-cell__label {
   font-family: "Plus Jakarta Sans", sans-serif;
@@ -1659,19 +1660,10 @@ h1, h2, h3, h4, h5, h6 {
   display: flex; flex-direction: column; gap: 2px;
 }
 .voice-hall__list { display: grid; gap: 9px; grid-template-columns: 1fr; }
-.voice-hall__summon { margin-top: 12px; }
-.voice-hall__summontoggle {
-  display: flex; align-items: center; gap: 9px; width: 100%;
-  padding: 11px 14px; border-radius: 14px;
-  font-size: 13px; font-weight: 500; color: var(--color-text);
-  border: 1px dashed var(--color-card-border);
-  background: color-mix(in srgb, var(--color-primary) 40%, transparent);
-  transition: border-color 0.18s ease, background 0.18s ease;
-}
-.voice-hall__summontoggle:hover { border-color: rgba(var(--color-ember-rgb), 0.45); background: rgba(var(--color-ember-rgb), 0.06); }
-/* embedded summon (no longer a bordered right-rail) — sit flush under the toggle */
-.voice-hall__summon .voice-summon { border: none !important; background: transparent; }
-.voice-hall__summon .voice-summon__form { overflow: visible; padding: 12px 2px 4px; }
+/* The summon request is its own Hall PAGE now (v2.0 D4) — the form sits flush
+   in the body pane, no bordered aside chrome. */
+.voice-hall__body .voice-summon { border: none; background: transparent; }
+.voice-hall__body .voice-summon__form { overflow: visible; padding: 8px 2px 4px; }
 
 /* live "Now narrating" spotlight at the head of the column */
 .voice-spotlight {
@@ -2499,10 +2491,40 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.5;
   color: var(--color-text-muted);
 }
+/* The ledger rows read as a plain list on desktop; the button shell only "does"
+   something on phones (v2.0 W6): the why clamps to one line and the row taps
+   open, cued by a small rotating + (no chevron columns). */
+.atelier-entry__hit {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+  text-align: left;
+  cursor: default;
+}
+.atelier-entry__plus { display: none; }
+@media (max-width: 767px) {
+  .atelier-entry__hit { cursor: pointer; }
+  .atelier-entry__plus {
+    display: inline-block;
+    vertical-align: -1px;
+    margin-left: 7px;
+    color: var(--color-text-muted);
+    transition: transform 0.25s ease, color 0.25s ease;
+  }
+  .atelier-entry__plus[data-open] { transform: rotate(45deg); color: var(--color-ember); }
+  .atelier-entry__why:not(.is-open) {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
 
 /* built-with chips */
 
-/* the field guide — subtle interactions + how to trigger them */
+/* the field guide — title-first cards; the "how" reveals on tap (v2.0 W3).
+   The card is a real <button>, so hover/press feedback is an honest affordance. */
 .atelier-eggs {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
@@ -2510,23 +2532,24 @@ h1, h2, h3, h4, h5, h6 {
 }
 .atelier-egg {
   display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-rows: auto auto;
+  width: 100%;
+  text-align: left;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
   column-gap: 12px;
   row-gap: 4px;
-  padding: 16px;
+  padding: 14px 16px;
   border-radius: 14px;
   background: rgba(var(--color-ember-rgb), 0.04);
   border: 1px solid var(--color-card-border);
-  transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+  transition: border-color 0.3s ease, background 0.3s ease;
 }
-.atelier-egg:hover {
+.atelier-egg:hover,
+.atelier-egg[aria-expanded='true'] {
   border-color: rgba(var(--color-ember-rgb), 0.4);
   background: rgba(var(--color-ember-rgb), 0.07);
-  transform: translateY(-2px);
 }
 .atelier-egg__icon {
-  grid-row: 1 / 3;
   display: grid;
   place-items: center;
   width: 36px;
@@ -2537,13 +2560,17 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid rgba(var(--color-ember-rgb), 0.22);
 }
 .atelier-egg__title {
-  align-self: center;
   font-weight: 600;
   font-size: 14px;
   color: var(--color-text);
 }
+.atelier-egg__plus {
+  color: var(--color-text-muted);
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+.atelier-egg__plus[data-open] { transform: rotate(45deg); color: var(--color-ember); }
 .atelier-egg__how {
-  grid-column: 2;
+  grid-column: 2 / 4;
   font-size: 12.5px;
   line-height: 1.5;
   color: var(--color-text-muted);
@@ -2691,34 +2718,36 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--color-text-muted);
 }
 
-/* Mobile inline inspector — on a phone the readout beneath the orbit scrolls off
-   the top the moment you reach the chips, so the tapped event's detail is shown
-   INLINE, right under its own chip group (where the finger already is). Desktop
-   keeps the orbit readout and hides this. */
-.observatory__inline-detail { display: none; }
-.observatory__mobile-hint { display: none; }
-@media (hover: none) {
-  .observatory__readout { display: none; }
-  .observatory__mobile-hint {
-    display: block;
-    font-size: 12px;
-    line-height: 1.5;
-    color: var(--color-text-muted);
-    margin: 2px 0 4px;
-  }
-  .observatory__inline-detail {
-    display: block;
-    margin-top: 12px;
-    padding: 12px 14px;
-    border-radius: 12px;
-    background: var(--color-card-bg);
-    border: 1px solid color-mix(in srgb, var(--g, var(--color-card-border)) 45%, var(--color-card-border));
-    text-align: left;
-    animation: obsDetailIn 0.24s ease;
-  }
-  .observatory__inline-detail .observatory__readout-meta { justify-content: flex-start; }
+/* The mobile SIGNAL READOUT (v2.0 W7) — the phone's own instrument: one real
+   event at a time, auto-advancing; a tap advances (and pauses the auto-cycle).
+   Replaces the orbit + chip list, which never worked on touch. */
+.obs-signal {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  width: 100%;
+  text-align: left;
+  padding: 16px 16px 18px;
+  border-radius: 14px;
+  position: relative;
+  overflow: hidden;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
 }
-@keyframes obsDetailIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+.obs-signal__top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.obs-signal__count { font-size: 11px; color: var(--color-text-muted); }
+.obs-signal .observatory__readout-meta { justify-content: flex-start; }
+/* the cycle bar — refills each event (keyed remount restarts the animation) */
+.obs-signal__bar {
+  position: absolute;
+  left: 0; bottom: 0;
+  height: 2px;
+  background: rgba(var(--color-ember-rgb), 0.55);
+  animation: obsSignalFill 3.8s linear forwards;
+}
+.obs-signal__bar[data-paused] { animation: none; width: 100%; opacity: 0.25; }
+@keyframes obsSignalFill { from { width: 0; } to { width: 100%; } }
+@media (prefers-reduced-motion: reduce) { .obs-signal__bar { animation: none; width: 100%; opacity: 0.25; } }
 
 /* the event index — every instrumented event, grouped + always visible */
 .observatory__index { display: flex; flex-direction: column; gap: 16px; }
@@ -2764,41 +2793,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 .observatory__chip:focus-visible { outline: 2px solid var(--color-gold); outline-offset: 2px; }
 
-/* the alert path — webhook signal-flow */
-/* the alert path — an open band, not another card (a thin rule sets it apart) */
-.observatory__signals {
-  padding: 28px 0 0;
-  border-top: 1px solid var(--color-card-border);
-}
-.observatory__signals-title { font-size: 15px; font-weight: 600; color: var(--color-text); }
-.observatory__signals-caption {
-  margin-top: 4px;
-  font-size: 13px;
-  line-height: 1.55;
-  color: var(--color-text-muted);
-  max-width: 60ch;
-}
-.observatory__flows { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
-.observatory__flow {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px 10px;
-}
-.observatory__flow-stage {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  padding: 6px 11px;
-  border-radius: 9999px;
-  border: 1px solid var(--color-card-border);
-  background: var(--color-card-bg);
-  color: var(--color-text);
-}
-.observatory__flow-stage--hook { color: var(--color-text-muted); border-style: dashed; }
-.observatory__flow-stage--discord { color: var(--color-accent-secondary); border-color: var(--color-accent-secondary); }
-.observatory__flow-arrow { color: var(--color-text-muted); flex: none; }
+/* (v2.0 W7: the webhook signal-flow band + footnote were cut — low value, high
+   visual weight; the observability panel's one-liner now carries that fact.) */
 
 /* the readouts */
 .observatory__metrics {
@@ -2871,47 +2867,6 @@ h1, h2, h3, h4, h5, h6 {
   background: rgba(var(--color-ember-rgb), 0.05);
   border: 1px solid var(--color-card-border);
 }
-/* Ruled off the top, not a colored left-stripe (L3 tell — common-ai-signs.md). */
-.observatory__footnote {
-  font-size: 13.5px;
-  line-height: 1.55;
-  max-width: 72ch;
-  color: var(--color-text-muted);
-  border-top: 1px solid var(--color-card-border);
-  padding-top: 12px;
-}
-
-/* ===== Atelier — The Reckoning (beta feedback → changes) ===== */
-.atelier-reckon__list {
-  border-top: 1px solid var(--color-card-border);
-}
-.atelier-reckon__row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.25rem 2.5rem;
-  padding: 1.1rem 0;
-  border-bottom: 1px solid var(--color-card-border);
-}
-.atelier-reckon__said { color: var(--color-text-muted); font-size: 14.5px; line-height: 1.5; }
-.atelier-reckon__changed { color: var(--color-text); font-size: 14.5px; line-height: 1.5; }
-.atelier-reckon__tag {
-  display: block;
-  margin-bottom: 0.3rem;
-  font-family: ui-monospace, "SF Mono", Menlo, monospace;
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-  opacity: 0.65;
-}
-.atelier-reckon__tag--fix { color: var(--color-ember); opacity: 1; }
-.atelier-reckon__notes { font-size: 12.5px; line-height: 1.65; color: var(--color-text-muted); max-width: 72ch; }
-.atelier-reckon__ctaline { font-size: clamp(20px, 2.4vw, 30px); line-height: 1.2; color: var(--color-text); max-width: 22ch; }
-.atelier-reckon__ctarow { display: flex; flex-wrap: wrap; gap: 1rem; }
-@media (max-width: 640px) {
-  .atelier-reckon__row { grid-template-columns: 1fr; gap: 0.5rem; padding: 1rem 0; }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .obs-orbit, .obs-hub__halo { animation: none; }
   .obs-node__dot, .observatory__chip { transition: none; }
@@ -2930,6 +2885,7 @@ h1, h2, h3, h4, h5, h6 {
   .atlas__detail { display: none; }
 }
 .atlas__inline { display: none; }
+@keyframes obsDetailIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
 @media (max-width: 859px) {
   .atlas__inline {
     display: block;
@@ -2943,6 +2899,44 @@ h1, h2, h3, h4, h5, h6 {
   }
   .atlas__inline .atlas__detail-blurb { margin-top: 0; }
 }
+
+/* Mobile hotspots-first mode (v2.0 W8): the 7 curated landmarks as tappable
+   cards, the full tree behind one disclosure. */
+.atlas__mobile { display: flex; flex-direction: column; gap: 10px; }
+.atlas__spot {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  column-gap: 11px;
+  row-gap: 6px;
+  width: 100%;
+  text-align: left;
+  padding: 13px 15px;
+  border-radius: 13px;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+}
+.atlas__spot[aria-expanded='true'] { border-color: color-mix(in srgb, var(--color-gold) 34%, var(--color-card-border)); }
+.atlas__spot-glyph { color: var(--color-gold); display: inline-flex; }
+.atlas__spot-name { font-size: 13.5px; font-weight: 600; color: var(--color-text); }
+.atlas__spot-plus { color: var(--color-text-muted); transition: transform 0.25s ease; }
+.atlas__spot-plus[data-open] { transform: rotate(45deg); color: var(--color-gold); }
+.atlas__spot-why { grid-column: 1 / 4; }
+.atlas__browse {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 44px;
+  margin-top: 4px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-gold);
+}
+.atlas__browse-caret { transition: transform 0.25s ease; }
+.atlas__browse-caret[data-open] { transform: rotate(180deg); }
 
 /* the tree */
 .atlas__tree {
@@ -3205,46 +3199,49 @@ h1, h2, h3, h4, h5, h6 {
 .works-nod__card:hover .works-nod__cta { gap: 11px; }
 
 /* ===== Commit graph (Making-Of) — GitHub-style heatmap from real git history ===== */
-.commit-graph { --cell: 13px; --cell-gap: 4px; }
+/* The build-window DAY STRIP (v2.0 W5) — one large square per real day of the
+   build, oldest → newest, dense by construction. Replaces the sparse 53-week
+   calendar (a two-week build told as a year read as an empty year). */
+.commit-graph { --cell: 26px; --cell-gap: 6px; }
 .commit-graph__scroll { position: relative; overflow-x: auto; overflow-y: hidden; padding-bottom: 4px; }
-.commit-graph__grid { display: inline-block; min-width: max-content; }
-.commit-graph__months {
-  display: grid;
-  grid-auto-columns: calc(var(--cell) + var(--cell-gap));
-  grid-auto-flow: column;
-  height: 16px;
-  margin-bottom: 4px;
+.commit-strip {
+  display: inline-flex;
+  gap: var(--cell-gap);
+  min-width: max-content;
+  padding-top: 2px;
+}
+.commit-strip__day { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.commit-strip__month {
+  height: 14px;
   font-family: "Plus Jakarta Sans", sans-serif;
   font-size: 10px;
   letter-spacing: 0.06em;
+  white-space: nowrap;
   color: var(--color-text-muted);
 }
-.commit-graph__month { grid-row: 1; white-space: nowrap; }
-.commit-graph__cols { display: flex; gap: var(--cell-gap); }
-.commit-graph__col { display: flex; flex-direction: column; gap: var(--cell-gap); }
+.commit-strip__date { font-size: 10px; color: var(--color-text-muted); opacity: 0.75; }
 .commit-cell {
   width: var(--cell);
   height: var(--cell);
-  border-radius: 3px;
+  border-radius: 5px;
   background: var(--commit-l0);
   display: inline-block;
 }
-.commit-cell--pad { background: transparent; }
 .commit-cell--l0 { background: var(--commit-l0); }
 .commit-cell--l1 { background: var(--commit-l1); }
 .commit-cell--l2 { background: var(--commit-l2); }
 .commit-cell--l3 { background: var(--commit-l3); }
 .commit-cell--l4 { background: var(--commit-l4); }
 
-/* One-time reveal: cells pop in column-by-column when the grid enters view. */
-.commit-graph__grid .commit-graph__cols .commit-cell { opacity: 0; transform: scale(0.4); }
-.commit-graph__grid.is-in .commit-graph__cols .commit-cell {
+/* One-time reveal: cells pop in day-by-day when the strip enters view. */
+.commit-strip .commit-cell { opacity: 0; transform: scale(0.4); }
+.commit-strip.is-in .commit-cell {
   animation: commitPop 0.42s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   animation-delay: var(--cell-delay, 0s);
 }
 @keyframes commitPop { to { opacity: 1; transform: scale(1); } }
 @media (prefers-reduced-motion: reduce) {
-  .commit-graph__grid .commit-graph__cols .commit-cell { opacity: 1; transform: none; animation: none; }
+  .commit-strip .commit-cell { opacity: 1; transform: none; animation: none; }
 }
 
 .commit-graph__tip {
@@ -3515,19 +3512,22 @@ h1, h2, h3, h4, h5, h6 {
 /* Frosted-glass sheet — translucent so the blurred page shows through, a bright
    top rim + inner highlight for the "pane of glass" read, and a strong blur. */
 .mobile-sheet {
-  /* Frosted glass that keeps the THEME's character (no bright white wash): a
-     translucent theme-tinted pane + a heavy blur, so the blurred page — warm on
-     day, deep on night — reads through it. A faint ember glow + a subtle rim,
-     nothing that lifts it to grey. */
+  /* NEAR-OPAQUE by design (v2.0 C5): iOS Safari silently drops backdrop-filter
+     in some compositing situations (seen on /making-of), and a sheet whose
+     legibility depends on a fragile blur becomes a transparent pane over the
+     page. The surface now stands on its own; the blur is only an enhancement
+     that softens whatever tiny fraction still reads through. */
+  /* card-tint over the solid page colour → a fully opaque, theme-true surface */
   background:
     radial-gradient(130% 60% at 50% 0%, rgba(var(--color-ember-rgb), 0.05), transparent 60%),
-    color-mix(in srgb, var(--color-card-bg) 55%, transparent);
+    linear-gradient(var(--color-card-bg), var(--color-card-bg)),
+    var(--color-primary);
   border-top: 1px solid color-mix(in srgb, var(--color-text) 14%, transparent);
   box-shadow:
     0 -24px 70px rgba(0,0,0,0.42),
     inset 0 1px 0 color-mix(in srgb, var(--color-text) 12%, transparent);
-  backdrop-filter: blur(48px) saturate(1.5);
-  -webkit-backdrop-filter: blur(48px) saturate(1.5);
+  backdrop-filter: blur(24px) saturate(1.3);
+  -webkit-backdrop-filter: blur(24px) saturate(1.3);
 }
 /* Glassy cards — a translucent, THEME-tinted pane with its own blur (a second
    layer of glass), not a bright white box. */
@@ -3611,40 +3611,218 @@ h1, h2, h3, h4, h5, h6 {
    glass; the light ones must feel warm, bright and clean — a frosted CREAM, never
    the flat grey it defaulted to. A warm cream tint dominates the blur, a soft
    ember bloom warms the top, and the surfaces are crisp warm-white. ────────── */
+/* ── Light-theme (dawn/day) menu — re-graded in v2.0 (C7): the old translucent
+   frost washed to a flat grey. Now a SOLID warm parchment pane — a soft dawn
+   bloom at the top, crisp warm-white cards, and real contrast on every control,
+   so the menu reads as its own cinematic object in daylight. ────────── */
 .light .mobile-sheet {
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,251,243,0.18) 44%, transparent 74%),
-    radial-gradient(130% 58% at 50% 0%, rgba(var(--color-ember-rgb), 0.12), transparent 60%),
-    color-mix(in srgb, #FFFAF1 76%, transparent);
-  border-top: 1px solid rgba(255,255,255,0.7);
+    radial-gradient(130% 58% at 50% 0%, rgba(var(--color-ember-rgb), 0.10), transparent 58%),
+    linear-gradient(180deg, #FFFDF8 0%, #FBF4E8 100%);
+  border-top: 1px solid rgba(255,255,255,0.9);
   box-shadow:
-    0 -24px 72px rgba(120,86,52,0.18),
-    inset 0 1.5px 0 rgba(255,255,255,0.8);
+    0 -24px 72px rgba(120,86,52,0.22),
+    inset 0 1.5px 0 rgba(255,255,255,0.9);
 }
 .light .sheet-card,
 .light .menu-list {
-  background: rgba(255,253,248,0.52);
-  border-color: rgba(120,86,52,0.14);
-}
-.light .menu-row + .menu-row { border-top-color: rgba(120,86,52,0.11); }
-.light .menu-cta--outline {
-  background: rgba(255,253,248,0.55);
+  background: rgba(255,255,255,0.72);
   border-color: rgba(120,86,52,0.18);
+  box-shadow: 0 1px 3px rgba(120,86,52,0.06);
+}
+.light .menu-row + .menu-row { border-top-color: rgba(120,86,52,0.12); }
+.light .menu-cta--outline {
+  background: rgba(255,255,255,0.78);
+  border-color: rgba(120,86,52,0.22);
 }
 .light .menu-cta--filled {
-  background: rgba(var(--color-ember-rgb), 0.13);
-  border-color: rgba(var(--color-ember-rgb), 0.34);
+  background: rgba(var(--color-ember-rgb), 0.14);
+  border-color: rgba(var(--color-ember-rgb), 0.4);
 }
-/* Light dial — a warm-toned track + inner depth so the rich hue reads with
-   presence on cream (on dark it already glows against the ink). */
+/* Light dial (v2.0 follow-up) — in dawn/day the sky hues turned the liquid
+   muddy. The liquid now pours in the loved "sound is live" wash: a clean
+   ember-peach gradient, independent of the sky, on a soft warm track. */
 .light .vol-apple {
-  background: rgba(120,86,52,0.08);
-  border-color: rgba(120,86,52,0.16);
-  box-shadow: inset 0 1px 4px rgba(120,86,52,0.16);
+  background: rgba(120,86,52,0.10);
+  border-color: rgba(120,86,52,0.2);
+  box-shadow: inset 0 1px 4px rgba(120,86,52,0.18);
 }
-.light .vol-apple__fill { box-shadow: inset 0 2px 7px rgba(255,255,255,0.4), inset 0 -14px 22px -10px rgba(120,60,30,0.25); }
+.light .vol-apple__fill {
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--color-ember) 28%, white) 0%,
+    color-mix(in srgb, var(--color-ember) 46%, white) 55%,
+    color-mix(in srgb, var(--color-ember) 62%, white) 100%);
+  box-shadow: inset 0 2px 7px rgba(255,255,255,0.45);
+}
+.light .vol-apple__icon { color: #7A4A22; filter: none; }
+/* Light wheel — the rim + ball need weight against parchment (they were built
+   for ink): a deeper rim track and a crisper active label. */
+.light .theme-wheel__svg circle[stroke='var(--color-card-border)'] { stroke: rgba(120,86,52,0.26); }
+.light .theme-wheel__ball {
+  box-shadow: 0 4px 12px rgba(120,86,52,0.3), 0 0 0 4px color-mix(in srgb, var(--sky-swatch, var(--color-ember)) 14%, transparent);
+  border-color: color-mix(in srgb, var(--sky-swatch, var(--color-ember)) 55%, rgba(120,86,52,0.3));
+}
+.light .theme-wheel__name { fill: #4A3620; }
 
 @media (prefers-reduced-motion: reduce) {
   .theme-wheel__icon { transition: none; }
   .sheet-card:active { transform: none; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   v2.0 feedback pass (see docs/chronicle/V2.0-FEEDBACK-PASS.md)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Tag pill (restored, A5) — the project-stack chip. Functional taxonomy in
+   the site's own tokens; see the Codex §3 L2 for the normalized pill rule. ── */
+.tag-rune {
+  display: inline-flex;
+  align-items: center;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  padding: 5px 11px;
+  border-radius: 8px;
+  background: rgba(var(--color-ember-rgb), 0.10);
+  color: var(--color-ember);
+  border: 1px solid rgba(var(--color-ember-rgb), 0.22);
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+.tag-rune--sm { font-size: 11px; padding: 4px 9px; }
+
+/* ── Footer actions (C1) — phone: full-width ask + symmetric 3-up link row;
+   ≥sm keeps the original inline row. ── */
+.footer-actions { display: flex; flex-direction: column; align-items: stretch; gap: 18px; }
+.footer-actions__links {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 8px; align-items: center; justify-items: center;
+}
+.footer-actions__link {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  font-size: 14px; font-weight: 500;
+  min-height: 44px; width: 100%;
+}
+@media (min-width: 640px) {
+  .footer-actions { flex-direction: row; align-items: center; justify-content: center; gap: 24px; }
+  .footer-actions__primary { flex: none; }
+  .footer-actions__links { display: inline-flex; gap: 20px; }
+  .footer-actions__link { width: auto; min-height: 0; font-size: 15px; }
+}
+
+/* ── Works proof (A6, reworked in round 4) — three bare field-notes opened by
+   an ember dash. No boxes, no labels: the boxed Role/Outcome/Scope grid read
+   as a spec table and fought the plate's editorial voice. ── */
+.works-proof {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 34rem;
+}
+.works-proof__item {
+  display: flex;
+  align-items: baseline;
+  gap: 11px;
+  font-size: 14.5px;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--color-text);
+}
+.works-proof__item::before {
+  content: '—';
+  flex: none;
+  color: var(--color-ember);
+  opacity: 0.75;
+}
+.works-story__toggle {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 13px; font-weight: 600;
+  min-height: 44px;
+  color: var(--color-ember);
+}
+.works-story__caret { transition: transform 0.25s ease; }
+.works-story__caret[data-open] { transform: rotate(180deg); }
+
+/* ── Arsenal luminary suns (D3, refined per owner follow-up) — the primary
+   node's own disc breathes a soft ember glow; no extra ring element (the
+   corona ring sat visually off-center against the label). ── */
+.orbit-sun {
+  animation: sun-breathe 4.2s ease-in-out infinite;
+}
+@keyframes sun-breathe {
+  0%, 100% { box-shadow: 0 0 16px 2px rgba(var(--color-ember-rgb), 0.3), inset 0 0 10px rgba(var(--color-ember-rgb), 0.12); }
+  50%      { box-shadow: 0 0 30px 6px rgba(var(--color-ember-rgb), 0.55), inset 0 0 16px rgba(var(--color-ember-rgb), 0.2); }
+}
+.orbit-legend {
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+  margin-top: -6px;
+  font-family: ui-monospace, "SFMono-Regular", monospace;
+  font-size: 11px; letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+}
+.orbit-legend__sun {
+  width: 9px; height: 9px; border-radius: 50%; flex: none;
+  background: rgba(var(--color-ember-rgb), 0.5);
+  box-shadow: 0 0 8px rgba(var(--color-ember-rgb), 0.6);
+  animation: legend-breathe 4.2s ease-in-out infinite;
+}
+@keyframes legend-breathe {
+  0%, 100% { opacity: 0.6; }
+  50%      { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .orbit-sun, .orbit-legend__sun { animation: none; }
+}
+
+/* ── Contact panels (v2.0 rounds 3–4) — cards on desktop; on phones the cards
+   dissolve into ALTERNATING FULL-BLEED BANDS (form = band, correspondence =
+   bare page, expedition = band). The zebra rhythm is what separates the scenes
+   once the card chrome is gone — and the content gets the padding back. ── */
+.contact-plate { position: relative; }
+@media (min-width: 640px) {
+  .contact-plate {
+    border: 1px solid var(--color-card-border);
+    border-radius: 20px;
+    padding: 36px;
+  }
+  .contact-plate--card { background: var(--gradient-card); }
+}
+@media (max-width: 639px) {
+  .contact-band {
+    /* full-bleed: pull to the viewport edges, pay the page gutter back as padding */
+    margin-inline: calc(50% - 50vw);
+    padding: 30px max(24px, calc(50vw - 50%)) 34px;
+    background: var(--color-card-bg);
+    border-block: 1px solid var(--color-card-border);
+  }
+}
+
+/* ── Desktop sound control (v2.0 follow-up) — the circle morphs INTO the bar:
+   one object, one icon; a light-ember liquid rises to the volume level. ── */
+.soundpop__fill {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg,
+    rgba(var(--color-ember-rgb), 0.14) 0%,
+    rgba(var(--color-ember-rgb), 0.24) 55%,
+    rgba(var(--color-ember-rgb), 0.34) 100%);
+  transition: opacity 0.2s ease;
+  will-change: height;
+}
+.light .soundpop__fill {
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--color-ember) 24%, white) 0%,
+    color-mix(in srgb, var(--color-ember) 40%, white) 55%,
+    color-mix(in srgb, var(--color-ember) 56%, white) 100%);
+}
+
+/* ── iOS input zoom guard (C4) — Safari auto-zooms into inputs whose font-size
+   is under 16px. Enforce 16px on touch devices; desktop keeps the type scale.
+   (Deliberately NOT maximum-scale=1 — that breaks pinch-zoom, WCAG 1.4.4.) ── */
+@media (pointer: coarse) {
+  input[type='text'], input[type='email'], input:not([type]), textarea, select {
+    font-size: 16px;
+  }
 }

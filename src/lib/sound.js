@@ -417,8 +417,15 @@ const TWO_PI = Math.PI * 2;
 const GEAR_TEETH = 26;        // teeth per full needle revolution → click rate
 const GEAR_MAX_HZ = 38;       // ceiling on the tooth-click rate (rad/s can spike)
 const GEAR_FULL_SPEED = 6;    // needle rad/s at which the gear reaches full volume
+// Phone speakers sit closer to the ear and compress harder than laptop drivers
+// — the same gear level that reads subtle on a MacBook ran hot on an iPhone
+// (v2.0 M1). No web API calibrates output per device, so coarse-pointer
+// hardware gets a fixed attenuation of this one bed.
+const COARSE_GEAR_TRIM = 0.55;
+const isCoarsePointer = () =>
+  typeof window !== 'undefined' && window.matchMedia?.('(pointer: coarse)').matches;
 const watch = makeBed({
-  peak: CONFIG.beds.hero.peak,
+  peak: CONFIG.beds.hero.peak * (isCoarsePointer() ? COARSE_GEAR_TRIM : 1),
   sampleUrl: CONFIG.beds.hero.sample,
   build: () => {
     const g = ctx.createGain(); g.gain.value = 0.0001;

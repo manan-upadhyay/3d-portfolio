@@ -70,6 +70,7 @@ export default {
   arsenal: {
     subtitle: 'The tools I use across the stack — hover a skill to see how it connects.',
     coreLabel: 'Skills',
+    coreLegend: 'the larger, glowing tools are my core stack',
   },
 
   works: {
@@ -80,9 +81,21 @@ export default {
     ndaSealed: "[[nda|Under NDA]] — details limited to what's permissible.",
     chartMore: 'Show {{count}} more projects',
     furl: 'Show less',
+    fullStory: 'Full details',
     nod: 'Six projects above. The seventh is this site itself.',
     nodCta: 'See how it was built',
     // (nodCta keeps its literal wording — the doorway reads the same in plain.)
+    projects: {
+      gajaakriti: {
+        lead: 'A media-heavy studio site built so 4K galleries load fast.',
+      },
+      'royal-tiles': {
+        lead: 'Design a tile floor in the browser, preview it live, download an order-ready PDF.',
+      },
+      'advisor-portfolio': {
+        lead: 'An enterprise portfolio-analysis platform, built from scratch.',
+      },
+    },
   },
 
   contact: {
@@ -90,13 +103,7 @@ export default {
     theMessage: 'Message',
     correspondence: 'Contact',
     placeholders: {
-      message: 'Tell me about the project you want to build…',
-    },
-    messagePlaceholders: {
-      'Senior role': 'Tell me about the team, the role, and what you’re building…',
-      Contract: 'Share the scope, timeline, and what you need shipped…',
-      Collaboration: 'What should we build together? Pitch me the idea…',
-      'Just saying hi': 'Say hello — what brought you here?',
+      message: 'Tell me about the role or project — or just say hi…',
     },
     submitIdle: 'Send Message',
     submitLoading: 'Sending…',
@@ -211,13 +218,13 @@ export default {
     title: 'How this site was built',
     confession: 'The making-of, minus the mystique.',
     confessionSub:
-      'The honest version: why this site exists, how it’s built, what beta testers flagged, and what I changed. Everything below is real — a live analytics panel, the actual codebase map, the commit graph — the process itself, not screenshots of it.',
+      'How this site is built, what was cut, and the details you might miss — all real, not screenshots of a process.',
     acts: { build: 'The Build', engine: 'Infrastructure', hidden: 'Details & extras' },
     commits: {
       title: 'Commit history',
-      range: 'Straight from this repo’s git log',
+      range: 'The build window, straight from this repo’s git log',
       caption:
-        'Each square is a day I committed to this repository — the whole build, pulled directly from git. This is the real history, not a mock-up.',
+        'Each square is a day I committed to this repository — one focused burst, pulled directly from git.',
       less: 'Less',
       more: 'More',
       tip_one: '{{count}} commit',
@@ -259,12 +266,10 @@ export default {
       threejs: { title: 'Three.js and WebGL', why: 'An early version used a 3D library for depth. I removed it and recreated the effect with layered CSS, parallax, and a Canvas2D astrolabe — cutting a large dependency and keeping the initial JS bundle small.' },
       tracking: { title: 'Cookie banners, cross-session tracking and surveillance analytics', why: 'The site does measure itself — but the decision was how. PostHog runs cookieless (memory-only), fully anonymous (no accounts, no identify()), and turns off completely when Do-Not-Track is set. No consent banner, because there is nothing to consent to: no cookies, no cross-session identity, nothing sold. The analytics measure which features get used, not who uses them.' },
       componentLib: { title: 'A pre-built UI kit or template', why: 'Every component is custom-built with Tailwind and CSS variables — no component library. It is more work, but it means full control over the design and no template bloat.' },
-      statusLine: { title: 'Location/moon status line', why: 'Built and reviewed, then removed — it felt invasive, and the time-based theme already delivered the effect.' },
-      battery: { title: 'Battery readout', why: 'Removed because the Battery Status API returns inaccurate values on some platforms; unreliable data has no place in a "reads your device" panel.' },
     },
     eggs: {
       title: 'Things you might miss',
-      intro: 'A lot of the interaction here is intentionally quiet. Here’s where to find it.',
+      intro: 'The quiet details — tap one to see where it lives.',
       astrolabe: {
         title: 'Cursor-tracked needle',
         how: 'Move your cursor over the hero astrolabe — the needle tracks your pointer, and a gear sound spins at the exact speed you move it.',
@@ -326,50 +331,27 @@ export default {
       panels: {
         privacy: {
           title: 'Privacy-first by design',
-          body: 'PostHog runs cookieless and anonymous — no accounts, memory-only persistence — and disables itself when Do-Not-Track is set. No consent banner, because there’s nothing to consent to.',
+          body: 'Cookieless, anonymous, memory-only — and fully disabled when Do-Not-Track is set.',
         },
         discoverability: {
           title: 'Built to be found',
-          body: 'Five JSON-LD schemas (Person, WebSite, ProfilePage, Organization, address), Open Graph and Twitter cards, canonical URLs, and an application-name for Google’s Knowledge Panel.',
+          body: 'Five JSON-LD schemas, Open Graph cards, canonical URLs — readable by machines and humans alike.',
         },
         observability: {
-          title: 'Watched, so nothing breaks silently',
-          body: 'A zero-dependency structured logger with a production debug key, errors caught at the error boundary and pushed to a Discord channel the moment they happen, and Vercel Speed Insights tracking Core Web Vitals from real visits.',
+          title: 'Nothing breaks silently',
+          body: 'A structured logger, errors pushed to Discord as they happen, Core Web Vitals from real visits.',
         },
       },
-      webhooks: {
-        title: 'The alert path',
-        caption: 'Two webhooks notify me where I already work: PostHog posts exceptions to a Discord alerts channel, and GitHub posts every push to a deploys channel. Errors and releases reach me without a dashboard to watch.',
-        hop: 'webhook',
-      },
-      footnote: 'Thirty-three events, thirteen super-properties, five dashboards, five schemas — and not one cookie. Shipping a feature is half the job; proving it gets used is the other half.',
     },
     atlas: {
       eyebrow: 'The codebase',
       title: 'How it’s structured',
       intro: 'A guided map of the repository. Expand a folder or jump to a landmark; each file explains the decision behind it, not its source.',
       hotspots: 'Start here',
+      browseAll: 'Browse the full tree',
       prompt: 'Open a folder or pick a landmark to see the reasoning behind it.',
       why: 'Why it’s built this way',
       repoCta: 'View the source',
-    },
-    reckoning: {
-      eyebrow: 'The revision',
-      title: 'What the beta changed',
-      intro: 'v1.0 reached ~358 visitors in three days and drew 200+ comments — praise and sharp criticism. I read all of it, checked it against the analytics, and shipped a revision. The honest split:',
-      saidHead: 'They said',
-      changedHead: 'I changed',
-      items: [
-        { said: 'Looks AI-generated.', changed: 'Redesigned the eyebrow, replaced glass cards with opaque surfaces, rewrote the copy plainer, and rebuilt About as an editorial layout.' },
-        { said: 'Too much text.', changed: 'Cut visible copy by about half; detail moved behind disclosure.' },
-        { said: 'The hero doesn’t sell the developer.', changed: 'Value-first hook, an above-the-fold proof strip, and CTAs that point at the work.' },
-        { said: 'No project images.', changed: 'Real screenshots now lead the featured projects.' },
-        { said: 'Buggy scroll, confusing controls.', changed: 'Snappier scroll, native on mobile, and a label on every control.' },
-      ],
-      notes: 'Under the hood: canvas DPR capped at 2×, animation lifecycles leak-audited, reduced-motion and touch honored, AA-contrast text — and the analytics rebuilt so the next round is judged on data.',
-      ctaLine: 'If that’s the kind of product thinking you’re hiring for, let’s talk.',
-      ctaContact: 'Contact me',
-      ctaResume: 'Résumé',
     },
     offmap: {
       title: 'Away from the keyboard',
@@ -396,8 +378,7 @@ export default {
     },
     builtWith: 'Built with',
     manifesto: [
-      'Honestly, this site is less about impressing anyone and more about a habit I can’t switch off: pushing past the normal version of a thing, trying an idea I haven’t tried, using a tool I haven’t used yet. The portfolio was the excuse.',
-      'What I care about is simpler than it looks here: work that holds up under load, clients glad they worked with me, and the details most people skip. The rest of this page is just me holding myself to that in public.',
+      'This site is a habit I can’t switch off: pushing past the normal version of a thing. What I care about is work that holds up under load, and the details most people skip.',
     ],
     sign: '— Manan Upadhyay',
   },

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Lock, Info, ArrowUpRight } from 'lucide-react';
 import { useExpeditionStore, useElapsed, useVisitStore, PX_PER_METER } from '../hooks/useExpedition';
@@ -12,6 +13,7 @@ import { trackOnce } from '../lib/analytics';
 import ScrollReveal from './ScrollReveal';
 import SunArc from './SunArc';
 import Hovercard from './Hovercard';
+import ClueUnlock from './ClueUnlock';
 
 const fmtTime = (s) => {
   const m = Math.floor(s / 60);
@@ -149,13 +151,25 @@ const Sigil = ({ seed }) => {
   return <canvas ref={ref} className="sigil__canvas" aria-hidden="true" />;
 };
 
-/* One "reading" cell — mono value over a tiny uppercase label. */
-const Reading = ({ label, value, accent }) => (
-  <div className={`expedition-cell${accent ? ' expedition-cell--accent' : ''}`}>
-    <span className="expedition-cell__label">{label}</span>
-    <span className="expedition-cell__value exp-mono">{value}</span>
-  </div>
-);
+/* One "reading" cell — mono value over a tiny uppercase label. Long values
+   truncate; tapping the cell expands it in place (and again to collapse) so a
+   phone can always read the full IP / GPU string (v2.0 M3). Desktop gets the
+   full value on hover via `title`. */
+const Reading = ({ label, value, accent }) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <button
+      type="button"
+      onClick={() => setOpen((o) => !o)}
+      title={typeof value === 'string' ? value : undefined}
+      aria-expanded={open}
+      className={`expedition-cell${accent ? ' expedition-cell--accent' : ''}${open ? ' is-open' : ''}`}
+    >
+      <span className="expedition-cell__label">{label}</span>
+      <span className="expedition-cell__value exp-mono">{value}</span>
+    </button>
+  );
+};
 
 /* A labelled mini-grid of reading cells; renders nothing when it has no data. */
 const ReadGroup = ({ label, cells, modifier = '' }) => {
@@ -183,13 +197,21 @@ const VoiceConstellation = ({ sealedLine }) => {
   const setVoice = useVoiceStore((s) => s.setVoice);
   const openHall = useVoiceStore((s) => s.openHall);
   const [hint, setHint] = useState(null);
+  // The tapped node (v2.0 M4): an unlocked persona names itself in the heading;
+  // a sealed one opens the shared ClueUnlock field inline — the same typing
+  // path phones get in the Voice Hall / mobile drawer.
+  const [picked, setPicked] = useState(null);
 
   const found = unlocked.filter((id) => SEALED_VOICES.includes(id)).length;
+  const pickedMeta = picked ? voiceById(picked) : null;
+  const pickedLocked = pickedMeta ? !unlocked.includes(picked) : false;
 
   return (
     <div className="expedition-voices">
       <div className="expedition-voices__head">
-        <span className="expedition-grouplabel">{t('recap.voices.title')}</span>
+        <span className="expedition-grouplabel">
+          {pickedMeta && !pickedLocked ? pickedMeta.label : t('recap.voices.title')}
+        </span>
         <button type="button" className="expedition-voices__explore" data-cursor="hover" onClick={openHall}>
           {t('recap.voices.explore')} <ArrowUpRight size={12} />
         </button>
@@ -209,11 +231,15 @@ const VoiceConstellation = ({ sealedLine }) => {
               data-open={open}
               data-active={active}
               data-cursor="hover"
-              onClick={() => open && setVoice(id)}
+              onClick={() => {
+                if (open) { setVoice(id); setPicked(id); }
+                else setPicked((p) => (p === id ? null : id)); // toggle the clue field
+              }}
               onMouseEnter={() => setHint(open ? meta.label : meta.hint)}
               onFocus={() => setHint(open ? meta.label : meta.hint)}
               onBlur={() => setHint(null)}
               aria-label={open ? t('recap.voices.switchTo', { voice: meta.label }) : t('recap.voices.locked')}
+              aria-expanded={!open ? picked === id : undefined}
               title={open ? meta.label : meta.hint}
             >
               {open ? <span className="vc-node__glyph font-chronicle">{meta.glyph}</span> : <Lock size={12} />}
@@ -222,7 +248,16 @@ const VoiceConstellation = ({ sealedLine }) => {
         })}
       </div>
 
-      <p className="expedition-sealed font-chronicle">{hint || sealedLine}</p>
+      {/* Sealed node tapped → the type-the-answer field, right here (M4). */}
+      <AnimatePresence initial={false}>
+        {pickedLocked && (
+          <ClueUnlock key={picked} voice={pickedMeta} onUnlocked={() => setPicked(null)} />
+        )}
+      </AnimatePresence>
+
+      <p className="expedition-sealed font-chronicle">
+        {hint || (pickedLocked ? `Clue — ${pickedMeta.hint}` : sealedLine)}
+      </p>
     </div>
   );
 };
@@ -291,7 +326,9 @@ const ExpeditionRecap = () => {
 
   return (
     <ScrollReveal direction="up" className="mt-14">
-      <div ref={ref} className="realm-card expedition-log p-7 sm:p-9">
+      {/* Phones: the closing full-bleed band of the contact zebra (form = band,
+          correspondence = bare, this = band); desktop keeps the card. */}
+      <div ref={ref} className="contact-plate contact-band expedition-log">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
             <span className="chapter-eyebrow">{t('recap.title')}</span>

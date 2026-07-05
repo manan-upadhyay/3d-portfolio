@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useDragControls } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   Menu, X, Compass, Mail, Download, ChevronLeft, ChevronRight,
-  Drama, Check, Lock, ChevronDown, Plus, Info, Clapperboard, ArrowUpRight,
+  Drama, Check, Lock, ChevronDown, Plus, Info, Clapperboard, ArrowUpRight, ArrowLeft,
 } from 'lucide-react';
 import { useVoiceStore } from '../store/useVoiceStore';
 import { useSoundStore } from '../store/useSoundStore';
@@ -13,7 +13,7 @@ import { sound } from '../lib/sound';
 import { pushOverlay, popOverlay } from '../lib/uiOverlay';
 import { personalInfo, chapterList } from '../constants';
 import { voicesByCategory, SEALED_VOICES, voiceById } from '../i18n/voices';
-import { scrollToSection } from '../lib/smoothScroll';
+import { scrollToSection, requestSection, getLenis } from '../lib/smoothScroll';
 import { track } from '../lib/analytics';
 import ThemeWheel from './ThemeWheel';
 import VolumeDial from './VolumeDial';
@@ -65,10 +65,38 @@ const ExploreRow = ({ icon: Icon, label, onClick }) => (
   </button>
 );
 
+// The Atelier's own nav sections (v2.0 C5) — the making-of page gets a Navigate
+// drawer too, listing its acts instead of the Chronicle chapters. Ids match the
+// Act/section anchors in sections/Atelier.jsx; labels are voiced.
+const ATELIER_SECTIONS = [
+  { id: 'build', no: 'I', labelKey: 'atelier.acts.build' },
+  { id: 'engine', no: 'II', labelKey: 'atelier.acts.engine' },
+  { id: 'hidden', no: 'III', labelKey: 'atelier.acts.hidden' },
+  { id: 'offmap', no: '—', labelKey: 'atelier.offmap.title' },
+];
+
 // ── Navigate drawer — a scannable numbered chapter list (faster than a map plate
-// on a phone, and it never clips). ──────────────────────────────────────────────
-const NavDrawer = ({ activeId, onTravel }) => {
+// on a phone, and it never clips). On /making-of it lists the Atelier's acts. ──
+const NavDrawer = ({ activeId, onTravel, isChronicle }) => {
   const { t } = useTranslation();
+  if (!isChronicle) {
+    return (
+      <div className="flex flex-col gap-2 pb-1">
+        {ATELIER_SECTIONS.map((p) => (
+          <button key={p.id} type="button" onClick={() => onTravel(p.id)}
+            className="sheet-card flex items-center gap-3.5 h-14 px-3 text-left">
+            <span className="grid place-items-center w-8 h-8 rounded-full font-chronicle text-[13px] font-semibold flex-shrink-0"
+              style={{ color: 'var(--color-text-muted)', border: '1px solid color-mix(in srgb, var(--color-text) 18%, transparent)' }}>
+              {p.no}
+            </span>
+            <span className="block text-[14px] font-medium leading-tight" style={{ color: 'var(--color-text)' }}>
+              {t(p.labelKey)}
+            </span>
+          </button>
+        ))}
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col gap-2 pb-1">
       {chapterList.map((p) => {
@@ -228,6 +256,7 @@ const MobileMenu = ({ activeId }) => {
   const isChronicle = pathname === '/';
   const [open, setOpen] = useState(false);
   const [view, setView] = useState('main'); // main | nav | voice | summon
+  const dragControls = useDragControls(); // swipe-down close, started from the grabber
   const { enabled, unlocked } = useSoundStore();
   const soundArmed = enabled && !unlocked; // on by preference, browser gate still shut
 
@@ -250,6 +279,22 @@ const MobileMenu = ({ activeId }) => {
   };
 
   const goBack = () => setView(view === 'summon' ? 'voice' : 'main');
+
+  // Hard-lock the page while the sheet is open (v2.0 C3) — same mechanism as the
+  // Voice Hall: stop Lenis (desktop-sized touch devices) AND overflow:hidden the
+  // document so touch scroll inside the sheet can never chain to the page.
+  useEffect(() => {
+    if (!open) return undefined;
+    const lenis = getLenis();
+    lenis?.stop();
+    const root = document.documentElement;
+    const prevOverflow = root.style.overflow;
+    root.style.overflow = 'hidden';
+    return () => {
+      root.style.overflow = prevOverflow;
+      lenis?.start();
+    };
+  }, [open]);
 
   // Escape steps back a sub-view first, else closes. Reset on route change / close.
   useEffect(() => {
@@ -276,12 +321,13 @@ const MobileMenu = ({ activeId }) => {
   const close = () => setOpen(false);
   const onContact = () => {
     track('mobile_menu_cta', { target: 'contact' });
-    if (isChronicle) scrollToSection('contact');
-    else window.location.href = `mailto:${personalInfo.email}`;
     close();
+    if (isChronicle) setTimeout(() => scrollToSection('contact'), 140);
+    else { requestSection('contact'); navigate('/'); } // route home → land on Summon (v2.0 C5)
   };
   const onTravel = (id) => { track('map_travel', { id, from: 'mobile' }); close(); setTimeout(() => scrollToSection(id), 140); };
   const onMakingOf = () => { track('making_of_enter', { from: 'mobile' }); close(); navigate('/making-of'); };
+  const onBackHome = () => { track('mobile_menu_cta', { target: 'home' }); close(); navigate('/'); };
 
   const inSub = view !== 'main';
   const title = view === 'nav' ? t('nav.navigate')
@@ -346,10 +392,22 @@ const MobileMenu = ({ activeId }) => {
               className="mobile-sheet fixed bottom-0 inset-x-0 z-[58] rounded-t-3xl px-5 pt-3 pb-[64px]"
               initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }}
               transition={{ type: 'spring', stiffness: 320, damping: 34 }}
+              /* Swipe-down to dismiss (v2.0 C5) — the gesture every bottom sheet
+                 has trained users to expect. The drag starts ONLY from the header
+                 grabber (dragControls), so it never fights the scrolling lists. */
+              drag="y"
+              dragControls={dragControls}
+              dragListener={false}
+              dragConstraints={{ top: 0, bottom: 0 }}
+              dragElastic={{ top: 0, bottom: 0.6 }}
+              onDragEnd={(_, info) => { if (info.offset.y > 90 || info.velocity.y > 600) close(); }}
             >
-              {/* header — grabber (main) OR back-chevron + title (sub-view) */}
+              {/* header — grabber (main) OR back-chevron + title (sub-view). Both
+                  are the swipe-down handle: touch here and pull to dismiss. */}
               {inSub ? (
-                <div className="flex items-center gap-2 mb-4 -ml-1">
+                <div className="flex items-center gap-2 mb-4 -ml-1"
+                  style={{ touchAction: 'none' }}
+                  onPointerDown={(e) => dragControls.start(e)}>
                   <button type="button" onClick={goBack} aria-label={t('nav.menu')}
                     className="grid place-items-center w-9 h-9 rounded-full flex-shrink-0"
                     style={{ border: '1px solid var(--color-card-border)', color: 'var(--color-text)' }}>
@@ -358,7 +416,10 @@ const MobileMenu = ({ activeId }) => {
                   <span className="text-[13px] font-semibold tracking-[0.14em] uppercase" style={{ color: 'var(--color-text-muted)' }}>{title}</span>
                 </div>
               ) : (
-                <div className="mx-auto mb-5 h-1 w-10 rounded-full" style={{ background: 'var(--color-card-border)' }} aria-hidden="true" />
+                <div className="mb-5 -mx-5 px-5 pt-1 pb-2" style={{ touchAction: 'none' }}
+                  onPointerDown={(e) => dragControls.start(e)} aria-hidden="true">
+                  <div className="mx-auto h-1 w-10 rounded-full" style={{ background: 'var(--color-card-border)' }} />
+                </div>
               )}
 
               <AnimatePresence mode="wait" initial={false}>
@@ -366,12 +427,12 @@ const MobileMenu = ({ activeId }) => {
                   <motion.div key="main" initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -12 }} transition={SLIDE}
                     className="overflow-y-auto overscroll-contain" data-lenis-prevent style={{ maxHeight: '76vh' }}>
 
-                    {/* 1 · Site feel — theme wheel + volume dial, borderless so they
-                        sit directly on the sheet (clean, minimal — no captions: the
-                        wheel names the theme, the dial's fill/icon says it's sound). */}
+    {/* 1 · Site feel — dial LEFT, theme wheel RIGHT (v2.0 C2: the wheel is
+                        the richer gesture and belongs under the thumb, which rests
+                        on the right for most hands). */}
                     <div className="feel-row">
-                      <div className="feel-well"><ThemeWheel /></div>
                       <div className="feel-well"><VolumeDial /></div>
+                      <div className="feel-well"><ThemeWheel /></div>
                     </div>
 
                     <hr className="sheet-divider" />
@@ -384,21 +445,27 @@ const MobileMenu = ({ activeId }) => {
                         onClick={() => { track('mobile_menu_cta', { target: 'resume' }); close(); }} />
                     </div>
 
-                    {/* 3 · Explore — secondary, a quiet grouped list */}
+                    {/* 3 · Explore — secondary, a quiet grouped list. Navigate now
+                        exists on BOTH routes (v2.0 C5): the making-of page gets its
+                        own act list in the drawer. */}
                     <div className="menu-list mt-4">
-                      {isChronicle && (
-                        <ExploreRow icon={Compass} label={t('nav.navigate')} onClick={() => setView('nav')} />
-                      )}
+                      <ExploreRow icon={Compass} label={t('nav.navigate')} onClick={() => setView('nav')} />
                       <ExploreRow icon={Drama} label={t('nav.voice')} onClick={() => setView('voice')} />
                     </div>
 
-                    {/* 4 · Making-Of — tertiary. An extra "how it was built" page, not core
-                        to the portfolio, so it's a quiet footnote (not a peer of the above). */}
-                    {isChronicle && (
+                    {/* 4 · The other route — a quiet footnote (not a peer of the
+                        above): the making-of doorway on the Chronicle, the way home
+                        on /making-of. */}
+                    {isChronicle ? (
                       <button type="button" onClick={onMakingOf} className="menu-footlink">
                         <Clapperboard size={13} strokeWidth={1.7} aria-hidden="true" />
                         {t('atelier.eyebrow')}
                         <ArrowUpRight size={13} aria-hidden="true" />
+                      </button>
+                    ) : (
+                      <button type="button" onClick={onBackHome} className="menu-footlink">
+                        <ArrowLeft size={13} strokeWidth={1.7} aria-hidden="true" />
+                        {t('makingOf.back')}
                       </button>
                     )}
                   </motion.div>
@@ -407,7 +474,7 @@ const MobileMenu = ({ activeId }) => {
                 {view === 'nav' && (
                   <motion.div key="nav" initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 16 }} transition={SLIDE}
                     className="overflow-y-auto overscroll-contain" data-lenis-prevent style={{ maxHeight: '72vh' }}>
-                    <NavDrawer activeId={activeId} onTravel={onTravel} />
+                    <NavDrawer activeId={activeId} onTravel={onTravel} isChronicle={isChronicle} />
                   </motion.div>
                 )}
 

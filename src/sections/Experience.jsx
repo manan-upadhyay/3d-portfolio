@@ -56,7 +56,7 @@ const WaypointBody = ({ w }) => {
         </p>
       )}
 
-      <p className="chapter-eyebrow !text-[11px] !tracking-[0.04em] !gap-2 mb-2.5">{t(`experience.journey.${w.id}.chapter`)}</p>
+      <p className="chapter-eyebrow !text-[10.5px] mb-2.5">{t(`experience.journey.${w.id}.chapter`)}</p>
       <h3 className="font-chronicle font-semibold text-[clamp(24px,2.2vw,30px)] leading-[1.05]" style={{ color: 'var(--color-text)' }}>
         {t(`experience.journey.${w.id}.role`)}
       </h3>
@@ -157,16 +157,31 @@ const Experience = () => {
     return () => { el.removeEventListener('scroll', syncNav); window.removeEventListener('resize', syncNav); };
   }, [syncNav]);
 
+  // The strip owns the wheel ONLY for horizontal intent (v2.0 follow-up: a
+  // static data-lenis-prevent made the whole band a vertical-scroll dead zone —
+  // Lenis ignored deltaY over it, so the page stuttered whenever the cursor
+  // crossed the section). React's root listener fires before Lenis's window
+  // listener, so toggling the attribute per-event routes each gesture cleanly:
+  // sideways → the timeline, vertical → the page.
+  const onStripWheel = useCallback((e) => {
+    stripRef.current?.toggleAttribute('data-lenis-prevent', Math.abs(e.deltaX) > Math.abs(e.deltaY));
+  }, []);
+
   // Velocity-driven pendulum sway on the hanging cards (a spring chasing a target
   // set by scroll velocity; settles with overshoot when the strip comes to rest).
+  // The rAF loop runs ONLY while the section is on screen, and skips the style
+  // write once settled — no idle per-frame cost (v2.0 follow-up).
   useEffect(() => {
     const el = stripRef.current;
     if (!el || reduce) return undefined;
-    let raf;
+    let raf = 0;
+    let running = false;
     let prev = el.scrollLeft;
     let angle = 0;
     let angVel = 0;
+    let lastWritten = null;
     const loop = () => {
+      if (!running) return;
       const now = el.scrollLeft;
       const vel = now - prev;
       prev = now;
@@ -175,11 +190,16 @@ const Experience = () => {
       angVel *= 0.82;
       angle += angVel;
       if (vel === 0 && Math.abs(angle) < 0.008 && Math.abs(angVel) < 0.008) angle = 0;
-      el.style.setProperty('--sway', `${angle.toFixed(3)}deg`);
+      const next = angle.toFixed(3);
+      if (next !== lastWritten) { lastWritten = next; el.style.setProperty('--sway', `${next}deg`); }
       raf = requestAnimationFrame(loop);
     };
-    raf = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(raf);
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && !running) { running = true; prev = el.scrollLeft; raf = requestAnimationFrame(loop); }
+      else if (!e.isIntersecting) { running = false; cancelAnimationFrame(raf); }
+    }, { threshold: 0.05 });
+    io.observe(el);
+    return () => { running = false; cancelAnimationFrame(raf); io.disconnect(); };
   }, [reduce]);
 
   // Active card = the one centered in the strip (glow + full opacity).
@@ -249,7 +269,7 @@ const Experience = () => {
           aria-label={t('chapters.work.label')}
           aria-roledescription="carousel"
           onKeyDown={onKeyDown}
-          data-lenis-prevent
+          onWheel={onStripWheel}
         >
           <div className="exp-track">
             <div className="exp-line" aria-hidden="true" />

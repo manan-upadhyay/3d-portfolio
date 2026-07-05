@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Lock, Check, ChevronDown, Info, Feather, Plus } from 'lucide-react';
+import { X, Lock, Check, ChevronDown, ChevronLeft, ChevronRight, Info, Feather, Plus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useVoiceStore } from '../store/useVoiceStore';
 import { voicesByCategory, voiceById, SEALED_VOICES } from '../i18n/voices';
@@ -101,11 +101,14 @@ const VoiceChip = ({ v, active, locked, onSelect }) => {
 const VoiceHall = () => {
   const { t } = useTranslation();
   const { hallOpen, closeHall, voice, setVoice, isUnlocked } = useVoiceStore();
-  const [summonOpen, setSummonOpen] = useState(false);
+  // 'roster' | 'summon' — the summon request is its OWN page inside the Hall
+  // (v2.0 D4, mirroring the mobile drawer flow) with a back chevron; the header
+  // and footer stay fixed, and only the roster ever scrolls.
+  const [view, setView] = useState('roster');
 
   useEffect(() => {
     if (!hallOpen) return undefined;
-    setSummonOpen(false);
+    setView('roster');
     // Hard-lock the page while the Hall is open. Lenis drives the whole-page
     // scroll, so we stop it AND set the document to overflow:hidden — the latter
     // is the backstop that keeps native wheel from chaining up to the document
@@ -118,7 +121,15 @@ const VoiceHall = () => {
     const prevOverflow = root.style.overflow;
     root.style.overflow = 'hidden';
     pushOverlay(); // hush the hero astrolabe behind the blur
-    const onKey = (e) => { if (e.key === 'Escape') closeHall(); };
+    // Escape steps back out of the summon page first, then closes the Hall.
+    const onKey = (e) => {
+      if (e.key !== 'Escape') return;
+      setView((v) => {
+        if (v === 'summon') return 'roster';
+        closeHall();
+        return v;
+      });
+    };
     window.addEventListener('keydown', onKey);
     return () => {
       window.removeEventListener('keydown', onKey);
@@ -151,67 +162,85 @@ const VoiceHall = () => {
             {/* ambient backdrop — ember/gold aura + faint star dust */}
             <div className="voice-hall__aura" aria-hidden="true" />
 
-            {/* header — the current voice IS the header (no separate title bar),
-                so the "who narrates" answer and the picker are one clean object */}
+            {/* header — FIXED on both views. Roster: the current voice IS the
+                header. Summon: a back chevron + the request title (v2.0 D4). */}
             <div className="voice-hall__header">
-              <motion.span key={`g-${activeVoice?.id}`} className="voice-hall__crest font-chronicle"
-                initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ type: 'spring', stiffness: 320, damping: 24 }}>
-                {activeVoice ? activeVoice.glyph : <Feather size={18} />}
-              </motion.span>
-              <div className="min-w-0 flex-1">
-                <p className="voice-spotlight__eyebrow">{t('voiceHall.nowNarrating')}</p>
-                <motion.h2 key={`n-${activeVoice?.id}`} className="voice-hall__title font-chronicle"
-                  initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }}>
-                  {activeVoice ? activeVoice.label : t('voiceHall.title')}
-                </motion.h2>
-              </div>
+              {view === 'summon' ? (
+                <>
+                  <button type="button" onClick={() => setView('roster')} aria-label={t('voiceHall.request.back')} data-cursor="hover"
+                    className="grid place-items-center w-8 h-8 rounded-lg flex-shrink-0" style={{ border: '1px solid var(--color-card-border)', color: 'var(--color-text)' }}>
+                    <ChevronLeft size={16} />
+                  </button>
+                  <div className="min-w-0 flex-1">
+                    <p className="voice-spotlight__eyebrow">{t('voiceHall.request.section')}</p>
+                    <h2 className="voice-hall__title font-chronicle">{t('voiceHall.request.cta')}</h2>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <motion.span key={`g-${activeVoice?.id}`} className="voice-hall__crest font-chronicle"
+                    initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ type: 'spring', stiffness: 320, damping: 24 }}>
+                    {activeVoice ? activeVoice.glyph : <Feather size={18} />}
+                  </motion.span>
+                  <div className="min-w-0 flex-1">
+                    <p className="voice-spotlight__eyebrow">{t('voiceHall.nowNarrating')}</p>
+                    <motion.h2 key={`n-${activeVoice?.id}`} className="voice-hall__title font-chronicle"
+                      initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }}>
+                      {activeVoice ? activeVoice.label : t('voiceHall.title')}
+                    </motion.h2>
+                  </div>
+                </>
+              )}
               <button type="button" onClick={closeHall} aria-label={t('voiceHall.close')} data-cursor="hover"
                 className="grid place-items-center w-8 h-8 rounded-lg flex-shrink-0" style={{ border: '1px solid var(--color-card-border)', color: 'var(--color-text-muted)' }}>
                 <X size={15} />
               </button>
             </div>
 
-            {/* single scrolling column — roster of voices, then a quiet, collapsed
-                "Summon a voice" disclosure. data-lenis-prevent so the wheel scrolls
-                THIS pane, not the page (Lenis hijacks wheel globally). */}
-            <div className="voice-hall__body" data-lenis-prevent>
-              {groups.map((g) => (
-                <section key={g.id} className="voice-hall__group">
-                  <p className="voice-hall__grouplabel">{t(`voiceHall.categories.${g.id}`)}</p>
-                  <motion.div className="voice-hall__list" variants={STAGGER} initial="hidden" animate="show">
-                    {g.items.map((v) => (
-                      <VoiceChip key={v.id} v={v} active={voice === v.id}
-                        locked={v.locked && !isUnlocked(v.id)} onSelect={() => choose(v.id)} />
-                    ))}
-                  </motion.div>
-                </section>
-              ))}
-
-              {/* Summon — collapsed by default (the chrome that used to fill a whole
-                  right rail). One quiet line opens the request form in place. */}
-              <div className="voice-hall__summon">
-                <button type="button" onClick={() => setSummonOpen((o) => !o)} data-cursor="hover"
-                  className="voice-hall__summontoggle" aria-expanded={summonOpen}>
-                  <Plus size={14} className="flex-shrink-0" style={{ color: 'var(--color-ember)', transform: summonOpen ? 'rotate(45deg)' : 'none', transition: 'transform 0.2s ease' }} />
-                  <span className="flex-1 text-left">{t('voiceHall.request.cta')}</span>
-                  <ChevronDown size={14} className="flex-shrink-0" style={{ transform: summonOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s ease' }} />
-                </button>
-                <AnimatePresence initial={false}>
-                  {summonOpen && (
-                    <motion.div key="summon" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
-                      transition={{ type: 'spring', stiffness: 320, damping: 32 }} style={{ overflow: 'hidden' }}>
-                      <VoiceRequest />
+            {view === 'summon' ? (
+              /* The summon page — the form stands alone, always fully visible
+                 (its own pane scrolls only if a short viewport forces it). */
+              <motion.div key="summon" className="voice-hall__body" data-lenis-prevent
+                initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }}
+                transition={{ type: 'spring', stiffness: 380, damping: 34 }}>
+                <VoiceRequest />
+              </motion.div>
+            ) : (
+              /* The roster — the ONLY scrolling region of the Hall.
+                 data-lenis-prevent so the wheel scrolls THIS pane, not the page. */
+              <div className="voice-hall__body" data-lenis-prevent>
+                {groups.map((g) => (
+                  <section key={g.id} className="voice-hall__group">
+                    <p className="voice-hall__grouplabel">{t(`voiceHall.categories.${g.id}`)}</p>
+                    <motion.div className="voice-hall__list" variants={STAGGER} initial="hidden" animate="show">
+                      {g.items.map((v) => (
+                        <VoiceChip key={v.id} v={v} active={voice === v.id}
+                          locked={v.locked && !isUnlocked(v.id)} onSelect={() => choose(v.id)} />
+                      ))}
                     </motion.div>
-                  )}
-                </AnimatePresence>
+                  </section>
+                ))}
               </div>
-            </div>
+            )}
 
-            {/* footer — one quiet line: the discovery progress */}
+            {/* footer — fixed. Roster: discovery progress + the summon doorway.
+                Summon: just the way back. */}
             <div className="flex items-center gap-x-4 px-6 py-3 border-t text-[11px]"
               style={{ borderColor: 'var(--color-card-border)', color: 'var(--color-text-muted)' }}>
-              <span>{t('voiceHall.sealedHint')}</span>
-              <span className="ml-auto font-mono uppercase tracking-wider">{t('voiceHall.found', { count: discovered, total: SEALED_VOICES.length })}</span>
+              {view === 'summon' ? (
+                <button type="button" onClick={() => setView('roster')} data-cursor="hover"
+                  className="inline-flex items-center gap-1.5 font-medium" style={{ color: 'var(--color-text)' }}>
+                  <ChevronLeft size={13} /> {t('voiceHall.request.back')}
+                </button>
+              ) : (
+                <>
+                  <button type="button" onClick={() => setView('summon')} data-cursor="hover"
+                    className="inline-flex items-center gap-1.5 font-medium" style={{ color: 'var(--color-ember)' }}>
+                    <Plus size={13} /> {t('voiceHall.request.cta')} <ChevronRight size={12} style={{ color: 'var(--color-text-muted)' }} />
+                  </button>
+                  <span className="ml-auto font-mono uppercase tracking-wider">{t('voiceHall.found', { count: discovered, total: SEALED_VOICES.length })}</span>
+                </>
+              )}
             </div>
           </motion.div>
         </motion.div>

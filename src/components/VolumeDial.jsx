@@ -12,14 +12,14 @@ import { sound } from '../lib/sound';
 // capsule squashes while held (the iOS feel) and a pitched tick syncs to the drag.
 // The liquid's HUE tracks the SELECTED theme mode — the exact same value the wheel
 // paints its arc with — so the two controls always match (including on "auto").
-const W = 54;
-const H = 156;
+// `width`/`height` let the desktop SoundControl popover reuse the same instrument
+// at a smaller size (one volume UI everywhere — v2.0 D1).
 const SKY_HUE = {
   auto: 'var(--sky-auto)', dawn: 'var(--sky-dawn)', day: 'var(--sky-day)',
   dusk: 'var(--sky-dusk)', night: 'var(--sky-night)',
 };
 
-const VolumeDial = () => {
+const VolumeDial = ({ width = 54, height = 156 }) => {
   const { t } = useTranslation();
   const { enabled, volume, setVolume, setEnabled } = useSoundStore();
   // Match the wheel exactly: use the selected mode's hue, and on `auto` borrow the
@@ -74,7 +74,7 @@ const VolumeDial = () => {
     <motion.div
       ref={trackRef}
       className="vol-apple"
-      style={{ width: W, height: H, '--vol-hue': SKY_HUE[hueKey] || 'var(--color-ember)' }}
+      style={{ width, height, '--vol-hue': SKY_HUE[hueKey] || 'var(--color-ember)' }}
       animate={{ scaleX: dragging ? 1.05 : 1, scaleY: dragging ? 0.99 : 1 }}
       transition={{ type: 'spring', stiffness: 400, damping: 18 }}
       onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}

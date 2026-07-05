@@ -1,18 +1,21 @@
-// AUTO-GENERATED from `git log` — the commit history of THIS repo, the
-// subject of the Making-Of page. Regenerate by re-running the generator in
-// the task notes. Daily commit counts keyed by ISO date (non-zero days only).
+// AUTO-GENERATED from `git log --all` — the commit history of THIS repo, the
+// subject of the Making-Of page. Regenerate before every release:
+//   git log --all --pretty=%ad --date=format:%Y-%m-%d | sort | uniq -c
+// Every figure is real — the graph's honesty is the whole point (v2.0 W5:
+// faking it was explicitly refused).
+//
+// `windowStart` frames the CommitGraph to the build window (the dense burst
+// that IS this site) instead of a sparse 53-week year; the pre-window days
+// (the 2023 template origin + early sketches) stay recorded here for truth,
+// but aren't part of the "how this site was built" story.
 export const commitHistory = {
-  "total": 105,
+  "total": 107,
   "first": "2023-07-30",
-  "last": "2026-07-01",
-  "activeDays": 17,
-  "busiest": {
-    "date": "2026-06-30",
-    "count": 24
-  },
-  "longestStreak": 12,
+  "last": "2026-07-03",
+  "windowStart": "2026-06-20",
   "days": {
-    "2026-07-01": 4,
+    "2026-07-03": 1,
+    "2026-07-01": 5,
     "2026-06-30": 24,
     "2026-06-29": 10,
     "2026-06-28": 2,

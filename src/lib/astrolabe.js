@@ -283,12 +283,11 @@ export function mountAstrolabe(canvas, wrap, { bearingEl, onSpeed } = {}) {
   const ro = new ResizeObserver(setSize);
   ro.observe(wrap);
   const onMove = (e) => { mouse.x = e.clientX; mouse.y = e.clientY; };
-  // A tap aims the needle too — the key path on touch, where `pointermove` may
-  // never fire. The needle swings to wherever the visitor tapped (and the swing
-  // sounds the gear), giving mobile its own version of the cursor-tracking feel.
-  const onTap = (e) => { mouse.x = e.clientX; mouse.y = e.clientY; updateRect(); };
-  window.addEventListener('pointermove', onMove);
-  window.addEventListener('pointerdown', onTap, { passive: true });
+  // Cursor-tracking is a FINE-POINTER pleasure only. On touch, swinging the
+  // needle toward every stray tap read as a glitch, not an instrument (v2.0 M1)
+  // — so coarse pointers keep the gentle idle drift, and the explicit tap on the
+  // instrument itself (Hero's spin control) remains the one way to move it.
+  if (!coarse) window.addEventListener('pointermove', onMove);
   window.addEventListener('scroll', updateRect, { passive: true });
   window.addEventListener('resize', updateRect);
   raf = requestAnimationFrame(loop); // runs once under reduced-motion (no reschedule)
@@ -309,7 +308,6 @@ export function mountAstrolabe(canvas, wrap, { bearingEl, onSpeed } = {}) {
     cancelAnimationFrame(raf);
     ro.disconnect();
     window.removeEventListener('pointermove', onMove);
-    window.removeEventListener('pointerdown', onTap);
     window.removeEventListener('scroll', updateRect);
     window.removeEventListener('resize', updateRect);
   };

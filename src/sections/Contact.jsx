@@ -82,9 +82,7 @@ const ContactCompass = () => {
 
 const Contact = () => {
   const { t } = useTranslation();
-  const inquiries = t('contact.inquiries', { returnObjects: true });
   const [form, setForm] = useState({ name: '', email: '', message: '' });
-  const [inquiry, setInquiry] = useState(inquiries[0]);
   const honeypotRef = useRef(null); // bot trap — humans never fill this
   const submitRef = useRef(null);   // raven burst erupts from the button
   const nameRef = useRef(null);
@@ -128,18 +126,18 @@ const Contact = () => {
 
     setError('');
     setLoading(true);
-    track('contact_submit', { inquiry }); // the conversion attempt
+    track('contact_submit'); // the conversion attempt
     // Shared dispatch: posts, parses, and plays the flight/refused cue for us.
     const result = await sendRaven({
       name: form.name,
       email: form.email,
       message: form.message,
-      inquiry,
+      inquiry: 'Portfolio contact',
       company: honeypotRef.current?.value || '',
     });
     if (result.ok) {
       setSuccess(true);
-      track('contact_success', { inquiry }); // the conversion — the headline metric
+      track('contact_success'); // the conversion — the headline metric
       setForm({ name: '', email: '', message: '' });
       setTimeout(() => setSuccess(false), 6000);
     } else {
@@ -165,34 +163,21 @@ const Contact = () => {
 
       <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-8 mt-10">
         {/* ---- Message ---- */}
-        <ScrollReveal direction="up" className="realm-card p-7 sm:p-9 min-w-0 flex flex-col">
-          <span className="chapter-eyebrow">{t('contact.theMessage')}</span>
-
-          {/* inquiry chips */}
-          <div className="flex flex-wrap gap-2 mt-5 mb-7">
-            {inquiries.map((q) => {
-              const active = q === inquiry;
-              return (
-                <motion.button key={q} type="button" onClick={() => { if (q !== inquiry) track('inquiry_selected', { inquiry: q }); setInquiry(q); }} data-cursor="hover"
-                  whileTap={{ scale: 0.94 }} transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-                  className="px-3.5 py-1.5 rounded-full text-[13px] font-medium border transition-colors"
-                  style={{
-                    background: active ? 'rgba(var(--color-ember-rgb),0.14)' : 'transparent',
-                    borderColor: active ? 'rgba(var(--color-ember-rgb),0.5)' : 'var(--color-card-border)',
-                    color: active ? 'var(--color-ember)' : 'var(--color-text-muted)',
-                  }}>
-                  {q}
-                </motion.button>
-              );
-            })}
-          </div>
+        {/* Phones: a full-bleed BAND (edge-to-edge surface, no radius) so the
+            form reads as its own scene and never blends into the projects above
+            (v2.0 round 4). Desktop keeps the card. */}
+        <ScrollReveal direction="up" className="contact-plate contact-plate--card contact-band min-w-0 flex flex-col">
+          {/* v2.0 A2 — the inquiry chips are gone. Four decisions before typing a
+              word was pure friction on a form whose only job is "reach Manan":
+              three fields, one button, nothing to categorise. */}
+          <span className="chapter-eyebrow mb-7">{t('contact.theMessage')}</span>
 
           {/* noValidate: we run our own (voice-aware) validation in handleSubmit,
               so suppress the browser's native bubbles — otherwise an invalid
               type="email" value is caught natively and our custom error (and
               every voice's variant of it) never gets a chance to show. */}
           <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4 flex-1"
-            onFocus={() => trackOnce('contact_form_start', 'contact_form_start', { inquiry })}>
+            onFocus={() => trackOnce('contact_form_start', 'contact_form_start')}>
             {/* Honeypot — visually hidden, off the tab order; a filled value = bot. */}
             <input
               ref={honeypotRef}
@@ -212,7 +197,7 @@ const Contact = () => {
                 className={inputCls} style={fieldStyle('email')} aria-label="Your email" aria-required="true" />
             </div>
             <textarea ref={msgRef} name="message" rows={4} value={form.message} onChange={handleChange} aria-invalid={errorField === 'message'}
-              placeholder={`${t('contact.messagePlaceholders', { returnObjects: true })[inquiry] || t('contact.placeholders.message')} *`}
+              placeholder={`${t('contact.placeholders.message')} *`}
               autoComplete="off"
               className={`${inputCls} resize-none flex-1 min-h-[140px]`} style={inputStyle} aria-label="Your message" aria-required="true" />
 
@@ -253,7 +238,9 @@ const Contact = () => {
         </ScrollReveal>
 
         {/* ---- Correspondence ---- */}
-        <ScrollReveal direction="up" delay={0.1} className="realm-card p-7 sm:p-9 flex flex-col min-w-0">
+        {/* Phones: the BARE beat between the two bands (page background, no
+            chrome) — the alternation is what tells the sections apart. */}
+        <ScrollReveal direction="up" delay={0.1} className="contact-plate contact-plate--card flex flex-col min-w-0">
           <div className="flex items-start justify-between flex-col sm:flex-row">
             <span className="chapter-eyebrow">{t('contact.correspondence')}</span>
             <span className='mt-6 sm:mt-0 self-center sm:self-end'>

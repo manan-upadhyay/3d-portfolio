@@ -119,6 +119,7 @@ export default {
   arsenal: {
     subtitle: 'These are my many talents. Hover one — go ahead, I’ll wait. I’m great at waiting, too. That’s another one.',
     coreLabel: 'My Skillset',
+    coreLegend: 'the glowy ones are the ones I’m REALLY good at. boom.',
   },
 
   works: {
@@ -131,10 +132,12 @@ export default {
     ndaSealed: 'I’d tell you, but then I’d have to… you know. It’s [[nda|an NDA thing]]. Very official.',
     chartMore: 'Show {{count}} more hits',
     furl: 'Okay, that’s enough greatness',
+    fullStory: 'The whole saga',
     nod: 'Six hits up there. The seventh one is the website you’re looking at. Boom.',
     nodCta: 'Take the behind-the-scenes tour',
     projects: {
       gajaakriti: {
+        lead: 'A wedding studio site so fancy I almost cried. The photos load FAST.',
         description: 'A gorgeous media-heavy website and admin panel for a fancy wedding studio. Weddings! I love weddings. And the media loads fast.',
         highlights: [
           'Built a slick Next.js site — landing pages, portfolio, blogs, the works — plus an admin panel.',
@@ -144,6 +147,7 @@ export default {
         ],
       },
       'royal-tiles': {
+        lead: 'Design a floor. In a browser. Download the PDF. Tiles! Surprisingly fun.',
         description: 'An interactive tile-design tool — pick layouts, preview live, download order-ready PDFs. Tiles! Surprisingly fun.',
         highlights: [
           'Built a floor visualizer with live preview and downloadable PDF templates.',
@@ -154,6 +158,7 @@ export default {
         ],
       },
       'advisor-portfolio': {
+        lead: 'A whole Wall Street dashboard, from nothing. From NOTHING.',
         description: 'A finance dashboard for advisors, built from scratch — Next.js, Okta login, big interactive charts. Very Wall Street.',
         highlights: [
           'Built the whole frontend from scratch — design, reusable UI, protected routes, the lot.',
@@ -179,12 +184,6 @@ export default {
       name: 'Your name (or a nickname — I love nicknames)',
       email: 'Your email',
       message: 'Tell me everything. I’m a great listener. World’s best, probably.',
-    },
-    messagePlaceholders: {
-      'Senior role': 'Tell me about the team and the role — is it fun? Are they fun? Be honest.',
-      Contract: 'What do you need built, and by when? I deliver. Under-promise, over-deliver. Boom.',
-      Collaboration: 'Pitch me. I love a good pitch. Let’s make something great together.',
-      'Just saying hi': 'Hi! Hello! What’s up! This is already going great.',
     },
     submitIdle: 'Send it! Send it! Send it!',
     submitLoading: 'Sending…',
@@ -282,31 +281,12 @@ export default {
     title: 'How I Made This',
     confession: 'It passed every test but mine. And mine is the hard one.',
     confessionSub:
-      'The website was totally finished like forty saves ago. It was great. It was done. I could’ve left. But “done” is what other people settle for, and I am not other people — I’m an idea man with an eye for detail, which is two things. So I stayed and poured in another two hundred hours fixing stuff nobody would ever notice, AND I added analytics so I can PROVE people use the cool stuff. Because I notice. That’s my gift. And, occasionally, my curse. Mostly gift.',
+      'The website was done like forty saves ago. But “done” is what other people settle for — so I stayed, fixed stuff nobody would notice, and added analytics to PROVE people use the cool stuff. That’s my gift. Mostly gift.',
     acts: { build: 'How I Made It', engine: 'The Machine Room', hidden: 'Secret Stuff' },
-    reel: {
-      title: 'The Director’s Cut',
-      range: 'Jun 20 – 30 · 10 scenes',
-      caption:
-        'Grab the slider, click a scene, hit the arrow keys. Take your time. It’s art.',
-      scene: 'Scene',
-      commits: 'saves',
-      hint: 'just slide across it · click a scene · ← → to step',
-      aria: 'The movie of me building this',
-      prev: 'Previous scene',
-      next: 'Next scene',
-      scenes: {
-        foundation: { title: 'The Cold Open', blurb: 'A starfield and a hand-drawn compass thing for the top of the page. No pictures. I drew it with CODE. Boom.' },
-        canon: { title: 'Setting the Stage', blurb: 'The chapters, the little side menu, and all the smooth scrolling. The skeleton. Every great show has good bones.' },
-        realms: { title: 'My Greatest Hits', blurb: 'The fancy project cards, plus a search map you open with ⌘K. Like Google, but it’s all me.' },
-        journey: { title: 'The Origin Story', blurb: 'A sideways-scrolling timeline of my career and a spinny field of all my skills. There are a lot of skills.' },
-        voice: { title: 'The Other Mes', blurb: 'The whole site can talk in five different voices. Including this one. Especially this one.' },
-        sky: { title: 'Lights & Sound', blurb: 'Five skies that know what time it is, and little sounds the computer makes itself. No downloads. Magic.' },
-        recap: { title: 'The Creepy Part', blurb: 'A little panel that reads your computer and your city. I’m basically the NSA. A friendly NSA.' },
-        atelier: { title: 'Behind the Magic', blurb: 'This whole making-of page, the voice menu, the spinny compass, and a flock of birds when you message me.' },
-        polish: { title: 'The Final Cut', blurb: 'Making it work for everybody, making it fast, and hooking up the actual email. The boring important stuff.' },
-        observatory: { title: 'The Surveillance Van (Polite Version)', blurb: 'After it was done I added analytics so I can SEE which parts you click — but the nice kind, no cookies, totally anonymous. Plus SEO so Google knows who I am, and a secret message in the console. I think of everything.' },
-      },
+    commits: {
+      title: 'Every Time I Hit Save',
+      range: 'Straight from the repo. The REAL one.',
+      caption: 'Every square is a day I shipped. One glorious, caffeinated burst. Boom.',
     },
     stats: {
       hours: 'Hours of me',
@@ -323,7 +303,7 @@ export default {
     },
     eggs: {
       title: 'Secret Stuff I Added',
-      intro: 'I put a bunch of cool things in here that nobody notices. That ends today. Boom — here they are.',
+      intro: 'Cool things nobody notices. Tap one. Boom — secret revealed.',
       astrolabe: {
         title: 'The Spinny Compass',
         how: 'Wave your mouse over the big compass thing up top. It follows you. Like a loyal employee. And it makes a little gear noise. I did that.',
@@ -385,50 +365,27 @@ export default {
       panels: {
         privacy: {
           title: 'No Cookies. None.',
-          body: 'It’s anonymous, there’s no login, nothing’s saved between visits, and the second your browser says “don’t track me,” I don’t. No annoying cookie popup, because there’s nothing to pop up about.',
+          body: 'Anonymous, no login, nothing saved. Your browser says “don’t track me”? I don’t. Done.',
         },
         discoverability: {
           title: 'Google Knows Me',
-          body: 'Five of those fancy schema things, the link previews, the whole nine yards — so when you search me, Google puts my face in that little box on the right. The box! I’m in the box!',
+          body: 'Five fancy schema things so Google puts my face in the little box. The box!',
         },
         observability: {
           title: 'I Get Alerts',
-          body: 'There’s a logger, and when something breaks it pings my Discord — my PHONE buzzes — before you even notice. I also get speed reports from real visitors. If something breaks, I know before you do. That’s called being proactive.',
+          body: 'Something breaks, my Discord buzzes before you even notice. That’s called being proactive.',
         },
       },
-      webhooks: {
-        title: 'Stuff Pings My Phone',
-        caption: 'Two little pipes. One yells in my Discord when the site throws an error. The other yells when I push new code. I don’t check a dashboard like a chump — the news comes to ME. Boom. Webhooks. Look it up.',
-        hop: 'webhook',
-      },
-      footnote: 'Thirty-three things tracked, five dashboards, zero cookies. Anybody can build a website. I built a website AND the machine that watches it. That’s two skills. Minimum.',
     },
     atlas: {
       eyebrow: 'My Filing System',
       title: 'Where Everything Lives',
       intro: 'People think a folder is just a folder. Wrong. Every file is exactly where it should be, for a reason. Click around. I’ll explain. You’re welcome.',
       hotspots: 'The Greatest Hits',
+      browseAll: 'Open the whole filing cabinet',
       prompt: 'Click a folder or a greatest hit and I’ll tell you why I did it that way.',
       why: 'Why I Did It This Way',
       repoCta: 'See It On GitHub',
-    },
-    reckoning: {
-      eyebrow: 'The Feedback',
-      title: 'What the people said',
-      intro: 'I gave the internet my baby and the internet had NOTES. 200+ comments. I read every one — some twice, one while crying. Then I fixed the site. That’s leadership.',
-      saidHead: 'They said',
-      changedHead: 'I did',
-      items: [
-        { said: 'Looks AI-made.', changed: 'Rewrote it to sound like a person. Me. A person.' },
-        { said: 'Too many words.', changed: 'Cut half the words. The best half stayed.' },
-        { said: 'The top doesn’t sell you.', changed: 'Now it sells me. Hard. Tastefully hard.' },
-        { said: 'No project pictures.', changed: 'Added real pictures of real work.' },
-        { said: 'Scrolling’s weird, buttons are scary.', changed: 'Fixed the scroll. Labelled the buttons.' },
-      ],
-      notes: 'Also I made it faster and I did not read what DPR means but it’s capped at 2 and I feel great about it.',
-      ctaLine: 'You made it this far. We’re basically friends now. Let’s talk.',
-      ctaContact: 'Let’s be friends',
-      ctaResume: 'Résumé',
     },
     offmap: {
       title: 'The Real Me (Get Comfortable)',
@@ -455,9 +412,7 @@ export default {
     },
     builtWith: 'Made with',
     manifesto: [
-      'Okay, real talk: this isn’t about impressing anybody. I didn’t build it for a boss. I built it because I have this thing where I cannot leave “normal” alone — I have to try the idea nobody tried, push the button nobody pushed, use the tech I haven’t used yet. The website was just my excuse.',
-      'I love this stuff. The code, the puzzles, the moment a giant tangled mess finally goes “click” — I chase the problems that are way too big for me, the ones that scare me a little, because that’s where it gets fun. Fear is just fun wearing a tie.',
-      'But underneath the showmanship? I’m dead serious about four things: owning my mistakes, clients who are thrilled they picked me, work that actually holds up, and details. So many details. Everything else up there is just me proving it. Boom.',
+      'Real talk: I cannot leave “normal” alone. Underneath the showmanship I’m dead serious about work that holds up and details. So many details. Boom.',
     ],
     sign: '— Michael. I mean, Manan. (It’s Manan.)',
   },

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Github, ArrowUpRight, Lock, Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Github, ArrowUpRight, Lock, Star, ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 import { SectionWrapper } from '../hoc';
 import { projects, chapters } from '../constants';
 import { ChapterHeading, ScrollReveal, Annotated } from '../components';
@@ -140,6 +140,11 @@ const RealmPlate = ({ project, index }) => {
 
   const links = [project.live_demo_link, project.source_code_link].filter(Boolean);
   const highlights = t(`works.projects.${project.id}.highlights`, { returnObjects: true });
+  // Proof-first plate (v2.0 A6): the visible layer reads in ~5 seconds — one
+  // lead outcome line + a 3-cell proof strip + the stack pills. The prose
+  // description and the full highlight list live behind "The full story".
+  const [storyOpen, setStoryOpen] = useState(false);
+  const lead = t(`works.projects.${project.id}.lead`, { defaultValue: '' });
 
   return (
     <div ref={rootRef} className="grid lg:grid-cols-2 gap-8 lg:gap-14 items-stretch min-h-[60vh] py-10">
@@ -154,30 +159,63 @@ const RealmPlate = ({ project, index }) => {
         <h3 className="font-chronicle font-semibold leading-[0.95] text-[clamp(34px,4.5vw,56px)]" style={{ color: 'var(--color-text)' }}>
           {project.name}
         </h3>
-        <p className="mt-5 max-w-xl text-[16px] leading-[28px]" style={{ color: 'var(--color-text-muted)' }}>
-          {t(`works.projects.${project.id}.description`)}
-        </p>
+        {lead && (
+          <p className="mt-4 max-w-xl font-chronicle italic text-[clamp(17px,2vw,21px)] leading-snug" style={{ color: 'var(--color-ember)' }}>
+            {lead}
+          </p>
+        )}
 
-        {highlights?.length > 0 && (
-          <ul className="mt-5 space-y-2.5 max-w-xl">
-            {highlights.slice(0, 3).map((hgl, i) => (
-              <li key={i} className="flex gap-3 text-[14px] leading-[21px]" style={{ color: 'var(--color-text-muted)' }}>
-                <span className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: 'var(--color-gold)' }} />
-                <span><Annotated text={hgl} /></span>
-              </li>
+        {/* the proof — three bare field-notes, no boxes (v2.0 round 4: the
+            labelled Role/Outcome/Scope cells read as a spec table and forced
+            awkward taxonomy; the facts stand on their own, opened by a quiet
+            ember dash — the same editorial register as the rest of the plate) */}
+        {project.proof?.length > 0 && (
+          <ul className="works-proof mt-6">
+            {project.proof.map((cell) => (
+              <li key={cell.k} className="works-proof__item">{cell.v}</li>
             ))}
           </ul>
         )}
 
-        {/* Stack as a mono spec line, not a row of chips (Beta 1 named "pills"
-            as an AI tell). Rhymes with the hero proof strip + About stat labels. */}
-        <div className="mt-6 flex flex-wrap items-center gap-x-2.5 gap-y-1 font-mono text-[11.5px] tracking-[0.04em]" style={{ color: 'var(--color-text-muted)' }}>
+        {/* the stack — the quiet mono spec line (owner follow-up: pills next to
+            the proof strip read congested; one committed metadata motif wins) */}
+        <div className="mt-5 flex flex-wrap items-center gap-x-2.5 gap-y-1 font-mono text-[11.5px] tracking-[0.04em]" style={{ color: 'var(--color-text-muted)' }}>
           {project.tags.map((tag, i) => (
             <span key={tag.name} className="flex items-center gap-2.5">
               {i > 0 && <span aria-hidden="true" className="opacity-40" style={{ color: 'var(--color-ember)' }}>·</span>}
               <span>{tag.name}</span>
             </span>
           ))}
+        </div>
+
+        {/* depth on demand — the prose + every highlight, one tap away */}
+        <div className="mt-5 max-w-xl">
+          <button type="button" data-cursor="hover" className="works-story__toggle"
+            aria-expanded={storyOpen}
+            onClick={() => { if (!storyOpen) track('project_story_open', { project: project.name }); setStoryOpen((o) => !o); }}>
+            <ChevronDown size={14} className="works-story__caret" data-open={storyOpen || undefined} />
+            {t('works.fullStory')}
+          </button>
+          <AnimatePresence initial={false}>
+            {storyOpen && (
+              <motion.div key="story" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
+                transition={{ type: 'spring', stiffness: 320, damping: 34 }} style={{ overflow: 'hidden' }}>
+                <p className="pt-3 text-[15px] leading-[26px]" style={{ color: 'var(--color-text-muted)' }}>
+                  {t(`works.projects.${project.id}.description`)}
+                </p>
+                {highlights?.length > 0 && (
+                  <ul className="mt-4 space-y-2.5">
+                    {highlights.map((hgl, i) => (
+                      <li key={i} className="flex gap-3 text-[14px] leading-[21px]" style={{ color: 'var(--color-text-muted)' }}>
+                        <span className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: 'var(--color-gold)' }} />
+                        <span><Annotated text={hgl} /></span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {(links.length > 0 || project.isNDA) && (

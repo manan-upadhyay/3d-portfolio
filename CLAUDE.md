@@ -220,7 +220,8 @@ clean, and it looks like a *moment* — not a list.
 
 | Doc | What it governs |
 |---|---|
-| [V1.1-RELEASE-PLAN.md](docs/chronicle/V1.1-RELEASE-PLAN.md) | **Current cycle.** The v1.0→v1.1 revamp ("Restraint Pass"): goal, prioritized issues, workstreams, ROI, success metrics, expected output. Read this before starting reform work |
+| [V2.0-FEEDBACK-PASS.md](docs/chronicle/V2.0-FEEDBACK-PASS.md) | **Current cycle.** The v2.0 owner-feedback pass: per-item decisions, pushbacks (no faked commit graph), platform limitations (iOS blur/zoom), and the full change log |
+| [V1.1-RELEASE-PLAN.md](docs/chronicle/V1.1-RELEASE-PLAN.md) | The v1.0→v1.1 revamp ("Restraint Pass"): goal, prioritized issues, workstreams, ROI, success metrics, expected output |
 | [reports/](docs/chronicle/reports/) | Dated Beta-1 truth documents — [analytics](docs/chronicle/reports/analytics/2026-07-01-full-analytics-intelligence-report.md) (behavior), [feedback](docs/chronicle/reports/feedback/2026-07-01-reddit-beta-feedback.md) (perception), [combined action plan](docs/chronicle/reports/synthesis/2026-07-01-combined-beta-action-plan.md) (file-level execution detail) |
 | [common-ai-signs.md](docs/chronicle/common-ai-signs.md) | **Anti-Slop Codex** — the do-not-ship blocklist of AI-generated design tells (typography, color, layout, motion, copy) paired with our human alternatives + a §9 audit checklist. Run any section against it before "done" |
 | [LEGENDARY-ROADMAP.md](docs/chronicle/LEGENDARY-ROADMAP.md) | Planned "wonder" features — decisions, rationale, open questions, task tracking |

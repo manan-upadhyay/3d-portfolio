@@ -295,15 +295,26 @@ const FaceParticles = ({ src = '/atelier/portrait.webp' }) => {
 
     // ── mobile: a DRAGGABLE PHYSICS lens (there's no hover on touch) ────────────
     // The lens is a puck with position + velocity. Drag it over the portrait to
-    // reveal the photo; release and it falls to the baseline (floor) under gravity
-    // with a bounce, colliding with the walls like a real object. Device-tilt
-    // (gyro) rolls it around. The reveal loop runs ONLY while it's dragging /
-    // moving / tilting, then settles back to glyphs — idle cost stays ~zero.
+    // reveal the photo; release and it falls under gravity with a bounce,
+    // colliding with the walls like a real object.
+    //
+    // TILT (v2.0 C6): once the gyro is wired, the constant downward gravity is
+    // REPLACED by the tilt-derived vector — the portrait becomes a tray the
+    // phone is holding. Calibrated to the angle you held it at when tilt was
+    // enabled, so "how you hold it" is level; tilt farther/faster and the ball
+    // accelerates proportionally (real g·sinθ). A physical SHAKE (devicemotion)
+    // kicks the ball into the air. The reveal loop still runs ONLY while
+    // dragging / moving / actively tilting — idle cost stays ~zero.
     const coarse = !finePointer;
-    let physRaf = 0, physLast = 0, dragging = false, gyroOn = false;
+    let physRaf = 0, physLast = 0, dragging = false;
+    let gyroWired = false;   // listeners attached (permission granted)
+    let gyroLive = false;    // real sensor data has actually arrived (DevTools
+                             // emulation attaches listeners that never fire —
+                             // gravity must NOT switch off in that case)
     let tiltAX = 0, tiltAY = 0, lastMoveT = 0;
     const P = { x: 0, y: 0, vx: 0, vy: 0, rot: 0 };
     const G = 2600, REST = 0.52, AIR = 0.992, ROLL = 0.86;
+    const gyroActive = () => gyroLive && performance.now() - lastMoveT < 700;
     const rNow = () => lensR();
     const floorY = () => H - rNow();
     const clampX = (x) => clamp(x, rNow(), W - rNow());
@@ -324,12 +335,16 @@ const FaceParticles = ({ src = '/atelier/portrait.webp' }) => {
       physLast = now;
       const r = rNow();
       if (!dragging) {
+        // Gravity: the REAL projected vector once sensor data flows (g·sinθ of
+        // the actual device angles — upright phone = full pull down-screen, flat
+        // phone = a still marble); constant down-pull until then, so the ball
+        // always falls (v2.0 follow-up: it floated in DevTools emulation).
         P.vx += tiltAX * dt;
-        P.vy += (G + tiltAY) * dt;
+        P.vy += (gyroLive ? tiltAY : G) * dt;
         P.vx *= AIR; P.vy *= AIR;
         P.x += P.vx * dt; P.y += P.vy * dt;
-        if (P.x < r) { P.x = r; P.vx = -P.vx * REST; }
-        else if (P.x > W - r) { P.x = W - r; P.vx = -P.vx * REST; }
+        if (P.x < r) { P.x = r; P.vx = -P.vx * REST; if (Math.abs(P.vx) > 90) playCue('detent'); }
+        else if (P.x > W - r) { P.x = W - r; P.vx = -P.vx * REST; if (Math.abs(P.vx) > 90) playCue('detent'); }
         if (P.y < r) { P.y = r; P.vy = -P.vy * REST; }
         if (P.y > H - r) {
           P.y = H - r;
@@ -341,8 +356,13 @@ const FaceParticles = ({ src = '/atelier/portrait.webp' }) => {
       mx = P.x; my = P.y;
       if (formed) drawHoverFrame();
       placeLens();
-      const moving = Math.abs(P.vx) > 6 || Math.abs(P.vy) > 6 || Math.abs(P.y - floorY()) > 1;
-      if (dragging || gyroOn || moving) physRaf = requestAnimationFrame(physStep);
+      // With tilt gravity the ball may legitimately rest ANYWHERE on the tray
+      // (a level phone = a still marble), so "at the floor" is no longer part
+      // of the resting test.
+      const moving = gyroLive
+        ? (Math.abs(P.vx) > 6 || Math.abs(P.vy) > 6)
+        : (Math.abs(P.vx) > 6 || Math.abs(P.vy) > 6 || Math.abs(P.y - floorY()) > 1);
+      if (dragging || gyroActive() || moving) physRaf = requestAnimationFrame(physStep);
       else settleStop();
     };
     const kick = () => {
@@ -381,22 +401,49 @@ const FaceParticles = ({ src = '/atelier/portrait.webp' }) => {
       kick();
     };
 
-    // Device-tilt: tilt the phone to roll the puck (marble-on-a-tray).
+    // Device-tilt: the REAL projected gravity (marble-on-glass). No calibration
+    // trickery — the physics are the physics: g·sin(beta) pulls down the screen
+    // (an upright phone = a falling ball), g·sin(gamma) pulls sideways; lay the
+    // phone flat and the marble rests. Speed follows how far/fast you tip it.
     const onOrient = (e) => {
+      if (e.beta == null && e.gamma == null) return; // emulators fire empty events
       const g = e.gamma || 0, b = e.beta || 0;
-      tiltAX = G * 0.9 * Math.sin(clamp(g, -60, 60) * Math.PI / 180);
-      tiltAY = G * 0.6 * Math.sin(clamp(b - 45, -60, 60) * Math.PI / 180);
-      const active = Math.abs(g) > 3 || Math.abs(b - 45) > 5;
-      if (active) { gyroOn = true; lastMoveT = performance.now(); if (!dragging) kick(); }
-      else if (performance.now() - lastMoveT > 700) gyroOn = false; // held still → let it rest
+      gyroLive = true;
+      tiltAX = G * Math.sin(clamp(g, -80, 80) * Math.PI / 180);
+      tiltAY = G * Math.sin(clamp(b, -80, 80) * Math.PI / 180);
+      lastMoveT = performance.now();
+      if (!dragging) kick();
+    };
+    // A physical shake pops the ball into the air — impulse from the real
+    // device acceleration, so a harder shake throws it harder.
+    const onMotion = (e) => {
+      const a = e.acceleration;
+      if (!a) return;
+      const mag = Math.hypot(a.x || 0, a.y || 0, a.z || 0);
+      if (mag < 15) return; // below a deliberate shake
+      P.vx += (a.x || 0) * 55;
+      P.vy -= mag * 42; // pop UP off the tray
+      playCue('detent');
+      lastMoveT = performance.now();
+      if (!dragging) kick();
     };
     function enableGyro() {
-      if (gyroOn || typeof DeviceOrientationEvent === 'undefined') return;
-      const add = () => window.addEventListener('deviceorientation', onOrient);
-      const req = DeviceOrientationEvent.requestPermission;
-      if (typeof req === 'function') {
-        req().then((s) => { if (s === 'granted') { add(); if (gyroRef.current) gyroRef.current.style.display = 'none'; } }).catch(() => {});
-      } else { add(); if (gyroRef.current) gyroRef.current.style.display = 'none'; }
+      if (gyroWired || typeof DeviceOrientationEvent === 'undefined') return;
+      const add = () => {
+        gyroWired = true;
+        window.addEventListener('deviceorientation', onOrient);
+        window.addEventListener('devicemotion', onMotion);
+        if (gyroRef.current) gyroRef.current.style.display = 'none';
+      };
+      const reqO = DeviceOrientationEvent.requestPermission;
+      if (typeof reqO === 'function') {
+        // iOS gates both sensors behind one gesture-scoped prompt each.
+        const reqM = typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function'
+          ? DeviceMotionEvent.requestPermission() : Promise.resolve('granted');
+        Promise.all([reqO(), reqM.catch(() => 'denied')])
+          .then(([o]) => { if (o === 'granted') add(); })
+          .catch(() => {});
+      } else add();
     }
     const revealLens = () => {
       if (!coarse || !lensRef.current) return;
@@ -480,6 +527,7 @@ const FaceParticles = ({ src = '/atelier/portrait.webp' }) => {
       wrap.removeEventListener('pointermove', onPointerMove);
       wrap.removeEventListener('pointerleave', onPointerLeave);
       window.removeEventListener('deviceorientation', onOrient);
+      window.removeEventListener('devicemotion', onMotion);
       const el = lensRef.current;
       if (el) {
         el.removeEventListener('pointerdown', onLensDown);

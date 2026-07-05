@@ -117,6 +117,7 @@ export default {
   arsenal: {
     subtitle: 'My weapons. Each one field-tested in combat. Hover one to identify its known associates.',
     coreLabel: 'The Arsenal',
+    coreLegend: 'the burning ones are my primary weapons. fact.',
   },
 
   works: {
@@ -129,10 +130,12 @@ export default {
     ndaSealed: '[[nda|Classified]]. I have said too much already. This conversation is over.',
     chartMore: 'Reveal {{count}} more conquests',
     furl: 'Seal the records',
+    fullStory: 'The full report',
     nod: 'Six territories above. The seventh is the ground beneath your feet — this site.',
     nodCta: 'Review the schematics',
     projects: {
       gajaakriti: {
+        lead: 'A wedding studio’s media, delivered at superior speed. Weddings are a battlefield.',
         description: 'A media-heavy website and command center for a premium wedding studio. Media delivery: optimized. Performance: superior.',
         highlights: [
           'Constructed a Next.js site — landing pages, portfolio, blogs, admin command center.',
@@ -142,6 +145,7 @@ export default {
         ],
       },
       'royal-tiles': {
+        lead: 'Design a floor. Preview it live. Generate the order document. Precision.',
         description: 'A tactical tile-design system — select layouts, preview live, generate order-ready PDFs. Precision tooling.',
         highlights: [
           'Engineered a floor visualizer with live preview and downloadable PDF templates.',
@@ -152,6 +156,7 @@ export default {
         ],
       },
       'advisor-portfolio': {
+        lead: 'An enterprise finance platform, constructed from bare earth. The perimeter holds.',
         description: 'An advisor-facing finance platform, built from the ground up — Next.js, Okta authentication, Highcharts. Enterprise-grade.',
         highlights: [
           'Built the entire frontend from scratch — architecture, reusable UI, route protection, delivery.',
@@ -177,12 +182,6 @@ export default {
       name: 'State your name',
       email: 'State your email',
       message: 'State your business. Be specific. Be honest. I will know.',
-    },
-    messagePlaceholders: {
-      'Senior role': 'Describe the team, the rank, and the mission. I will assess your worthiness.',
-      Contract: 'Specify scope, timeline, and deliverables. Ambiguity is the enemy.',
-      Collaboration: 'Propose the alliance. State the terms. No surprises.',
-      'Just saying hi': 'Identify yourself and state your intent.',
     },
     submitIdle: 'Transmit',
     submitLoading: 'Transmitting…',
@@ -280,31 +279,12 @@ export default {
     title: 'How This Was Constructed',
     confession: 'It met every standard. None of them were mine. Mine are higher.',
     confessionSub:
-      'The site was operational and presentable approximately forty commits ago. It satisfied every external standard. External standards are for personnel who require supervision. I do not. I held it to the Schrute standard — which is absolute — and committed an additional two hundred hours to details no inspector would ever detect, because I detect them. I also installed surveillance: anonymous, cookieless telemetry that confirms which systems are in use. My eye misses nothing. A bear can smell a beehive from three miles. I can smell a misaligned pixel from my desk. Both facts are relevant.',
+      'The site was presentable forty commits ago. External standards are for personnel who require supervision. I held it to the Schrute standard — absolute — and I installed the surveillance to prove which systems are used. Fact.',
     acts: { build: 'The Construction', engine: 'The Engine Room', hidden: 'Concealed Systems' },
-    reel: {
-      title: 'The Surveillance Reel',
-      range: 'Jun 20 – 30 · 10 operations',
-      caption:
-        'This footage does not advance on its own. Drag the marker, select a frame, or use the arrow keys. A leader controls the playback. Proceed.',
-      scene: 'Operation',
-      commits: 'commits',
-      hint: 'glide across to scrub · select a frame · ← → to advance',
-      aria: 'The build, operation by operation',
-      prev: 'Previous operation',
-      next: 'Next operation',
-      scenes: {
-        foundation: { title: 'Establish the Perimeter', blurb: 'A starfield and a hand-drawn Canvas2D astrolabe. Zero images. Constructed entirely from code. Efficient.' },
-        canon: { title: 'Chain of Command', blurb: 'The chapter structure, the side-rail, and the scroll choreography. Order. Hierarchy. Without it, chaos.' },
-        realms: { title: 'Territories Secured', blurb: 'The cinematic project plates and a searchable ⌘K map of all terrain. A leader knows the map.' },
-        journey: { title: 'Service Record Deployed', blurb: 'A pinned horizontal career timeline and an interactive orbital skill field. Documented. Verifiable.' },
-        voice: { title: 'Multiple Identities', blurb: 'A full i18next layer. The site speaks in five voices. I am fluent in all of them. Including beets.' },
-        sky: { title: 'Sky & Audio Systems', blurb: 'Five time-aware skies via SunCalc, and a Web Audio cue system generated live. Zero bytes downloaded. Resourceful.' },
-        recap: { title: 'Visitor Reconnaissance', blurb: 'A client-side panel that scans your device and uplink and pins your position. Nothing exfiltrated. This time.' },
-        atelier: { title: 'The Schematics', blurb: 'This making-of, the Voice Hall, the free-spin alidade, and a flock of ravens dispatched on send.' },
-        polish: { title: 'Final Inspection', blurb: 'Accessibility, reduced-motion protocols, a performance sweep, and the live transmission relay. No loose ends.' },
-        observatory: { title: 'The Surveillance Apparatus', blurb: 'After deployment I installed the watch: anonymous, cookieless telemetry confirming which systems are used, structured-data SEO so the search engines file me correctly, and a logger that reports failures the instant they occur. A leader monitors everything.' },
-      },
+    commits: {
+      title: 'The Operations Log',
+      range: 'Extracted directly from the repository. Verified.',
+      caption: 'Every square is a day of committed operations. One disciplined campaign. Fact.',
     },
     stats: {
       hours: 'Hours deployed',
@@ -321,7 +301,7 @@ export default {
     },
     eggs: {
       title: 'Concealed Features. A Briefing.',
-      intro: 'Most of these systems are hidden. A superior operative finds them. Here is your intelligence. Memorize it. Then do NOT destroy this list — we worked hard on it.',
+      intro: 'Hidden systems. Tap an entry to receive its intelligence. Memorize it.',
       astrolabe: {
         title: 'The Tracking Alidade',
         how: 'Move your cursor across the astrolabe. The needle pursues it without mercy. A gear sound matches its speed exactly. Precision. Like a falcon.',
@@ -383,50 +363,27 @@ export default {
       panels: {
         privacy: {
           title: 'Anonymous. By Protocol.',
-          body: 'No accounts. No cookies. Nothing retained between visits. The instant a browser signals Do-Not-Track, surveillance ceases. No consent banner is deployed, because there is nothing to consent to. Discipline.',
+          body: 'No accounts. No cookies. Nothing retained. Do-Not-Track ceases surveillance instantly. Discipline.',
         },
         discoverability: {
           title: 'Correctly Filed',
-          body: 'Five structured schemas — Person, WebSite, ProfilePage, Organization, address — plus link previews and a designated application-name, so the search engines classify me with precision. A record must be unambiguous.',
+          body: 'Five structured schemas and link previews — the search engines classify me with precision.',
         },
         observability: {
           title: 'No Failure Goes Unreported',
-          body: 'A structured logger, exceptions captured and dispatched to a Discord channel automatically the instant they occur, and Core Web Vitals measured from genuine field traffic. When a system falters, I am notified first. Always first.',
+          body: 'Exceptions dispatched to Discord the instant they occur. I am notified first. Always first.',
         },
       },
-      webhooks: {
-        title: 'The Chain of Command',
-        caption: 'Two webhooks report directly to me. PostHog transmits every exception to a Discord alerts channel; GitHub transmits every push to a deploys channel. I do not patrol a dashboard awaiting bad news. The news reports to me.',
-        hop: 'webhook',
-      },
-      footnote: 'Thirty-three events. Thirteen tags. Five boards. Zero cookies. Building the site is competence. Building the apparatus that watches the site is command.',
     },
     atlas: {
       eyebrow: 'The Filing Protocol',
       title: 'Every File In Its Place',
       intro: 'A disorganised codebase is a disorganised mind. Mine is neither. Inspect the structure; each file is positioned by doctrine, and the doctrine is sound.',
       hotspots: 'Critical Assets',
+      browseAll: 'Inspect the entire structure',
       prompt: 'Select a directory or a critical asset. The reasoning will be disclosed.',
       why: 'The Justification',
       repoCta: 'Inspect The Source',
-    },
-    reckoning: {
-      eyebrow: 'The Audit',
-      title: 'Weaknesses, identified and eliminated',
-      intro: 'Beta released. 200+ critiques received. A lesser man would wither. I catalogued every one, cross-referenced the telemetry, and corrected the record. Fact:',
-      saidHead: 'Complaint',
-      changedHead: 'Correction',
-      items: [
-        { said: 'Looks AI-generated.', changed: 'Purged the tells. This was authored by a human. That human is me.' },
-        { said: 'Excessive text.', changed: 'Reduced by half. Every surviving word earns its place.' },
-        { said: 'The hero underperforms.', changed: 'Rebuilt to state fact on the first screen: role, stack, proof.' },
-        { said: 'No project images.', changed: 'Evidence submitted. As in a court of law.' },
-        { said: 'Scroll and controls confuse.', changed: 'Scroll corrected. Every control now labelled.' },
-      ],
-      notes: 'Performance audited, leaks eliminated, DPR capped at 2, accessibility honored. A Schrute does not ship a memory leak.',
-      ctaLine: 'You have reached the end. This indicates competence. Contact me.',
-      ctaContact: 'Contact HQ',
-      ctaResume: 'Résumé',
     },
     offmap: {
       title: 'The Man Behind the Manager',
@@ -453,9 +410,7 @@ export default {
     },
     builtWith: 'Constructed with',
     manifesto: [
-      'A clarification regarding motive. This was not constructed to impress a recruiter. That is a fortunate side effect, like the manure on a beet farm. It was constructed because I possess an unrelenting compulsion to surpass the ordinary specification — to test a concept untested, to deploy technology I have not yet subjugated. The site was merely the proving ground.',
-      'I derive genuine satisfaction from this work: the logic, the problem, the precise instant a chaotic system submits to order. I pursue problems large enough to threaten me, because a threat sharpens a man. Comfort is how the body atrophies. The same is true of the mind.',
-      'Beneath the discipline, four principles are non-negotiable: accountability — I answer for everything; a client who is genuinely satisfied — I accept no other outcome; work that withstands assault; and attention to detail so total it borders on surveillance. Everything above is simply proof. Fact.',
+      'I possess an unrelenting compulsion to surpass the ordinary specification. Beneath the discipline: work that withstands assault, and attention to detail so total it borders on surveillance. Fact.',
     ],
     sign: '— Dwight K. Schrute. (Manan. It is Manan.)',
   },

@@ -200,24 +200,44 @@ const OrbitalField = () => {
                     data-cursor="hover" aria-label={node.name}
                     onMouseEnter={() => enter(node.cat, node.key)} onMouseLeave={leave}
                     onFocus={() => enter(node.cat, node.key)} onBlur={leave}
-                    className="group grid place-items-center rounded-full transition-opacity duration-300"
+                    /* `relative` is load-bearing: the disc span is `absolute inset-0`
+                       and, without it, resolved against the 0×0 orbit wrapper —
+                       every node's disc (and the core highlight) rendered at 0px.
+                       Pre-existing; surfaced by the v2.0 "can't see the cores" note. */
+                    className="group relative grid place-items-center rounded-full transition-opacity duration-300"
                     style={{ width: node.size, height: node.size, marginLeft: -node.size / 2, marginTop: -node.size / 2,
                       opacity: dim ? 0.22 : 1,
                       animation: `${nodeAnim} ${ring.dur}s linear infinite`, animationPlayState: paused ? 'paused' : 'running' }}
                   >
-                    <span className="absolute inset-0 rounded-full realm-card group-hover:scale-[1.18]"
-                      style={{ transition: 'transform 0.45s cubic-bezier(0.34,1.56,0.64,1), border-color 0.3s ease, background 0.3s ease',
-                        ...(node.primary ? { borderColor: 'rgba(var(--color-ember-rgb),0.5)' } : {}),
-                        ...(inActiveCat ? { background: 'var(--color-card-bg)' } : {}) }} />
+                    {/* Luminary sun (v2.0 D3, refined ×2) — the primary's disc is
+                        unmistakably lit: a warm ember WASH fills it, a strong
+                        ember ring holds it, and the whole body breathes a glow
+                        (.orbit-sun). Visible on cream and on ink alike; the
+                        secondaries stay quiet moons. */}
+                    <span className={`rounded-full realm-card group-hover:scale-[1.18]${node.primary ? ' orbit-sun' : ''}`}
+                      /* position + radius are INLINE on purpose: .realm-card sits
+                         later in the cascade and silently beat the Tailwind
+                         `absolute` (disc rendered 0-sized since this section
+                         shipped) and `rounded-full` (squircle, not a planet). */
+                      style={{ position: 'absolute', inset: 0, borderRadius: '9999px',
+                        transition: 'transform 0.45s cubic-bezier(0.34,1.56,0.64,1), border-color 0.3s ease, background 0.3s ease',
+                        ...(node.primary ? {
+                          borderColor: 'rgba(var(--color-ember-rgb),0.7)',
+                          borderWidth: 1.5,
+                          background: 'radial-gradient(circle at 34% 30%, rgba(var(--color-ember-rgb),0.26), rgba(var(--color-ember-rgb),0.1) 70%)',
+                        } : {}),
+                        ...(inActiveCat && !node.primary ? { background: 'var(--color-card-bg)' } : {}) }} />
                     {logo ? (
                       <img src={logo} alt="" className="relative object-contain" style={{ width: glyph, height: glyph }} />
                     ) : (
                       <Webhook size={glyph - 2} strokeWidth={1.6} className="relative" style={{ color: 'var(--color-ember)' }} />
                     )}
-                    <span className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap text-[10.5px] font-medium pointer-events-none transition-all duration-300"
+                    <span className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap font-medium pointer-events-none transition-all duration-300"
                       style={{ top: '100%', marginTop: 5,
-                        color: active ? 'var(--color-ember)' : 'var(--color-text-muted)',
-                        opacity: dim ? 0.3 : active ? 1 : 0.74,
+                        fontSize: node.primary ? 11.5 : 10.5,
+                        fontWeight: node.primary ? 600 : 500,
+                        color: active || node.primary ? 'var(--color-ember)' : 'var(--color-text-muted)',
+                        opacity: dim ? 0.3 : active ? 1 : node.primary ? 0.95 : 0.6,
                         ...(inActiveCat ? { background: 'var(--color-primary)', padding: '1px 7px', borderRadius: 6 } : {}) }}>
                       {node.short}
                     </span>
@@ -303,7 +323,13 @@ const Tech = () => {
       </p>
 
       {orbital ? (
-        <div className="mt-6"><OrbitalField /></div>
+        <div className="mt-6">
+          <OrbitalField />
+          {/* The one line that decodes the field: brightness = mastery (v2.0 D3). */}
+          <p className="orbit-legend" aria-hidden="true">
+            <span className="orbit-legend__sun" /> {t('arsenal.coreLegend')}
+          </p>
+        </div>
       ) : (
         <Clusters />
       )}

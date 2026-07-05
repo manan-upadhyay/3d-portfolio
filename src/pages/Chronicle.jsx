@@ -2,9 +2,8 @@ import { lazy, Suspense, useState, useEffect, useRef } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import Hero from '../sections/Hero';
 import { ErrorBoundary, SideRail, MapOverlay, StickyCta } from '../components';
-import { personalInfo } from '../constants';
 import { useExpedition } from '../hooks/useExpedition';
-import { restoreScroll, scrollToTop } from '../lib/smoothScroll';
+import { restoreScroll, consumeSectionRequest } from '../lib/smoothScroll';
 import { sound } from '../lib/sound';
 import { track, trackOnce } from '../lib/analytics';
 
@@ -31,8 +30,13 @@ const Chronicle = () => {
   const [mapOpen, setMapOpen] = useState(false);
   useExpedition(); // accumulate session scroll distance → the Phase 5 recap
 
-  // Returning from the Atelier: drop the visitor back at the doorway they left.
-  useEffect(() => restoreScroll(), []);
+  // Returning from the Atelier: an explicit destination (e.g. "Contact" tapped
+  // on /making-of) wins; otherwise drop the visitor back at the doorway they left.
+  useEffect(() => {
+    const cancelRequest = consumeSectionRequest();
+    const cancelRestore = restoreScroll();
+    return () => { cancelRequest(); cancelRestore(); };
+  }, []);
 
   // Map open / close whoosh — fire on transitions only (skip the initial mount).
   const mapWasOpen = useRef(false);
@@ -67,16 +71,6 @@ const Chronicle = () => {
   return (
     <>
       <SideRail activeId={activeId} onOpenMap={() => setMapOpen(true)} visible={activeId !== 'origin'} />
-      {/* Desktop wordmark — a real name-based brand mark, distinct from the map
-          icon (Beta 1: "thought the icon is the logo"). Fades in once past the
-          hero, where the giant name already carries identity. Clicks home.
-          (On mobile the map lives in the MobileMenu; no separate map button.) */}
-      <button onClick={() => scrollToTop()} data-cursor="hover"
-        aria-label={`${personalInfo.name} — back to top`} title={personalInfo.name}
-        className={`hidden md:block fixed top-6 left-6 z-40 font-chronicle text-[15px] font-semibold tracking-tight transition-opacity duration-500 ${activeId !== 'origin' ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
-        style={{ color: 'var(--color-text)' }}>
-        {personalInfo.name}
-      </button>
       <MapOverlay open={mapOpen} onClose={() => setMapOpen(false)} activeId={activeId} />
       <StickyCta activeId={activeId} />
 

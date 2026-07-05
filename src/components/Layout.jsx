@@ -7,7 +7,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { useThemeStore } from '../store/useThemeStore';
 import { useVoiceStore } from '../store/useVoiceStore';
-import { useSmoothScroll, getLenis, scrollToSection } from '../lib/smoothScroll';
+import { useSmoothScroll, getLenis, scrollToSection, requestSection } from '../lib/smoothScroll';
 import { useActiveSection } from '../hooks/useActiveSection';
 import { useEngagementAnalytics } from '../hooks/useEngagementAnalytics';
 import { useVisitStore } from '../hooks/useExpedition';
@@ -138,27 +138,32 @@ const Layout = () => {
             {t('footer.closeSub')}
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-5 gap-y-3">
+          {/* Mobile gets its own composition (v2.0 feedback: the wrapping row read
+              congested + asymmetric on phones): a full-width primary ask, then a
+              symmetric 3-up row of quiet links. Desktop keeps the inline row. */}
+          <div className="footer-actions mt-8">
             <button
-              type="button" data-cursor="hover" className="btn-primary"
-              onClick={() => { track('footer_cta', { target: 'contact' }); if (pathname === '/') scrollToSection('contact'); else navigate('/'); }}>
+              type="button" data-cursor="hover" className="btn-primary footer-actions__primary"
+              onClick={() => { track('footer_cta', { target: 'contact' }); if (pathname === '/') scrollToSection('contact'); else { requestSection('contact'); navigate('/'); } }}>
               {t('footer.getInTouch')}
             </button>
-            <a href={personalInfo.resumeLink} download={summon.resumeFileName} data-cursor="hover"
-              onClick={() => track('footer_cta', { target: 'resume' })}
-              className="inline-flex items-center gap-2 text-[15px] font-medium link-hover" style={{ color: 'var(--color-text)' }}>
-              <Download size={15} /> {t('footer.resume')}
-            </a>
-            <a href={personalInfo.linkedin} target="_blank" rel="noopener noreferrer" data-cursor="hover"
-              onClick={() => track('footer_cta', { target: 'linkedin' })}
-              className="inline-flex items-center gap-2 text-[15px] font-medium link-hover" style={{ color: 'var(--color-text-muted)' }}>
-              <Linkedin size={15} /> LinkedIn
-            </a>
-            <a href={personalInfo.github} target="_blank" rel="noopener noreferrer" data-cursor="hover"
-              onClick={() => track('footer_cta', { target: 'github' })}
-              className="inline-flex items-center gap-2 text-[15px] font-medium link-hover" style={{ color: 'var(--color-text-muted)' }}>
-              <Github size={15} /> GitHub
-            </a>
+            <div className="footer-actions__links">
+              <a href={personalInfo.resumeLink} download={summon.resumeFileName} data-cursor="hover"
+                onClick={() => track('footer_cta', { target: 'resume' })}
+                className="footer-actions__link link-hover" style={{ color: 'var(--color-text)' }}>
+                <Download size={15} /> {t('footer.resume')}
+              </a>
+              <a href={personalInfo.linkedin} target="_blank" rel="noopener noreferrer" data-cursor="hover"
+                onClick={() => track('footer_cta', { target: 'linkedin' })}
+                className="footer-actions__link link-hover" style={{ color: 'var(--color-text-muted)' }}>
+                <Linkedin size={15} /> LinkedIn
+              </a>
+              <a href={personalInfo.github} target="_blank" rel="noopener noreferrer" data-cursor="hover"
+                onClick={() => track('footer_cta', { target: 'github' })}
+                className="footer-actions__link link-hover" style={{ color: 'var(--color-text-muted)' }}>
+                <Github size={15} /> GitHub
+              </a>
+            </div>
           </div>
 
           {/* The quiet, always-reachable doorway to the Atelier (hidden while there). */}

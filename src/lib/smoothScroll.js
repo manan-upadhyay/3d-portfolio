@@ -92,6 +92,30 @@ export const rememberScroll = () => { rememberedY = window.scrollY; };
  * scroll is actually applied, so React StrictMode's double-invoked mount effect
  * (dev) can't swallow it on the first pass.
  */
+// Cross-route section handoff (v2.0 C5): "Contact" tapped on /making-of must
+// land on the Chronicle's contact section — but that section is lazy-loaded, so
+// the caller can't scroll right after navigate(). Request it here; the
+// Chronicle consumes it on mount and polls until the anchor exists.
+let requestedSection = null;
+export const requestSection = (id) => { requestedSection = id; };
+
+export const consumeSectionRequest = () => {
+  if (!requestedSection) return () => {};
+  const id = requestedSection;
+  requestedSection = null;
+  rememberedY = null; // the explicit destination beats the remembered position
+  let raf = 0;
+  let tries = 0;
+  const step = () => {
+    const el = document.getElementById(id);
+    if (el) { scrollToSection(id); return; }
+    if (tries++ > 80) return; // ~1.3s of frames — give up quietly
+    raf = requestAnimationFrame(step);
+  };
+  raf = requestAnimationFrame(step);
+  return () => cancelAnimationFrame(raf);
+};
+
 export const restoreScroll = () => {
   if (rememberedY == null) return () => {};
   const y = rememberedY;
