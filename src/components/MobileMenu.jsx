@@ -309,6 +309,12 @@ const MobileMenu = ({ activeId }) => {
   }, [open, view]);
   useEffect(() => { setOpen(false); }, [pathname]);
   useEffect(() => { if (!open) setView('main'); }, [open]);
+  // The Atelier field guide opens this sheet on mobile (sky/theme lives here).
+  useEffect(() => {
+    const openMenu = () => setOpen(true);
+    window.addEventListener('ui:open-menu', openMenu);
+    return () => window.removeEventListener('ui:open-menu', openMenu);
+  }, []);
   // While the sheet is open it sits IN FRONT of the hero — register it as an overlay
   // so the astrolabe goes dormant (frozen needle, silent gear) behind it.
   useEffect(() => {

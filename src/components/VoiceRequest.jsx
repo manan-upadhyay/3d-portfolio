@@ -19,15 +19,20 @@ const VoiceRequest = () => {
   const [email, setEmail] = useState('');
   const [note, setNote] = useState('');
   const [state, setState] = useState('idle'); // idle | sending | done | error
+  const [errorKey, setErrorKey] = useState('persona'); // which specific error to show
   const sendRef = useRef(null);     // the raven flock erupts from the Send button…
   const originRef = useRef(null);   // …whose centre we capture before it swaps out
   const personaRef = useRef(null);
   const emailRef = useRef(null);
 
+  // One error at a time, and it names EXACTLY what's wrong — only the voice is
+  // required, so a missing email must never read as "email required".
+  const fail = (key, ref) => { setErrorKey(key); playCue('error'); setState('error'); ref?.current?.focus(); };
+
   const submit = async (e) => {
     e.preventDefault();
-    if (!persona.trim()) { playCue('error'); setState('error'); personaRef.current?.focus(); return; }
-    if (email.trim() && !EMAIL_RE.test(email)) { playCue('error'); setState('error'); emailRef.current?.focus(); return; }
+    if (!persona.trim()) { fail('persona', personaRef); return; }
+    if (email.trim() && !EMAIL_RE.test(email)) { fail('email', emailRef); return; }
     // Capture the button's centre now — the form swaps to the done panel on
     // success, unmounting the button before the burst can read its position.
     const r = sendRef.current?.getBoundingClientRect();
@@ -42,6 +47,7 @@ const VoiceRequest = () => {
       company: '',
     });
     track(result.ok ? 'voice_summon_success' : 'voice_summon_error');
+    if (!result.ok) setErrorKey('failed'); // network/send failure, not a field problem
     setState(result.ok ? 'done' : 'error');
   };
 
@@ -67,7 +73,7 @@ const VoiceRequest = () => {
             {/* Intro line ↔ error share one slot at the top, so an error is seen
                 instantly (no scrolling) and never grows the form past the modal. */}
             {state === 'error'
-              ? <RavenNotice type="error">{t('voiceHall.request.error')}</RavenNotice>
+              ? <RavenNotice type="error">{t(`voiceHall.request.errors.${errorKey}`)}</RavenNotice>
               : <p className="voice-summon__lede">{t('voiceHall.request.ctaSub')}</p>}
 
             <label className="voice-summon__field">

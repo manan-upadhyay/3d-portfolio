@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useReducedMotion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { ScanSearch } from 'lucide-react';
 import { playCue } from '../lib/sound';
 
@@ -38,6 +39,7 @@ const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const easeOutCubic = (x) => 1 - Math.pow(1 - x, 3);
 
 const FaceParticles = ({ src = '/atelier/portrait.webp' }) => {
+  const { t } = useTranslation();
   const reduce = useReducedMotion();
   const wrapRef = useRef(null);
   const canvasRef = useRef(null);
@@ -60,6 +62,16 @@ const FaceParticles = ({ src = '/atelier/portrait.webp' }) => {
     let running = false;     // is the rAF loop currently scheduled?
     let formed = false;      // has assembly finished (→ freeze, never loop again)?
     let onScreen = false;
+    // Lens "drag me" hint: dismissed on the first interaction, then re-invited
+    // after 30s of stillness (R6) — a returning explorer who forgot it's
+    // draggable gets the cue again. Only re-shows while on screen and formed.
+    let hintIdleTimer = 0;
+    const showHint = () => { if (hintRef.current && onScreen && formed) hintRef.current.style.opacity = '1'; };
+    const dismissHint = () => {
+      if (hintRef.current) hintRef.current.style.opacity = '0';
+      clearTimeout(hintIdleTimer);
+      hintIdleTimer = setTimeout(showHint, 30000);
+    };
     let t0 = 0;
     let particles = [];
     let targets = [];        // { nx, ny } normalized 0..1 in the face's own box
@@ -382,7 +394,7 @@ const FaceParticles = ({ src = '/atelier/portrait.webp' }) => {
       lensRef.current?.setPointerCapture?.(e.pointerId);
       const { x, y } = localXY(e); plt = performance.now();
       P.x = clampX(x); P.y = clampY(y); P.vx = 0; P.vy = 0;
-      if (hintRef.current) hintRef.current.style.opacity = '0';
+      dismissHint();
       enableGyro();
       kick();
     };
@@ -414,6 +426,7 @@ const FaceParticles = ({ src = '/atelier/portrait.webp' }) => {
       tiltAX = G * Math.sin(clamp(g, -80, 80) * Math.PI / 180);
       tiltAY = G * Math.sin(clamp(b, -80, 80) * Math.PI / 180);
       lastMoveT = performance.now();
+      dismissHint(); // active tilting counts as interaction — reset the idle cue
       if (!dragging) kick();
     };
     // A physical shake pops the ball into the air — impulse from the real
@@ -527,6 +540,7 @@ const FaceParticles = ({ src = '/atelier/portrait.webp' }) => {
       cancelAnimationFrame(raf);
       cancelAnimationFrame(hoverRaf);
       cancelAnimationFrame(physRaf);
+      clearTimeout(hintIdleTimer);
       wrap.removeEventListener('pointermove', onPointerMove);
       wrap.removeEventListener('pointerleave', onPointerLeave);
       window.removeEventListener('deviceorientation', onOrient);
@@ -552,10 +566,13 @@ const FaceParticles = ({ src = '/atelier/portrait.webp' }) => {
           coarse pointers once the portrait has formed. */}
       <button ref={lensRef} type="button" className="atelier-face__lens" aria-hidden="true" tabIndex={-1}>
         <ScanSearch size={20} strokeWidth={1.75} />
-        <span ref={hintRef} className="atelier-face__lens-hint">drag over me</span>
+        <span ref={hintRef} className="atelier-face__lens-hint">{t('atelier.portrait.drag')}</span>
       </button>
+      {/* iOS gates device-motion behind a tap — so the label must say TAP, not
+          "tilt" (R6: "tilt to explore" implied tilting worked before the tap that
+          actually requests the sensor permission). */}
       <button ref={gyroRef} type="button" className="atelier-face__gyro" aria-hidden="true" tabIndex={-1}>
-        tilt to explore
+        {t('atelier.portrait.tilt')}
       </button>
     </div>
   );

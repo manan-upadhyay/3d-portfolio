@@ -208,6 +208,11 @@ const VoiceHall = () => {
             ) : (
               /* The roster — the ONLY scrolling region of the Hall.
                  data-lenis-prevent so the wheel scrolls THIS pane, not the page. */
+              <>
+              {/* Plain explainer so a non-technical visitor knows what this menu
+                  does — FIXED between the header and the scrolling roster (owner
+                  follow-up), so only the voice list scrolls. */}
+              <p className="voice-hall__explainer">{t('voiceHall.explainer')}</p>
               <div className="voice-hall__body" data-lenis-prevent>
                 {groups.map((g) => (
                   <section key={g.id} className="voice-hall__group">
@@ -221,27 +226,33 @@ const VoiceHall = () => {
                   </section>
                 ))}
               </div>
+              </>
             )}
 
-            {/* footer — fixed. Roster: discovery progress + the summon doorway.
-                Summon: just the way back. */}
-            <div className="flex items-center gap-x-4 px-6 py-3 border-t text-[11px]"
-              style={{ borderColor: 'var(--color-card-border)', color: 'var(--color-text-muted)' }}>
-              {view === 'summon' ? (
-                <button type="button" onClick={() => setView('roster')} data-cursor="hover"
-                  className="inline-flex items-center gap-1.5 font-medium" style={{ color: 'var(--color-text)' }}>
-                  <ChevronLeft size={13} /> {t('voiceHall.request.back')}
-                </button>
-              ) : (
-                <>
+            {/* footer — roster only: discovery progress + a full-width summon TILE
+                (mirrors the mobile drawer's doorway — R5: the old inline link was
+                near-invisible next to the counter). When every voice is found the
+                tile turns solid ember — a louder invite for the empty state. The
+                summon view has NO footer: the header already carries the way back. */}
+            {view !== 'summon' && (
+              <div className="px-6 py-3 border-t text-[11px]"
+                style={{ borderColor: 'var(--color-card-border)', color: 'var(--color-text-muted)' }}>
+                <div className="flex flex-col gap-2.5">
+                  <span className="font-mono uppercase tracking-wider">{t('voiceHall.found', { count: discovered, total: SEALED_VOICES.length })}</span>
                   <button type="button" onClick={() => setView('summon')} data-cursor="hover"
-                    className="inline-flex items-center gap-1.5 font-medium" style={{ color: 'var(--color-ember)' }}>
-                    <Plus size={13} /> {t('voiceHall.request.cta')} <ChevronRight size={12} style={{ color: 'var(--color-text-muted)' }} />
+                    className="flex items-center gap-2.5 w-full px-3.5 py-3 rounded-xl text-[13px] font-medium transition-colors"
+                    style={{
+                      border: discovered >= SEALED_VOICES.length ? '1px solid rgba(var(--color-ember-rgb),0.5)' : '1px dashed var(--color-card-border)',
+                      color: 'var(--color-text)',
+                      background: discovered >= SEALED_VOICES.length ? 'rgba(var(--color-ember-rgb),0.12)' : 'color-mix(in srgb, var(--color-primary) 40%, transparent)',
+                    }}>
+                    <Plus size={15} style={{ color: 'var(--color-ember)' }} />
+                    <span className="flex-1 text-left">{t('voiceHall.request.cta')}</span>
+                    <ChevronRight size={15} style={{ color: 'var(--color-text-muted)' }} />
                   </button>
-                  <span className="ml-auto font-mono uppercase tracking-wider">{t('voiceHall.found', { count: discovered, total: SEALED_VOICES.length })}</span>
-                </>
-              )}
-            </div>
+                </div>
+              </div>
+            )}
           </motion.div>
         </motion.div>
       )}

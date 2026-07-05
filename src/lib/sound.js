@@ -47,11 +47,15 @@ export const CONFIG = {
   //    • peak    = loudness 0..1
   assembleSwell: { peak: 0.07, grains: 34, spread: 0.95, freqMin: 1500, freqMax: 3800 },
   beds: {
-    hero: { peak: 0.5, sample: '/sounds/astrolabe.mp3' },   // Hero astrolabe loop
-    arsenal: { peak: 0.12, sample: '/sounds/arsenal.mp3' },  // Arsenal ambience loop
+    // Sound audit (owner: the continuous beds were fatiguing in earbuds). The
+    // orbit drone was 0.45 — ~12× the sibling lens buzz — and read as an
+    // irritating buzz; pulled in line with the lens so it's a soft undertone.
+    // The hero astrolabe loop was also eased down a touch.
+    hero: { peak: 0.34, sample: '/sounds/astrolabe.mp3' },   // Hero astrolabe loop
+    arsenal: { peak: 0.11, sample: '/sounds/arsenal.mp3' },  // Arsenal ambience loop
     lens: { peak: 0.035 },    // face-particle magic-lantern hover buzz
-    orbit: { peak: 0.45 },   // observatory constellation hover buzz (sibling, not same)
-    reel: { peak: 0.16 },     // director's-reel film-transport whir (velocity-driven)
+    orbit: { peak: 0.06 },    // observatory constellation hover buzz (soft undertone)
+    reel: { peak: 0.14 },     // director's-reel film-transport whir (velocity-driven)
   },
   raven: '/sounds/raven.mp3',       // Contact-send raven (one-shot sample)
 };

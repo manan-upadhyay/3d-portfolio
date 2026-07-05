@@ -202,14 +202,16 @@ const experiences = [
 // Data only (`id`, `year`, `tech`, `kind`, `current`). The voice-bearing copy —
 // `chapter`, `headline`, `role`, `org`, `points` — lives in the Voice bundles,
 // keyed by `id`: t(`experience.journey.<id>.<field>`).
+// Ordered NEWEST → oldest (résumé convention): a hiring manager who never
+// scrolls the strip still lands on the strongest, current role first. The "what's
+// next" CTA closes the row. `secondment` (not `current`) flags an assignment that
+// branches off an employer — rendered with a "via" route link + ribbon so it
+// never reads as a second, simultaneous job. See Experience.jsx.
 export const journey = [
-  { id: 'first-trail', year: '2021', tech: ['React', 'Redux', 'Strapi', 'Prisma', 'PostgreSQL'], kind: 'work' },
-  { id: 'oath', year: '2022', tech: [], kind: 'edu' },
-  { id: 'expedition', year: '2022 — Now', tech: ['Next.js', 'Node.js', 'NestJS', 'PostgreSQL', 'MongoDB', 'Auth'], kind: 'work', current: true },
-  // `secondment` (not `current`) flags an assignment that branches off the
-  // previous waypoint's employer — rendered with a "via" route link + ribbon so
-  // it never reads as a second, simultaneous job. See Experience.jsx.
   { id: 'vanguard', year: 'Jan 2025 — Now', tech: ['Next.js', 'Okta', 'AWS', 'Helm', 'Harness'], kind: 'work', secondment: true, secondedTo: 'Infosys' },
+  { id: 'expedition', year: '2022 — Now', tech: ['Next.js', 'Node.js', 'NestJS', 'PostgreSQL', 'MongoDB', 'Auth'], kind: 'work', current: true },
+  { id: 'oath', year: '2022', tech: [], kind: 'edu' },
+  { id: 'first-trail', year: '2021', tech: ['React', 'Redux', 'Strapi', 'Prisma', 'PostgreSQL'], kind: 'work' },
   { id: 'horizon', year: 'Now', tech: [], kind: 'cta' },
 ];
 
@@ -254,9 +256,9 @@ const featuredProjects = [
     isNDA: false,
     // Proof strip (facts, not copy — labels are voiced via works.proofLabels.*)
     proof: [
-      { k: 'role', v: 'Solo, end-to-end' },
-      { k: 'outcome', v: 'Optimized 4K media delivery' },
-      { k: 'scale', v: 'Full site + admin panel' },
+      { k: 'role', v: 'Solo — design to deploy' },
+      { k: 'outcome', v: 'Film-fast 4K galleries (CDN + R2 streaming)' },
+      { k: 'scale', v: 'Public site + admin CMS, in production' },
     ],
     // Realm screenshots in display order. Lives under public/realms/<slug>/.
     // `themed: true` swaps to public/realms/<slug>/<light|dark>/ per theme.
@@ -291,8 +293,8 @@ const featuredProjects = [
     isNDA: false,
     proof: [
       { k: 'role', v: 'Solo build' },
-      { k: 'outcome', v: 'PNG → editable SVG, in-browser' },
-      { k: 'scale', v: 'Live preview → order-ready PDF' },
+      { k: 'outcome', v: 'PNG → editable SVG in-browser (TensorFlow.js)' },
+      { k: 'scale', v: 'Live floor preview → order-ready PDF' },
     ],
     gallery: {
       slug: 'royal-tiles',
@@ -327,9 +329,9 @@ const featuredProjects = [
     // behind SSO, no real service names.
     architecture: [['client'], ['web'], ['auth', 'api'], ['service', 'report']],
     proof: [
-      { k: 'role', v: 'Lead frontend, from scratch' },
-      { k: 'outcome', v: '4 production releases' },
-      { k: 'scale', v: 'Capital Group (enterprise)' },
+      { k: 'role', v: 'Lead frontend — built from scratch' },
+      { k: 'outcome', v: '4 production releases · Okta SSO + RBAC' },
+      { k: 'scale', v: 'Enterprise · Capital Group (USA)' },
     ],
   },
 ];
@@ -468,16 +470,18 @@ export const atelier = {
   cut: ['assets', 'threejs', 'tracking', 'componentLib'],
   // The "field guide" — the deliberately-subtle interactions most visitors never
   // find. `icon` keys a lucide glyph in Atelier.jsx; the name + how-to-trigger
-  // copy is voiced: t('atelier.eggs.<id>.title' / '.how').
+  // copy is voiced: t('atelier.eggs.<id>.title' / '.how'). `act` (optional) wires
+  // the card's "Show me" button to the actual feature — see EGG_ACTIONS.
   eggs: [
-    { id: 'astrolabe', icon: 'compass' },
-    { id: 'spin', icon: 'refresh' },
+    { id: 'astrolabe', icon: 'compass', act: 'origin' },
+    { id: 'spin', icon: 'refresh', act: 'origin' },
+    { id: 'lens', icon: 'lens', act: 'portrait' },
     { id: 'sound', icon: 'audio' },
-    { id: 'sky', icon: 'sky' },
-    { id: 'voices', icon: 'drama' },
-    { id: 'map', icon: 'map' },
-    { id: 'raven', icon: 'send' },
-    { id: 'recap', icon: 'fingerprint' },
+    { id: 'sky', icon: 'sky', act: 'sky' },
+    { id: 'voices', icon: 'drama', act: 'voices' },
+    { id: 'map', icon: 'map', act: 'map' },
+    { id: 'raven', icon: 'send', act: 'contact' },
+    { id: 'recap', icon: 'fingerprint', act: 'contact' },
     { id: 'console', icon: 'terminal' },
   ],
   // "Built with" — proper-noun tech names are data, rendered as chips.

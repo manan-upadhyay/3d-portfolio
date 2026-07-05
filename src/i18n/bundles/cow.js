@@ -68,7 +68,8 @@ export default {
       },
       oath: {
         chapter: 'Moo Moo', headline: 'Moo moo moo moo moo · 8.36 / 10.', role: 'Moo', org: 'Moo Moo Moo Moo',
-        points: ['Moo moo moo moo moo moo.', 'Moo moo moo — LL.B. — moo HNGU, moo moo (AIBE), moo.'],
+        credential: 'Moo — LL.B. — moo (AIBE).',
+        points: ['Moo moo moo moo moo moo.'],
       },
       expedition: {
         chapter: 'Moo Moo Moo', headline: 'Moo moo. Moo-moo. Moo moo moo.', role: 'Moo Moo Moo', org: 'Moo Moo',
@@ -353,7 +354,11 @@ export default {
       sending: 'Moo…',
       done: 'Moo moo moo',
       doneSub: 'Moo moo “{{persona}}” moo moo moo moo. Moo.',
-      error: 'Moo moo moo moo. Moo moo moo moo moo moo moo, moo moo moo.',
+      errors: {
+        persona: 'Moo — moo moo moo. Moo.',
+        email: 'Moo moo moo — moo moo moo, moo moo moo moo.',
+        failed: 'Moo moo moo moo. Moo moo moo moo moo.',
+      },
     },
   },
 

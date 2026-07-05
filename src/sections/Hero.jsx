@@ -388,9 +388,16 @@ const Hero = () => {
             <button onClick={() => { track('hero_cta', { target: 'contact' }); scrollToSection('contact'); }} data-cursor="hover" className="btn-secondary">
               {t('hero.ctaSecondary')}
             </button>
-            <a href={personalInfo.resumeLink} target="_blank" rel="noopener noreferrer" onClick={() => track('hero_cta', { target: 'resume' })} data-cursor="hover" className="btn-secondary">
-              <Download size={15} strokeWidth={1.75} /> {t('hero.ctaResume')}
-            </a>
+            {/* Résumé is the third CTA on ≥sm; on phones it's dropped here (it
+                lives in the menu's Quick row) so the hero shows a clean two-CTA
+                row and the location line stays high (R4). Wrapper span carries the
+                hide — `.btn-secondary` sets its own display, so `hidden` on the
+                anchor itself wouldn't win. */}
+            <span className="hidden sm:contents">
+              <a href={personalInfo.resumeLink} target="_blank" rel="noopener noreferrer" onClick={() => track('hero_cta', { target: 'resume' })} data-cursor="hover" className="btn-secondary">
+                <Download size={15} strokeWidth={1.75} /> {t('hero.ctaResume')}
+              </a>
+            </span>
           </div>
 
           <div className="hero-meta mt-8 font-mono text-[11px] tracking-[0.14em] uppercase" style={{ color: 'var(--color-text-muted)' }}>

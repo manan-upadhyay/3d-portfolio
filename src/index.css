@@ -747,7 +747,10 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--color-card-border);
 }
 .wp .realm-card {
-  height: var(--card-h);
+  /* min-height, not a fixed height: taller waypoints (via line + 3 long bullets +
+     stack) were clipped by the card's overflow-hidden on desktop. Now the card
+     grows to fit its content, with a floor so short cards stay uniform. */
+  min-height: var(--card-h);
   opacity: 0.6;
   transform: scale(0.97);
   transition: opacity 0.45s ease, transform 0.45s ease, border-color 0.45s ease, box-shadow 0.45s ease;
@@ -1690,6 +1693,14 @@ h1, h2, h3, h4, h5, h6 {
   padding: 2px 18px 14px;
   display: flex; flex-direction: column; gap: 2px;
 }
+.voice-hall__explainer {
+  flex: none; /* fixed sub-header between the header and the scrolling roster */
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+  padding: 10px 20px 12px;
+  border-bottom: 1px solid var(--color-card-border);
+}
 .voice-hall__list { display: grid; gap: 9px; grid-template-columns: 1fr; }
 /* The summon request is its own Hall PAGE now (v2.0 D4) — the form sits flush
    in the body pane, no bordered aside chrome. */
@@ -2522,63 +2533,63 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.5;
   color: var(--color-text-muted);
 }
-/* The ledger rows read as a plain list on desktop; the button shell only "does"
-   something on phones (v2.0 W6): the why clamps to one line and the row taps
-   open, cued by a small rotating + (no chevron columns). */
+/* Disclosure on EVERY screen (owner follow-up): the built/cut ledger is title-
+   first — the "why" stays collapsed to one line and the row taps open, cued by a
+   small rotating +. Keeps ~11 rows scannable instead of a wall of prose. */
 .atelier-entry__hit {
   display: flex;
   flex-direction: column;
   gap: 3px;
   width: 100%;
   text-align: left;
-  cursor: default;
+  cursor: pointer;
 }
-.atelier-entry__plus { display: none; }
-@media (max-width: 767px) {
-  .atelier-entry__hit { cursor: pointer; }
-  .atelier-entry__plus {
-    display: inline-block;
-    vertical-align: -1px;
-    margin-left: 7px;
-    color: var(--color-text-muted);
-    transition: transform 0.25s ease, color 0.25s ease;
-  }
-  .atelier-entry__plus[data-open] { transform: rotate(45deg); color: var(--color-ember); }
-  .atelier-entry__why:not(.is-open) {
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
+.atelier-entry__plus {
+  display: inline-block;
+  vertical-align: -1px;
+  margin-left: 7px;
+  color: var(--color-text-muted);
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+.atelier-entry__plus[data-open] { transform: rotate(45deg); color: var(--color-ember); }
+.atelier-entry__why:not(.is-open) {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* built-with chips */
 
-/* the field guide — title-first cards; the "how" reveals on tap (v2.0 W3).
-   The card is a real <button>, so hover/press feedback is an honest affordance. */
+/* the field guide — title-first cards; the "how" + a "Show me" jump to the real
+   feature reveal on tap. The card is a container; the toggle and the jump are
+   sibling buttons (a button can't nest in a button). */
 .atelier-eggs {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
   gap: 12px;
 }
 .atelier-egg {
+  border-radius: 14px;
+  background: rgba(var(--color-ember-rgb), 0.04);
+  border: 1px solid var(--color-card-border);
+  overflow: hidden;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+.atelier-egg:hover,
+.atelier-egg.is-open {
+  border-color: rgba(var(--color-ember-rgb), 0.4);
+  background: rgba(var(--color-ember-rgb), 0.07);
+}
+.atelier-egg__hit {
   display: grid;
   width: 100%;
   text-align: left;
   grid-template-columns: auto 1fr auto;
   align-items: center;
   column-gap: 12px;
-  row-gap: 4px;
   padding: 14px 16px;
-  border-radius: 14px;
-  background: rgba(var(--color-ember-rgb), 0.04);
-  border: 1px solid var(--color-card-border);
-  transition: border-color 0.3s ease, background 0.3s ease;
-}
-.atelier-egg:hover,
-.atelier-egg[aria-expanded='true'] {
-  border-color: rgba(var(--color-ember-rgb), 0.4);
-  background: rgba(var(--color-ember-rgb), 0.07);
+  cursor: pointer;
 }
 .atelier-egg__icon {
   display: grid;
@@ -2600,8 +2611,8 @@ h1, h2, h3, h4, h5, h6 {
   transition: transform 0.25s ease, color 0.25s ease;
 }
 .atelier-egg__plus[data-open] { transform: rotate(45deg); color: var(--color-ember); }
+.atelier-egg__reveal { padding: 0 16px 14px 64px; }
 .atelier-egg__how {
-  grid-column: 2 / 4;
   font-size: 12.5px;
   line-height: 1.5;
   color: var(--color-text-muted);
@@ -2615,6 +2626,22 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid var(--color-card-border);
   color: var(--color-text);
 }
+/* the "Show me" jump to the actual feature */
+.atelier-egg__show {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-ember);
+  background: rgba(var(--color-ember-rgb), 0.1);
+  border: 1px solid rgba(var(--color-ember-rgb), 0.28);
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.atelier-egg__show:hover { background: rgba(var(--color-ember-rgb), 0.18); border-color: rgba(var(--color-ember-rgb), 0.5); }
 
 /* ── The Observatory — "instrumented, not surveilled" ─────────────────────────
    The senior-infrastructure moment: a living SVG event-constellation + readouts
@@ -3345,40 +3372,69 @@ h1, h2, h3, h4, h5, h6 {
   background: rgba(var(--color-ember-rgb), 0.08);
   border: 1px solid rgba(var(--color-ember-rgb), 0.22);
 }
-/* The ordered gate. Wraps freely; a 1px connector bridges each stage in the gap
-   so it reads as one flow (checkout → … → build → merge-ready) without clutter. */
-.ci-chain {
-  list-style: none; margin: 20px 0 0; padding: 0;
-  display: flex; flex-wrap: wrap; align-items: stretch; gap: 11px;
-}
-.ci-step {
+/* The run: a vertical timeline of stages on a rail of nodes, flowing down into
+   the green merge-ready gate. Full width on every screen — never scrolls
+   horizontally, never truncates. */
+.ci-run { list-style: none; margin: 22px 0 0; padding: 0; }
+.ci-stage {
   position: relative;
-  display: flex; align-items: center; gap: 10px;
-  padding: 9px 13px; border-radius: 12px;
-  background: var(--color-card-bg); border: 1px solid var(--color-card-border);
+  display: flex; align-items: center; gap: 15px;
+  padding: 8px 0;
+  padding-left: 48px;   /* room for the node rail */
+  min-height: 46px;
 }
-.ci-step:not(:last-child)::after {
-  content: ''; position: absolute; right: -11px; top: 50%;
-  width: 11px; height: 1px; background: var(--color-card-border);
+/* the through-line at the node centre (x = 18, node is 36 wide from left:0) */
+.ci-stage::before {
+  content: ''; position: absolute; left: 17px; top: 0; bottom: 0; width: 2px;
+  background: linear-gradient(var(--color-card-border), var(--color-card-border));
 }
-.ci-step__icon {
-  display: grid; place-items: center; width: 28px; height: 28px;
-  border-radius: 8px; flex-shrink: 0;
-  color: var(--color-ember); background: rgba(var(--color-ember-rgb), 0.1);
+.ci-stage:first-child::before { top: 50%; }        /* line begins at the first node */
+.ci-stage:last-child::before { bottom: 50%; }       /* …and ends at the last node */
+.ci-stage__node {
+  position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+  display: grid; place-items: center; width: 36px; height: 36px;
+  border-radius: 10px; z-index: 1;
+  color: var(--color-ember); background: rgba(var(--color-ember-rgb), 0.12);
+  border: 1px solid rgba(var(--color-ember-rgb), 0.25);
 }
-.ci-step__body { display: flex; flex-direction: column; min-width: 0; }
-.ci-step__label { font-size: 12.5px; font-weight: 600; letter-spacing: 0.02em; color: var(--color-text); }
-.ci-step__cmd { font-size: 10px; color: var(--color-text-muted); }
-.ci-step--pass { background: rgba(var(--color-success-rgb), 0.08); border-color: rgba(var(--color-success-rgb), 0.4); }
-.ci-step--pass .ci-step__icon { color: var(--color-success); background: rgba(var(--color-success-rgb), 0.14); }
-.ci-step--pass .ci-step__label { color: var(--color-success); }
-/* Staggered rise when the chain enters view. */
-.ci-chain .ci-step { opacity: 0; transform: translateY(6px); }
-.ci-chain.is-in .ci-step { animation: ci-rise 0.5s ease both; animation-delay: calc(var(--i) * 0.06s); }
+.ci-stage__text { display: flex; flex-direction: column; min-width: 0; }
+.ci-stage__label { font-size: 13px; font-weight: 600; letter-spacing: 0.02em; color: var(--color-text); }
+.ci-stage__cmd { font-size: 11px; margin-top: 1px; color: var(--color-text-muted); }
+/* the terminal gate — a solid green node that closes the run */
+.ci-stage--gate .ci-stage__node {
+  color: #fff; background: var(--color-success);
+  border-color: var(--color-success);
+  box-shadow: 0 0 14px rgba(var(--color-success-rgb), 0.4);
+}
+.ci-stage--gate .ci-stage__label { color: var(--color-success); font-weight: 700; }
+
+/* Staggered rise as the run enters view. */
+.ci-run .ci-stage { opacity: 0; transform: translateY(6px); }
+.ci-run.is-in .ci-stage { animation: ci-rise 0.5s ease both; animation-delay: calc(var(--i) * 0.07s); }
 @keyframes ci-rise { to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) {
-  .ci-chain .ci-step { opacity: 1; transform: none; animation: none; }
+  .ci-run .ci-stage { opacity: 1; transform: none; animation: none; }
 }
+
+/* Map overlay quick-action pills — hover lifts the surface + border (design-
+   system sync). The Making-of doorway variant carries the ember accent so it
+   reads as a distinct destination, apart from the utility links. */
+.map-action {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 13px; border-radius: 999px;
+  font-size: 13px; font-weight: 500;
+  color: var(--color-text);
+  border: 1px solid var(--color-card-border);
+  background: transparent;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.map-action:hover { background: var(--color-card-bg); border-color: color-mix(in srgb, var(--color-text) 26%, transparent); }
+.map-action--doorway {
+  color: var(--color-ember);
+  border-color: rgba(var(--color-ember-rgb), 0.4);
+  background: rgba(var(--color-ember-rgb), 0.08);
+}
+.map-action--doorway:hover { background: rgba(var(--color-ember-rgb), 0.14); border-color: rgba(var(--color-ember-rgb), 0.6); }
 
 /* The quiet doorway to the Atelier in the global footer. */
 .atelier-footer-link:hover { color: var(--color-ember) !important; }
@@ -3771,6 +3827,27 @@ h1, h2, h3, h4, h5, h6 {
 }
 .tag-rune--sm { font-size: 11px; padding: 4px 9px; }
 
+/* Tech-stack pills — warm, on-theme mono chips (owner follow-up: the neutral
+   card-surface version read dull/washed-out on the light plate). Ember-tinted
+   fill + border + the site's mono face give them a deliberate "tech tag" feel
+   that sits IN the palette, not a generic bright pill. */
+.tech-pill {
+  display: inline-flex;
+  align-items: center;
+  font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  padding: 5px 11px;
+  border-radius: 999px;
+  color: var(--color-ember);
+  background: rgba(var(--color-ember-rgb), 0.09);
+  border: 1px solid rgba(var(--color-ember-rgb), 0.24);
+  white-space: nowrap;
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+
 /* ── Footer actions (C1) — phone: full-width ask + symmetric 3-up link row;
    ≥sm keeps the original inline row. ── */
 .footer-actions { display: flex; flex-direction: column; align-items: stretch; gap: 18px; }
@@ -3794,25 +3871,28 @@ h1, h2, h3, h4, h5, h6 {
    an ember dash. No boxes, no labels: the boxed Role/Outcome/Scope grid read
    as a spec table and fought the plate's editorial voice. ── */
 .works-proof {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  max-width: 34rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px 22px;
+  max-width: 36rem;
+  padding-top: 18px;
+  border-top: 1px solid var(--color-card-border);
 }
-.works-proof__item {
-  display: flex;
-  align-items: baseline;
-  gap: 11px;
-  font-size: 14.5px;
+@media (max-width: 480px) { .works-proof { grid-template-columns: 1fr 1fr; } }
+.works-proof__label {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.works-proof__val {
+  margin-top: 6px;
+  font-size: 14px;
   font-weight: 500;
-  line-height: 1.45;
+  line-height: 1.35;
   color: var(--color-text);
-}
-.works-proof__item::before {
-  content: '—';
-  flex: none;
-  color: var(--color-ember);
-  opacity: 0.75;
 }
 .works-story__toggle {
   display: inline-flex; align-items: center; gap: 7px;

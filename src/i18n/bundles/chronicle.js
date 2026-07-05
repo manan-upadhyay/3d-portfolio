@@ -114,13 +114,14 @@ export default {
       },
       oath: {
         chapter: 'The Oath',
-        headline: 'Forged the foundations · CGPA 8.36 / 10.',
+        // Study → duration → grade, in that order, so it reads at a glance for
+        // someone who doesn't know me (R1). The law degree is a quiet second
+        // credential, not buried in prose.
+        headline: 'CGPA 8.36 / 10',
         role: 'B.E. Information Technology',
-        org: 'Gujarat Technological University',
-        points: [
-          'Engineering degree in Information Technology.',
-          'And a three-year LL.B. from Hemchandracharya North Gujarat University — earned alongside the work, with the bar cleared (AIBE) in 2026.',
-        ],
+        org: 'Gujarat Technological University · 2018 – 2022',
+        credential: 'Plus an LL.B. (Laws), HNGU — bar cleared (AIBE) 2026',
+        points: [],
       },
       expedition: {
         chapter: 'The Long Expedition',
@@ -170,6 +171,9 @@ export default {
     nda: 'NDA',
     enterRealm: 'Enter the realm',
     source: 'Source',
+    // The proof strip's tiny labels — the facts read cryptically without them
+    // ("Solo, end-to-end" of WHAT?). Generic; every voice inherits.
+    proofLabels: { role: 'My role', outcome: 'Outcome', scale: 'Scope' },
     ndaSealed: "[[nda|Sealed under NDA]] — details limited to what's permissible.",
     ndaArch: 'Abstracted architecture — sealed under NDA',
     // Load-bearing controls stay plain even in the themed default voice — a
@@ -260,8 +264,7 @@ export default {
   },
 
   contact: {
-    availability:
-      'Open to senior full-stack roles & collaborations — usually replies within a day.',
+    availability: 'Open to senior full-stack roles & collaborations.',
     theMessage: 'The Message',
     correspondence: 'Correspondence',
     placeholders: {
@@ -309,6 +312,7 @@ export default {
     close: 'Close the map',
     hint: 'Tap a realm to travel',
     actions: {
+      makingOf: 'The Making-of',
       voices: 'Change persona',
       resume: 'Read the Scroll (Resume)',
       github: 'GitHub',
@@ -321,6 +325,8 @@ export default {
   // The Voice Hall — the command-palette voice picker (scales past the popover).
   voiceHall: {
     title: 'Personas',
+    // Plain, non-technical explainer shown at the top of the roster.
+    explainer: 'Pick who narrates this site. The words change to match the voice — everything else stays the same. Just for fun.',
     subtitle: 'Choose who narrates the chronicle — or request a persona not yet among us.',
     searchPlaceholder: 'Search voices…  try “office”, “boss”, “moo”',
     nowNarrating: 'Now narrating',
@@ -350,7 +356,11 @@ export default {
       sending: 'Summoning…',
       done: 'Your request takes flight',
       doneSub: 'The cartographer will weigh “{{persona}}.” Thank you, traveler.',
-      error: 'The raven balked — check the name and a valid email, then try again.',
+      errors: {
+        persona: 'Name a voice or personality to summon.',
+        email: 'That email doesn’t look right — fix it, or leave it blank.',
+        failed: 'The raven balked — mind trying again?',
+      },
     },
   },
 
@@ -359,7 +369,7 @@ export default {
     credit: '© {{year}} Manan Upadhyay · Crafted with React, GSAP & far too much chai.',
     atelierLink: 'The Making-Of — how this site was built',
     closeHead: 'Let’s build something.',
-    closeSub: 'Open to senior full-stack roles and collaborations. I usually reply within a day.',
+    closeSub: 'Open to senior full-stack roles and collaborations.',
     getInTouch: 'Get in touch',
     resume: 'Résumé',
   },
@@ -444,6 +454,10 @@ export default {
     confessionSub:
       'How this site is built, what was cut, and what hides in plain sight — all of it the real thing, not screenshots of a process.',
     acts: { build: 'The Build', engine: 'The Engine Room', hidden: 'The Hidden Layer' },
+    // The voice-aware portrait's touch affordances (functional micro-labels —
+    // chronicle carries them, all voices inherit). `tilt` says TAP because iOS
+    // gates the motion sensor behind that first tap (R6).
+    portrait: { drag: 'drag to reveal', tilt: 'tap to tilt' },
     // The commit trail — a GitHub-style heatmap drawn from this repo's real git
     // history (CommitGraph + src/constants/commitHistory.js). All figures are data.
     commits: {
@@ -501,7 +515,8 @@ export default {
     },
     eggs: {
       title: 'The Field Guide',
-      intro: 'The quiet craft — tap any entry to learn where it hides.',
+      intro: 'The quiet craft — tap any entry to learn where it hides, then jump straight to it.',
+      showMe: 'Show me',
       astrolabe: {
         title: 'The living needle',
         how: 'Sweep your cursor across the hero astrolabe — the needle follows your hand, and a gear-mechanism sound turns at exactly the speed you move it.',
@@ -509,6 +524,10 @@ export default {
       spin: {
         title: 'Spin the needle',
         how: 'Press the spin button on the instrument’s rim to flick the needle into a free spin — real flywheel physics wind it up and let it coast to rest.',
+      },
+      lens: {
+        title: 'The living portrait',
+        how: 'On a computer, sweep your cursor over my photo — a lens reveals the real image beneath the particles. On a phone, drag the lens across it, or tilt and shake the device: it moves with real physics.',
       },
       sound: {
         title: 'A synthesised score',

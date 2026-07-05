@@ -54,7 +54,7 @@ export default {
     travelTrail: 'Scroll the timeline',
     journey: {
       'first-trail': { chapter: 'First Role', headline: 'Where I started.' },
-      oath: { chapter: 'Education', headline: 'B.E. Information Technology · CGPA 8.36 / 10.' },
+      oath: { chapter: 'Education', headline: 'CGPA 8.36 / 10' },
       expedition: { chapter: 'Full Stack Role', headline: 'Six industries. Production-grade. End to end.' },
       vanguard: {
         chapter: 'Lead Role',
@@ -100,7 +100,7 @@ export default {
   },
 
   contact: {
-    availability: 'Open to senior full-stack roles and collaborations — usually replies within a day.',
+    availability: 'Open to senior full-stack roles and collaborations.',
     theMessage: 'Message',
     correspondence: 'Contact',
     placeholders: {
@@ -166,7 +166,11 @@ export default {
       sending: 'Sending…',
       done: 'Request sent',
       doneSub: 'Thanks — I’ll consider “{{persona}}.”',
-      error: 'Something went wrong — check the name and a valid email, then retry.',
+      errors: {
+        persona: 'Enter a voice or personality.',
+        email: 'That email doesn’t look right — fix it, or leave it blank.',
+        failed: 'Something went wrong — please try again.',
+      },
     },
   },
 
@@ -417,7 +421,7 @@ export default {
     quote: '“The journey is the reward.”',
     atelierLink: 'The making-of — how this site was built',
     closeHead: 'Let’s work together.',
-    closeSub: 'Open to senior full-stack roles and collaborations. I usually reply within a day.',
+    closeSub: 'Open to senior full-stack roles and collaborations.',
     getInTouch: 'Contact me',
     resume: 'Résumé',
   },

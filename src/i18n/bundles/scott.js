@@ -79,9 +79,9 @@ export default {
         chapter: 'School',
         headline: 'I have a degree. A real one. CGPA 8.36 / 10. Boom.',
         role: 'Student (a good one)',
+        credential: 'Also a LAW degree — LL.B., bar passed (AIBE). Basically a lawyer.',
         points: [
           'Got an engineering degree in IT. Framed it. Looked at it. Still proud.',
-          'Then got a LAW degree too — LL.B., three years, from HNGU — and passed the bar (AIBE). I am basically a lawyer. Don’t sue me, I’ll sue back.',
         ],
       },
       expedition: {
@@ -454,7 +454,11 @@ export default {
       sending: 'Summoning…',
       done: 'Boom. Sent.',
       doneSub: 'I’ll give “{{persona}}” some real thought. No promises. Okay, a small promise. Thank you, friend.',
-      error: 'Okay, that did not work. Check the name and the email. It’s gonna be fine. We’re a family.',
+      errors: {
+        persona: 'You gotta tell me WHO. That’s the whole point. Give me a name.',
+        email: 'That email looks off. Fix it — or just leave it blank. No pressure.',
+        failed: 'Okay, that did not send. Try again. It’s gonna be fine. We’re a family.',
+      },
     },
   },
 
@@ -476,7 +480,7 @@ export default {
     quote: '“That’s what she said.”',
     atelierLink: 'The making-of. Behind the scenes. Pretty much a documentary.',
     closeHead: 'Let’s be friends.',
-    closeSub: 'Open to senior roles, collaborations, and mutually beneficial friendships. I reply fast.',
+    closeSub: 'Open to senior roles, collaborations, and mutually beneficial friendships.',
     getInTouch: 'Let’s talk',
     resume: 'Résumé',
   },

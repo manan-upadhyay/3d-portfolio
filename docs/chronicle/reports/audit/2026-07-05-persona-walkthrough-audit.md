@@ -311,16 +311,109 @@ still open — captured here so nothing is lost. (Everything in §3 is now resol
 declined, or deferred per the logs above; the only deferred worklist item is the
 holistic dynamic-type px→rem pass, #8.)
 
-| # | Priority | Observation | §2 source | Persona | Effort |
-|---|---|---|---|---|---|
-| R1 | 🟡 | Journey "Oath" card buries the LL.B. (degree + law degree + bar exam in one bullet) — surface the law credential as a quiet second line under the role | 2.2 | Hiring manager | S |
-| R2 | 🟡 | "Usually replies within a day" appears twice on the Contact screen (intro + footer sub) — keep one | 2.2 | Hiring manager | S |
-| R3 | 🟡 | Arsenal constellation lines only connect ring-siblings — add cross-stack links (React↔Next↔TS) so it reads like a dependency map, not decoration | 2.3 | Skeptic dev | M |
-| R4 | 🟡 | Three hero CTAs stack on 390px and push the location line low — consider two on mobile (See my work · Get in touch), résumé stays in the menu | 2.4 | Drive-by | S |
-| R5 | 🟡 | Voice Hall "Summon a new voice" doorway is near-invisible next to the discovery counter — give the "all voices found" state a louder invite | 2.6 | Explorer | S |
-| R6 | 🟡 | Lens puck "drag over me" hint never reappears after first dismiss — re-show after ~30s idle on the portrait (session-scoped) | 2.6 | Explorer | S |
-| — | 🟠 | **Deferred:** holistic dynamic-type pass (px→rem) so browser font-scaling lifts the whole UI, not just verified-safe at 120% (worklist #8) | 2.7 | Older / a11y | M |
+| # | Priority | Observation | §2 source | Persona | Effort | Status |
+|---|---|---|---|---|---|---|
+| R1 | 🟡 | Journey "Oath" card buries the LL.B. (degree + law degree + bar exam in one bullet) — surface the law credential as a quiet second line under the role | 2.2 | Hiring manager | S | ✅ done (p3) |
+| R2 | 🟡 | "Usually replies within a day" appears twice on the Contact screen (intro + footer sub) — keep one | 2.2 | Hiring manager | S | ✅ done (p3) — **removed entirely** (owner: false commitment) |
+| R3 | 🟡 | Arsenal constellation lines only connect ring-siblings — add cross-stack links (React↔Next↔TS) so it reads like a dependency map, not decoration | 2.3 | Skeptic dev | M | ✅ done (p3) |
+| R4 | 🟡 | Three hero CTAs stack on 390px and push the location line low — consider two on mobile (See my work · Get in touch), résumé stays in the menu | 2.4 | Drive-by | S | ✅ done (p3) |
+| R5 | 🟡 | Voice Hall "Summon a new voice" doorway is near-invisible next to the discovery counter — give the "all voices found" state a louder invite | 2.6 | Explorer | S | ✅ done (p3) |
+| R6 | 🟡 | Lens puck "drag over me" hint never reappears after first dismiss — re-show after ~30s idle on the portrait (session-scoped) | 2.6 | Explorer | S | ✅ done (p3) — + fixed misleading "tilt" copy |
+| — | 🟠 | **Deferred:** holistic dynamic-type pass (px→rem) so browser font-scaling lifts the whole UI, not just verified-safe at 120% (worklist #8) | 2.7 | Older / a11y | M | deferred |
 
-**Nothing here is load-bearing for conversion** — R1/R2 are copy polish, R3/R5/R6
-are explorer-depth niceties, R4 is a mobile-layout tidy. Good candidates for a
-future polish pass, not a blocker for Beta 2.
+---
+
+## 7. Resolution log — 2026-07-05 (pass 3)
+
+Cleared the R-list (R1–R6). `lint` / `typecheck` / `build` clean; verified via
+headless CDP (real hover/scroll, mobile + desktop viewports), no exceptions.
+
+- **R1 — LL.B. surfaced, not buried.** Added an optional `credential` line to the
+  Journey card ([Experience.jsx](../../../../src/sections/Experience.jsx)) — a
+  quiet gold line with a scale icon under the role/org. The Oath card now shows
+  "LL.B. (Laws) · HNGU — bar cleared (AIBE), 2026" as its own line; the old
+  paragraph bullet that hid it is gone. Voiced in all five bundles (`plain`
+  inherits via fallback).
+- **R2 — reply-time claim removed everywhere (owner).** Not de-duplicated —
+  **deleted** as a false commitment. Stripped "usually replies within a day" /
+  "reply fast" / "within one day" from `contact.availability` and
+  `footer.closeSub` across every voice (chronicle, plain, dwight, scott; cow was
+  already moo). Verified: the phrase appears nowhere in the rendered body.
+- **R3 — real dependency map.** Skills now carry a `related` list
+  ([constants](../../../../src/constants/index.js)); hovering a node lights its
+  actual collaborators wherever they orbit (bidirectional), not just its
+  ring-siblings ([Tech.jsx](../../../../src/sections/Tech.jsx)). Cross-ring edges
+  draw as **dashed gold**, same-ring as solid ember, so the "cross-stack" reads.
+  Nodes with no relations fall back to the old ring-sibling behaviour.
+- **R4 — two hero CTAs on phones.** The résumé CTA is now `hidden sm:contents`
+  (wrapper span, since `.btn-secondary` sets its own display) — dropped on
+  ≤sm where it already lives in the menu's Quick row. Verified at 390px: exactly
+  two CTAs ("See my work", "Get in touch"), location line stays high.
+- **R5 — desktop summon doorway = the mobile tile.** Replaced the near-invisible
+  inline link in the Voice Hall footer
+  ([VoiceHall.jsx](../../../../src/components/VoiceHall.jsx)) with the mobile
+  drawer's full-width dashed tile (owner: "copy the mobile design"). When every
+  voice is found the tile turns solid ember — the louder invite the empty state
+  asked for. Verified: full-width "Summon a new voice" tile renders.
+- **R6 — lens hint re-invite + honest tilt copy.** (a) The "drag" hint now
+  re-appears after 30s of stillness on the portrait
+  ([FaceParticles.jsx](../../../../src/components/FaceParticles.jsx)), reset on any
+  drag/tilt. (b) Fixed the misleading label: the iOS affordance said "tilt to
+  explore" but tilt does nothing until the tap that requests the motion-sensor
+  permission — it now reads **"tap to tilt"** (and the puck hint "drag to
+  reveal"). Both labels moved into i18n (`atelier.portrait.*`). Verified copy on
+  `/making-of`.
+
+---
+
+## 8. Owner-directed UI pass — 2026-07-05 (pass 4)
+
+A broad follow-up driven by owner review of the rendered build. `lint` /
+`typecheck` / `build` clean throughout; verified via headless CDP + DOM.
+
+- **R3 reverted** — the cross-stack constellation links added confusion; the
+  orbital field is back to lighting ring-siblings.
+- **Experience: recency-first + no clipping.** `journey` reordered NEWEST→oldest
+  so the strongest current role ("Lead Frontend Developer", Capital Group) leads
+  the strip — a hiring manager who never scrolls still lands on it; the "what's
+  next" CTA closes the row. The card's fixed height became `min-height`, so tall
+  cards grow instead of being clipped (verified: 0 clipped). Added spacing above
+  the bottom divider.
+- **Education card refactored** — study → duration (`2018–2022`) → grade, LL.B. a
+  quiet credential line, no redundant repeat of the degree.
+- **Project plates** — proof strip is a labelled grid ("My role / Outcome /
+  Scope") with concrete, realistic values; the mono stack line became warm
+  on-theme **tech pills** (ember-tinted mono chips, after the first neutral
+  version read washed-out).
+- **CI card → vertical run-timeline** — the horizontal chip row overflowed /
+  truncated / scrolled; replaced with a GitHub-Actions-style vertical rail of
+  nodes into a green "merge-ready" gate — full width, no horizontal scroll, no
+  truncation, identical desktop + mobile.
+- **Form errors fixed** — the Voice-request form names exactly what's wrong
+  (voice missing vs. bad email vs. send failed) instead of implying email is
+  required; specific messages in every voice. Removed the redundant footer "Back"
+  from the request page (header already carries it).
+- **Ledger disclosure on all screens** — the built/cut "why" now stays collapsed
+  (title-first, tap to open) on desktop too, ~11 rows scan instead of a wall.
+- **Sound audit** — the observability-orbit hover bed was `0.45` (~12× the
+  sibling lens buzz) and read as an irritating drone; pulled to `0.06`. Hero
+  astrolabe loop eased `0.5 → 0.34`; arsenal/reel trimmed.
+- **Voice menu clarity** — a plain, non-technical explainer now sits at the top
+  of the Voice Hall so a first-timer knows what the menu does.
+- **Map overlay** — hover states on the quick-action pills + a distinct,
+  ember-accented **Making-of doorway**, placed apart from the six realm pins.
+- **Field Guide → live shortcuts** — each entry has a **"Show me"** jump to the
+  real feature (hero/astrolabe, contact route home; Voice Hall + Sky menu /
+  mobile sheet open in place; portrait scrolls into view). Added a new **"The
+  living portrait"** entry for the FaceParticles lens (hover-reveal desktop;
+  drag + tilt/shake physics mobile). Kept one device-aware list, not separate
+  desktop/mobile lists.
+
+**Making-of nav placement (owner question).** Landed on: SideRail action (both
+routes) + foot-of-Realms doorway + footer link + **now the ⌘K map** (distinct
+doorway). It stays *out* of the six-realm canon everywhere (never a seventh pin).
+
+**CI card — keep or cut?** Recommendation: **keep.** As a clean quiet vertical
+timeline it's a real senior signal (most portfolios never show their quality
+gate) for the CTO/skeptic, and ignorable for everyone else. One-line removal if a
+leaner making-of is ever wanted.

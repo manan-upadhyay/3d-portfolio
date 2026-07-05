@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Briefcase, GraduationCap, Compass, ArrowRight, GitBranch, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Briefcase, GraduationCap, Compass, ArrowRight, GitBranch, ChevronLeft, ChevronRight, Scale } from 'lucide-react';
 import { journey, chapters } from '../constants';
 import { ChapterHeading } from '../components';
 import { scrollToSection } from '../lib/smoothScroll';
@@ -16,6 +16,9 @@ const WaypointBody = ({ w }) => {
   const isCta = w.kind === 'cta';
   const points = t(`experience.journey.${w.id}.points`, { returnObjects: true });
   const via = w.secondment ? t(`experience.journey.${w.id}.via`, { defaultValue: '' }) : '';
+  // Optional quiet "second credential" line under the role/org (R1: surfaces the
+  // LL.B. on the Oath card instead of burying it in a paragraph bullet).
+  const credential = t(`experience.journey.${w.id}.credential`, { defaultValue: '' });
   return (
     <div className="realm-card relative h-full p-7 flex flex-col overflow-hidden">
       <span
@@ -62,6 +65,13 @@ const WaypointBody = ({ w }) => {
       </h3>
       <p className="text-[13.5px] mt-1.5" style={{ color: 'var(--color-text-muted)' }}>{t(`experience.journey.${w.id}.org`)}</p>
 
+      {credential && (
+        <p className="text-[12.5px] mt-2 flex items-start gap-1.5" style={{ color: 'var(--color-gold)' }}>
+          <Scale size={13} className="mt-[2px] shrink-0" strokeWidth={1.75} />
+          <span>{credential}</span>
+        </p>
+      )}
+
       <p className="font-chronicle italic text-[16.5px] leading-snug mt-4" style={{ color: 'var(--color-ember)' }}>
         {t(`experience.journey.${w.id}.headline`)}
       </p>
@@ -88,16 +98,12 @@ const WaypointBody = ({ w }) => {
       )}
 
       {w.tech.length > 0 && (
-        <div
-          className="mt-auto pt-5 flex flex-wrap items-center gap-x-2 gap-y-1 border-t font-mono text-[10.5px] tracking-[0.04em]"
-          style={{ borderColor: 'var(--color-card-border)', color: 'var(--color-text-muted)' }}
-        >
-          {w.tech.map((tech, i) => (
-            <span key={tech} className="flex items-center gap-2">
-              {i > 0 && <span aria-hidden="true" className="opacity-40" style={{ color: 'var(--color-ember)' }}>·</span>}
-              <span>{tech}</span>
-            </span>
-          ))}
+        <div className="mt-8 pt-5 border-t" style={{ borderColor: 'var(--color-card-border)' }}>
+          <div className="flex flex-wrap gap-2">
+            {w.tech.map((tech) => (
+              <span key={tech} className="tech-pill">{tech}</span>
+            ))}
+          </div>
         </div>
       )}
     </div>

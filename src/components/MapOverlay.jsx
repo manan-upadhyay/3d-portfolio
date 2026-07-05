@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { FileText, Github, Linkedin, Sun, Moon, X, Star, Feather, Mountain, Waves } from 'lucide-react';
+import { FileText, Github, Linkedin, Sun, Moon, X, Star, Feather, Mountain, Waves, Hammer, ArrowUpRight } from 'lucide-react';
 import { personalInfo, chapterList } from '../constants';
 import { scrollToSection } from '../lib/smoothScroll';
 import { pushOverlay, popOverlay } from '../lib/uiOverlay';
@@ -35,6 +36,7 @@ const trailPath = (pts) => {
 
 const MapOverlay = ({ open, onClose, activeId }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { resolvedTheme, toggleTheme } = useThemeStore();
   const isDark = resolvedTheme === 'dark';
   const labelOf = (p) => t(`chapters.${p.id}.label`);
@@ -152,12 +154,18 @@ const MapOverlay = ({ open, onClose, activeId }) => {
 
             </div>
 
-            {/* quick actions */}
+            {/* quick actions + the Making-of doorway. The doorway sits APART from
+                the six realm pins above (it isn't a seventh realm — it's the
+                workshop beyond the map), given an ember-accented treatment so it
+                reads as a distinct destination, not another utility link. */}
             <div className="flex flex-wrap items-center gap-2 px-5 py-4 border-t" style={{ borderColor: 'var(--color-card-border)' }}>
+              <button type="button" onClick={() => { track('making_of_enter', { from: 'map' }); onClose(); navigate('/making-of'); }} data-cursor="hover"
+                className="map-action map-action--doorway">
+                <Hammer size={14} /> {t('map.actions.makingOf')} <ArrowUpRight size={13} className="opacity-70" />
+              </button>
+              <span className="w-px h-5 mx-0.5 hidden sm:block" style={{ background: 'var(--color-card-border)' }} aria-hidden="true" />
               {acts.map((a) => (
-                <button key={a.id} onClick={() => { a.run(); if (a.id !== 'theme') onClose(); }} data-cursor="hover"
-                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[13px] font-medium transition-colors"
-                  style={{ border: '1px solid var(--color-card-border)', color: 'var(--color-text)' }}>
+                <button key={a.id} onClick={() => { a.run(); if (a.id !== 'theme') onClose(); }} data-cursor="hover" className="map-action">
                   <a.icon size={14} style={{ color: 'var(--color-ember)' }} /> {a.label}
                 </button>
               ))}

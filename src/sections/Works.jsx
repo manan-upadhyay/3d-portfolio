@@ -174,26 +174,27 @@ const RealmPlate = ({ project, index }) => {
           </p>
         )}
 
-        {/* the proof — three bare field-notes, no boxes (v2.0 round 4: the
-            labelled Role/Outcome/Scope cells read as a spec table and forced
-            awkward taxonomy; the facts stand on their own, opened by a quiet
-            ember dash — the same editorial register as the rest of the plate) */}
+        {/* the proof — a labelled 3-fact strip (owner follow-up: the label-less
+            dashes read cryptically — "Solo, end-to-end" of what?). Each fact now
+            carries a tiny muted label above the value, laid out as a scannable
+            grid with a hairline top rule — reference info that recedes so the
+            eye still lands on the name → lead → CTA, not a wall of accents. */}
         {project.proof?.length > 0 && (
-          <ul className="works-proof mt-6">
+          <dl className="works-proof mt-7">
             {project.proof.map((cell) => (
-              <li key={cell.k} className="works-proof__item">{cell.v}</li>
+              <div key={cell.k} className="works-proof__cell">
+                <dt className="works-proof__label">{t(`works.proofLabels.${cell.k}`, { defaultValue: cell.k })}</dt>
+                <dd className="works-proof__val">{cell.v}</dd>
+              </div>
             ))}
-          </ul>
+          </dl>
         )}
 
-        {/* the stack — the quiet mono spec line (owner follow-up: pills next to
-            the proof strip read congested; one committed metadata motif wins) */}
-        <div className="mt-5 flex flex-wrap items-center gap-x-2.5 gap-y-1 font-mono text-[11.5px] tracking-[0.04em]" style={{ color: 'var(--color-text-muted)' }}>
-          {project.tags.map((tag, i) => (
-            <span key={tag.name} className="flex items-center gap-2.5">
-              {i > 0 && <span aria-hidden="true" className="opacity-40" style={{ color: 'var(--color-ember)' }}>·</span>}
-              <span>{tag.name}</span>
-            </span>
+        {/* the stack — themed pills (owner request: the mono dot-line read as
+            prose; pills make the stack scannable while staying quiet). */}
+        <div className="mt-6 flex flex-wrap gap-2">
+          {project.tags.map((tag) => (
+            <span key={tag.name} className="tech-pill">{tag.name}</span>
           ))}
         </div>
 
@@ -279,13 +280,12 @@ const RealmCard = ({ project }) => {
           <NdaSchematic architecture={project.architecture} label={t('works.ndaArch')} />
         </div>
       )}
-      <div className="mt-4 pt-4 flex flex-wrap items-center gap-x-2 gap-y-1 border-t font-mono text-[10.5px] tracking-[0.04em]" style={{ borderColor: 'var(--color-card-border)', color: 'var(--color-text-muted)' }}>
-        {project.tags.map((tag, i) => (
-          <span key={tag.name} className="flex items-center gap-2">
-            {i > 0 && <span aria-hidden="true" className="opacity-40" style={{ color: 'var(--color-ember)' }}>·</span>}
-            <span>{tag.name}</span>
-          </span>
-        ))}
+      <div className="mt-5 pt-5 border-t" style={{ borderColor: 'var(--color-card-border)' }}>
+        <div className="flex flex-wrap gap-2">
+          {project.tags.map((tag) => (
+            <span key={tag.name} className="tech-pill">{tag.name}</span>
+          ))}
+        </div>
       </div>
     </div>
   </ScrollReveal>

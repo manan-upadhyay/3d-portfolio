@@ -77,9 +77,9 @@ export default {
         chapter: 'Training',
         headline: 'Formal credentials acquired. CGPA 8.36 / 10. Fact.',
         role: 'Cadet, Information Technology',
+        credential: 'Second credential: LL.B. — bar examination (AIBE) passed. Legally formidable.',
         points: [
           'Acquired a formal engineering degree. Credentials are non-negotiable.',
-          'Then acquired a second degree — LL.B., three years, from HNGU — and passed the bar examination (AIBE). Redundant credentials are superior credentials. I am also legally formidable.',
         ],
       },
       expedition: {
@@ -176,7 +176,7 @@ export default {
   },
 
   contact: {
-    availability: 'I respond to all transmissions, typically within one day. Efficiency is the highest form of respect.',
+    availability: 'I respond to every transmission. Efficiency is the highest form of respect.',
     theMessage: 'The Transmission',
     correspondence: 'Channels',
     placeholders: {
@@ -452,7 +452,11 @@ export default {
       sending: 'Transmitting…',
       done: 'Requisition logged',
       doneSub: 'The candidate “{{persona}}” will be vetted thoroughly. Background check included. You have done your duty.',
-      error: 'Transmission failed. Verify the name and a valid email. Do not make me ask twice.',
+      errors: {
+        persona: 'State the voice. A request with no subject is not a request.',
+        email: 'That email is invalid. Correct it, or leave it blank.',
+        failed: 'Transmission failed. Try again. Do not make me ask twice.',
+      },
     },
   },
 
@@ -474,7 +478,7 @@ export default {
     quote: '“Fact.”',
     atelierLink: 'The schematics — how this site was engineered. Question authority.',
     closeHead: 'Make contact.',
-    closeSub: 'Available for senior roles and collaborations. Responses are prompt and superior.',
+    closeSub: 'Available for senior roles and collaborations. Standards remain superior.',
     getInTouch: 'Contact HQ',
     resume: 'Résumé',
   },

@@ -1,13 +1,31 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Hammer, Scissors, Compass, RefreshCcw, AudioLines, CloudSun, Drama, Map, Send, Fingerprint, Terminal, Plus } from 'lucide-react';
+import { Hammer, Scissors, Compass, RefreshCcw, AudioLines, CloudSun, Drama, Map, Send, Fingerprint, Terminal, Plus, ScanSearch, ArrowUpRight } from 'lucide-react';
 import { SectionWrapper } from '../hoc';
 import { atelier } from '../constants';
+import { requestSection } from '../lib/smoothScroll';
+import { useVoiceStore } from '../store/useVoiceStore';
 import { ChapterHeading, ScrollReveal, CountUp, CommitGraph, CiPipeline, Observatory, CodebaseAtlas, PersonaTriptych, FaceParticles } from '../components';
 
 /* lucide glyph per field-guide entry (icon id → component). */
-const EGG_ICONS = { compass: Compass, refresh: RefreshCcw, audio: AudioLines, sky: CloudSun, drama: Drama, map: Map, send: Send, fingerprint: Fingerprint, terminal: Terminal };
+const EGG_ICONS = { compass: Compass, refresh: RefreshCcw, lens: ScanSearch, audio: AudioLines, sky: CloudSun, drama: Drama, map: Map, send: Send, fingerprint: Fingerprint, terminal: Terminal };
+
+const isDesktop = () => typeof window !== 'undefined' && window.matchMedia('(min-width: 768px)').matches;
+
+/* Wires a field-guide card's "Show me" button to the real feature. The Atelier is
+   its own route, so location-based features (hero, contact) route home and land
+   there; the global overlays (voice hall, sky menu / mobile sheet) open in place;
+   the portrait lives on this page. `run(navigate)` performs the jump. */
+const EGG_ACTIONS = {
+  origin: (navigate) => { requestSection('origin'); navigate('/'); },
+  contact: (navigate) => { requestSection('contact'); navigate('/'); },
+  portrait: () => document.getElementById('atelier-portrait')?.scrollIntoView({ behavior: 'smooth', block: 'center' }),
+  voices: () => useVoiceStore.getState().openHall(), // the canonical voice picker, works on both routes
+  map: (navigate) => { requestSection('origin'); navigate('/'); setTimeout(() => window.dispatchEvent(new Event('chronicle:open-map')), 450); },
+  sky: () => window.dispatchEvent(new Event(isDesktop() ? 'ui:open-sky' : 'ui:open-menu')),
+};
 
 /* HeroInstrument — a faint, slowly-counter-rotating astrolabe that fills the open
    right side of the cold-open. Pure decoration (aria-hidden), masked to bleed off
@@ -62,27 +80,35 @@ const HeroInstrument = () => (
 /* One field-guide entry — icon + title only; the "how" reveals on tap (one open
    at a time, v2.0 W3). The card is a REAL button now, so its hover/press
    affordance is honest — it does something. */
-const EggCard = ({ icon, title, how, open, onToggle }) => {
+const EggCard = ({ icon, title, how, open, onToggle, onShow, showLabel }) => {
   const Icon = EGG_ICONS[icon] ?? Compass;
   return (
     <motion.li
       initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }} transition={{ duration: 0.5 }}
+      className={`atelier-egg ${open ? 'is-open' : ''}`}
     >
-      <button type="button" className="atelier-egg" data-cursor="hover" aria-expanded={open} onClick={onToggle}>
+      {/* toggle + the "Show me" jump are SIBLINGS (a button can't nest in a
+          button) — the row reveals both the "how" and a shortcut to the feature. */}
+      <button type="button" className="atelier-egg__hit" data-cursor="hover" aria-expanded={open} onClick={onToggle}>
         <span className="atelier-egg__icon" aria-hidden="true"><Icon size={17} strokeWidth={1.5} /></span>
         <span className="atelier-egg__title">{title}</span>
         <Plus size={14} className="atelier-egg__plus" data-open={open || undefined} aria-hidden="true" />
-        <AnimatePresence initial={false}>
-          {open && (
-            <motion.span key="how" className="atelier-egg__how"
-              initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
-              transition={{ type: 'spring', stiffness: 340, damping: 32 }} style={{ overflow: 'hidden', display: 'block' }}>
-              {how}
-            </motion.span>
-          )}
-        </AnimatePresence>
       </button>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div key="reveal" className="atelier-egg__reveal"
+            initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
+            transition={{ type: 'spring', stiffness: 340, damping: 32 }} style={{ overflow: 'hidden' }}>
+            <p className="atelier-egg__how">{how}</p>
+            {onShow && (
+              <button type="button" className="atelier-egg__show" data-cursor="hover" onClick={onShow}>
+                {showLabel} <ArrowUpRight size={13} />
+              </button>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.li>
   );
 };
@@ -140,6 +166,7 @@ const Instrument = ({ label, title, intro, className = '', children }) => (
 
 const Atelier = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [openEgg, setOpenEgg] = useState(null); // one field-guide reveal at a time
 
   const manifesto = t('atelier.manifesto', { returnObjects: true });
@@ -261,12 +288,17 @@ const Atelier = () => {
             <span className="atelier-sublabel">{t('atelier.eggs.title')}</span>
             <p className="atelier-ledger__intro mt-4">{t('atelier.eggs.intro')}</p>
             <ul className="atelier-eggs mt-7">
-              {atelier.eggs.map((e) => (
-                <EggCard key={e.id} icon={e.icon}
-                  title={t(`atelier.eggs.${e.id}.title`)} how={t(`atelier.eggs.${e.id}.how`)}
-                  open={openEgg === e.id}
-                  onToggle={() => setOpenEgg((cur) => (cur === e.id ? null : e.id))} />
-              ))}
+              {atelier.eggs.map((e) => {
+                const action = e.act && EGG_ACTIONS[e.act];
+                return (
+                  <EggCard key={e.id} icon={e.icon}
+                    title={t(`atelier.eggs.${e.id}.title`)} how={t(`atelier.eggs.${e.id}.how`)}
+                    open={openEgg === e.id}
+                    onToggle={() => setOpenEgg((cur) => (cur === e.id ? null : e.id))}
+                    onShow={action ? () => action(navigate) : undefined}
+                    showLabel={t('atelier.eggs.showMe')} />
+                );
+              })}
             </ul>
           </ScrollReveal>
 
@@ -315,7 +347,7 @@ const Atelier = () => {
           <p className="atelier-sign font-chronicle mt-6">{t('atelier.sign')}</p>
         </div>
         {/* the maker, assembled from the same characters that built the site */}
-        <FaceParticles />
+        <div id="atelier-portrait"><FaceParticles /></div>
       </ScrollReveal>
 
       {/* No bespoke closing CTA here (v2.0 follow-up): the shared Layout footer
