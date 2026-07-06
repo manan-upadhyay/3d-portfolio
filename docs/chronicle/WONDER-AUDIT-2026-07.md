@@ -71,9 +71,18 @@
 | `scott` | Michael Scott (The Office) | sealed | Very strong; best-written sealed voice | **Signature line demoted** (see V1) |
 | `dwight` | Dwight Schrute (The Office) | sealed | Strong, distinct cadence | Could push more cold-open facts/threats |
 | `cow` | A cow ("moo") | sealed | Perfect one-joke bit | By design, nothing to strengthen |
-| `tyrion` | Tyrion Lannister (GoT) | sealed | **New (V4).** Witty, literary, wine-soaked | full bundle, key-parity with scott |
-| `deadpool` | Deadpool (Marvel) | sealed | **New (V4).** 4th-wall, meta, chaotic | full bundle, key-parity with scott |
-| `stark` | Tony Stark (Iron Man) | sealed | **New (V4).** Cocky-genius engineer | full bundle, key-parity with scott |
+| `got` | **The Game of Thrones** (ensemble) | sealed | **New (V4).** Wry Maester narrator deploying the whole realm's famous lines (replaced single-character `tyrion`, which read too thin) | full bundle, key-parity |
+| `deadpool` | Deadpool (Marvel) | sealed | **New (V4).** 4th-wall, meta, chaotic | full bundle, key-parity |
+| `avengers` | **The Avengers** (MCU ensemble) | sealed | **New (V4).** F.R.I.D.A.Y./JARVIS mission-control narrator deploying the team's iconic lines (replaced single-character `stark`, same thinning issue) | full bundle, key-parity |
+| `yoda` | Yoda (Star Wars) | sealed | **New (V4).** Inverted syntax, unique register | full bundle, key-parity |
+| `chandler` | Chandler Bing (Friends) | sealed | **New (V4).** Sarcasm + "Could I BE any more…" | full bundle, key-parity |
+
+> **Roster evolution (2026-07-06):** single-character voices `tyrion` and `stark`
+> were replaced by **ensemble** voices `got` and `avengers` — a lone character
+> thins out across a whole site, whereas an ensemble (one coherent narrator
+> quoting the cast) has a deep bench of instantly-recognizable lines. Triggers:
+> `winter` (GoT) and `assemble` (Avengers). Current sealed roster (8): scott,
+> dwight, cow, got, deadpool, avengers, yoda, chandler.
 
 **Finding:** the sealed voices are well-written, but the payoff is weakened
 because **several iconic lines live in i18n keys that render nowhere.** The
