@@ -416,7 +416,7 @@ Keep richer content, but hide it until users ask for it.
 Add a top-level strip immediately below the hero:
 
 ```md
-5+ years full-stack | React / Next.js / Node.js | Frontend-heavy product engineer | Open to senior roles | Ahmedabad / Remote
+5+ years full-stack | React · Next.js · Node.js | Frontend-heavy product engineer | Open to senior roles | Ahmedabad / Remote
 ```
 
 Add 3 proof tiles:
@@ -505,7 +505,7 @@ Full-stack developer — frontend-heavy, production-tested.
 I build polished React and Next.js applications for real business workflows — 
 dashboards, CRMs, SaaS tools, and public-facing products.
 
-5+ yrs · React / Next.js / Node.js · Lead Frontend at Capital Group via Infosys · 8 shipped products
+5+ yrs · React · Next.js · Node.js · Lead Frontend at Capital Group via Infosys · 8 shipped products
 
 [See my work] [Download résumé] [Get in touch]
 ```

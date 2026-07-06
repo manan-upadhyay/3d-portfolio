@@ -22,8 +22,7 @@ export default {
   hero: {
     lead: 'I build',
     phrases: ['the world’s best web apps', 'production React systems', 'full-stack everything', 'apps people actually use'],
-    hook: 'Full-stack developer, 5+ years. React, Next.js, Node.js. Sometimes I start a sentence and I don’t know where it’s going — but the web apps? Those I finish. Every time.',
-    proof: ['5+ yrs · React / Next.js / Node.js'],
+    proof: ['5+ yrs · React · Next.js · Node.js'],
     ctaPrimary: 'See my work',
     ctaSecondary: 'Let’s be friends',
     ctaResume: 'Résumé',
@@ -36,20 +35,14 @@ export default {
     intro: [
       'I’m Manan — a friend first, a developer second, and an entertainer third. Five years in, twenty-plus projects deep, somehow also one of the best full-stack engineers you will meet. Don’t make it weird.',
       'I take an idea from a blank page [[endToEnd|all the way to production]], across six industries, and I make it look easy. It is not easy. I just make it look that way. That’s the whole job.',
+      'Sometimes I’ll start a sentence and I don’t even know where it’s going — I just hope I find it along the way. The web apps, though? Those I finish. Every time.',
     ],
-    scribeNote: 'Things I Believe',
     disciplines: 'My Many Talents',
-    principles: [
-      { title: 'People person', body: 'I own every feature end to end — like family. From the first meeting to the last deploy, nobody gets left behind. That is a guarantee.' },
-      { title: 'A little stitious', body: 'I’m not superstitious about edge cases. I’m a little stitious. Reusable components, accessibility, the unglamorous stuff that quietly saves the day.' },
-      { title: 'Fast', body: 'Code-splitting, caching, CDNs. [[measured|Speed]]. Like a gazelle. A coding gazelle wearing a Bluetooth headset.' },
-      { title: 'Locked down', body: 'JWT, OAuth, Okta, RBAC. Nobody gets in unless I say so. I’m basically a bouncer, but for your data.' },
-    ],
     services: {
       frontend: { title: 'Making Things Look Great', description: 'Production UIs with React, Next.js and TypeScript. If it’s not pretty, it’s not done. I have an eye for these things.' },
       backend: { title: 'The Behind-the-Scenes Stuff', description: 'Scalable APIs with Node, Express, NestJS, JWT/OAuth and RBAC — the plumbing nobody sees but everybody needs.' },
-      performance: { title: 'Fast AND Findable', description: 'Code-splitting, caching, CDNs, Core Web Vitals — nobody likes waiting and I HATE waiting. Plus the SEO schema stuff so Google actually knows who I am. Speed and fame. Both.' },
-      fullstack: { title: 'Doing It All', description: 'End to end, soup to nuts, grooming to production. I wear all the hats. I love hats.' },
+      performance: { title: 'Fast AND Findable', description: 'Code-splitting, caching, CDNs, Core Web Vitals — nobody likes waiting and I HATE waiting. Plus the SEO schema stuff so Google actually knows who I am. Speed and fame. Both. I move like a gazelle. A coding gazelle in a Bluetooth headset.' },
+      fullstack: { title: 'Doing It All', description: 'End to end, soup to nuts, grooming to production. I wear all the hats. I love hats. The edge cases and reusable components nobody claps for? I’m not superstitious about those — I’m a little stitious. They quietly save the day.' },
     },
     stats: {
       years: 'Years In The Game',
@@ -224,8 +217,6 @@ export default {
   },
 
   map: {
-    searchPlaceholder: 'Search… try “skills”, “projects”, “contact”',
-    noResult: 'Nothing here. Weird. Try “skills”, “experience”, or “contact”.',
     footerHint: 'enter to go · esc to bail',
     actions: {
       resume: 'My Résumé',
@@ -427,11 +418,9 @@ export default {
   voiceHall: {
     title: 'The Improv Stage',
     subtitle: 'Pick who narrates this whole thing. I do all the voices myself. I’m basically a chameleon, but for talking.',
-    searchPlaceholder: 'Search for a voice…  try “the office”, “boss”, “moo”',
     nowNarrating: 'Currently me',
     tryHint: 'Click a voice and — BOOM — the whole site starts talking like them. Even this part right here. Especially this part.',
     close: 'Close (but don’t go)',
-    noResult: 'Nobody here by that name. And I know everybody. I’m a people person.',
     sealedHint: 'Some voices are sealed, like a surprise party. Tap one and answer its clue — or type the secret word anywhere on the page — and they wake up. Surprise.',
     found: '{{count}}/{{total}} secret voices found',
     footerHint: 'enter to speak · esc to close',

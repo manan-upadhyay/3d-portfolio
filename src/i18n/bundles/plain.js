@@ -24,8 +24,7 @@ export default {
   hero: {
     lead: 'I build',
     phrases: ['production web apps', 'React frontends', 'full-stack systems', 'polished interfaces'],
-    hook: 'Full-stack developer — 5+ years, frontend-heavy. React, Next.js, Node.js, TypeScript. Lead Frontend at Capital Group via Infosys. Open to senior roles.',
-    proof: ['5+ yrs · React / Next.js / Node.js'],
+    proof: ['5+ yrs · React · Next.js · Node.js'],
     ctaPrimary: 'See my work',
     ctaSecondary: 'Contact me',
     ctaResume: 'Résumé',
@@ -38,15 +37,7 @@ export default {
       'I build production web platforms with a focus on solid architecture and the details users feel but never see.',
       'Five years and twenty-plus releases across six industries. I own features end to end — [[endToEnd|from an empty repository to production monitoring]] — and do my best work on hard, ambiguous problems.',
     ],
-    scribeNote: 'How I Work',
     disciplines: 'What I Do',
-    // Principle bodies stay factual; titles are already plain so they fall back.
-    principles: [
-      { title: 'End-to-end ownership', body: 'From requirements and system design to release validation and production monitoring.' },
-      { title: 'Detail as discipline', body: 'Reusable UI systems, edge cases, and accessibility — the work that makes products feel solid.' },
-      { title: 'Performance as a habit', body: 'Code-splitting, caching, CDN, and media optimization — [[measured|measured, not guessed]].' },
-      { title: 'Secure by default', body: 'JWT/OAuth, Okta, RBAC and middleware access control across enterprise apps.' },
-    ],
   },
 
   experience: {
@@ -126,8 +117,6 @@ export default {
   },
 
   map: {
-    searchPlaceholder: 'Search…  try “skills”, “projects”, “contact”',
-    noResult: 'No section found — try “skills”, “experience”, or “contact”.',
     footerHint: 'enter to go · esc to close',
     actions: {
       voices: 'Persona',
@@ -140,11 +129,9 @@ export default {
   voiceHall: {
     title: 'Personas',
     subtitle: 'Pick the writing persona — or request one that isn’t here yet.',
-    searchPlaceholder: 'Search personas…',
     nowNarrating: 'Current voice',
     tryHint: 'Pick a voice — the whole site, this panel included, re-reads itself in that style.',
     close: 'Close',
-    noResult: 'No matching voice.',
     sealedHint: 'Tap a hidden voice and answer its clue to unlock it — or type the secret word anywhere on the page.',
     found: '{{count}}/{{total}} found',
     footerHint: 'enter to select · esc to close',
@@ -265,7 +252,7 @@ export default {
     },
     phases: {
       voice: { title: 'Multi-voice system', why: 'A full i18next layer; the entire site re-skins through five writing voices, architected to scale to fifteen.' },
-      marginalia: { title: 'Marginalia', why: 'Hover a phrase to reveal the underlying engineering fact in a footnote.' },
+      marginalia: { title: 'Footnotes', why: 'Hover a phrase to reveal the underlying engineering fact in a footnote.' },
       sky: { title: 'Time-aware theme', why: 'Five theme modes resolved from your local time via SunCalc — no geolocation permission required.' },
       sound: { title: 'Sound design', why: 'A Web Audio cue system (synthesized, zero asset weight); default-on, muted under reduced-motion.' },
       recap: { title: 'Session recap', why: 'A client-side panel that reads device + connection details and maps your location — nothing stored or sent.' },
@@ -274,7 +261,7 @@ export default {
     },
     cuts: {
       assets: { title: 'Image, GIF and audio files', why: 'Very little of this site is shipped media. The hero is rendered in Canvas2D, the starfield is CSS, and the interface sounds are generated at runtime with the Web Audio API. Shipping the feedback layer as code instead of files means a smaller bundle, fewer requests, and faster loads.' },
-      threejs: { title: 'Three.js and WebGL', why: 'An early version used a 3D library for depth. I removed it and recreated the effect with layered CSS, parallax, and a Canvas2D astrolabe — cutting a large dependency and keeping the initial JS bundle small.' },
+      threejs: { title: 'Three.js and WebGL', why: 'An early version used a 3D library for depth. I removed it and recreated the effect with layered CSS, parallax, and a Canvas2D compass — cutting a large dependency and keeping the initial JS bundle small.' },
       tracking: { title: 'Cookie banners, cross-session tracking and surveillance analytics', why: 'The site does measure itself — but the decision was how. PostHog runs cookieless (memory-only), fully anonymous (no accounts, no identify()), and turns off completely when Do-Not-Track is set. No consent banner, because there is nothing to consent to: no cookies, no cross-session identity, nothing sold. The analytics measure which features get used, not who uses them.' },
       componentLib: { title: 'A pre-built UI kit or template', why: 'Every component is custom-built with Tailwind and CSS variables — no component library. It is more work, but it means full control over the design and no template bloat.' },
     },
@@ -283,11 +270,11 @@ export default {
       intro: 'The quiet details — tap one to see where it lives.',
       astrolabe: {
         title: 'Cursor-tracked needle',
-        how: 'Move your cursor over the hero astrolabe — the needle tracks your pointer, and a gear sound spins at the exact speed you move it.',
+        how: 'Move your cursor over the hero compass — the needle tracks your pointer, and a gear sound spins at the exact speed you move it.',
       },
       spin: {
         title: 'Spin the needle',
-        how: 'Click the spin button on the astrolabe’s edge to flick the needle — it speeds up and slows to a stop with real momentum physics.',
+        how: 'Click the spin button on the compass’s edge to flick the needle — it speeds up and slows to a stop with real momentum physics.',
       },
       sound: {
         title: 'Synthesized sound',
@@ -414,7 +401,7 @@ export default {
     openHall: 'Browse all voices',
     hallTeaserSome: '{{count}} hidden voices to find',
     hallTeaserAll: 'All voices unlocked',
-    note: 'Tip: you can change the writing voice — try Plainspoken, or find the hidden ones.',
+    note: 'Tip: you can change the writing voice — try Story, or find the hidden ones.',
   },
 
   footer: {

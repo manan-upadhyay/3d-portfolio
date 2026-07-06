@@ -20,8 +20,7 @@ export default {
   hero: {
     lead: 'I build',
     phrases: ['production web systems', 'React applications', 'full-stack machines', 'zero-fault interfaces'],
-    hook: 'Full-stack developer. 5+ years. React, Next.js, Node.js — production-grade, delivered with zero tolerance for failure and faster than 80% of all snakes.',
-    proof: ['5+ yrs · React / Next.js / Node.js'],
+    proof: ['5+ yrs · React · Next.js · Node.js', 'Bears · Beets · Battlestar Galactica'],
     ctaPrimary: 'See my work',
     ctaSecondary: 'Contact HQ',
     ctaResume: 'Résumé',
@@ -35,18 +34,11 @@ export default {
       'I am Manan — a full-stack developer, a beet farmer, a black belt, and the owner of Schrute Farms (a five-star agritourism beet plantation). My code does not have bugs. Bugs have my code.',
       'Five years. Twenty-plus releases. Six industries conquered. I take a feature [[endToEnd|from requisition to production]] and I defend it like it is my own land — which, spiritually and legally, it is.',
     ],
-    scribeNote: 'Schrute Principles',
     disciplines: 'Areas of Dominance',
-    principles: [
-      { title: 'Total ownership', body: 'From specification to production monitoring, there are no loose ends. I find them. I eliminate them. I trust no one with merge access. Loyalty is earned.' },
-      { title: 'Vigilance', body: 'Reusable systems, edge cases, accessibility. An unguarded edge case is precisely how the enemy breaches the perimeter. Question everything. Raise your hand first.' },
-      { title: 'Efficiency', body: 'Code-splitting, caching, CDN. Wasted milliseconds are wasted resources. I am faster than 80% of all snakes; my applications are [[measured|faster than the rest]].' },
-      { title: 'Security', body: 'JWT, OAuth, Okta, RBAC. Identity theft is not a joke — millions of families suffer every year. Not on my watch. I am also a volunteer sheriff’s deputy.' },
-    ],
     services: {
       frontend: { title: 'Interface Superiority', description: 'Production UIs with React, Next.js, TypeScript and reusable systems. The interface is the first line of defense. It will not fall.' },
-      backend: { title: 'Core Infrastructure', description: 'Scalable APIs with Node, Express, NestJS, JWT/OAuth and RBAC. The foundation. Without it the structure collapses. Mine does not.' },
-      performance: { title: 'Maximum Efficiency & Visibility', description: 'Code-splitting, caching, CDN, Core Web Vitals. Wasted time is weakness. I do not tolerate weakness. Structured-data SEO ensures the search engines file me correctly. Fast and findable.' },
+      backend: { title: 'Core Infrastructure', description: 'Scalable APIs with Node, Express, NestJS, JWT/OAuth and RBAC. The foundation — without it the structure collapses. Mine does not. Identity theft is not a joke; millions of families suffer every year. Not on my watch.' },
+      performance: { title: 'Maximum Efficiency & Visibility', description: 'Code-splitting, caching, CDN, Core Web Vitals. Wasted time is weakness. I do not tolerate weakness — I ship faster than 80% of all snakes. Structured-data SEO ensures the search engines file me correctly. Fast and findable.' },
       fullstack: { title: 'Total Command', description: 'End-to-end ownership, requisition to production monitoring. I control the entire chain. There are no gaps in my perimeter.' },
     },
     stats: {
@@ -77,7 +69,7 @@ export default {
         chapter: 'Training',
         headline: 'Formal credentials acquired. CGPA 8.36 / 10. Fact.',
         role: 'Cadet, Information Technology',
-        credential: 'Second credential: LL.B. — bar examination (AIBE) passed. Legally formidable.',
+        credential: "Second credential: LL.B. — bar examination (AIBE) passed. Legally formidable. Also a former volunteer deputy sheriff.",
         points: [
           'Acquired a formal engineering degree. Credentials are non-negotiable.',
         ],
@@ -115,7 +107,7 @@ export default {
   },
 
   arsenal: {
-    subtitle: 'My weapons. Each one field-tested in combat. Hover one to identify its known associates.',
+    subtitle: 'These are not skills. These are survival competencies. Each one field-tested in combat. Hover one to identify its known associates.',
     coreLabel: 'The Arsenal',
     coreLegend: 'the burning ones are my primary weapons. fact.',
   },
@@ -191,7 +183,7 @@ export default {
       sending: 'Raven deployed. Maintain radio silence…',
     },
     resumeCta: 'Service Record',
-    success: 'Transmission received. Acknowledged. Filed in triplicate. I will respond.',
+    success: 'Transmission received. Acknowledged. Filed in triplicate. I have already begun a background check on the sender. I will respond.',
     errors: {
       required: [
         'Incomplete transmission. A field is empty. Unacceptable. Complete it.',
@@ -222,8 +214,6 @@ export default {
   },
 
   map: {
-    searchPlaceholder: 'Search the territory… try “skills”, “projects”, “contact”',
-    noResult: 'No such territory. Recalibrate. Try “skills”, “experience”, or “contact”.',
     footerHint: 'enter to deploy · esc to retreat',
     actions: {
       resume: 'Service Record',
@@ -311,7 +301,7 @@ export default {
       intro: 'Hidden systems. Tap an entry to receive its intelligence. Memorize it.',
       astrolabe: {
         title: 'The Tracking Alidade',
-        how: 'Move your cursor across the astrolabe. The needle pursues it without mercy. A gear sound matches its speed exactly. Precision. Like a falcon.',
+        how: 'Move your cursor across the compass. The needle pursues it without mercy. A gear sound matches its speed exactly. Precision. Like a falcon.',
       },
       spin: {
         title: 'Free-Spin Protocol',
@@ -425,11 +415,9 @@ export default {
   voiceHall: {
     title: 'Voice Authorization',
     subtitle: 'Select the voice cleared to narrate this chronicle. Choose correctly. Identity is everything.',
-    searchPlaceholder: 'Search the registry…  try “office”, “beets”, “moo”',
     nowNarrating: 'Currently in command',
     tryHint: 'Select a voice. The entire chronicle — this panel included — will immediately submit to it. There is no resistance.',
     close: 'Dismiss',
-    noResult: 'No such voice exists in the registry. I have memorized the registry. There is no such voice.',
     sealedHint: 'Certain voices are sealed for security. Select one and supply its password — or type the correct password anywhere on the page — to breach them.',
     found: '{{count}}/{{total}} sealed voices breached',
     footerHint: 'enter to speak · esc to close',

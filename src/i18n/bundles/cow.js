@@ -19,8 +19,7 @@ export default {
   hero: {
     lead: 'I moo',
     phrases: ['moo web apps', 'moo moo React', 'full-stack moo', 'moo interfaces'],
-    hook: 'Moo moo moo — React, Next.js, Node.js. Moo moo moo moo, moo moo moo moo moo moo moo moo moo.',
-    proof: ['5+ moos · React / Next.js / Node.js'],
+    proof: ['5+ moos · React · Next.js · Node.js'],
     ctaPrimary: 'See the moo',
     ctaSecondary: 'Moo me',
     ctaResume: 'Moo (résumé)',
@@ -34,14 +33,7 @@ export default {
       'Moo moo moo moo moo moo moo — moo moo moo moo, moo moo moo moo moo moo moo.',
       'Moo moo moo moo moo. Moo moo moo moo moo moo moo moo, moo moo moo moo moo moo.',
     ],
-    scribeNote: 'Moo Moo',
     disciplines: 'Moo',
-    principles: [
-      { title: 'Moo', body: 'Moo moo moo moo moo moo moo moo.' },
-      { title: 'Moo moo', body: 'Moo moo moo moo, moo moo moo moo moo.' },
-      { title: 'Moo moo moo', body: 'Moo moo moo moo moo moo moo.' },
-      { title: 'Moooo', body: 'Moo moo moo moo moo moo moo moo moo.' },
-    ],
     services: {
       frontend: { title: 'Moo', description: 'Moo moo moo moo moo moo moo moo moo.' },
       backend: { title: 'Moo Moo', description: 'Moo moo moo moo, moo moo moo moo.' },
@@ -154,8 +146,6 @@ export default {
   },
 
   map: {
-    searchPlaceholder: 'Moo moo… moo “moo”, “moo moo”, “moo”',
-    noResult: 'Moo moo moo — moo “moo”, “moo moo”, moo “moo”.',
     footerHint: 'moo moo · moo moo moo',
     actions: {
       resume: 'Moo Moo',
@@ -327,11 +317,9 @@ export default {
   voiceHall: {
     title: 'Moo',
     subtitle: 'Moo moo moo moo — moo moo moo moo moo moo moo.',
-    searchPlaceholder: 'Moo…  moo “moo”, “moo”, “moo”',
     nowNarrating: 'Moo moo',
     tryHint: 'Moo moo moo — moo moo moo, moo moo moo, moo moo moo moo moo moo.',
     close: 'Moo',
-    noResult: 'Moo moo moo moo moo. Moo.',
     sealedHint: 'Moo moo moo moo moo moo moo — moo moo moo moo moo moo moo moo.',
     found: '{{count}}/{{total}} moo moo',
     footerHint: 'moo moo · moo moo',

@@ -237,7 +237,7 @@ Below the hook, above the CTAs, add a concise proof line:
 <div className="hero-proof mt-4 flex flex-wrap items-center gap-3 text-[13px] font-mono tracking-wide uppercase" style={{ color: 'var(--color-text-muted)' }}>
   <span>5+ yrs</span>
   <span className="opacity-40">·</span>
-  <span>React / Next.js / Node.js</span>
+  <span>React · Next.js · Node.js</span>
   <span className="opacity-40">·</span>
   <span>8 shipped products</span>
   <span className="opacity-40">·</span>

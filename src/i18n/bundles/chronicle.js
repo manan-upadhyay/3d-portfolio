@@ -48,8 +48,7 @@ export default {
   hero: {
     lead: 'I build',
     phrases: ['production React systems', 'full-stack web apps', 'dashboards & CRMs', 'interfaces that hold up'],
-    hook: 'Full-stack developer, 5+ years shipping React, Next.js, and Node.js — from dashboards and CRMs to SaaS and enterprise products.',
-    proof: ['5+ yrs · React / Next.js / Node.js'],
+    proof: ['5+ yrs · React · Next.js · Node.js'],
     ctaPrimary: 'See my work',
     ctaSecondary: 'Get in touch',
     ctaResume: 'Résumé',
@@ -64,13 +63,6 @@ export default {
     intro: [
       'I’m a full-stack developer focused on production web platforms — solid architecture underneath, and an obsessive eye on the details users feel but never see.',
       'Five years and twenty-plus releases across six industries. I own features [[endToEnd|from an empty repo to production monitoring]], and do my sharpest work where the problem is tangled and the path isn’t obvious.',
-    ],
-    scribeNote: "The Scribe's Note",
-    principles: [
-      { title: 'End-to-end ownership', body: 'From requirement grooming and system design to release validation and production monitoring.' },
-      { title: 'Detail as discipline', body: 'Reusable UI systems, edge cases, and accessibility — the unglamorous craft that makes products feel solid.' },
-      { title: 'Performance as a habit', body: 'Code-splitting, caching, CDN, and media optimization — [[measured|measured, not guessed]].' },
-      { title: 'Secure by default', body: 'JWT/OAuth, Okta, RBAC and middleware access control across enterprise apps.' },
     ],
     disciplines: 'Disciplines',
     // Discipline cards (keyed by the service `iconKey` in constants).
@@ -328,11 +320,9 @@ export default {
     // Plain, non-technical explainer shown at the top of the roster.
     explainer: 'Pick who narrates this site. The words change to match the voice — everything else stays the same. Just for fun.',
     subtitle: 'Choose who narrates the chronicle — or request a persona not yet among us.',
-    searchPlaceholder: 'Search voices…  try “office”, “boss”, “moo”',
     nowNarrating: 'Now narrating',
     tryHint: 'Tap a voice — the whole chronicle, this hall included, re-tells itself in their words.',
     close: 'Close',
-    noResult: 'No voice answers to that name — yet.',
     sealedHint: 'Tap a sealed voice and answer its clue to wake it — or type the secret word anywhere on the page.',
     found: '{{count}}/{{total}} sealed found',
     footerHint: 'enter to speak · esc to close',
@@ -500,7 +490,7 @@ export default {
     },
     phases: {
       voice: { title: 'The Voice switcher', why: 'A full i18next layer — the whole site re-skins through five personalities, scalable to fifteen, with easter-egg voices unlocked by discovery.' },
-      marginalia: { title: 'Marginalia', why: 'Hover a flavor phrase and the real engineering fact unfolds in the margin — the fantasy made to earn its keep.' },
+      marginalia: { title: 'Footnotes', why: 'Hover a flavor phrase and the real engineering fact unfolds in a footnote — the fantasy made to earn its keep.' },
       sky: { title: 'Time-aware sky', why: 'Five theme modes that resolve from your real local time via SunCalc — no geolocation prompt, pure math from your timezone.' },
       sound: { title: 'Interactive sound', why: 'A Web Audio system of synthesized cues (zero bytes) that reward intent, never motion — default-on, silenced under reduced-motion.' },
       recap: { title: 'The Expedition recap', why: 'A cinematic instrument that reads your device and connection client-side and pins you on a live polar map — nothing stored, nothing sent.' },
@@ -508,8 +498,8 @@ export default {
       telemetry: { title: 'Telemetry & discoverability', why: 'Thirty-three product events folding into one per-visit session recap, thirteen super-properties, and five PostHog dashboards — all cookieless, anonymous, and silenced under Do-Not-Track. Beside it, structured-data SEO and a bespoke logger. The instrument answers "are the moments touched?" without harvesting a thing about who touches them.' },
     },
     cuts: {
-      assets: { title: 'A folder of images, GIFs & audio files', why: 'Almost none of this site is shipped media. The hero astrolabe is drawn in Canvas2D, the starfield is pure CSS, and every interface sound is synthesised live through the Web Audio API. The whole feedback layer ships as code, not megabytes — a smaller bundle, fewer network round-trips, and a faster first paint.' },
-      threejs: { title: 'Three.js & the whole WebGL layer', why: 'An early build leaned on a 3D library for depth. I tore it out and rebuilt the same sense of space with layered CSS, parallax, and a hand-drawn Canvas2D astrolabe — dropping a heavy dependency and keeping the initial JS well under budget. Depth, without the download.' },
+      assets: { title: 'A folder of images, GIFs & audio files', why: 'Almost none of this site is shipped media. The hero compass is drawn in Canvas2D, the starfield is pure CSS, and every interface sound is synthesised live through the Web Audio API. The whole feedback layer ships as code, not megabytes — a smaller bundle, fewer network round-trips, and a faster first paint.' },
+      threejs: { title: 'Three.js & the whole WebGL layer', why: 'An early build leaned on a 3D library for depth. I tore it out and rebuilt the same sense of space with layered CSS, parallax, and a hand-drawn Canvas2D compass — dropping a heavy dependency and keeping the initial JS well under budget. Depth, without the download.' },
       tracking: { title: 'Cookie banners, cross-session tracking & surveillance analytics', why: 'The site does measure itself — but the senior call was how. PostHog runs cookieless (memory-only persistence), fully anonymous (no accounts, no identify(), no cross-session identity), and hard-disabled the instant Do-Not-Track is set. No consent banner, because there is nothing to consent to: nothing is sold, nothing follows you off the page. The analytics serve the craft — which moments get touched — not the surveillance.' },
       componentLib: { title: 'A pre-built UI kit or paid template', why: 'Every component here is bespoke — Tailwind for layout, CSS variables for theme, nothing lifted from a library. More work, but full pixel control and none of the bloat or that unmistakable look-alike-template feel.' },
     },
@@ -519,7 +509,7 @@ export default {
       showMe: 'Show me',
       astrolabe: {
         title: 'The living needle',
-        how: 'Sweep your cursor across the hero astrolabe — the needle follows your hand, and a gear-mechanism sound turns at exactly the speed you move it.',
+        how: 'Sweep your cursor across the hero compass — the needle follows your hand, and a gear-mechanism sound turns at exactly the speed you move it.',
       },
       spin: {
         title: 'Spin the needle',
