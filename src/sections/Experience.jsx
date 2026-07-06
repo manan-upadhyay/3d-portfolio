@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { trackOnce } from '../lib/analytics';
 import { Briefcase, GraduationCap, Compass, ArrowRight, GitBranch, ChevronLeft, ChevronRight, Scale } from 'lucide-react';
 import { journey, chapters } from '../constants';
 import { ChapterHeading } from '../components';
@@ -151,7 +152,15 @@ const Experience = () => {
     if (!el) return;
     const max = el.scrollWidth - el.clientWidth;
     const x = el.scrollLeft;
-    setNav({ prev: x > 4, next: x < max - 4, progress: max > 0 ? x / max : 0 });
+    const progress = max > 0 ? x / max : 0;
+    setNav({ prev: x > 4, next: x < max - 4, progress });
+    // How far through the horizontal career journey do people actually get?
+    // Milestones only, once each — fires only where a real horizontal scrub
+    // exists (desktop); mobile's vertical layout is covered by scroll_depth.
+    if (max > 0) {
+      const pct = Math.round(progress * 100);
+      [25, 50, 75, 100].forEach((m) => { if (pct >= m) trackOnce(`exp:${m}`, 'experience_progress', { pct: m }); });
+    }
   }, []);
 
   useEffect(() => {

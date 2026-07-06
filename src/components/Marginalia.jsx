@@ -2,6 +2,7 @@ import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { trackOnce } from '../lib/analytics';
 
 // MARGINALIA — flavor meets substance (LEGENDARY-ROADMAP §2).
 //
@@ -36,6 +37,11 @@ const Marginalia = ({ id, children }) => {
   const ptr = useRef('mouse');
   const tipId = useId();
   const note = t(`marginalia.${id}`);
+
+  // Adoption signal (LEGENDARY-ROADMAP §2): did visitors actually discover the
+  // flavor↔substance footnotes? Fire once per distinct note per session, on any
+  // reveal path (hover / tap / keyboard) — never per-frame.
+  useEffect(() => { if (open) trackOnce(`marginalia:${id}`, 'marginalia_reveal', { id }); }, [open, id]);
 
   // Anchor the portalled note to the trigger — centered above it, flipping below
   // near the top edge, and CLAMPED within the viewport so it never runs off-screen

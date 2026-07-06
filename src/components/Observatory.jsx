@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { ShieldCheck, Search, Activity } from 'lucide-react';
 import { atelier } from '../constants';
 import { playCue, sound } from '../lib/sound';
+import { trackOnce } from '../lib/analytics';
 import CountUp from './CountUp';
 
 /**
@@ -123,6 +124,7 @@ const Observatory = () => {
       lastNote.current = id;
       if (id != null) playCue('hoverNote', { step: stepById[id] ?? 0 });
     }
+    if (id != null) trackOnce('observatory_explore', 'observatory_explore'); // did anyone explore the analytics constellation?
     setSelected(id);
   };
 

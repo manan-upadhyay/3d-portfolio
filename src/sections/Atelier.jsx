@@ -6,6 +6,7 @@ import { Hammer, Scissors, Compass, RefreshCcw, AudioLines, CloudSun, Drama, Map
 import { SectionWrapper } from '../hoc';
 import { atelier } from '../constants';
 import { requestSection } from '../lib/smoothScroll';
+import { track } from '../lib/analytics';
 import { useVoiceStore } from '../store/useVoiceStore';
 import { ChapterHeading, ScrollReveal, CountUp, CommitGraph, CiPipeline, Observatory, CodebaseAtlas, PersonaTriptych, FaceParticles } from '../components';
 
@@ -117,12 +118,12 @@ const EggCard = ({ icon, title, how, open, onToggle, onShow, showLabel }) => {
    starts clamped to one line and taps open (the ellipsis + a small rotating +
    are the affordance — no column of accordion chevrons, v2.0 W6). Desktop shows
    everything, untappable. */
-const LedgerEntry = ({ title, why, kind }) => {
+const LedgerEntry = ({ id, title, why, kind }) => {
   const [open, setOpen] = useState(false);
   return (
     <li className={`atelier-entry atelier-entry--${kind}`}>
       <button type="button" className="atelier-entry__hit" aria-expanded={open}
-        onClick={() => setOpen((o) => !o)}>
+        onClick={() => setOpen((o) => { if (!o) track('ledger_expand', { id, kind }); return !o; })}>
         <span className="atelier-entry__title">
           {title}
           <Plus size={12} className="atelier-entry__plus" data-open={open || undefined} aria-hidden="true" />
@@ -237,7 +238,7 @@ const Atelier = () => {
                 </span>
                 <ul className="atelier-col__list">
                   {atelier.built.map((id) => (
-                    <LedgerEntry key={id} kind="built"
+                    <LedgerEntry key={id} id={id} kind="built"
                       title={t(`atelier.phases.${id}.title`)} why={t(`atelier.phases.${id}.why`)} />
                   ))}
                 </ul>
@@ -248,7 +249,7 @@ const Atelier = () => {
                 </span>
                 <ul className="atelier-col__list">
                   {atelier.cut.map((id) => (
-                    <LedgerEntry key={id} kind="cut"
+                    <LedgerEntry key={id} id={id} kind="cut"
                       title={t(`atelier.cuts.${id}.title`)} why={t(`atelier.cuts.${id}.why`)} />
                   ))}
                 </ul>
@@ -294,8 +295,8 @@ const Atelier = () => {
                   <EggCard key={e.id} icon={e.icon}
                     title={t(`atelier.eggs.${e.id}.title`)} how={t(`atelier.eggs.${e.id}.how`)}
                     open={openEgg === e.id}
-                    onToggle={() => setOpenEgg((cur) => (cur === e.id ? null : e.id))}
-                    onShow={action ? () => action(navigate) : undefined}
+                    onToggle={() => setOpenEgg((cur) => { const next = cur === e.id ? null : e.id; if (next === e.id) track('egg_reveal', { id: e.id }); return next; })}
+                    onShow={action ? () => { track('egg_show', { id: e.id }); action(navigate); } : undefined}
                     showLabel={t('atelier.eggs.showMe')} />
                 );
               })}

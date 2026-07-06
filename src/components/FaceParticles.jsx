@@ -3,6 +3,7 @@ import { useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { ScanSearch } from 'lucide-react';
 import { playCue } from '../lib/sound';
+import { trackOnce } from '../lib/analytics';
 
 /**
  * FaceParticles — a cinematic "character assembly": a swarm of tiny glyphs flies
@@ -391,6 +392,7 @@ const FaceParticles = ({ src = '/atelier/portrait.webp' }) => {
       if (!formed) return;
       e.preventDefault();
       dragging = true;
+      trackOnce('portrait:drag', 'portrait_interact', { mode: 'drag' }); // mobile: played with the portrait puck
       lensRef.current?.setPointerCapture?.(e.pointerId);
       const { x, y } = localXY(e); plt = performance.now();
       P.x = clampX(x); P.y = clampY(y); P.vx = 0; P.vy = 0;
@@ -422,6 +424,7 @@ const FaceParticles = ({ src = '/atelier/portrait.webp' }) => {
     const onOrient = (e) => {
       if (e.beta == null && e.gamma == null) return; // emulators fire empty events
       const g = e.gamma || 0, b = e.beta || 0;
+      if (!gyroLive) trackOnce('portrait:gyro', 'portrait_interact', { mode: 'gyro' }); // mobile: tilt/gyro actually used
       gyroLive = true;
       tiltAX = G * Math.sin(clamp(g, -80, 80) * Math.PI / 180);
       tiltAY = G * Math.sin(clamp(b, -80, 80) * Math.PI / 180);

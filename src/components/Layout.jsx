@@ -169,6 +169,7 @@ const Layout = () => {
           {/* The quiet, always-reachable doorway to the Atelier (hidden while there). */}
           {pathname !== '/making-of' && (
             <Link to="/making-of" data-cursor="hover"
+              onClick={() => track('making_of_enter', { from: 'footer' })}
               className="atelier-footer-link font-chronicle italic text-[14px] inline-flex items-center gap-1.5 mt-12 transition-colors"
               style={{ color: 'var(--color-text-muted)' }}>
               {t('footer.atelierLink')} <ArrowUpRight size={13} />

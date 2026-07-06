@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { atelier } from '../constants';
 import { playCue } from '../lib/sound';
+import { track, trackOnce } from '../lib/analytics';
 
 /**
  * CodebaseAtlas — a cinematic, collapsible, VS-Code-flavoured tree over a curated,
@@ -117,6 +118,8 @@ const CodebaseAtlas = () => {
   const focusRow = (id) => rowRefs.current.get(id)?.focus();
 
   const activate = (node) => {
+    trackOnce('atlas_explore', 'atlas_explore'); // did anyone open the codebase atlas at all?
+    track('atlas_node_open', { id: node.id });   // which files/dirs draw interest
     setSelected(node.id);
     if (node.children) toggle(node.id);
     playCue('blip');

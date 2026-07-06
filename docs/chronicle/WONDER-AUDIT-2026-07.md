@@ -54,6 +54,7 @@
 | S2 | **Voice-specific cue palettes** (each voice sounds different) | Interaction | 🔵 | 7 | 5 | med |
 | C1 | Cinematic upgrades to existing sections (list below) | Cinematics | 🔵 | 7 | 6 | med |
 | P1 | New sub-pages / wild flows (concepts below) | Sub-pages | 🔵 | 8 | 7 | med |
+| A1 | **Analytics coverage** for every post-v1 wonder feature (adoption data → V3 keep/cut) | Instrumentation | ✅ | 8 | 3 | low |
 
 > Impact/Effort/Risk are 1–10 gut estimates to help sequencing, matched to the
 > LEGENDARY-ROADMAP scale. Re-score when a task is picked up.

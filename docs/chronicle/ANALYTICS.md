@@ -87,6 +87,34 @@ via autocapture — the list below is our *intentional* product events.)
 | `shortcut_used` | `Layout` / `Chronicle` | `combo` | ⌘K / ⇧⌘V → **keyboard power-user** (likely a dev) |
 | `session_recap` | `analytics.js` (on page-leave) | see below | **one summary row per visit** |
 
+**Post-v1 features — coverage added / documented in the 2026-07-06 audit**
+([reports/audit/2026-07-06-post-v1-analytics-coverage-audit.md](reports/audit/2026-07-06-post-v1-analytics-coverage-audit.md)):
+
+| Event | Fired from | Props | Answers |
+|---|---|---|---|
+| `mobile_menu_open` | `MobileMenu` | — | **do mobile users open the sheet?** (controls live only here) |
+| `mobile_menu_view` | `MobileMenu` | `view` nav/voice/summon | which in-sheet drawer they enter |
+| `mobile_menu_cta` | `MobileMenu` | `target` | mobile CTA (contact/resume/home) |
+| `marginalia_reveal` | `Marginalia` | `id` (once/note) | **discovered a flavor↔fact footnote?** |
+| `atlas_explore` / `atlas_node_open` | `CodebaseAtlas` | (`id`) | explored the codebase map / which files draw interest |
+| `observatory_explore` | `Observatory` | — | explored the analytics constellation |
+| `making_of_enter` / `making_of_exit` | rail / works / map / mobile / **footer** | `from` | how they reach & leave the Atelier |
+| `experience_progress` | `Experience` | `pct` 25/50/75/100 | **how far through the horizontal career journey** (desktop scrub) |
+| `egg_reveal` / `egg_show` | `Atelier` egg cards | `id` | which hidden features they're curious about vs. actually jump to try |
+| `ledger_expand` | `Atelier` ledger | `id`, `kind` built/cut | which shipped/cut decisions they read |
+| `portrait_interact` | `FaceParticles` | `mode` drag/gyro | did the mobile portrait toy get used (drag / tilt) — deduped once |
+| `atelier_scroll_depth` | `MakingOf` | `pct` | how far down the making-of route they read |
+| `project_story_open` | `Works` | `project` | opened a realm's full story |
+| `sticky_cta_shown` / `_click` / `_dismiss` | `StickyCta` | (`target`) | scroll-triggered CTA funnel |
+| `footer_cta` | `Layout` (footer) | `target` | footer CTA clicks |
+| `voice_clue_solved` / `_revealed` / `_miss` | `ClueUnlock` | `voice` | **sealed-voice unlock funnel** (mobile path) |
+| `session_heartbeat` | `Layout` | `seconds` 15/30/60 | short-session depth (recap-miss backfill) |
+
+> **Voices note.** All 10 voices (2 open + 8 sealed) are covered generically:
+> `voice_selected {voice}` and `voice_unlocked {voice}` carry the voice id, so
+> per-voice adoption/discovery needs no per-voice instrumentation. The pinned
+> trio (Scott / GoT / Avengers) is measurable via `voice_selected` breakdown.
+
 ### `session_recap` — the ExpeditionRecap, as data
 
 Fired **once on page-leave** (`pagehide` / `visibilitychange→hidden`). Because
@@ -103,9 +131,16 @@ the stores) so **every** chart/funnel can be sliced without extra work. Uses onl
 the **synchronous** device snapshot (`readVisitor` — no IP/geo call; PostHog
 derives country server-side):
 
-`device_os`, `device_browser`, `device_gpu`, `device_cores`, `device_touch`,
-`screen_w/h`, `language`, `returning_visitor`, `reduced_motion`, `sound_enabled`,
-`theme`, `sky_mode`, `voice`.
+`app_name`, `beta_round`, `tracking_version`, `device_os`, `device_browser`,
+`device_gpu`, `device_cores`, `device_touch`, `screen_w/h`, `viewport_w/h`,
+`language`, **`input_type`** (coarse/fine), `reduced_motion`, `initial_theme`,
+`returning_visitor`, `sound_enabled`, `theme`, `sky_mode`, `voice` (**21 total**).
+
+> **Mobile without extra work.** Because `input_type` (coarse/fine) and
+> `device_touch` ride on *every* event and pageview, **all analytics are already
+> sliceable by mobile vs desktop** — no mobile-specific duplication needed. The
+> few genuinely mobile-only interactions (the bottom-sheet menu) get their own
+> events (`mobile_menu_*`) so the mobile experience is measurable end to end.
 
 ## Viewing the data (build once in PostHog)
 

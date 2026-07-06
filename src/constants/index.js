@@ -525,17 +525,23 @@ export const atelier = {
   // NON-COPY data only (real event names, counts, capability chips); every label
   // is voiced under t('atelier.observatory.*'). Drives the Observatory component.
   // Sourced from the live code:
-  //   events     → grep of track()/trackOnce()/capture() across src (33 named
-  //                product events; session_recap is the aggregating hub).
-  //   superProps → registerContext() in components/Layout.jsx (13 properties).
+  //   events     → grep of track()/trackOnce()/capture() across src (50+ named
+  //                product events; session_recap is the aggregating hub). The
+  //                constellation below visualises a curated subset; drill-down
+  //                events (atlas_node_open, mobile_menu_view, egg_show,
+  //                ledger_expand ids, portrait_interact, voice_clue_*) fire too
+  //                but are omitted here to keep the map readable.
+  //   superProps → registerContext() in main.jsx + Layout.jsx + the stores
+  //                (21 properties — device/screen/viewport/input, theme, sky,
+  //                voice, sound, returning_visitor…).
   //   schemas    → JSON-LD @type blocks in index.html (WebSite, ProfilePage,
   //                Person, Organization, PostalAddress).
   //   dashboards → PostHog (funnels, cohorts, retention, weekly alerts).
   observatory: {
     // The instrument readouts — `value` is data; `count` cells animate via CountUp.
     metrics: [
-      { key: 'events', value: '33', count: true },
-      { key: 'superProps', value: '13', count: true },
+      { key: 'events', value: '50', count: true },
+      { key: 'superProps', value: '21', count: true },
       { key: 'webhooks', value: '2', count: true },
       { key: 'dashboards', value: '5', count: true },
       { key: 'schemas', value: '5', count: true },
@@ -555,10 +561,12 @@ export const atelier = {
           { id: 'hero_cta', where: 'Hero — primary call-to-action' },
           { id: 'section_view', where: 'Each chapter as it enters view' },
           { id: 'scroll_depth', where: 'Scroll-depth milestones (25/50/75/100%)' },
+          { id: 'experience_progress', where: 'Pinned career journey scrubbed (25/50/75/100%)' },
           { id: 'rail_nav', where: 'SideRail chapter jump' },
           { id: 'map_open', where: '⌘K map overlay opened' },
           { id: 'map_travel', where: 'Travel to a realm from the map' },
           { id: 'shortcut_used', where: 'A keyboard shortcut fired' },
+          { id: 'mobile_menu_open', where: 'Mobile bottom-sheet menu opened' },
         ] },
         { id: 'craft', events: [
           { id: 'astrolabe_spin', where: 'Hero compass nudged' },
@@ -571,6 +579,9 @@ export const atelier = {
           { id: 'voice_hall_open', where: 'Voice Hall overlay opened' },
           { id: 'voice_unlocked', where: 'A sealed voice unlocked' },
           { id: 'voice_summon_submit', where: '“Summon a voice” request sent' },
+          { id: 'marginalia_reveal', where: 'A flavor↔fact footnote revealed', once: true },
+          { id: 'atlas_explore', where: 'Codebase Atlas explored', once: true },
+          { id: 'observatory_explore', where: 'Analytics constellation explored', once: true },
         ] },
         { id: 'realms', events: [
           { id: 'carousel_open', where: 'A realm opened in the carousel', once: true },
@@ -580,6 +591,8 @@ export const atelier = {
           { id: 'atelier_view', where: 'The Workshop (/making-of) reached' },
           { id: 'persona_card_expand', where: 'A persona card opened' },
           { id: 'expedition_view', where: 'Expedition recap revealed', once: true },
+          { id: 'egg_reveal', where: 'A hidden-feature card expanded' },
+          { id: 'ledger_expand', where: 'A built/cut ledger entry opened' },
         ] },
         { id: 'intent', events: [
           { id: 'contact_form_start', where: 'Contact form first focused', once: true },

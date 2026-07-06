@@ -309,6 +309,11 @@ const MobileMenu = ({ activeId }) => {
   }, [open, view]);
   useEffect(() => { setOpen(false); }, [pathname]);
   useEffect(() => { if (!open) setView('main'); }, [open]);
+  // Mobile-menu engagement (v1.1 Workstream E). Every open (FAB, coach-tip, or
+  // the `ui:open-menu` event) and each in-sheet drawer view — the core mobile UX
+  // signals, since the sound / theme / voice controls live ONLY in this sheet.
+  useEffect(() => { if (open) track('mobile_menu_open'); }, [open]);
+  useEffect(() => { if (open && view !== 'main') track('mobile_menu_view', { view }); }, [open, view]);
   // The Atelier field guide opens this sheet on mobile (sky/theme lives here).
   useEffect(() => {
     const openMenu = () => setOpen(true);
