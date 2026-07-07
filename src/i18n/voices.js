@@ -131,7 +131,7 @@ export const voices = [
     hint: '“______ is coming.” Finish the most famous Game of Thrones line.',
     hint2: 'Six letters: W-I-N-T-E-R. House Stark’s words.',
     info: {
-      name: 'The realm of Westeros',
+      name: 'The Realm of Westeros',
       source: 'Game of Thrones',
       note: 'The best of the Seven Kingdoms — Stark, Lannister, Targaryen and more — in one voice. Winter is coming.',
     },

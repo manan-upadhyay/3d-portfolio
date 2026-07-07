@@ -1812,12 +1812,15 @@ h1, h2, h3, h4, h5, h6 {
   display: inline-flex; align-items: center; justify-content: center;
   padding: 12px 16px; border-radius: 12px;
   font-size: 13px; font-weight: 600;
-  color: var(--color-bg);
-  background: var(--color-ember);
-  border: 1px solid rgba(var(--color-ember-rgb), 0.6);
-  transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+  /* Shared primary-CTA tokens (theme-aware, contrast-checked) — same language as
+     the "Summon a new narrator" send button, so both CTAs read as one system. */
+  color: var(--cta-accent-fg);
+  background: var(--cta-accent-bg);
+  border: none;
+  box-shadow: 0 6px 18px rgba(var(--color-ember-rgb), 0.28);
+  transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
 }
-.voice-preview__apply:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(var(--color-ember-rgb), 0.28); }
+.voice-preview__apply:hover { transform: translateY(-1px); filter: brightness(1.06); box-shadow: 0 10px 26px rgba(var(--color-ember-rgb), 0.36); }
 .voice-preview__badge {
   width: 100%;
   display: inline-flex; align-items: center; justify-content: center; gap: 7px;
