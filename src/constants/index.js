@@ -215,18 +215,28 @@ export const journey = [
   { id: 'horizon', year: 'Now', tech: [], kind: 'cta' },
 ];
 
-// Generic, product-agnostic architecture tiers — abstract boxes for the NDA
-// plates' system schematic (persona audit 2026-07-05, item 9). These are
-// deliberately generic (Client / API Gateway / Data Store …), NOT the real
-// service names, so an NDA plate can carry "a real platform lives here" proof
-// without breaching anything. EN-only technical labels, exempt from voice like
-// the atlas tags. Keys are referenced by each NDA project's `architecture`
-// (an ordered list of columns; NdaSchematic auto-flows every node in a column
-// to every node in the next). Drives NdaSchematic.jsx.
+// Architecture tiers for the NDA plates' system schematic (persona audit
+// 2026-07-05, item 9). Two flavours are permissible: (a) product-agnostic
+// generic tiers (Client / API Gateway / Data Store …) that carry "a real
+// platform lives here" proof without naming anything sealed, and (b) the
+// actual *stack/tooling* tiers (Next.js / Auth.js / Okta SSO / RBAC) — those
+// tools are already public in each project's stack tags, so naming them is
+// safe; the NDA protects the client's product, data and service names, never
+// the off-the-shelf auth vendor. The advisor-portfolio plate uses (b) so its
+// schematic is a truthful Okta OIDC + Auth.js auth flow, not a vague box.
+// EN-only technical labels, exempt from voice like the atlas tags. Keys are
+// referenced by each NDA project's `architecture` (an ordered list of columns;
+// NdaSchematic auto-flows every node in a column to every node in the next —
+// so columns are chosen such that a full connection is always truthful).
+// Drives NdaSchematic.jsx.
 export const ARCH_TIERS = {
   client: 'Client',
   web: 'Web App',
+  nextjs: 'Next.js',
   auth: 'Auth',
+  authjs: 'Auth.js',
+  okta: 'Okta SSO',
+  rbac: 'RBAC',
   api: 'API Gateway',
   service: 'Services',
   worker: 'Workers',
@@ -325,9 +335,14 @@ const featuredProjects = [
     source_code_link: '',
     live_demo_link: '',
     isNDA: true,
-    // Abstract tiers only (see ARCH_TIERS) — an advisor-facing reporting app
-    // behind SSO, no real service names.
-    architecture: [['client'], ['web'], ['auth', 'api'], ['service', 'report']],
+    // The real auth flow (see ARCH_TIERS) — a Next.js advisor app that gates
+    // every request through Auth.js + Okta SSO, then RBAC, before any protected
+    // service or report. Named stack (Okta/Auth.js) is public via the tags; the
+    // client's own services/data stay unnamed. Columns are ordered so the
+    // schematic's full auto-connect is always truthful (RBAC sits alone between
+    // the two-node identity and application tiers, so no false edge is drawn):
+    //   Client → Next.js → [Auth.js + Okta SSO] → RBAC → [Services + Reporting]
+    architecture: [['client'], ['nextjs'], ['authjs', 'okta'], ['rbac'], ['service', 'report']],
     proof: [
       { k: 'role', v: 'Lead frontend — built from scratch' },
       { k: 'outcome', v: '4 production releases · Okta SSO + RBAC' },

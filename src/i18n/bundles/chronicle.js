@@ -167,7 +167,7 @@ export default {
     // ("Solo, end-to-end" of WHAT?). Generic; every voice inherits.
     proofLabels: { role: 'My role', outcome: 'Outcome', scale: 'Scope' },
     ndaSealed: "[[nda|Sealed under NDA]] — details limited to what's permissible.",
-    ndaArch: 'Abstracted architecture — sealed under NDA',
+    ndaArch: 'System architecture — sealed under NDA',
     // Load-bearing controls stay plain even in the themed default voice — a
     // skimmer shouldn't have to decode a verb to expand the list (persona audit
     // 2026-07-05, item 10; the Contact de-theming precedent from v1.1).

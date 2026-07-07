@@ -70,7 +70,7 @@ export default {
     realm: 'Project',
     enterRealm: 'View project',
     ndaSealed: "[[nda|Under NDA]] — details limited to what's permissible.",
-    ndaArch: 'Abstract architecture (details under NDA)',
+    ndaArch: 'System architecture (details under NDA)',
     chartMore: 'Show {{count}} more projects',
     furl: 'Show less',
     fullStory: 'Full details',
