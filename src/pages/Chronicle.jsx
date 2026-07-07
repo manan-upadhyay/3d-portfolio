@@ -43,9 +43,9 @@ const Chronicle = () => {
     onClick: () => { track('rail_nav', { id: c.id }); scrollToSection(c.id); },
   }));
   const railActions = [
-    { key: 'map', label: t('nav.map'), ariaLabel: t('nav.openMap'), kbd: true,
+    { key: 'map', label: t('nav.map'), ariaLabel: t('nav.openMap'), kbd: '⌘K',
       glyph: <Map size={17} />, onClick: () => setMapOpen(true) },
-    { key: 'makingOf', label: t('nav.makingOf'), ariaLabel: t('nav.makingOf'),
+    { key: 'makingOf', label: t('nav.makingOf'), ariaLabel: t('nav.makingOf'), nav: true,
       glyph: <Hammer size={16} />,
       onClick: () => { track('making_of_enter', { from: 'rail' }); navigate('/making-of'); } },
   ];
