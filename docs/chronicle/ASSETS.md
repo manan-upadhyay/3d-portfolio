@@ -64,8 +64,22 @@ state). The cover prompt below is for if/when we add bespoke cover art.
 |---|---|---|
 | `realms/<slug>/<screenshot>.png` | as captured | product screenshots (shipped) |
 | `chronicle/realms/<slug>.webp` *(optional)* | 1600×1200 (4:3) | cinematic cover, probed |
+| `voices/<dark\|light>/<id>.webp` *(optional)* | **1440×1440, exactly square (1:1)**, WebP ~85% | Voice Hall / mobile **preview-panel portrait** (V5) — a **pre-rendered plate** (frame + monogram + portrait all baked in), rendered **directly** (no `FaceParticles`, no extra frame); monogram fallback if absent |
 
-Slugs match `constants` projects (e.g. `gajaakriti`, `royal-tiles`, …).
+Slugs match `constants` projects (e.g. `gajaakriti`, `royal-tiles`, …). Voice
+`<id>`s match the registry ([voices.js](../../src/i18n/voices.js)): `scott`,
+`dwight`, `got`, `avengers`, `yoda`, `chandler`, … (open voices `chronicle` /
+`plain` don't need one — the panel shows their monogram; sealed voices keep the
+wax-lock until unlocked). Ship **two theme variants** — `voices/dark/<id>.webp`
+and `voices/light/<id>.webp` — each pre-graded to sit on that theme's panel; the
+preview picks the folder from the resolved theme. The image is the finished art
+(its own ornate frame), so it renders as-is via [VoicePreviewCard](../../src/components/VoicePreviewCard.jsx).
+
+**Dimensions / grading (perfect on all screens):** author at **1440×1440, exactly
+1:1** (min 1024²; ~1180–1460px is the largest real render — a big phone at DPR 3 /
+small tablet at DPR 2 — desktop maxes at only ~276px CSS). Keep the frame/monogram
+a few % inside the edges. **Bake the background to match the panel** so edges blend
+seamlessly: dark → deep near-black/navy; light → the light theme's cream card tone.
 
 **Prompt template** (prepend World Bible):
 > "A cinematic, painterly cover illustration representing **<one-line project

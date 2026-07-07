@@ -416,6 +416,12 @@ export default {
     title: 'Voice Authorization',
     subtitle: 'Select the voice cleared to narrate this chronicle. Choose correctly. Identity is everything.',
     nowNarrating: 'Currently in command',
+    preview: {
+      eyebrow: 'Under review',
+      sealed: 'Unauthorized voice',
+      apply: 'Authorize this voice',
+      active: 'Currently in command',
+    },
     tryHint: 'Select a voice. The entire chronicle — this panel included — will immediately submit to it. There is no resistance.',
     close: 'Dismiss',
     sealedHint: 'Certain voices are sealed for security. Select one and supply its password — or type the correct password anywhere on the page — to breach them.',

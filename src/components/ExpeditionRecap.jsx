@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Lock, Info, ArrowUpRight } from 'lucide-react';
 import { useExpeditionStore, useElapsed, useVisitStore, PX_PER_METER } from '../hooks/useExpedition';
@@ -9,6 +9,7 @@ import { SEALED_VOICES, voiceById } from '../i18n/voices';
 import { fmtCoord, localReading } from '../lib/visitor';
 import { useVisitor } from '../hooks/useVisitor';
 import { deviceHash, drawSigil } from '../lib/sigil';
+import { playCue } from '../lib/sound';
 import { trackOnce } from '../lib/analytics';
 import ScrollReveal from './ScrollReveal';
 import SunArc from './SunArc';
@@ -276,13 +277,22 @@ const ExpeditionRecap = () => {
 
   // Tick the live clock + measure refresh rate only while the card is on screen.
   const ref = useRef(null);
+  const reduce = useReducedMotion();
   const [inView, setInView] = useState(false);
+  // The Traveler's Sigil "stamps in" once, the first time the recap resolves into
+  // view (S1) — a one-shot press animation + the `sigilStamp` cue. `playCue`
+  // self-gates on the audio unlock, so it only sounds for a visitor who has
+  // already engaged the sound layer — never a phantom noise from a passive scroll.
+  const [stamped, setStamped] = useState(false);
   useEffect(() => {
     const el = ref.current;
     if (!el) return undefined;
     const io = new IntersectionObserver(([e]) => {
       setInView(e.isIntersecting);
-      if (e.isIntersecting) trackOnce('expedition_view', 'expedition_view'); // did they reach the recap?
+      if (e.isIntersecting) {
+        trackOnce('expedition_view', 'expedition_view'); // did they reach the recap?
+        setStamped((was) => { if (!was) playCue('sigilStamp'); return true; });
+      }
     }, { threshold: 0.2 });
     io.observe(el);
     return () => io.disconnect();
@@ -339,10 +349,13 @@ const ExpeditionRecap = () => {
               </Hovercard>
             </p>
           </div>
-          <div className="expedition-sigil flex-shrink-0" title={t('recap.sigilNote')}>
+          <motion.div className="expedition-sigil flex-shrink-0" title={t('recap.sigilNote')}
+            initial={false}
+            animate={stamped && !reduce ? { scale: [1.28, 0.9, 1.04, 1] } : { scale: 1 }}
+            transition={{ duration: 0.5, ease: 'easeOut', times: [0, 0.42, 0.72, 1] }}>
             <Sigil seed={seed} />
             <span className="expedition-sigil__hash exp-mono">{hex}</span>
-          </div>
+          </motion.div>
         </div>
 
         <div className="expedition-body mt-8">

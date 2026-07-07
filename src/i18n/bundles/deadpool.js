@@ -420,6 +420,12 @@ export default {
     title: 'The Voice Booth',
     subtitle: 'Pick who narrates this whole thing. I’m obviously the best choice, but the site’s a democracy, so. Democracy. Gross. Vote for me.',
     nowNarrating: 'Currently: me',
+    preview: {
+      eyebrow: 'Now previewing',
+      sealed: 'Locked (boo)',
+      apply: 'Give this voice the mic',
+      active: 'Currently: this legend',
+    },
     tryHint: 'Click a voice and BOOM — the whole site starts talking like them. Even this exact box. Especially this box. Fourth wall’s already gone, might as well.',
     close: 'Bail',
     sealedHint: 'Some voices are locked, like a treasure chest, or my emotional core. Tap one and answer its clue — or type the secret word anywhere — to pop it open.',

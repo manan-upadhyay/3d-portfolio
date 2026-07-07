@@ -37,6 +37,10 @@ export const CONFIG = {
   blip: { peak: 0.11 },             // arsenal hover pluck
   detent: { peak: 0.085 },          // build-reel sprocket tick (per frame crossed)
   settle: { peak: 0.12 },           // build-reel playhead landing thunk
+  // ── S1 micro-moments (intent-gated) ──────────────────────────────────────
+  unfurl: { peak: 0.09, grains: 11 }, // realm-plate parchment unroll (dur-synced to the expand)
+  seal: { peak: 0.13 },             // copy-email wax-seal press (a soft, deliberate stamp)
+  sigilStamp: { peak: 0.16 },       // recap traveler's-sigil stamp (a firm emboss thunk)
   click: { peak: 0.14 },            // physical prev/next key — press (bright) + release (soft)
   volumeTick: { peak: 0.05 },       // apple-slider drag tick — pitch rises with the level
   hoverNote: { peak: 0.085 },       // observatory analytics-chip hover note (pitched)
@@ -226,6 +230,43 @@ const CUES = {
   settle(t0) {
     blip(t0, { freq: 132, type: 'triangle', dur: 0.13, peak: CONFIG.settle.peak, attack: 0.004, glideTo: 92 });
     swoosh(t0, { dur: 0.09, peak: CONFIG.settle.peak * 0.4, type: 'lowpass', from: 760, to: 200, q: 0.7 });
+  },
+
+  // Realm-plate "unfurl" (S1) — a soft parchment unroll. A lowpassed air "roll"
+  // opening from low to open over the plate's expand, with a thinning shower of
+  // tiny paper-fibre ticks. `dur` is passed by the caller = the expand duration,
+  // so the sound and the motion open at exactly the same rate (feels natural, not
+  // a fixed clip fired next to a variable animation).
+  unfurl(t0, { dur = 0.6 } = {}) {
+    const c = CONFIG.unfurl;
+    swoosh(t0, { dur, peak: c.peak, type: 'lowpass', from: 300, to: 1200, q: 0.5 });
+    const n = c.grains;
+    for (let i = 0; i < n; i++) {
+      const p = i / n;                       // fibres release densest at the start, thin out
+      const dt = p * dur * 0.9 + Math.random() * 0.012;
+      blip(t0 + dt, { freq: 2100 + Math.random() * 2700, type: 'triangle', dur: 0.03, peak: c.peak * 0.16 * (1 - p * 0.5), attack: 0.001 });
+    }
+  },
+
+  // Copy-email "seal" (S1) — a deliberate wax-seal press: a soft bandpass press
+  // transient, a low triangle "thock" of wax settling, and a faint high contact
+  // tick. Reads as a stamp pressed once, not a click.
+  seal(t0) {
+    const pk = CONFIG.seal.peak;
+    swoosh(t0, { dur: 0.05, peak: pk * 0.7, type: 'bandpass', from: 900, to: 380, q: 4 });
+    blip(t0 + 0.012, { freq: 150, glideTo: 96, type: 'triangle', dur: 0.14, peak: pk, attack: 0.002 });
+    blip(t0, { freq: 2400, type: 'sine', dur: 0.02, peak: pk * 0.14, attack: 0.001 });
+  },
+
+  // Recap "sigil stamp" (S1) — a firmer emboss than the wax seal: a weighted
+  // press-thunk dropping in pitch + a short metallic ring (the sigil biting the
+  // page), fired once when the Traveler's Sigil resolves.
+  sigilStamp(t0) {
+    const pk = CONFIG.sigilStamp.peak;
+    blip(t0, { freq: 130, glideTo: 70, type: 'triangle', dur: 0.18, peak: pk, attack: 0.002 });
+    swoosh(t0, { dur: 0.06, peak: pk * 0.6, type: 'bandpass', from: 1400, to: 500, q: 6 });
+    blip(t0 + 0.02, { freq: 660, type: 'sine', dur: 0.22, peak: pk * 0.3, attack: 0.004 });
+    blip(t0 + 0.02, { freq: 990, type: 'sine', dur: 0.16, peak: pk * 0.16, attack: 0.004 });
   },
 
   // A physical button — a sharp contact transient + a low body "thock". `up:true`

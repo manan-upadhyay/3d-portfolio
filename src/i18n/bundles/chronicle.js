@@ -321,10 +321,19 @@ export default {
     explainer: 'Pick who narrates this site. The words change to match the voice — everything else stays the same. Just for fun.',
     subtitle: 'Choose who narrates the chronicle — or request a persona not yet among us.',
     nowNarrating: 'Now narrating',
+    // Desktop preview panel (V5) — the framed portrait + details on the right.
+    preview: {
+      eyebrow: 'Now previewing',
+      sealed: 'Sealed',
+      apply: 'Speak in this voice',
+      active: 'Now narrating the chronicle',
+      clue: 'Clue',
+    },
     tryHint: 'Tap a voice — the whole chronicle, this hall included, re-tells itself in their words.',
     close: 'Close',
     sealedHint: 'Tap a sealed voice and answer its clue to wake it — or type the secret word anywhere on the page.',
     found: '{{count}}/{{total}} sealed found',
+    foundShort: '{{count}}/{{total}} found',
     footerHint: 'enter to speak · esc to close',
     categories: {
       core: 'The Voices',
@@ -459,6 +468,8 @@ export default {
       more: 'More',
       tip_one: '{{count}} commit',
       tip_other: '{{count}} commits',
+      share: '{{pct}}% of the whole build',
+      peak: 'The peak — my busiest day',
       busyUnit: '{{count}} in a day',
       streakUnit: '{{count}} days',
       aria: 'A calendar heatmap of daily commits to this repository',

@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { scrollToTop } from '../lib/smoothScroll';
 import { useThemeStore } from '../store/useThemeStore';
+import { useVoiceStore } from '../store/useVoiceStore';
+import { voiceById } from '../i18n/voices';
 
 // Springy "jelly" physics — a touch of overshoot, settles naturally.
 const JELLY = { type: 'spring', stiffness: 320, damping: 22, mass: 0.7 };
@@ -69,6 +71,11 @@ const SideRail = ({ items, activeId, actions = [], visible, ariaLabel, crestLabe
   const [expanded, setExpanded] = useState(false);
   const { resolvedTheme } = useThemeStore();
   const crest = resolvedTheme === 'dark' ? '/logo-dark.png' : '/logo-light.webp';
+  // Ambient voice mark — the active persona, pinned to the rail's foot so it's
+  // always in view. Opens the Voice Hall. Reused on both routes (the rail is).
+  const voice = useVoiceStore((s) => s.voice);
+  const openHall = useVoiceStore((s) => s.openHall);
+  const activeVoice = voiceById(voice);
 
   return (
     <motion.nav
@@ -140,6 +147,45 @@ const SideRail = ({ items, activeId, actions = [], visible, ariaLabel, crestLabe
             glyph={a.glyph}
           />
         ))}
+
+        {/* Ambient voice mark — always shows who is narrating; opens the Hall. */}
+        {activeVoice && (
+          <>
+            <span className="my-1 h-px mx-2" style={{ background: 'var(--color-card-border)' }} />
+            <button
+              onClick={openHall}
+              data-cursor="hover"
+              aria-label={`${t('voiceHall.nowNarrating')}: ${activeVoice.label}`}
+              title={`${t('voiceHall.nowNarrating')}: ${activeVoice.label}`}
+              className="relative flex items-center w-full h-9 rounded-xl"
+            >
+              <span className="relative grid place-items-center flex-shrink-0" style={{ width: COLLAPSED - 12 }}>
+                <span
+                  className="grid place-items-center w-7 h-7 rounded-full font-chronicle text-[11.5px] leading-none"
+                  style={{
+                    color: 'var(--color-ember)',
+                    background: 'rgba(var(--color-ember-rgb),0.14)',
+                    border: '1px solid rgba(var(--color-ember-rgb),0.3)',
+                  }}
+                >
+                  {activeVoice.glyph}
+                </span>
+              </span>
+              <motion.span
+                animate={{ opacity: expanded ? 1 : 0, x: expanded ? 0 : -6 }}
+                transition={{ duration: 0.25, ease: 'easeOut' }}
+                className="relative min-w-0 text-left"
+              >
+                <span className="block text-[8.5px] font-bold tracking-[0.18em] uppercase leading-none whitespace-nowrap" style={{ color: 'var(--color-gold)' }}>
+                  {t('voiceHall.nowNarrating')}
+                </span>
+                <span className="block text-[12.5px] font-medium leading-tight mt-0.5 truncate" style={{ color: 'var(--color-text)' }}>
+                  {activeVoice.label}
+                </span>
+              </motion.span>
+            </button>
+          </>
+        )}
       </motion.div>
     </motion.nav>
   );

@@ -419,6 +419,12 @@ export default {
     title: 'The Improv Stage',
     subtitle: 'Pick who narrates this whole thing. I do all the voices myself. I’m basically a chameleon, but for talking.',
     nowNarrating: 'Currently me',
+    preview: {
+      eyebrow: 'Now auditioning',
+      sealed: 'Sealed voice',
+      apply: 'Make me the narrator',
+      active: 'That’s me. Narrating. Boom.',
+    },
     tryHint: 'Click a voice and — BOOM — the whole site starts talking like them. Even this part right here. Especially this part.',
     close: 'Close (but don’t go)',
     sealedHint: 'Some voices are sealed, like a surprise party. Tap one and answer its clue — or type the secret word anywhere on the page — and they wake up. Surprise.',

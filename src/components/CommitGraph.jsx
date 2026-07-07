@@ -57,18 +57,13 @@ function buildWindow(days, startStr, endStr) {
   return { cells, total, active, busiest, bestStreak };
 }
 
-const fmtDate = (ds) => {
-  const d = new Date(`${ds}T00:00:00Z`);
-  return `${MONTHS[d.getUTCMonth()]} ${d.getUTCDate()}, ${d.getUTCFullYear()}`;
-};
-
 const CommitGraph = () => {
   const { t } = useTranslation();
   const reduce = useReducedMotion();
   const rootRef = useRef(null);
   const scrollRef = useRef(null);
   const [inView, setInView] = useState(false);
-  const [hover, setHover] = useState(null); // { date, count, x, y }
+  const [hover, setHover] = useState(null); // { count, pct, isPeak, x, y }
 
   const { cells, total, active, busiest, bestStreak } = useMemo(
     () => buildWindow(commitHistory.days, commitHistory.windowStart, commitHistory.last),
@@ -112,21 +107,38 @@ const CommitGraph = () => {
               <span
                 className={`commit-cell commit-cell--l${cell.level}`}
                 style={{ '--cell-delay': `${i * 0.03}s` }}
-                onPointerEnter={(e) => cell.count > 0 && setHover({ date: cell.date, count: cell.count, x: e.currentTarget.offsetLeft, y: e.currentTarget.offsetTop })}
+                onPointerEnter={(e) => {
+                  if (cell.count === 0 || !rootRef.current) return;
+                  const cr = e.currentTarget.getBoundingClientRect();
+                  const rr = rootRef.current.getBoundingClientRect();
+                  setHover({
+                    count: cell.count,
+                    pct: Math.max(1, Math.round((cell.count / total) * 100)),
+                    isPeak: cell.date === busiest.date,
+                    x: cr.left - rr.left + cr.width / 2,
+                    y: cr.top - rr.top,
+                  });
+                }}
                 onPointerLeave={() => setHover(null)}
               />
               <span className="commit-strip__date exp-mono" aria-hidden="true">{cell.day}</span>
             </div>
           ))}
         </div>
-
-        {hover && (
-          <span className="commit-graph__tip" style={{ left: hover.x, top: hover.y }} role="tooltip">
-            <strong>{t('atelier.commits.tip', { count: hover.count })}</strong>
-            <span>{fmtDate(hover.date)}</span>
-          </span>
-        )}
       </div>
+
+      {/* Tooltip lives OUTSIDE the horizontally-scrolled strip so the strip's
+          overflow clip never crops it — positioned against the graph root. */}
+      {hover && (
+        <span className="commit-graph__tip" style={{ left: hover.x, top: hover.y }} role="tooltip">
+          <strong>{t('atelier.commits.tip', { count: hover.count })}</strong>
+          <span>
+            {hover.isPeak
+              ? t('atelier.commits.peak')
+              : t('atelier.commits.share', { pct: hover.pct })}
+          </span>
+        </span>
+      )}
 
       {/* legend */}
       <div className="commit-graph__legend" aria-hidden="true">

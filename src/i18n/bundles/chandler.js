@@ -420,6 +420,12 @@ export default {
     title: 'The Voice Booth',
     subtitle: 'Pick who narrates this whole thing. Could I BE any more biased toward myself? No. But it’s your call. The others are great too, I guess.',
     nowNarrating: 'Currently: me',
+    preview: {
+      eyebrow: 'Now previewing',
+      sealed: 'Locked voice',
+      apply: 'Could this voice BE the narrator?',
+      active: 'Currently: me',
+    },
     tryHint: 'Click a voice and the whole site — this box included — re-tells itself in their words. Even this exact sentence. Could that BE any more meta?',
     close: 'Close',
     sealedHint: 'Some voices are locked, like my feelings. Tap one and answer its clue — or type the secret word anywhere — to open it up.',

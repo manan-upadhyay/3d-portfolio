@@ -18,6 +18,7 @@ import Cursor from './Cursor';
 import SkyControl from './SkyControl';
 import ControlCluster from './ControlCluster';
 import MobileMenu from './MobileMenu';
+import MobileVoiceMark from './MobileVoiceMark';
 import DayNightToggle from './DayNightToggle';
 import EasterEggListener from './EasterEggListener';
 import VoiceTransition from './VoiceTransition';
@@ -120,6 +121,7 @@ const Layout = () => {
       <div className="md:hidden fixed top-4 right-4 z-40"><DayNightToggle /></div>
       <div className="hidden md:contents"><ControlCluster activeId={activeId} /></div>
       <MobileMenu activeId={activeId} />
+      <MobileVoiceMark />
       <EasterEggListener />
       <VoiceTransition />
       <VoiceHall />

@@ -63,6 +63,8 @@ via autocapture — the list below is our *intentional* product events.)
 | `voice_switcher_open` | `VoiceSwitcher` | — | used the voice menu? |
 | `voice_hall_open` | `useVoiceStore.openHall` | — | opened the Hall? |
 | `voice_selected` | `useVoiceStore.setVoice` | `voice` | **# voices tried / favourite** |
+| `voice_previewed` | `VoiceHall` panel / mobile preview | `voice`, `locked`, `source:'hall'\|'mobile'` | **previewed-most** (once/session/voice) — browsed without applying |
+| `voice_applied` | `VoiceHall` panel / mobile preview | `voice`, `source:'hall'\|'mobile'` | **applied-most** (once/session/voice) — the Apply button; compare directly to `voice_previewed`, sliceable by `source` |
 | `voice_unlocked` | `useVoiceStore.unlockVoice` | `voice` | discovered an easter-egg voice? |
 | `voice_summon_submit` / `_success` / `_error` | `VoiceHall` summon form | `persona` | requested a brand-new voice |
 | `theme_changed` | `useThemeStore` | `mode`, `sky` | toggled the sky? |

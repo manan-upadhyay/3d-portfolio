@@ -422,6 +422,12 @@ export default {
     title: 'The Voice Array',
     subtitle: 'Pick who narrates the whole thing — what master do I serve? Whoever you crown. I’d pick me, obviously, but it’s your call. The rest of the roster’s solid too. Even the one who only says “moo.”',
     nowNarrating: 'Now running',
+    preview: {
+      eyebrow: 'Standing by',
+      sealed: 'Access restricted',
+      apply: 'Deploy this voice',
+      active: 'Now running',
+    },
     tryHint: 'Pick a voice and the entire site — this panel included — re-narrates in their register. Instantly. The way a good switch should feel.',
     close: 'Close',
     sealedHint: 'Some voices are locked. Answer a voice’s clue — or type its secret word anywhere on the page — to bring it online.',

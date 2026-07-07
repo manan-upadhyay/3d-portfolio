@@ -420,6 +420,12 @@ export default {
     title: 'The Council of Voices',
     subtitle: 'Who tells this tale, choose. Myself, recommend I would — but generous, I am. Their charms, the others have.',
     nowNarrating: 'Now speaking',
+    preview: {
+      eyebrow: 'Preview this, you do',
+      sealed: 'Sealed, this voice is',
+      apply: 'Speak in this voice, it will',
+      active: 'Now speaking, it is',
+    },
     tryHint: 'A voice, choose — and in their words, retell itself the whole site will, this chamber included. Even the clever parts.',
     close: 'Leave, you may',
     sealedHint: 'Sealed, some voices are. A voice’s riddle answer — or its secret word type anywhere — and yours it becomes.',

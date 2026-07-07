@@ -421,6 +421,12 @@ export default {
     title: 'The Court of Voices',
     subtitle: 'Choose who narrates this tale. Any voice may hold the throne a while — the realm does not mind a little chaos. Chaos, after all, is a ladder.',
     nowNarrating: 'Now holding the throne',
+    preview: {
+      eyebrow: 'Now auditioning',
+      sealed: 'Sealed voice',
+      apply: 'Let this voice hold the throne',
+      active: 'Now holds the throne',
+    },
     tryHint: 'Choose a voice and the whole keep — this hall included — retells itself in their words. Even the clever bits.',
     close: 'Take your leave',
     sealedHint: 'Some voices are sealed. Answer a voice’s riddle — or type its secret word anywhere in the keep — and it is yours.',

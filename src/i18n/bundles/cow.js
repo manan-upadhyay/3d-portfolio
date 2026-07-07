@@ -318,6 +318,12 @@ export default {
     title: 'Moo',
     subtitle: 'Moo moo moo moo — moo moo moo moo moo moo moo.',
     nowNarrating: 'Moo moo',
+    preview: {
+      eyebrow: 'Moo',
+      sealed: 'Moo moo',
+      apply: 'Moo moo moo',
+      active: 'Moo moo moo moo',
+    },
     tryHint: 'Moo moo moo — moo moo moo, moo moo moo, moo moo moo moo moo moo.',
     close: 'Moo',
     sealedHint: 'Moo moo moo moo moo moo moo — moo moo moo moo moo moo moo moo.',

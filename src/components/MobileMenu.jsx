@@ -5,20 +5,19 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   Menu, X, Compass, Mail, Download, ChevronLeft, ChevronRight,
-  Drama, Check, Lock, ChevronDown, Plus, Info, Clapperboard, ArrowUpRight, ArrowLeft,
+  Drama, Check, Lock, Plus, Clapperboard, ArrowUpRight, ArrowLeft,
 } from 'lucide-react';
 import { useVoiceStore } from '../store/useVoiceStore';
 import { useSoundStore } from '../store/useSoundStore';
 import { sound } from '../lib/sound';
-import { pushOverlay, popOverlay } from '../lib/uiOverlay';
+import { pushOverlay, popOverlay, lockBodyScroll, unlockBodyScroll } from '../lib/uiOverlay';
 import { personalInfo, chapterList, atelierActs } from '../constants';
 import { voicesByCategory, SEALED_VOICES, voiceById } from '../i18n/voices';
 import { scrollToSection, requestSection, getLenis } from '../lib/smoothScroll';
-import { track } from '../lib/analytics';
+import { track, trackOnce } from '../lib/analytics';
 import ThemeWheel from './ThemeWheel';
 import VolumeDial from './VolumeDial';
-import Hovercard from './Hovercard';
-import ClueUnlock from './ClueUnlock';
+import VoicePreviewCard from './VoicePreviewCard';
 import VoiceRequest from './VoiceRequest';
 
 /**
@@ -34,16 +33,6 @@ import VoiceRequest from './VoiceRequest';
  * Sub-views (nav / voice / summon) slide in with a back-chevron header, so no
  * centred modal can ever run off-screen. Portalled so no ancestor can clip it.
  */
-
-// Attribution card body — mirrors the desktop VoiceSwitcher so touch users get the
-// same "who is this voice" reference (the info button Beta users missed on mobile).
-const infoBody = (info) => (
-  <>
-    <p className="text-[12px] font-semibold leading-tight" style={{ color: 'var(--color-text)' }}>{info.name}</p>
-    <p className="text-[11px] mt-0.5" style={{ color: 'var(--color-ember)' }}>{info.source}</p>
-    <p className="text-[11px] mt-1.5 leading-snug" style={{ color: 'var(--color-text-muted)' }}>{info.note}</p>
-  </>
-);
 
 // The PRIMARY actions — Contact (filled) + Résumé (outline). These carry the most
 // visual weight in the sheet: they are what the target audience (recruiters, CTOs)
@@ -128,64 +117,37 @@ const NavDrawer = ({ activeId, onTravel, isChronicle }) => {
   );
 };
 
-// One voice row inside the Persona drawer. Now carries the ⓘ reference (name +
-// show) that desktop has — restored for touch. Sealed rows expand ClueUnlock.
-const VoiceDrawerRow = ({ v, active, locked, onSelect }) => {
-  const [answering, setAnswering] = useState(false);
-  useEffect(() => { if (!locked) setAnswering(false); }, [locked]);
-  return (
-    <div className={`sheet-card ${active ? 'sheet-card--active' : ''} overflow-hidden`}>
-      <div className="flex items-center">
-        <button type="button" onClick={locked ? () => setAnswering((o) => !o) : onSelect}
-          aria-expanded={locked ? answering : undefined} aria-pressed={!locked ? active : undefined}
-          className="flex items-center gap-3 flex-1 min-w-0 px-3.5 py-2.5 text-left">
-          <span className="grid place-items-center w-5 flex-shrink-0">
-            {locked ? <Lock size={13} style={{ color: 'var(--color-text-muted)' }} />
-              : active ? <Check size={15} style={{ color: 'var(--color-ember)' }} />
-              : <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--color-card-border)' }} />}
-          </span>
-          <span className="min-w-0 flex-1">
-            <span className="block text-[14px] font-medium leading-tight" style={{ color: active ? 'var(--color-ember)' : 'var(--color-text)', fontStyle: locked ? 'italic' : 'normal' }}>
-              {locked ? v.sample : v.label}
-            </span>
-            <span className="block text-[11.5px] leading-snug mt-0.5" style={{ color: 'var(--color-text-muted)' }}>
-              {locked ? `Clue — ${v.hint}` : v.sample}
-            </span>
-          </span>
-          {locked && <ChevronDown size={15} className="flex-shrink-0 transition-transform" style={{ color: 'var(--color-text-muted)', transform: answering ? 'rotate(180deg)' : 'none' }} />}
-        </button>
-
-        {v.info && (
-          <Hovercard
-            className="grid place-items-center w-9 h-9 mr-1.5 rounded-full flex-shrink-0"
-            width={220}
-            ariaLabel={`What is this voice? ${v.info.name}, ${v.info.source}`}
-            content={infoBody(v.info)}
-          >
-            <Info size={15} style={{ color: 'var(--color-text-muted)' }} />
-          </Hovercard>
-        )}
-      </div>
-      <AnimatePresence initial={false}>
-        {locked && answering && (
-          <div className="px-3.5 pb-2.5">
-            <ClueUnlock key="u" voice={v} onUnlocked={() => setAnswering(false)} />
-          </div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-};
+// One voice row inside the Persona drawer. Tapping any row (open OR sealed) opens
+// the preview view — the mobile mirror of the desktop decoupled model: preview
+// first (identity + gyro-lens portrait), apply only via the explicit button there.
+const VoiceDrawerRow = ({ v, active, locked, onPreview }) => (
+  <button type="button" onClick={() => onPreview(v)} aria-pressed={active}
+    className={`sheet-card ${active ? 'sheet-card--active' : ''} flex items-center w-full px-3.5 py-2.5 text-left`}>
+    <span className="grid place-items-center w-5 flex-shrink-0">
+      {locked ? <Lock size={13} style={{ color: 'var(--color-text-muted)' }} />
+        : active ? <Check size={15} style={{ color: 'var(--color-ember)' }} />
+        : <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--color-card-border)' }} />}
+    </span>
+    <span className="min-w-0 flex-1 ml-3">
+      <span className="block text-[14px] font-medium leading-tight" style={{ color: active ? 'var(--color-ember)' : 'var(--color-text)', fontStyle: locked ? 'italic' : 'normal' }}>
+        {locked ? v.sample : v.label}
+      </span>
+      <span className="block text-[11.5px] leading-snug mt-0.5" style={{ color: 'var(--color-text-muted)' }}>
+        {locked ? `Clue — ${v.hint}` : v.sample}
+      </span>
+    </span>
+    <ChevronRight size={15} className="flex-shrink-0 ml-2" style={{ color: 'var(--color-text-muted)' }} />
+  </button>
+);
 
 // ── Persona drawer — a fixed "now narrating" header, a SCROLLING roster, and a
 // sticky footer (summon + discovery count). Only the roster scrolls. ─────────────
-const VoiceDrawer = ({ onSummon }) => {
+const VoiceDrawer = ({ onSummon, onPreview }) => {
   const { t } = useTranslation();
-  const { voice, setVoice, isUnlocked } = useVoiceStore();
+  const { voice, isUnlocked } = useVoiceStore();
   const groups = voicesByCategory();
   const discovered = SEALED_VOICES.filter((id) => isUnlocked(id)).length;
   const activeVoice = voiceById(voice);
-  const choose = (id) => { if (id !== voice) setVoice(id); };
 
   return (
     <div className="flex flex-col" style={{ maxHeight: '72vh' }}>
@@ -217,7 +179,7 @@ const VoiceDrawer = ({ onSummon }) => {
               </p>
               {g.items.map((v) => (
                 <VoiceDrawerRow key={v.id} v={v} active={voice === v.id}
-                  locked={v.locked && !isUnlocked(v.id)} onSelect={() => choose(v.id)} />
+                  locked={v.locked && !isUnlocked(v.id)} onPreview={onPreview} />
               ))}
             </div>
           ))}
@@ -241,6 +203,26 @@ const VoiceDrawer = ({ onSummon }) => {
   );
 };
 
+// ── Persona preview (mobile) — the decoupled preview view: the shared
+// VoicePreviewCard (gyro-lens portrait + identity), with an explicit apply button.
+// Reached by tapping a voice row; applying re-skins the site and flips the card to
+// its "now narrating" badge (the visitor can keep browsing the roster behind it).
+const VoicePreviewDrawer = ({ voiceId }) => {
+  const { voice, setVoice, isUnlocked } = useVoiceStore();
+  const v = voiceById(voiceId);
+  if (!v) return null;
+  const locked = v.locked && !isUnlocked(v.id);
+  const apply = () => {
+    trackOnce(`voice_apply:${v.id}`, 'voice_applied', { voice: v.id, source: 'mobile' });
+    if (v.id !== voice) setVoice(v.id);
+  };
+  return (
+    <div className="voice-preview-sheet overflow-y-auto overscroll-contain" data-lenis-prevent style={{ maxHeight: '72vh' }}>
+      <VoicePreviewCard v={v} active={voice === v.id} locked={locked} onApply={apply} onUnlocked={() => {}} />
+    </div>
+  );
+};
+
 const SLIDE = { type: 'spring', stiffness: 380, damping: 38 };
 
 const MobileMenu = ({ activeId }) => {
@@ -249,7 +231,8 @@ const MobileMenu = ({ activeId }) => {
   const navigate = useNavigate();
   const isChronicle = pathname === '/';
   const [open, setOpen] = useState(false);
-  const [view, setView] = useState('main'); // main | nav | voice | summon
+  const [view, setView] = useState('main'); // main | nav | voice | preview | summon
+  const [previewId, setPreviewId] = useState(null); // voice shown in the preview view
   const dragControls = useDragControls(); // swipe-down close, started from the grabber
   const { enabled, unlocked } = useSoundStore();
   const soundArmed = enabled && !unlocked; // on by preference, browser gate still shut
@@ -277,7 +260,16 @@ const MobileMenu = ({ activeId }) => {
     try { sessionStorage.setItem('menuCoachSeen', '1'); } catch { /* private mode */ }
   };
 
-  const goBack = () => setView(view === 'summon' ? 'voice' : 'main');
+  const goBack = () => setView(view === 'summon' || view === 'preview' ? 'voice' : 'main');
+  // Tapping a voice row previews it (no re-skin) — the mobile mirror of desktop's
+  // decoupled model. Counted once/session/voice → comparable to voice_applied.
+  const onPreview = (v) => {
+    setPreviewId(v.id);
+    trackOnce(`voice_preview:${v.id}`, 'voice_previewed', {
+      voice: v.id, locked: v.locked && !useVoiceStore.getState().isUnlocked(v.id), source: 'mobile',
+    });
+    setView('preview');
+  };
 
   // Hard-lock the page while the sheet is open (v2.0 C3) — same mechanism as the
   // Voice Hall: stop Lenis (desktop-sized touch devices) AND overflow:hidden the
@@ -286,11 +278,9 @@ const MobileMenu = ({ activeId }) => {
     if (!open) return undefined;
     const lenis = getLenis();
     lenis?.stop();
-    const root = document.documentElement;
-    const prevOverflow = root.style.overflow;
-    root.style.overflow = 'hidden';
+    lockBodyScroll(); // overflow:hidden + scrollbar-width padding (no page shift)
     return () => {
-      root.style.overflow = prevOverflow;
+      unlockBodyScroll();
       lenis?.start();
     };
   }, [open]);
@@ -300,7 +290,7 @@ const MobileMenu = ({ activeId }) => {
     if (!open) return undefined;
     const onKey = (e) => {
       if (e.key !== 'Escape') return;
-      if (view === 'summon') setView('voice');
+      if (view === 'summon' || view === 'preview') setView('voice');
       else if (view !== 'main') setView('main');
       else setOpen(false);
     };
@@ -315,10 +305,16 @@ const MobileMenu = ({ activeId }) => {
   useEffect(() => { if (open) track('mobile_menu_open'); }, [open]);
   useEffect(() => { if (open && view !== 'main') track('mobile_menu_view', { view }); }, [open, view]);
   // The Atelier field guide opens this sheet on mobile (sky/theme lives here).
+  // The ambient voice mark opens it straight to the persona picker.
   useEffect(() => {
     const openMenu = () => setOpen(true);
+    const openVoice = () => { setOpen(true); setView('voice'); };
     window.addEventListener('ui:open-menu', openMenu);
-    return () => window.removeEventListener('ui:open-menu', openMenu);
+    window.addEventListener('ui:open-voice', openVoice);
+    return () => {
+      window.removeEventListener('ui:open-menu', openMenu);
+      window.removeEventListener('ui:open-voice', openVoice);
+    };
   }, []);
   // While the sheet is open it sits IN FRONT of the hero — register it as an overlay
   // so the astrolabe goes dormant (frozen needle, silent gear) behind it.
@@ -340,8 +336,10 @@ const MobileMenu = ({ activeId }) => {
   const onBackHome = () => { track('mobile_menu_cta', { target: 'home' }); close(); navigate('/'); };
 
   const inSub = view !== 'main';
+  const previewVoice = view === 'preview' ? voiceById(previewId) : null;
   const title = view === 'nav' ? t('nav.navigate')
     : view === 'voice' ? t('voice.menuTitle')
+    : view === 'preview' ? (previewVoice?.info?.name || previewVoice?.label || t('voice.menuTitle'))
     : view === 'summon' ? t('voiceHall.request.cta')
     : null;
 
@@ -490,7 +488,13 @@ const MobileMenu = ({ activeId }) => {
 
                 {view === 'voice' && (
                   <motion.div key="voice" initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 16 }} transition={SLIDE}>
-                    <VoiceDrawer onSummon={() => setView('summon')} />
+                    <VoiceDrawer onSummon={() => setView('summon')} onPreview={onPreview} />
+                  </motion.div>
+                )}
+
+                {view === 'preview' && (
+                  <motion.div key="preview" initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 16 }} transition={SLIDE}>
+                    <VoicePreviewDrawer voiceId={previewId} />
                   </motion.div>
                 )}
 

@@ -5,10 +5,28 @@ import { useTranslation } from 'react-i18next';
 import { useVoiceStore } from '../store/useVoiceStore';
 import { voicesByCategory, voiceById, SEALED_VOICES } from '../i18n/voices';
 import { getLenis } from '../lib/smoothScroll';
-import { pushOverlay, popOverlay } from '../lib/uiOverlay';
+import { pushOverlay, popOverlay, lockBodyScroll, unlockBodyScroll } from '../lib/uiOverlay';
+import { trackOnce } from '../lib/analytics';
 import Hovercard from './Hovercard';
 import ClueUnlock from './ClueUnlock';
+import VoicePreviewCard from './VoicePreviewCard';
 import VoiceRequest from './VoiceRequest';
+
+// A single reactive "is this a desktop-width viewport?" flag — the preview panel
+// is a desktop-only affordance (mobile gets its own gyro-lens flow later), so the
+// Hall keeps its calm single-column roster on phones.
+const useIsDesktop = () => {
+  const [desktop, setDesktop] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(min-width: 820px)').matches,
+  );
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 820px)');
+    const on = () => setDesktop(mq.matches);
+    mq.addEventListener('change', on);
+    return () => mq.removeEventListener('change', on);
+  }, []);
+  return desktop;
+};
 
 const STAGGER = { hidden: {}, show: { transition: { staggerChildren: 0.04, delayChildren: 0.04 } } };
 const ITEM = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 330, damping: 26 } } };
@@ -30,13 +48,24 @@ const infoBody = (info) => (
 // "Clue —" line + an ⓘ reference tooltip. Tapping a sealed plate expands the
 // touch-friendly `ClueUnlock` field (the only unlock path on phones), so a locked
 // row is never a dead tap.
-const VoiceChip = ({ v, active, locked, onSelect }) => {
+// `desktop` mode: a chip is a PREVIEW trigger only (details + unlock + apply all
+// live in the right-hand panel), so the inline clue field and the ⓘ hovercard —
+// whose whole job the panel now does — are withheld. `selected` marks the voice
+// currently shown in the panel. On mobile (no panel) the chip keeps its original
+// job: open voice → apply on tap; sealed voice → expand the inline clue field,
+// with the ⓘ reference tooltip.
+const VoiceChip = ({ v, active, locked, selected, desktop, onSelect, onPreview }) => {
   const [answering, setAnswering] = useState(false);
   // Collapse the field once the voice opens (locked → false on the next render).
   useEffect(() => { if (!locked) setAnswering(false); }, [locked]);
 
+  const onClick = desktop
+    ? () => onPreview(v)
+    : locked ? () => setAnswering((o) => !o) : onSelect;
+
   return (
-    <motion.div variants={ITEM} className="voice-chip" data-active={active} data-locked={locked} data-answering={answering || undefined}>
+    <motion.div variants={ITEM} className="voice-chip" data-active={active} data-locked={locked}
+      data-selected={desktop && selected ? true : undefined} data-answering={answering || undefined}>
       {/* header row — button + info stay on one line; the clue field expands as a
           separate block BELOW so the info icon never reflows to a new line (which
           caused the content shift + janky open/close). */}
@@ -44,10 +73,10 @@ const VoiceChip = ({ v, active, locked, onSelect }) => {
         <button
           type="button"
           role="option"
-          aria-selected={active}
-          aria-expanded={locked ? answering : undefined}
+          aria-selected={desktop ? selected : active}
+          aria-expanded={!desktop && locked ? answering : undefined}
           data-cursor="hover"
-          onClick={locked ? () => setAnswering((o) => !o) : onSelect}
+          onClick={onClick}
           className="voice-chip__hit"
         >
           <span className="voice-chip__glyph">
@@ -61,12 +90,14 @@ const VoiceChip = ({ v, active, locked, onSelect }) => {
           </span>
           {active ? (
             <span className="voice-chip__tick" aria-hidden="true"><Check size={12} /></span>
-          ) : locked ? (
+          ) : !desktop && locked ? (
             <span className="voice-chip__caret" data-open={answering || undefined} aria-hidden="true"><ChevronDown size={14} /></span>
+          ) : selected && desktop ? (
+            <span className="voice-chip__caret" aria-hidden="true"><ChevronRight size={14} /></span>
           ) : null}
         </button>
 
-        {v.info && (
+        {!desktop && v.info && (
           <Hovercard
             className="voice-chip__info"
             width={210}
@@ -79,7 +110,7 @@ const VoiceChip = ({ v, active, locked, onSelect }) => {
       </div>
 
       <AnimatePresence initial={false}>
-        {locked && answering && (
+        {!desktop && locked && answering && (
           <ClueUnlock key="unlock" voice={v} onUnlocked={() => setAnswering(false)} />
         )}
       </AnimatePresence>
@@ -101,25 +132,28 @@ const VoiceChip = ({ v, active, locked, onSelect }) => {
 const VoiceHall = () => {
   const { t } = useTranslation();
   const { hallOpen, closeHall, voice, setVoice, isUnlocked } = useVoiceStore();
+  const desktop = useIsDesktop();
   // 'roster' | 'summon' — the summon request is its OWN page inside the Hall
   // (v2.0 D4, mirroring the mobile drawer flow) with a back chevron; the header
   // and footer stay fixed, and only the roster ever scrolls.
   const [view, setView] = useState('roster');
+  // Desktop only: which voice is shown in the preview panel (defaults to the
+  // active voice each time the Hall opens). Preview is decoupled from apply.
+  const [preview, setPreview] = useState(voice);
 
   useEffect(() => {
     if (!hallOpen) return undefined;
     setView('roster');
+    setPreview(voice);
     // Hard-lock the page while the Hall is open. Lenis drives the whole-page
-    // scroll, so we stop it AND set the document to overflow:hidden — the latter
-    // is the backstop that keeps native wheel from chaining up to the document
-    // when it bubbles out of (or past the end of) an inner scroll area. Inner
+    // scroll, so we stop it AND lock the document — `lockBodyScroll` sets
+    // overflow:hidden and pads for the scrollbar width so the page doesn't
+    // reflow/"zoom" as the scrollbar disappears (and reappears on close). Inner
     // scrollers carry `data-lenis-prevent` + `overscroll-behavior:contain` so they
     // still scroll natively without leaking to the background.
     const lenis = getLenis();
     lenis?.stop();
-    const root = document.documentElement;
-    const prevOverflow = root.style.overflow;
-    root.style.overflow = 'hidden';
+    lockBodyScroll();
     pushOverlay(); // hush the hero astrolabe behind the blur
     // Escape steps back out of the summon page first, then closes the Hall.
     const onKey = (e) => {
@@ -133,7 +167,7 @@ const VoiceHall = () => {
     window.addEventListener('keydown', onKey);
     return () => {
       window.removeEventListener('keydown', onKey);
-      root.style.overflow = prevOverflow;
+      unlockBodyScroll();
       lenis?.start();
       popOverlay();
     };
@@ -142,9 +176,44 @@ const VoiceHall = () => {
   const groups = voicesByCategory();
   const discovered = SEALED_VOICES.filter((id) => isUnlocked(id)).length;
   const activeVoice = voiceById(voice);
+  const previewVoice = voiceById(preview) || activeVoice;
+  const previewLocked = !!(previewVoice && previewVoice.locked && !isUnlocked(previewVoice.id));
   // Picking a voice keeps the Hall open — the copy (this Hall too) re-skins live,
   // inviting the visitor to try several before they close.
   const choose = (id) => { if (id !== voice) setVoice(id); };
+  // Desktop: clicking a chip only PREVIEWS it (no re-skin). Analytics counts each
+  // voice previewed once/session → "previewed most" vs the applied count below.
+  const onPreview = (v) => {
+    setPreview(v.id);
+    trackOnce(`voice_preview:${v.id}`, 'voice_previewed', { voice: v.id, locked: v.locked && !isUnlocked(v.id), source: 'hall' });
+  };
+  // Desktop: the panel's apply button is the ONLY thing that re-skins the site.
+  // Counted once/session per voice → directly comparable to the preview count.
+  const applyPreview = () => {
+    if (!previewVoice) return;
+    trackOnce(`voice_apply:${previewVoice.id}`, 'voice_applied', { voice: previewVoice.id, source: 'hall' });
+    choose(previewVoice.id);
+  };
+
+  // Footer — full-width, slim: just the "summon a voice" tile (the discovery
+  // count moved up to the Secret Ones category header). Standard popup footer.
+  const allFound = discovered >= SEALED_VOICES.length;
+  const footerEl = (
+    <div className="voice-hall__footer px-6 py-2.5 border-t"
+      style={{ borderColor: 'var(--color-card-border)' }}>
+      <button type="button" onClick={() => setView('summon')} data-cursor="hover"
+        className="flex items-center gap-2.5 w-full px-3.5 py-2.5 rounded-xl text-[13px] font-medium transition-colors"
+        style={{
+          border: allFound ? '1px solid rgba(var(--color-ember-rgb),0.5)' : '1px dashed var(--color-card-border)',
+          color: 'var(--color-text)',
+          background: allFound ? 'rgba(var(--color-ember-rgb),0.12)' : 'color-mix(in srgb, var(--color-primary) 40%, transparent)',
+        }}>
+        <Plus size={15} style={{ color: 'var(--color-ember)' }} />
+        <span className="flex-1 text-left">{t('voiceHall.request.cta')}</span>
+        <ChevronRight size={15} style={{ color: 'var(--color-text-muted)' }} />
+      </button>
+    </div>
+  );
 
   return (
     <AnimatePresence>
@@ -154,7 +223,7 @@ const VoiceHall = () => {
           role="dialog" aria-modal="true" aria-label={t('voiceHall.title')}>
           <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(12px)' }} onClick={closeHall} />
 
-          <motion.div className="voice-hall relative w-full max-w-lg rounded-3xl overflow-hidden flex flex-col"
+          <motion.div className={`voice-hall relative w-full rounded-3xl overflow-hidden flex flex-col ${desktop && view === 'roster' ? 'max-w-3xl' : 'max-w-lg'}`}
             style={{ maxHeight: 'min(88vh, 720px)' }}
             initial={{ scale: 0.94, y: 14, opacity: 0 }} animate={{ scale: 1, y: 0, opacity: 1 }} exit={{ scale: 0.96, y: 10, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 260, damping: 26 }}>
@@ -213,45 +282,45 @@ const VoiceHall = () => {
                   does — FIXED between the header and the scrolling roster (owner
                   follow-up), so only the voice list scrolls. */}
               <p className="voice-hall__explainer">{t('voiceHall.explainer')}</p>
-              <div className="voice-hall__body" data-lenis-prevent>
-                {groups.map((g) => (
-                  <section key={g.id} className="voice-hall__group">
-                    <p className="voice-hall__grouplabel">{t(`voiceHall.categories.${g.id}`)}</p>
-                    <motion.div className="voice-hall__list" variants={STAGGER} initial="hidden" animate="show">
-                      {g.items.map((v) => (
-                        <VoiceChip key={v.id} v={v} active={voice === v.id}
-                          locked={v.locked && !isUnlocked(v.id)} onSelect={() => choose(v.id)} />
-                      ))}
-                    </motion.div>
-                  </section>
-                ))}
-              </div>
-              </>
-            )}
-
-            {/* footer — roster only: discovery progress + a full-width summon TILE
-                (mirrors the mobile drawer's doorway — R5: the old inline link was
-                near-invisible next to the counter). When every voice is found the
-                tile turns solid ember — a louder invite for the empty state. The
-                summon view has NO footer: the header already carries the way back. */}
-            {view !== 'summon' && (
-              <div className="px-6 py-3 border-t text-[11px]"
-                style={{ borderColor: 'var(--color-card-border)', color: 'var(--color-text-muted)' }}>
-                <div className="flex flex-col gap-2.5">
-                  <span className="font-mono uppercase tracking-wider">{t('voiceHall.found', { count: discovered, total: SEALED_VOICES.length })}</span>
-                  <button type="button" onClick={() => setView('summon')} data-cursor="hover"
-                    className="flex items-center gap-2.5 w-full px-3.5 py-3 rounded-xl text-[13px] font-medium transition-colors"
-                    style={{
-                      border: discovered >= SEALED_VOICES.length ? '1px solid rgba(var(--color-ember-rgb),0.5)' : '1px dashed var(--color-card-border)',
-                      color: 'var(--color-text)',
-                      background: discovered >= SEALED_VOICES.length ? 'rgba(var(--color-ember-rgb),0.12)' : 'color-mix(in srgb, var(--color-primary) 40%, transparent)',
-                    }}>
-                    <Plus size={15} style={{ color: 'var(--color-ember)' }} />
-                    <span className="flex-1 text-left">{t('voiceHall.request.cta')}</span>
-                    <ChevronRight size={15} style={{ color: 'var(--color-text-muted)' }} />
-                  </button>
+              <div className="voice-hall__cols" data-two={desktop || undefined}>
+                <div className="voice-hall__body" data-lenis-prevent>
+                  {groups.map((g) => (
+                    <section key={g.id} className="voice-hall__group">
+                      {/* sticky category header — sticks to the top of the scroll
+                          area; the sealed row also carries the discovery count. */}
+                      <div className="voice-hall__grouplabel">
+                        <span>{t(`voiceHall.categories.${g.id}`)}</span>
+                        {g.id === 'sealed' && (
+                          <span className="voice-hall__groupcount">{t('voiceHall.foundShort', { count: discovered, total: SEALED_VOICES.length })}</span>
+                        )}
+                      </div>
+                      <motion.div className="voice-hall__list" variants={STAGGER} initial="hidden" animate="show">
+                        {g.items.map((v) => (
+                          <VoiceChip key={v.id} v={v} active={voice === v.id}
+                            locked={v.locked && !isUnlocked(v.id)}
+                            desktop={desktop} selected={preview === v.id}
+                            onPreview={onPreview} onSelect={() => choose(v.id)} />
+                        ))}
+                      </motion.div>
+                    </section>
+                  ))}
                 </div>
+                {desktop && previewVoice && (
+                  <aside className="voice-preview" aria-live="polite" data-lenis-prevent>
+                    <VoicePreviewCard
+                      key={previewVoice.id}
+                      v={previewVoice}
+                      active={voice === previewVoice.id}
+                      locked={previewLocked}
+                      onApply={applyPreview}
+                      onUnlocked={() => setPreview(previewVoice.id)}
+                    />
+                  </aside>
+                )}
               </div>
+              {/* Full-width footer — the standard popup pattern. */}
+              {footerEl}
+              </>
             )}
           </motion.div>
         </motion.div>

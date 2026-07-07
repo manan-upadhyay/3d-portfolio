@@ -35,13 +35,17 @@ const ConsoleLine = ({ kind, children }) => (
   </motion.div>
 );
 
-/* Copy-to-clipboard button (email row) — flips to a check for ~2s on success */
+/* Copy-to-clipboard button (email row) — copying "seals" the address: a wax-seal
+   stamp (the check presses in) + an expanding wax ring, paired with the `seal`
+   cue (S1). Rewards the deliberate copy action; flips back after ~2s. */
 const CopyButton = ({ text }) => {
+  const reduce = useReducedMotion();
   const [copied, setCopied] = useState(false);
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
+      playCue('seal'); // the wax-seal press — a deliberate stamp, not a click
       track('email_copied'); // a quiet but strong contact-intent signal
       setTimeout(() => setCopied(false), 1800);
     } catch { /* clipboard blocked — the mailto link still works */ }
@@ -49,9 +53,26 @@ const CopyButton = ({ text }) => {
   return (
     <button type="button" onClick={copy} data-cursor="hover"
       aria-label={copied ? 'Email copied' : 'Copy email address'}
-      className="grid place-items-center w-9 h-9 rounded-lg flex-shrink-0 transition-colors"
+      className="relative grid place-items-center w-9 h-9 rounded-lg flex-shrink-0 transition-colors"
       style={{ color: copied ? 'var(--color-success)' : 'var(--color-ember)', background: 'rgba(var(--color-ember-rgb),0.08)' }}>
-      {copied ? <Check size={15} /> : <Copy size={15} />}
+      {/* the wax spreading — a ring that stamps out and fades */}
+      <AnimatePresence>
+        {copied && !reduce && (
+          <motion.span key="seal-ring" aria-hidden="true" className="absolute inset-0 rounded-lg pointer-events-none"
+            initial={{ scale: 0.55, opacity: 0.55 }} animate={{ scale: 1.9, opacity: 0 }} exit={{ opacity: 0 }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+            style={{ border: '1.5px solid rgba(var(--color-ember-rgb),0.6)' }} />
+        )}
+      </AnimatePresence>
+      {copied ? (
+        <motion.span key="check" className="grid place-items-center"
+          initial={reduce ? false : { scale: 1.55 }} animate={{ scale: 1 }}
+          transition={{ type: 'spring', stiffness: 600, damping: 17 }}>
+          <Check size={15} />
+        </motion.span>
+      ) : (
+        <Copy size={15} />
+      )}
     </button>
   );
 };

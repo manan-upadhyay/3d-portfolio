@@ -47,10 +47,10 @@
 | V0 | **Dead-key cleanup** — remove keys nothing renders anymore | Cleanup | ✅ | 5 | 1 | low |
 | V1 | Restore Michael Scott's signature line to a **rendered** slot | Voices | ✅ | 8 | 2 | low |
 | V2 | Re-home famous sealed-voice lines stranded in dead keys | Voices | ✅ | 7 | 3 | low |
-| V3 | Voice-personality **content-strength pass** (per-voice table below) | Voices | 🟢 | 8 | 5 | low |
-| V4 | New voices — **roster expansion** (shortlist below) | Voices | 🟢 | 8 | 6 | med |
-| V5 | **Voice identity in the UI** — per-voice emblem/particle portrait | Voices | 🔵 | 7 | 6 | med |
-| S1 | Micro-moment sweep — new intent-gated sound/motion (map below) | Interaction | 🟡 | 8 | 6 | med |
+| V3 | Voice-personality **content-strength pass** (per-voice table below) | Voices | ✅ | 8 | 5 | low |
+| V4 | New voices — **roster expansion** (shortlist below) | Voices | ✅ | 8 | 6 | med |
+| V5 | **Voice identity in the UI** — Voice Hall preview panel (desktop + mobile) + pre-rendered plates + ambient voice mark | Voices | ✅ | 8 | 7 | med |
+| S1 | Micro-moment sweep — new intent-gated sound/motion (map below) | Interaction | ✅ | 8 | 6 | med |
 | S2 | **Voice-specific cue palettes** (each voice sounds different) | Interaction | 🔵 | 7 | 5 | med |
 | C1 | Cinematic upgrades to existing sections (list below) | Cinematics | 🔵 | 7 | 6 | med |
 | P1 | New sub-pages / wild flows (concepts below) | Sub-pages | 🔵 | 8 | 7 | med |
@@ -181,7 +181,7 @@ catchphrase layered in — *character up, substance intact.*
 
 ---
 
-### V3 — Voice content-strength pass (per-voice) · 🟢 (owner-flagged + salvage done)
+### V3 — Voice content-strength pass (per-voice) · ✅ DONE (owner-flagged + salvage; optional full sweep deferred)
 
 **Goal.** Each sealed voice should **lead with its most iconic register** in the
 highest-visibility slots (hero hook, pull-quotes, CTAs, error/success states,
@@ -218,29 +218,39 @@ then removed from all five bundles. Build clean.
 
 ---
 
-### V4 — New voices (roster expansion) · 🟢 (3 shipped 2026-07-06)
+### V4 — New voices (roster expansion) · ✅ DONE (5 shipped 2026-07-06; roster now 8 sealed)
 
-> **Shipped: `tyrion`, `deadpool`, `stark`.** Each is a complete override bundle
-> with **exact key-parity to `scott`** (verified — no missing/extra keys) and
-> matching array lengths (only `hero.proof` differs: each carries a signature
-> second chip — "I drink and I know things" / "Yes, this is a portfolio." /
-> "I am the architecture" — the Dwight "Bears · Beets" pattern). Registry entries
-> (trigger/hint/hint2/info/glyph) added to [voices.js](../../src/i18n/voices.js);
-> the loader + unlock wiring is fully data-driven so **no code changes were
-> needed** beyond the registry. Build clean; all three code-split to ~10KB gz.
+> **Final shipped roster (V4):** `got`, `deadpool`, `avengers`, `yoda`, `chandler`
+> — **five** new sealed voices, bringing the sealed roster to **8** (scott,
+> dwight, cow, got, deadpool, avengers, yoda, chandler). Each is a complete
+> override bundle with **exact key-parity to `scott`** (verified — no missing/extra
+> keys) and matching array lengths. Registry entries (trigger/hint/hint2/info/glyph)
+> live in [voices.js](../../src/i18n/voices.js); the loader + unlock wiring is fully
+> data-driven so **no code changes were needed** beyond the registry. Build clean;
+> each code-splits to ~9–10KB gz (verified in the latest build).
 >
-> | Voice | id | trigger | glyph | category |
-> |---|---|---|---|---|
-> | Tyrion Lannister | `tyrion` | `wine` | Ty | sealed |
-> | Deadpool (PG-13) | `deadpool` | `deadpool` | Dp | sealed |
-> | Tony Stark | `stark` | `jarvis` | Ts | sealed |
+> | Voice | id | trigger | category |
+> |---|---|---|---|
+> | The Game of Thrones (ensemble) | `got` | `winter` | sealed |
+> | Deadpool (PG-13) | `deadpool` | `deadpool` | sealed |
+> | The Avengers (ensemble) | `avengers` | `assemble` | sealed |
+> | Yoda | `yoda` | `yoda` | sealed |
+> | Chandler Bing | `chandler` | `chandler` | sealed |
 >
-> **Category decision:** kept all three in the existing `sealed` group rather than
+> **Roster correction (2026-07-06):** the single-character `tyrion` and `stark`
+> voices originally shipped here were **replaced by the ensembles `got` and
+> `avengers`** (a lone character thinned out across a whole site — see §2.1). The
+> registry/bundles reflect the final roster above; the historical `tyrion`/`stark`
+> notes below are kept only as a record of the recognizability-pass reasoning.
+>
+> **Category decision:** kept all in the existing `sealed` group rather than
 > adding a `legends` category — a new category would mean touching `CATEGORIES`
 > **and** adding a `voiceHall.categories.legends` label to every bundle. Revisit
-> the split only if the sealed roster grows past ~8. The popover still previews
-> `POPOVER_SEALED_LIMIT` (3) and overflows the rest to the Hall; the discovery
-> count is now n/6 (data-driven, verified via `SEALED_VOICES`).
+> the split only if the sealed roster grows past ~8 — **it is now at 8, so a
+> `legends`/franchise split is the next thing to revisit** (see V5, which touches
+> the Hall anyway). The popover still previews `POPOVER_SEALED_LIMIT` (3) and
+> overflows the rest to the Hall; the discovery count is n/8 (data-driven,
+> verified via `SEALED_VOICES`).
 >
 > **Recognizability pass (2026-07-06, owner feedback "couldn't identify them
 > instantly").** Reworked the high-traffic surfaces of all three so the signature
@@ -326,10 +336,69 @@ Voice Hall groups them meaningfully as the roster grows.
 
 ---
 
-### V5 — Voice identity in the UI (emblem / particle portrait) · 🔵
+### V5 — Voice identity in the UI (emblem / particle portrait) · 🟢
 
-**Question from owner:** *"Should we try a UI for a logo/person-image particle
-show of the current voice, or an element resembling them?"*
+> **Owner scope (2026-07-06):** three sub-builds — (1) a desktop **Voice Hall
+> preview panel** (MacBook-style right column with a per-voice `FaceParticles`
+> portrait + details, replacing the Hall's hover info popover), decoupling
+> **preview** from **apply**; (2) a **mobile** gyro-draggable-lens variant of the
+> same; (3) an always-visible **ambient voice mark** (SideRail on desktop, a
+> persistent spot on mobile) so the visitor always knows which persona they're in.
+> Custom analytics must separate *previewed-most* from *applied-most*.
+>
+> #### ✅ Sub-build 1 — Desktop preview panel — DONE (2026-07-06)
+> Shipped in [VoiceHall.jsx](../../src/components/VoiceHall.jsx) +
+> [index.css](../../src/index.css). Model (owner-confirmed = **decoupled**):
+> - **Two columns on desktop** (≥820px): scrollable roster left, framed "screen"
+>   preview panel right. Mobile stays single-column, unchanged (its own gyro pass
+>   is sub-build 2), so nothing regressed on phones.
+> - **Click a chip = PREVIEW only** (no re-skin) → portrait + details in the panel.
+>   The panel's **"Speak in this voice"** button is the *only* apply path (or a
+>   **"now narrating"** badge when it's already active). Locked voices preview a
+>   **wax-seal silhouette + teaser line + clue + inline `ClueUnlock`** (no
+>   name/note — the reveal stays the reward); solving the clue applies it.
+> - **Info hovercard removed from the Hall** (its content is now the panel); it
+>   **stays in the bottom-right `VoiceSwitcher`** popover per owner ask.
+> - **Portrait:** probes `public/voices/<id>.webp` → `FaceParticles` if present,
+>   else the serif **monogram** medallion (works today, auto-upgrades when art is
+>   dropped in). `FaceParticles` is **`lazy()`-split** (its own ~4.6KB gz chunk) so
+>   it never touches the initial bundle — "not heavy" honoured.
+> - **Analytics:** `voice_previewed` + `voice_applied` (both `trackOnce` per voice
+>   per session, `{ voice, locked | source:'hall' }`) → *previewed-most vs
+>   applied-most* falls straight out. See [ANALYTICS.md](ANALYTICS.md).
+> - Chrome strings added under `voiceHall.preview.*` in **all 10 bundles**
+>   (in character). Build clean; verified headless (open + locked states).
+>
+> **Portrait art (owner-provided 2026-07-06) — direction change:** instead of a
+> `FaceParticles` swarm, the owner supplies **pre-rendered plates** (the frame,
+> monogram and gold-halftone portrait all baked into the image), **two per voice**
+> — `public/voices/dark/<id>.webp` + `public/voices/light/<id>.webp`. The preview
+> now renders the theme-matched plate **directly** (no FaceParticles, no extra
+> frame box); the shared `VoicePreviewCard` probes it and falls back to the serif
+> monogram when absent. FaceParticles is **no longer used by the preview** (still
+> powers the Atelier portrait). Sealed voices keep the wax-lock until unlocked.
+> Shipped so far: `scott` (dark+light).
+>
+> #### ✅ Sub-build 2 — Mobile preview flow — DONE (2026-07-06)
+> The mobile menu's Persona drawer is now **decoupled** like desktop: tapping any
+> voice row (open or sealed) opens a **preview view** (shared `VoicePreviewCard` —
+> the plate + full identity), with an explicit **"Speak in this voice"** apply
+> button; sealed rows show the clue + inline unlock there. Reached via the roster
+> or the ambient mark. Same `voice_previewed` / `voice_applied` events with
+> `source:'mobile'`. **Note:** the original "gyro-lens" idea is **superseded** by
+> the owner's static pre-rendered plates (rendering a swarm/lens over a finished
+> plate would fight the art); the decoupled preview flow is the mobile deliverable.
+>
+> #### ✅ Sub-build 3 — Ambient voice mark — DONE (2026-07-06)
+> Always-visible active-voice insignia: **desktop** in the `SideRail` footer (the
+> voice monogram medallion + "now narrating" label on expand → opens the Hall);
+> **mobile** a fixed bottom-left medallion (mirrors the FAB → opens the persona
+> picker via a `ui:open-voice` event). Uses the registry `glyph` monogram (the
+> voice's canonical mark); a per-voice insignia SVG can replace it later without
+> rewiring. Reused on both routes (the rail is shared).
+
+**Original question from owner:** *"Should we try a UI for a logo/person-image
+particle show of the current voice, or an element resembling them?"*
 
 **Finding:** the machinery already exists. [FaceParticles.jsx](../../src/components/FaceParticles.jsx)
 is a pure-Canvas2D "character assembly" that samples any high-contrast image into
@@ -395,7 +464,24 @@ The site has a **dense** interactive-sound texture already (this is why the
 **Takeaway:** input surfaces are well covered. The **gaps** are (a) a few
 sections with *no* signature moment, and (b) no *voice-specific* audio identity.
 
-### S1 — Micro-moment sweep (new intent-gated moments) · 🟡
+### S1 — Micro-moment sweep (new intent-gated moments) · ✅ (owner-picked 3 shipped 2026-07-06)
+
+> **Owner picked 3 of the 7** (the rest rejected — see below), landed in
+> [sound.js](../../src/lib/sound.js) `CUES` + `CONFIG` with matching motion:
+> - **Realm-plate "unfurl"** — opening a project's "full story" plate ([Works.jsx](../../src/sections/Works.jsx))
+>   fires a parchment-unroll cue whose `dur` is passed = the expand duration, so
+>   sound and motion open at the same rate. Intent-gated (the toggle click), open-only.
+> - **Copy-email "seal"** — copying the address ([Contact.jsx](../../src/sections/Contact.jsx)
+>   `CopyButton`) stamps a wax-seal press cue + an expanding wax ring and a
+>   press-in check. Rewards the deliberate copy.
+> - **Recap "sigil stamp"** — the Traveler's Sigil ([ExpeditionRecap.jsx](../../src/components/ExpeditionRecap.jsx))
+>   stamps in once (scale press-thunk) with a firm emboss cue when the recap first
+>   resolves; `playCue` self-gates on the audio unlock so it never fires from a
+>   passive scroll for a visitor who hasn't engaged sound.
+>
+> **Rejected by owner:** sky-scrub on the astrolabe, marginalia ink-bleed, SideRail
+> chapter detent. **Not taken this pass:** tech-orbit lock-on. All cues honour
+> reduced-motion (silent + static) and self-clean.
 
 Each must pass the 4-part test. Ranked by impact-to-effort:
 
@@ -495,11 +581,18 @@ Chronicle. Spec any greenlit route in a new `docs/chronicle/sections/` doc.
    (arsenal / contact-success) + the "gazelle" salvage are done, and the dead
    husks (`hero.hook` / `about.principles` / `about.scribeNote`) are deleted from
    all bundles. Remaining: the optional full per-voice 1–5 strength sweep.
-3. **One new voice** (V4: Gandalf *or* Tyrion) to prove the expansion pattern end
-   to end, then batch the rest.
-4. **A signature build:** pick **one** of V5 (voice emblem) *or* a C1 cinematic
-   *or* one P1 sub-page — a single "wow" per cycle, fully finished, verified in
-   all themes/reduced-motion/touch, `npm run build` clean.
+3. **New voices — ✅ done 2026-07-06:** the expansion pattern is proven end to end;
+   the sealed roster batched out to **8** (got, deadpool, avengers, yoda, chandler
+   added). The registry scales with zero code changes per voice.
+4. **A signature build — 🟢 in progress:** **V5 (voice identity in the UI)** is the
+   current "wow" — a Voice Hall **preview panel** (MacBook-style, per-voice
+   `FaceParticles` portrait + the voice's details, replacing the Hall's hover info
+   popover), a **preview-vs-apply** interaction split with dedicated analytics
+   (previewed-most vs applied-most), a gyro-draggable **mobile** lens variant, and
+   an **ambient voice mark** (always-visible active-voice insignia in the SideRail /
+   mobile). See the expanded V5 spec above. C1 cinematics + P1 sub-pages stay queued
+   behind it — one "wow" per cycle, fully finished, verified in all
+   themes/reduced-motion/touch, `npm run build` clean.
 
 > Update this board's Status column as items move. When any item ships, land its
 > canon in the relevant `docs/chronicle/` doc (per CLAUDE.md §5) and cross-link

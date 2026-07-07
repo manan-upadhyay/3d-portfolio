@@ -20,6 +20,7 @@ export { default as Marginalia, Annotated } from './Marginalia';
 export { default as MapDivider } from './MapDivider';
 export { default as MapOverlay } from './MapOverlay';
 export { default as MobileMenu } from './MobileMenu';
+export { default as MobileVoiceMark } from './MobileVoiceMark';
 export { default as Observatory } from './Observatory';
 export { default as PersonaTriptych } from './PersonaTriptych';
 export { default as RavenBurst } from './RavenBurst';
