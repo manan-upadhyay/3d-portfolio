@@ -470,7 +470,6 @@ export default {
     clueCloser: 'Closer — {{hint}}',
     clueGiveaway: 'Very well, I shall spare you. The word is',
     clueTapUnlock: 'tap to unseal',
-    more: '{{count}} more voices wait in the wings.',
   },
 
   footer: {

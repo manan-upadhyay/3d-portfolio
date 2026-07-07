@@ -471,7 +471,6 @@ export default {
     clueCloser: 'Warmer — {{hint}}',
     clueGiveaway: 'Fine, I’ll hand it to you. It’s',
     clueTapUnlock: 'tap to deploy',
-    more: '{{count}} more voices in the array.',
   },
 
   footer: {

@@ -469,7 +469,6 @@ export default {
     clueCloser: 'Getting warmer — {{hint}}',
     clueGiveaway: 'Ugh, fine, I’ll just tell you. It’s',
     clueTapUnlock: 'tap to unlock',
-    more: '{{count}} more voices in here. It’s a whole ensemble cast.',
   },
 
   footer: {

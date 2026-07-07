@@ -469,7 +469,6 @@ export default {
     clueCloser: 'Closer — {{hint}}',
     clueGiveaway: 'Spare you, I shall. The word, it is',
     clueTapUnlock: 'tap to unseal',
-    more: '{{count}} more voices, in the wings wait.',
   },
 
   footer: {

@@ -406,7 +406,6 @@ export default {
     clueCloser: 'Getting closer — {{hint}}',
     clueGiveaway: 'The answer is',
     clueTapUnlock: 'tap to unlock',
-    more: '{{count}} more in the Voice Hall',
     openHall: 'Browse all voices',
     hallTeaserSome: '{{count}} hidden voices to find',
     hallTeaserAll: 'All voices unlocked',

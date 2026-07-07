@@ -6,7 +6,7 @@ import { useVoiceStore } from '../store/useVoiceStore';
 import { useCoachmark } from '../store/useCoachmark';
 import { pushOverlay, popOverlay } from '../lib/uiOverlay';
 import { trackOnce } from '../lib/analytics';
-import { voices, SEALED_VOICES, POPOVER_SEALED_LIMIT, popoverVoices } from '../i18n/voices';
+import { SEALED_VOICES, POPOVER_SEALED_LIMIT, popoverVoices } from '../i18n/voices';
 import Hovercard from './Hovercard';
 import ClueUnlock from './ClueUnlock';
 
@@ -125,10 +125,11 @@ let enticeArmed = false;
  * quill button (gently pulsing until the visitor first opens the Hall) that pops a
  * menu UPWARD. The menu is a deliberately short TEASER: a one-line "what is this"
  * subtitle, the OPEN voices, then up to POPOVER_SEALED_LIMIT sealed-voice clues
- * (with the full discovery count), and — when more voices exist than fit — a quiet
- * "+N more" line plus the primary CTA, both routing to the full Voice Hall. The
- * old "Marked Voices" group is retired to keep the menu uncluttered. Click/tap
- * driven; closes on outside-click/Escape.
+ * (with the full discovery count), and the primary CTA into the full Voice Hall.
+ * The full roster lives in the Hall — the header's discovery count already signals
+ * there's more, so no redundant "+N more" line. The old "Marked Voices" group is
+ * retired to keep the menu uncluttered. Click/tap driven; closes on
+ * outside-click/Escape.
  */
 const VoiceSwitcher = ({ activeId }) => {
   const { t } = useTranslation();
@@ -182,8 +183,6 @@ const VoiceSwitcher = ({ activeId }) => {
   const openVoices = shown.filter((v) => !v.locked);
   const sealed = shown.filter((v) => v.locked).slice(0, POPOVER_SEALED_LIMIT);
   const discovered = SEALED_VOICES.filter((id) => isUnlocked(id)).length;
-  // Voices not previewed here (open or sealed) — the reason to enter the Hall.
-  const moreCount = voices.length - openVoices.length - sealed.length;
 
   const choose = (id) => { setVoice(id); setOpen(false); };
   const toggleMenu = () => { markVoiceNoted(); releaseCoach('voice'); if (!open) trackOnce('voice_switcher_open', 'voice_switcher_open'); setOpen((o) => !o); };
@@ -268,15 +267,6 @@ const VoiceSwitcher = ({ activeId }) => {
                     onSelect={() => choose(v.id)}
                   />
                 ))}
-
-                {/* overflow — quietly signals there are more voices than fit, and
-                    routes to the Hall (the menu's "for more, open the Hall" cue) */}
-                {moreCount > 0 && (
-                  <button type="button" onClick={goHall} data-cursor="hover" className="voice-more">
-                    <span>{t('voice.more', { count: moreCount })}</span>
-                    <ArrowRight size={13} className="flex-shrink-0" />
-                  </button>
-                )}
               </>
             )}
 

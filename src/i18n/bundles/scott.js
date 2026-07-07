@@ -468,7 +468,6 @@ export default {
     clueCloser: 'Okay, warmer — {{hint}}',
     clueGiveaway: 'Fine, I’ll just tell you. It’s',
     clueTapUnlock: 'boom, tap it',
-    more: '{{count}} more voices. Like a party. In here.',
   },
 
   footer: {

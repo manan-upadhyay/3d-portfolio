@@ -650,7 +650,6 @@ export default {
     clueCloser: 'Closer — {{hint}}',
     clueGiveaway: 'The word is',
     clueTapUnlock: 'tap to speak it',
-    more: '{{count}} more in the Voice Hall',
     openHall: 'Enter the Voice Hall',
     hallTeaserSome: '{{count}} sealed voices await discovery',
     hallTeaserAll: 'Every voice discovered — wander them all',
