@@ -34,16 +34,15 @@ const Row = ({ no, glyph, label, kbd, active, expanded, onClick, ariaLabel }) =>
     )}
     <span
       className="relative grid place-items-center flex-shrink-0"
-      style={{ width: COLLAPSED - 12 }}
+      style={{
+        width: COLLAPSED - 12,
+        // One icon language: glyphs inherit this (lucide uses currentColor), so
+        // every leading cell — number or icon — rests muted and lifts to ember
+        // only when its row is active. No per-item accent colors.
+        color: active ? 'var(--color-ember)' : 'var(--color-text-muted)',
+      }}
     >
-      {glyph || (
-        <span
-          className="text-[11px] font-mono"
-          style={{ color: active ? 'var(--color-ember)' : 'var(--color-text-muted)' }}
-        >
-          {no}
-        </span>
-      )}
+      {glyph || <span className="text-[11px] font-mono">{no}</span>}
     </span>
     <motion.span
       animate={{ opacity: expanded ? 1 : 0, x: expanded ? 0 : -6 }}
@@ -148,42 +147,27 @@ const SideRail = ({ items, activeId, actions = [], visible, ariaLabel, crestLabe
           />
         ))}
 
-        {/* Ambient voice mark — always shows who is narrating; opens the Hall. */}
+        {/* Ambient voice mark — who is narrating; opens the Hall. Rendered as a
+            plain row (monogram glyph + single-line label) so it reads as one of
+            the rail's own items, not a separate widget. The "now narrating"
+            context lives in the aria-label/title rather than a caps eyebrow. */}
         {activeVoice && (
           <>
             <span className="my-1 h-px mx-2" style={{ background: 'var(--color-card-border)' }} />
-            <button
+            <Row
               onClick={openHall}
-              data-cursor="hover"
-              aria-label={`${t('voiceHall.nowNarrating')}: ${activeVoice.label}`}
-              title={`${t('voiceHall.nowNarrating')}: ${activeVoice.label}`}
-              className="relative flex items-center w-full h-9 rounded-xl"
-            >
-              <span className="relative grid place-items-center flex-shrink-0" style={{ width: COLLAPSED - 12 }}>
+              expanded={expanded}
+              label={activeVoice.label}
+              ariaLabel={`${t('voiceHall.nowNarrating')}: ${activeVoice.label}`}
+              glyph={
                 <span
                   className="grid place-items-center w-7 h-7 rounded-full font-chronicle text-[11.5px] leading-none"
-                  style={{
-                    color: 'var(--color-ember)',
-                    background: 'rgba(var(--color-ember-rgb),0.14)',
-                    border: '1px solid rgba(var(--color-ember-rgb),0.3)',
-                  }}
+                  style={{ color: 'var(--color-text-muted)', border: '1px solid var(--color-card-border)' }}
                 >
                   {activeVoice.glyph}
                 </span>
-              </span>
-              <motion.span
-                animate={{ opacity: expanded ? 1 : 0, x: expanded ? 0 : -6 }}
-                transition={{ duration: 0.25, ease: 'easeOut' }}
-                className="relative min-w-0 text-left"
-              >
-                <span className="block text-[8.5px] font-bold tracking-[0.18em] uppercase leading-none whitespace-nowrap" style={{ color: 'var(--color-gold)' }}>
-                  {t('voiceHall.nowNarrating')}
-                </span>
-                <span className="block text-[12.5px] font-medium leading-tight mt-0.5 truncate" style={{ color: 'var(--color-text)' }}>
-                  {activeVoice.label}
-                </span>
-              </motion.span>
-            </button>
+              }
+            />
           </>
         )}
       </motion.div>

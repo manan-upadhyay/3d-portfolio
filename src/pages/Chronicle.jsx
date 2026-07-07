@@ -44,9 +44,9 @@ const Chronicle = () => {
   }));
   const railActions = [
     { key: 'map', label: t('nav.map'), ariaLabel: t('nav.openMap'), kbd: true,
-      glyph: <Map size={17} style={{ color: 'var(--color-ember)' }} />, onClick: () => setMapOpen(true) },
+      glyph: <Map size={17} />, onClick: () => setMapOpen(true) },
     { key: 'makingOf', label: t('nav.makingOf'), ariaLabel: t('nav.makingOf'),
-      glyph: <Hammer size={16} style={{ color: 'var(--color-text-muted)' }} />,
+      glyph: <Hammer size={16} />,
       onClick: () => { track('making_of_enter', { from: 'rail' }); navigate('/making-of'); } },
   ];
 

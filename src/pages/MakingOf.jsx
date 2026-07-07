@@ -39,7 +39,7 @@ const MakingOf = () => {
   }));
   const railActions = [
     { key: 'home', label: t('makingOf.back'), ariaLabel: t('makingOf.back'),
-      glyph: <ArrowLeft size={16} style={{ color: 'var(--color-text-muted)' }} />,
+      glyph: <ArrowLeft size={16} />,
       onClick: () => { track('making_of_exit', { from: 'rail' }); navigate('/'); } },
   ];
 

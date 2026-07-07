@@ -9,7 +9,6 @@ import { projects, chapters } from '../constants';
 import { ChapterHeading, ScrollReveal, Annotated, NdaSchematic } from '../components';
 import { useThemeStore } from '../store/useThemeStore';
 import { rememberScroll } from '../lib/smoothScroll';
-import { playCue } from '../lib/sound';
 import { track, trackOnce } from '../lib/analytics';
 import { useNavigate } from 'react-router-dom';
 import Magnet from '../components/Magnet';
@@ -203,10 +202,7 @@ const RealmPlate = ({ project, index }) => {
         <div className="mt-5 max-w-xl">
           <button type="button" data-cursor="hover" className="works-story__toggle"
             aria-expanded={storyOpen}
-            onClick={() => {
-              if (!storyOpen) { track('project_story_open', { project: project.name }); playCue('unfurl', { dur: 0.6 }); } // the plate unfurls — parchment unroll synced to the expand
-              setStoryOpen((o) => !o);
-            }}>
+            onClick={() => { if (!storyOpen) track('project_story_open', { project: project.name }); setStoryOpen((o) => !o); }}>
             <ChevronDown size={14} className="works-story__caret" data-open={storyOpen || undefined} />
             {t('works.fullStory')}
           </button>

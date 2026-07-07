@@ -50,7 +50,7 @@
 | V3 | Voice-personality **content-strength pass** (per-voice table below) | Voices | ✅ | 8 | 5 | low |
 | V4 | New voices — **roster expansion** (shortlist below) | Voices | ✅ | 8 | 6 | med |
 | V5 | **Voice identity in the UI** — Voice Hall preview panel (desktop + mobile) + pre-rendered plates + ambient voice mark | Voices | ✅ | 8 | 7 | med |
-| S1 | Micro-moment sweep — new intent-gated sound/motion (map below) | Interaction | ✅ | 8 | 6 | med |
+| S1 | Micro-moment sweep — new intent-gated sound/motion (map below) | Interaction | ⏸️ | 8 | 6 | med |
 | S2 | **Voice-specific cue palettes** (each voice sounds different) | Interaction | 🔵 | 7 | 5 | med |
 | C1 | Cinematic upgrades to existing sections (list below) | Cinematics | 🔵 | 7 | 6 | med |
 | P1 | New sub-pages / wild flows (concepts below) | Sub-pages | 🔵 | 8 | 7 | med |
@@ -464,24 +464,18 @@ The site has a **dense** interactive-sound texture already (this is why the
 **Takeaway:** input surfaces are well covered. The **gaps** are (a) a few
 sections with *no* signature moment, and (b) no *voice-specific* audio identity.
 
-### S1 — Micro-moment sweep (new intent-gated moments) · ✅ (owner-picked 3 shipped 2026-07-06)
+### S1 — Micro-moment sweep (new intent-gated moments) · ⏸️ PARKED (built then reverted 2026-07-07)
 
-> **Owner picked 3 of the 7** (the rest rejected — see below), landed in
-> [sound.js](../../src/lib/sound.js) `CUES` + `CONFIG` with matching motion:
-> - **Realm-plate "unfurl"** — opening a project's "full story" plate ([Works.jsx](../../src/sections/Works.jsx))
->   fires a parchment-unroll cue whose `dur` is passed = the expand duration, so
->   sound and motion open at the same rate. Intent-gated (the toggle click), open-only.
-> - **Copy-email "seal"** — copying the address ([Contact.jsx](../../src/sections/Contact.jsx)
->   `CopyButton`) stamps a wax-seal press cue + an expanding wax ring and a
->   press-in check. Rewards the deliberate copy.
-> - **Recap "sigil stamp"** — the Traveler's Sigil ([ExpeditionRecap.jsx](../../src/components/ExpeditionRecap.jsx))
->   stamps in once (scale press-thunk) with a firm emboss cue when the recap first
->   resolves; `playCue` self-gates on the audio unlock so it never fires from a
->   passive scroll for a visitor who hasn't engaged sound.
+> **Built then reverted by owner request.** The owner-picked 3 (realm-plate
+> "unfurl", copy-email "seal", recap "sigil stamp") were implemented — cues in
+> [sound.js](../../src/lib/sound.js) `CUES`/`CONFIG` + matching motion in
+> [Works.jsx](../../src/sections/Works.jsx) / [Contact.jsx](../../src/sections/Contact.jsx)
+> / [ExpeditionRecap.jsx](../../src/components/ExpeditionRecap.jsx) — then **fully
+> reverted** on the owner's call. Those files + the three cues no longer carry any
+> S1 code. If revived, the specs below still stand.
 >
-> **Rejected by owner:** sky-scrub on the astrolabe, marginalia ink-bleed, SideRail
-> chapter detent. **Not taken this pass:** tech-orbit lock-on. All cues honour
-> reduced-motion (silent + static) and self-clean.
+> **Rejected outright (not built):** sky-scrub on the astrolabe, marginalia
+> ink-bleed, SideRail chapter detent. **Not taken:** tech-orbit lock-on.
 
 Each must pass the 4-part test. Ranked by impact-to-effort:
 
