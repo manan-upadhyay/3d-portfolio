@@ -254,15 +254,15 @@ export default {
       visit: 'Times You Came Back',
     },
     voices: {
-      title: 'Hidden Voices',
+      title: 'Hidden Narrators',
       unlocked: '{{count}} of {{total}}. Not bad.',
       sealed: 'Locked',
       switchTo: 'Be {{voice}}',
       locked: 'Locked. Mysterious. Like my job.',
     },
     sealed: {
-      none: 'A bunch of voices still locked. Could this BE any more of a scavenger hunt? Go find them. I believe in you.',
-      some: '{{count}} of {{total}} voices still hiding. Keep going, you delightful person.',
+      none: 'A bunch of narrators still locked. Could this BE any more of a scavenger hunt? Go find them. I believe in you.',
+      some: '{{count}} of {{total}} narrators still hiding. Keep going, you delightful person.',
       all: 'You found ALL of them. Could you BE any more thorough? I’m genuinely impressed, and I’m stingy with that.',
     },
   },
@@ -320,7 +320,7 @@ export default {
         how: 'Top right. Five skies. One’s “auto” and it knows what time it is where you are. Could that BE any more slightly unsettling? And yet, cool. Both things.',
       },
       voices: {
-        title: 'The Other Voices',
+        title: 'The Other Narrators',
         how: 'The whole site can talk in different voices — press ⇧⌘V. Some are locked. Type the secret word anywhere to unlock them. Hint, because I like you: type “chandler.” That’s me. Hi.',
       },
       map: {
@@ -417,19 +417,19 @@ export default {
   },
 
   voiceHall: {
-    title: 'The Voice Booth',
+    title: 'The Narration Booth',
     subtitle: 'Pick who narrates this whole thing. Could I BE any more biased toward myself? No. But it’s your call. The others are great too, I guess.',
     nowNarrating: 'Currently: me',
     preview: {
       eyebrow: 'Now previewing',
-      sealed: 'Locked voice',
-      apply: 'Could this voice BE the narrator?',
+      sealed: 'Locked narrator',
+      apply: 'Could this narrator BE the one?',
       active: 'Currently: me',
     },
-    tryHint: 'Click a voice and the whole site — this box included — re-tells itself in their words. Even this exact sentence. Could that BE any more meta?',
+    tryHint: 'Click a narrator and the whole site — this box included — re-tells itself in their words. Even this exact sentence. Could that BE any more meta?',
     close: 'Close',
-    sealedHint: 'Some voices are locked, like my feelings. Tap one and answer its clue — or type the secret word anywhere — to open it up.',
-    found: '{{count}}/{{total}} hidden voices found',
+    sealedHint: 'Some narrators are locked, like my feelings. Tap one and answer its clue — or type the secret word anywhere — to open it up.',
+    found: '{{count}}/{{total}} hidden narrators found',
     footerHint: 'enter to speak · esc to close',
     categories: {
       core: 'The Normal Ones',
@@ -437,10 +437,10 @@ export default {
     },
     request: {
       section: 'Summon',
-      cta: 'Request a new voice',
+      cta: 'Request a new narrator',
       ctaSub: 'Want someone else narrating this? Tell me who. Make the case. I love a good pitch — it’s the one time I don’t have to talk.',
       back: 'Back',
-      persona: 'Whose voice?',
+      persona: 'Whose narration?',
       personaPlaceholder: 'a character · a celebrity · me, but even more anxious…',
       email: 'Your email',
       emailPlaceholder: 'your email — so a real human can follow up, allegedly',

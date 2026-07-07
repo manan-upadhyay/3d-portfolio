@@ -254,15 +254,15 @@ export default {
       visit: 'Times You Came Back',
     },
     voices: {
-      title: 'Secret Voices',
+      title: 'Secret Narrators',
       unlocked: '{{count}} of {{total}}. nice.',
       sealed: 'Locked',
       switchTo: 'Be {{voice}}',
       locked: 'Locked. Mysterious. Like my backstory.',
     },
     sealed: {
-      none: 'A bunch of voices still locked. Go find ’em. It’s basically a scavenger hunt and I’m rooting for you.',
-      some: '{{count}} of {{total}} voices still hiding. Keep going, you glorious weirdo.',
+      none: 'A bunch of narrators still locked. Go find ’em. It’s basically a scavenger hunt and I’m rooting for you.',
+      some: '{{count}} of {{total}} narrators still hiding. Keep going, you glorious weirdo.',
       all: 'You found ALL of them. Overachiever. I’d hug you but you’re on the other side of the screen. For now.',
     },
   },
@@ -320,7 +320,7 @@ export default {
         how: 'Top right. Five skies. One’s “auto” and it knows what time it is where you are. Which is either magic or surveillance. Why not both?',
       },
       voices: {
-        title: 'The Other Voices',
+        title: 'The Other Narrators',
         how: 'The whole site can talk in different voices — press ⇧⌘V. Some are locked. Type the secret word anywhere to bust ’em out. Hint, because I like you: type my name. It’s “deadpool.” Obviously.',
       },
       map: {
@@ -417,19 +417,19 @@ export default {
   },
 
   voiceHall: {
-    title: 'The Voice Booth',
+    title: 'The Narration Booth',
     subtitle: 'Pick who narrates this whole thing. I’m obviously the best choice, but the site’s a democracy, so. Democracy. Gross. Vote for me.',
     nowNarrating: 'Currently: me',
     preview: {
       eyebrow: 'Now previewing',
       sealed: 'Locked (boo)',
-      apply: 'Give this voice the mic',
+      apply: 'Give this narrator the mic',
       active: 'Currently: this legend',
     },
-    tryHint: 'Click a voice and BOOM — the whole site starts talking like them. Even this exact box. Especially this box. Fourth wall’s already gone, might as well.',
+    tryHint: 'Click a narrator and BOOM — the whole site starts talking like them. Even this exact box. Especially this box. Fourth wall’s already gone, might as well.',
     close: 'Bail',
-    sealedHint: 'Some voices are locked, like a treasure chest, or my emotional core. Tap one and answer its clue — or type the secret word anywhere — to pop it open.',
-    found: '{{count}}/{{total}} secret voices found',
+    sealedHint: 'Some narrators are locked, like a treasure chest, or my emotional core. Tap one and answer its clue — or type the secret word anywhere — to pop it open.',
+    found: '{{count}}/{{total}} secret narrators found',
     footerHint: 'enter to speak · esc to close',
     categories: {
       core: 'The Normal Ones',
@@ -437,10 +437,10 @@ export default {
     },
     request: {
       section: 'Summon',
-      cta: 'Summon a new voice',
+      cta: 'Summon a new narrator',
       ctaSub: 'Want somebody else narrating this? Name them. Make it weird. I’ll personally lobby for it. I have nothing but time.',
       back: 'Back',
-      persona: 'Whose voice?',
+      persona: 'Whose narration?',
       personaPlaceholder: 'a hero · a villain · that one celebrity · me but somehow louder…',
       email: 'Your email',
       emailPlaceholder: 'your email — so a real human can reach out, allegedly',

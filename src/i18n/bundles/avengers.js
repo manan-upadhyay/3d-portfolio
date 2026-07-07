@@ -256,16 +256,16 @@ export default {
       visit: 'Return Visits',
     },
     voices: {
-      title: 'Sealed Voices',
+      title: 'Sealed Narrators',
       unlocked: '{{count}} of {{total}} online',
       sealed: 'Locked',
       switchTo: 'Deploy {{voice}}',
       locked: 'Locked. Classified.',
     },
     sealed: {
-      none: 'Some voices are still locked. Consider it a side mission. You look like someone who finishes those.',
+      none: 'Some narrators are still locked. Consider it a side mission. You look like someone who finishes those.',
       some: '{{count}} of {{total}} still sealed. Keep going — you’re closing in.',
-      all: 'Every voice online. All systems green. Nicely done — and I don’t hand out “nicely done.”',
+      all: 'Every narrator online. All systems green. Nicely done — and I don’t hand out “nicely done.”',
     },
   },
 
@@ -322,7 +322,7 @@ export default {
         how: 'Top right: five skies. One’s “auto” — it reads the actual time where you are and sets the scene. Context-aware. The way everything should be.',
       },
       voices: {
-        title: 'The Voice System',
+        title: 'The Narration System',
         how: 'The whole site re-narrates in different voices — press ⇧⌘V. Some are locked. Type the right word anywhere to bring one online. Since you’ve earned clearance: type “assemble.”',
       },
       map: {
@@ -419,19 +419,19 @@ export default {
   },
 
   voiceHall: {
-    title: 'The Voice Array',
+    title: 'The Narrator Array',
     subtitle: 'Pick who narrates the whole thing — what master do I serve? Whoever you crown. I’d pick me, obviously, but it’s your call. The rest of the roster’s solid too. Even the one who only says “moo.”',
     nowNarrating: 'Now running',
     preview: {
       eyebrow: 'Standing by',
       sealed: 'Access restricted',
-      apply: 'Deploy this voice',
+      apply: 'Deploy this narrator',
       active: 'Now running',
     },
-    tryHint: 'Pick a voice and the entire site — this panel included — re-narrates in their register. Instantly. The way a good switch should feel.',
+    tryHint: 'Pick a narrator and the entire site — this panel included — re-narrates in their register. Instantly. The way a good switch should feel.',
     close: 'Close',
-    sealedHint: 'Some voices are locked. Answer a voice’s clue — or type its secret word anywhere on the page — to bring it online.',
-    found: '{{count}}/{{total}} sealed voices online',
+    sealedHint: 'Some narrators are locked. Answer a narrator’s clue — or type its secret word anywhere on the page — to bring it online.',
+    found: '{{count}}/{{total}} sealed narrators online',
     footerHint: 'enter to run · esc to close',
     categories: {
       core: 'The Professionals',
@@ -439,10 +439,10 @@ export default {
     },
     request: {
       section: 'Summon',
-      cta: 'Request a new voice',
+      cta: 'Request a new narrator',
       ctaSub: 'Want someone else narrating this? Name them and make the case. Good ideas get built around here.',
       back: 'Back',
-      persona: 'Whose voice?',
+      persona: 'Whose narration?',
       personaPlaceholder: 'a hero · a legend · a rival worth out-building…',
       email: 'Your email',
       emailPlaceholder: 'your email — so a real human can get back to you',

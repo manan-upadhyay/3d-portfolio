@@ -119,7 +119,7 @@ export default {
   map: {
     footerHint: 'enter to go · esc to close',
     actions: {
-      voices: 'Persona',
+      voices: 'Narration',
       resume: 'Resume',
       themeLight: 'Light mode',
       themeDark: 'Dark mode',
@@ -127,30 +127,30 @@ export default {
   },
 
   voiceHall: {
-    title: 'Personas',
-    subtitle: 'Pick the writing persona — or request one that isn’t here yet.',
-    nowNarrating: 'Current voice',
+    title: 'Narration',
+    subtitle: 'Pick the narrator — or request one that isn’t here yet.',
+    nowNarrating: 'Current narrator',
     preview: {
       eyebrow: 'Preview',
-      sealed: 'Locked voice',
-      apply: 'Use this voice',
-      active: 'Current voice',
+      sealed: 'Locked narrator',
+      apply: 'Use this narrator',
+      active: 'Current narrator',
     },
-    tryHint: 'Pick a voice — the whole site, this panel included, re-reads itself in that style.',
+    tryHint: 'Pick a narrator — the whole site, this panel included, re-reads itself in that style.',
     close: 'Close',
-    sealedHint: 'Tap a hidden voice and answer its clue to unlock it — or type the secret word anywhere on the page.',
+    sealedHint: 'Tap a hidden narrator and answer its clue to unlock it — or type the secret word anywhere on the page.',
     found: '{{count}}/{{total}} found',
     foundShort: '{{count}}/{{total}} found',
     footerHint: 'enter to select · esc to close',
     categories: {
-      core: 'Personas',
+      core: 'Narrators',
       sealed: 'Hidden',
     },
     request: {
       section: 'Request',
-      cta: 'Request a voice',
-      ctaSub: 'Want a specific voice or personality? Let me know and I’ll consider adding it.',
-      persona: 'Which voice / personality?',
+      cta: 'Request a narrator',
+      ctaSub: 'Want a specific narrator or character? Let me know and I’ll consider adding it.',
+      persona: 'Which narrator / character?',
       personaPlaceholder: 'e.g. a famous character, an accent, a tone…',
       email: 'Your email',
       emailPlaceholder: 'your email — so I can follow up',
@@ -161,7 +161,7 @@ export default {
       done: 'Request sent',
       doneSub: 'Thanks — I’ll consider “{{persona}}.”',
       errors: {
-        persona: 'Enter a voice or personality.',
+        persona: 'Enter a narrator or character.',
         email: 'That email doesn’t look right — fix it, or leave it blank.',
         failed: 'Something went wrong — please try again.',
       },
@@ -196,7 +196,7 @@ export default {
       visit: 'Visit no.',
     },
     voices: {
-      title: 'Hidden Voices',
+      title: 'Hidden Narrators',
       unlocked: '{{count}} / {{total}} found',
       sealed: 'Locked',
       explore: 'Browse all',
@@ -204,9 +204,9 @@ export default {
       locked: 'Locked — not yet found',
     },
     sealed: {
-      none: 'Three hidden voices are still locked — the right words unlock them.',
-      some: '{{count}} of {{total}} hidden voices still locked.',
-      all: 'All hidden voices unlocked. Nice.',
+      none: 'Three hidden narrators are still locked — the right words unlock them.',
+      some: '{{count}} of {{total}} hidden narrators still locked.',
+      all: 'All hidden narrators unlocked. Nice.',
     },
   },
 
@@ -294,8 +294,8 @@ export default {
         how: 'The control at top-right offers five skies, including “auto”, which picks dawn/day/dusk/night from your local time.',
       },
       voices: {
-        title: 'Alternate voices',
-        how: 'Every line of copy can switch personality. Open the Voice Hall with ⇧⌘V; locked voices unlock when you type their secret word on the page.',
+        title: 'Alternate narrators',
+        how: 'Every line of copy can switch personality. Open the Narration Hall with ⇧⌘V; locked narrators unlock when you type their secret word on the page.',
       },
       map: {
         title: 'Command map',
@@ -396,8 +396,8 @@ export default {
   },
 
   voice: {
-    menuSub: 'Change the writing voice of the whole site.',
-    sealedHint: 'Tap a hidden voice and',
+    menuSub: 'Change who narrates the whole site.',
+    sealedHint: 'Tap a hidden narrator and',
     sealedTypeHint: 'answer its clue to unlock it.',
     cluePlaceholder: 'Type your answer…',
     clueSubmit: 'Unlock',
@@ -406,10 +406,10 @@ export default {
     clueCloser: 'Getting closer — {{hint}}',
     clueGiveaway: 'The answer is',
     clueTapUnlock: 'tap to unlock',
-    openHall: 'Browse all voices',
-    hallTeaserSome: '{{count}} hidden voices to find',
-    hallTeaserAll: 'All voices unlocked',
-    note: 'Tip: you can change the writing voice — try Story, or find the hidden ones.',
+    openHall: 'Browse all narrators',
+    hallTeaserSome: '{{count}} hidden narrators to find',
+    hallTeaserAll: 'All narrators unlocked',
+    note: 'Tip: you can change who narrates the site — try Story, or find the hidden ones.',
   },
 
   footer: {

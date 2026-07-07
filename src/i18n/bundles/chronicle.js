@@ -27,10 +27,10 @@ export default {
     close: 'Close menu',
     theme: 'Theme',
     sound: 'Sound',
-    voice: 'Persona',
+    voice: 'Narration',
     voiceSub: 'Change who narrates the site',
     makingOfSub: 'How this site was built',
-    menuCoach: 'Sound, themes & voices live in here — tap to explore.',
+    menuCoach: 'Sound, themes & narrators live in here — tap to explore.',
     contact: 'Contact',
   },
 
@@ -305,7 +305,7 @@ export default {
     hint: 'Tap a realm to travel',
     actions: {
       makingOf: 'The Making-of',
-      voices: 'Change persona',
+      voices: 'Change narration',
       resume: 'Read the Scroll (Resume)',
       github: 'GitHub',
       linkedin: 'LinkedIn',
@@ -316,10 +316,10 @@ export default {
 
   // The Voice Hall — the command-palette voice picker (scales past the popover).
   voiceHall: {
-    title: 'Personas',
+    title: 'The Narration Hall',
     // Plain, non-technical explainer shown at the top of the roster.
-    explainer: 'Pick who narrates this site. The words change to match the voice — everything else stays the same. Just for fun.',
-    subtitle: 'Choose who narrates the chronicle — or request a persona not yet among us.',
+    explainer: 'Pick who narrates this site. The words change to match the narrator — everything else stays the same. Just for fun.',
+    subtitle: 'Choose who narrates the chronicle — or request a narrator not yet among us.',
     nowNarrating: 'Now narrating',
     // Desktop preview panel (V5) — the framed portrait + details on the right.
     preview: {
@@ -329,23 +329,23 @@ export default {
       active: 'Now narrating the chronicle',
       clue: 'Clue',
     },
-    tryHint: 'Tap a voice — the whole chronicle, this hall included, re-tells itself in their words.',
+    tryHint: 'Tap a narrator — the whole chronicle, this hall included, re-tells itself in their words.',
     close: 'Close',
-    sealedHint: 'Tap a sealed voice and answer its clue to wake it — or type the secret word anywhere on the page.',
+    sealedHint: 'Tap a sealed narrator and answer its clue to wake it — or type the secret word anywhere on the page.',
     found: '{{count}}/{{total}} sealed found',
     foundShort: '{{count}}/{{total}} found',
     footerHint: 'enter to speak · esc to close',
     categories: {
-      core: 'The Voices',
+      core: 'The Narrators',
       sealed: 'Sealed',
     },
-    // The gamified "summon a new voice" tile.
+    // The gamified "summon a new narrator" tile.
     request: {
       section: 'Summon',
-      cta: 'Summon a new voice',
+      cta: 'Summon a new narrator',
       ctaSub: 'A character you’d love to hear narrate this? Send word to the cartographer.',
       back: 'Back',
-      persona: 'Whose voice?',
+      persona: 'Whose narration?',
       personaPlaceholder: 'Gandalf · a dread pirate · your favourite villain…',
       email: 'Your email',
       emailPlaceholder: 'your email — so I can tell you when it lands',
@@ -356,7 +356,7 @@ export default {
       done: 'Your request takes flight',
       doneSub: 'The cartographer will weigh “{{persona}}.” Thank you, traveler.',
       errors: {
-        persona: 'Name a voice or personality to summon.',
+        persona: 'Name a narrator or character to summon.',
         email: 'That email doesn’t look right — fix it, or leave it blank.',
         failed: 'The raven balked — mind trying again?',
       },
@@ -428,17 +428,17 @@ export default {
       visit: 'Voyage no.',
     },
     voices: {
-      title: 'Sealed Voices',
+      title: 'Sealed Narrators',
       unlocked: '{{count}} / {{total}} found',
       sealed: 'Sealed',
       explore: 'Explore all',
       switchTo: 'Speak as {{voice}}',
-      locked: 'A sealed voice, yet undiscovered',
+      locked: 'A sealed narrator, yet undiscovered',
     },
     sealed: {
-      none: 'Three voices still lie sealed — listen for the words that wake them.',
-      some: '{{count}} of {{total}} voices still lie sealed — keep listening.',
-      all: 'Every voice discovered. A keen ear, traveler.',
+      none: 'Three narrators still lie sealed — listen for the words that wake them.',
+      some: '{{count}} of {{total}} narrators still lie sealed — keep listening.',
+      all: 'Every narrator discovered. A keen ear, traveler.',
     },
   },
 
@@ -540,7 +540,7 @@ export default {
       },
       voices: {
         title: 'Hidden voices',
-        how: 'The whole site can be re-voiced. Open the Voice Hall (⇧⌘V) — sealed personalities unlock when you type their secret word anywhere on the page. (Try “boss”.)',
+        how: 'The whole site can be re-voiced. Open the Narration Hall (⇧⌘V) — sealed personalities unlock when you type their secret word anywhere on the page. (Try “boss”.)',
       },
       map: {
         title: 'The chart',
@@ -637,11 +637,11 @@ export default {
   },
 
   voice: {
-    menuTitle: 'Persona',
-    menuSub: 'Who narrates this chronicle? Pick a persona.',
-    pinned: 'Marked Voices',
-    sealed: 'Sealed Voices',
-    sealedHint: 'Tap a sealed voice and',
+    menuTitle: 'Narration',
+    menuSub: 'Who narrates this chronicle? Pick a narrator.',
+    pinned: 'Marked Narrators',
+    sealed: 'Sealed Narrators',
+    sealedHint: 'Tap a sealed narrator and',
     sealedTypeHint: 'answer its clue to wake it.',
     cluePlaceholder: 'Answer the clue…',
     clueSubmit: 'Speak the word',
@@ -650,13 +650,13 @@ export default {
     clueCloser: 'Closer — {{hint}}',
     clueGiveaway: 'The word is',
     clueTapUnlock: 'tap to speak it',
-    openHall: 'Enter the Voice Hall',
-    hallTeaserSome: '{{count}} sealed voices await discovery',
-    hallTeaserAll: 'Every voice discovered — wander them all',
+    openHall: 'Enter the Narration Hall',
+    hallTeaserSome: '{{count}} sealed narrators await discovery',
+    hallTeaserAll: 'Every narrator discovered — wander them all',
     // The one-time entice note above the quill (replaces the old static ring).
-    note: 'Psst — this whole tale can be told by other personas. Care to meet them?',
+    note: 'Psst — this whole tale can be told by other narrators. Care to meet them?',
     locked: 'Locked',
-    ariaOpen: 'Choose a persona',
+    ariaOpen: 'Choose a narrator',
   },
 
   // Interactive sound design (LEGENDARY-ROADMAP §4). UI copy for the bottom-right

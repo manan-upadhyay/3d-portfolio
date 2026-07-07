@@ -250,16 +250,16 @@ export default {
       visit: 'Recorded Incursions',
     },
     voices: {
-      title: 'Classified Voices',
+      title: 'Classified Narrators',
       unlocked: '{{count}}/{{total}} declassified',
       sealed: 'Classified',
       switchTo: 'Assume identity: {{voice}}',
       locked: 'Classified. Strictly need-to-know.',
     },
     sealed: {
-      none: 'Three voices remain classified. I will find them. I always find them.',
-      some: '{{count}} of {{total}} voices still classified. The investigation continues.',
-      all: 'All voices declassified. Impressive. I trust you completely. (I do not.)',
+      none: 'Three narrators remain classified. I will find them. I always find them.',
+      some: '{{count}} of {{total}} narrators still classified. The investigation continues.',
+      all: 'All narrators declassified. Impressive. I trust you completely. (I do not.)',
     },
   },
 
@@ -316,7 +316,7 @@ export default {
         how: 'Top-right control. Five skies. “Auto” reads your local time and deploys the correct one. Surveillance-grade. Excellent.',
       },
       voices: {
-        title: 'Classified Voices',
+        title: 'Classified Narrators',
         how: 'The site speaks in multiple identities. Open the Hall with ⇧⌘V. Locked identities require a password, typed anywhere on the page. The password for one of them is “beets”. You did not hear that from me.',
       },
       map: {
@@ -413,19 +413,19 @@ export default {
   },
 
   voiceHall: {
-    title: 'Voice Authorization',
-    subtitle: 'Select the voice cleared to narrate this chronicle. Choose correctly. Identity is everything.',
+    title: 'Narration Authorization',
+    subtitle: 'Select the narrator cleared to narrate this chronicle. Choose correctly. Identity is everything.',
     nowNarrating: 'Currently in command',
     preview: {
       eyebrow: 'Under review',
-      sealed: 'Unauthorized voice',
-      apply: 'Authorize this voice',
+      sealed: 'Unauthorized narrator',
+      apply: 'Authorize this narrator',
       active: 'Currently in command',
     },
-    tryHint: 'Select a voice. The entire chronicle — this panel included — will immediately submit to it. There is no resistance.',
+    tryHint: 'Select a narrator. The entire chronicle — this panel included — will immediately submit to it. There is no resistance.',
     close: 'Dismiss',
-    sealedHint: 'Certain voices are sealed for security. Select one and supply its password — or type the correct password anywhere on the page — to breach them.',
-    found: '{{count}}/{{total}} sealed voices breached',
+    sealedHint: 'Certain narrators are sealed for security. Select one and supply its password — or type the correct password anywhere on the page — to breach them.',
+    found: '{{count}}/{{total}} sealed narrators breached',
     footerHint: 'enter to speak · esc to close',
     categories: {
       core: 'Authorized Personnel',
@@ -433,10 +433,10 @@ export default {
     },
     request: {
       section: 'Requisition',
-      cta: 'Requisition a new voice',
-      ctaSub: 'A voice is absent from the roster. This is a security gap. Report the candidate. I will investigate personally.',
+      cta: 'Requisition a new narrator',
+      ctaSub: 'A narrator is absent from the roster. This is a security gap. Report the candidate. I will investigate personally.',
       back: 'Back',
-      persona: 'Identify the voice',
+      persona: 'Identify the narrator',
       personaPlaceholder: 'a superior officer · a fellow farmer · a worthy adversary…',
       email: 'Your email',
       emailPlaceholder: 'your email — for the official record',
@@ -447,7 +447,7 @@ export default {
       done: 'Requisition logged',
       doneSub: 'The candidate “{{persona}}” will be vetted thoroughly. Background check included. You have done your duty.',
       errors: {
-        persona: 'State the voice. A request with no subject is not a request.',
+        persona: 'State the narrator. A request with no subject is not a request.',
         email: 'That email is invalid. Correct it, or leave it blank.',
         failed: 'Transmission failed. Try again. Do not make me ask twice.',
       },

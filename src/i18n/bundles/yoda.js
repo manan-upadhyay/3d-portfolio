@@ -254,16 +254,16 @@ export default {
       visit: 'Times Returned',
     },
     voices: {
-      title: 'Sealed Voices',
+      title: 'Sealed Narrators',
       unlocked: '{{count}} of {{total}} freed',
       sealed: 'Sealed',
       switchTo: 'Speak as {{voice}}',
       locked: 'Sealed. For now.',
     },
     sealed: {
-      none: 'Sealed, several voices remain. A locked door, only a puzzle unsolved it is.',
+      none: 'Sealed, several narrators remain. A locked door, only a puzzle unsolved it is.',
       some: '{{count}} of {{total}}, still sealed. Keep at it — admire persistence, I do.',
-      all: 'Unsealed, every voice is. My kind of person, you are. Proud, I am.',
+      all: 'Unsealed, every narrator is. My kind of person, you are. Proud, I am.',
     },
   },
 
@@ -320,7 +320,7 @@ export default {
         how: 'Top right: five skies. One is “auto,” and the hour where you are, know it does. Useful, this trick is. Unsettling, only slightly.',
       },
       voices: {
-        title: 'The Other Voices',
+        title: 'The Other Narrators',
         how: 'In other tongues, speak this whole site will. Press ⇧⌘V. Sealed, some are — the right word, type it anywhere to free them. A hint, since like you I do: type “yoda.”',
       },
       map: {
@@ -417,30 +417,30 @@ export default {
   },
 
   voiceHall: {
-    title: 'The Council of Voices',
+    title: 'The Council of Narrators',
     subtitle: 'Who tells this tale, choose. Myself, recommend I would — but generous, I am. Their charms, the others have.',
     nowNarrating: 'Now speaking',
     preview: {
       eyebrow: 'Preview this, you do',
-      sealed: 'Sealed, this voice is',
+      sealed: 'Sealed, this narrator is',
       apply: 'Speak in this voice, it will',
       active: 'Now speaking, it is',
     },
-    tryHint: 'A voice, choose — and in their words, retell itself the whole site will, this chamber included. Even the clever parts.',
+    tryHint: 'A narrator, choose — and in their words, retell itself the whole site will, this chamber included. Even the clever parts.',
     close: 'Leave, you may',
-    sealedHint: 'Sealed, some voices are. A voice’s riddle answer — or its secret word type anywhere — and yours it becomes.',
-    found: '{{count}}/{{total}} sealed voices freed',
+    sealedHint: 'Sealed, some narrators are. A narrator’s riddle answer — or its secret word type anywhere — and yours it becomes.',
+    found: '{{count}}/{{total}} sealed narrators freed',
     footerHint: 'enter to speak · esc to close',
     categories: {
       core: 'The Plain-Spoken',
-      sealed: 'The Sealed Voices',
+      sealed: 'The Sealed Narrators',
     },
     request: {
       section: 'Summon',
-      cta: 'Another voice, summon',
+      cta: 'Another narrator, summon',
       ctaSub: 'Someone else to narrate this, would you have? Name them, and your case make. A well-argued petition, respect I do.',
       back: 'Back',
-      persona: 'Whose voice?',
+      persona: 'Whose narration?',
       personaPlaceholder: 'a master · a legend · a rival worth teaching…',
       email: 'Your email',
       emailPlaceholder: 'your email — so reply in kind I might',
