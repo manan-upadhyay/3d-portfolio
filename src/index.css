@@ -969,6 +969,20 @@ h1, h2, h3, h4, h5, h6 {
   vertical-align: super;
 }
 
+/* One-time discoverability hint on the first footnote a visitor scrolls to — an
+   ember-glow pulse that says "these dotted phrases are interactive." Fires once
+   ever (gated in JS + persisted); reduced-motion never reaches this class. */
+@keyframes marginalia-hint {
+  0%, 100% { color: inherit; text-decoration-color: rgba(var(--color-ember-rgb), 0.55); text-shadow: none; }
+  35%, 60% { color: var(--color-ember); text-decoration-color: var(--color-ember); text-shadow: 0 0 12px rgba(var(--color-ember-rgb), 0.5); }
+}
+@keyframes marginalia-hint-rune {
+  0%, 100% { text-shadow: none; }
+  45% { text-shadow: 0 0 10px rgba(var(--color-ember-rgb), 0.9); }
+}
+.marginalia--hint { animation: marginalia-hint 1.5s ease-in-out 1; }
+.marginalia--hint .marginalia__rune { animation: marginalia-hint-rune 1.5s ease-in-out 1; }
+
 /* The unfolding margin note. Portalled to <body> (escapes overflow:hidden
    ancestors), fixed-positioned above the phrase via inline left/top, then lifted
    above its own height and centered with the transform below. */
@@ -2274,6 +2288,15 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--color-text-muted);
 }
 .atelier-instrument--gap { margin-top: clamp(64px, 9vw, 108px); }
+
+/* SideRail rows read as clickable — a faint ember wash on hover (the active row
+   keeps its stronger tint on top). Hover-capable pointers only, so touch never
+   sticks a highlight. Makes the Map / Making-of actions feel like buttons, not
+   labels (features value audit 2026-07-08, P2 Realm map). */
+@media (hover: hover) {
+  .sr-row { transition: background-color 0.2s ease; }
+  .sr-row:hover { background: rgba(var(--color-ember-rgb), 0.06); }
+}
 
 /* the Act II breather — a waypoint on the cartographer's trail between the two
    heavy developer instruments (Observatory → Codebase Atlas). A thread descends

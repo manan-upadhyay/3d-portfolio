@@ -29,14 +29,50 @@ const TIP_STYLE = {
   boxShadow: 'var(--shadow-card)',
 };
 
+// Discoverability teach (features value audit 2026-07-08, P2): the dotted
+// underline + dagger is subtle enough that many never learn these phrases are
+// interactive. The FIRST footnote a visitor scrolls to gets a single ember-glow
+// shimmer — then every other one stays quiet, forever. Claimed by the first
+// instance to mount (About, top of the page); persisted once-per-visitor.
+let hintClaimed = false;
+const HINT_KEY = 'marginaliaHinted';
+
 const Marginalia = ({ id, children }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [pos, setPos] = useState(null);
+  const [hinting, setHinting] = useState(false);
   const triggerRef = useRef(null);
   const ptr = useRef('mouse');
   const tipId = useId();
   const note = t(`marginalia.${id}`);
+
+  // Claim the one-time hint on mount (if nobody has, it isn't already spent, and
+  // motion is allowed), then fire the shimmer the first time this phrase scrolls
+  // into view — teaching the affordance exactly once, where the eye already is.
+  useEffect(() => {
+    if (hintClaimed) return undefined;
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return undefined;
+    let spent = false;
+    try { spent = localStorage.getItem(HINT_KEY) === '1'; } catch { /* private mode */ }
+    if (spent) return undefined;
+    const el = triggerRef.current;
+    if (!el) return undefined;
+    hintClaimed = true; // this instance is the teacher; no other will shimmer
+    let fired = false;
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      fired = true;
+      io.disconnect();
+      try { localStorage.setItem(HINT_KEY, '1'); } catch { /* private mode */ }
+      setHinting(true);
+      setTimeout(() => setHinting(false), 1500);
+    }, { threshold: 0.9 });
+    io.observe(el);
+    // Release the claim on cleanup if we never fired, so a remount (StrictMode's
+    // dev double-invoke, or this teacher unmounting) can re-claim and re-observe.
+    return () => { io.disconnect(); if (!fired) hintClaimed = false; };
+  }, []);
 
   // Adoption signal (LEGENDARY-ROADMAP §2): did visitors actually discover the
   // flavor↔substance footnotes? Fire once per distinct note per session, on any
@@ -94,7 +130,7 @@ const Marginalia = ({ id, children }) => {
   return (
     <span
       ref={triggerRef}
-      className="marginalia"
+      className={`marginalia${hinting ? ' marginalia--hint' : ''}`}
       role="button"
       tabIndex={0}
       data-cursor="hover"

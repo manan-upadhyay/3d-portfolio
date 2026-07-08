@@ -26,7 +26,7 @@ const Row = ({ no, glyph, label, kbd, nav, active, expanded, onClick, ariaLabel 
     aria-label={ariaLabel}
     title={ariaLabel}
     aria-current={active ? 'true' : undefined}
-    className="relative flex items-center w-full h-9 rounded-xl"
+    className="sr-row relative flex items-center w-full h-9 rounded-xl"
   >
     <span
       className="absolute inset-0 rounded-xl transition-opacity duration-300"
