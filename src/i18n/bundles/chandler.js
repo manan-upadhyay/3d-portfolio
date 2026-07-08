@@ -276,21 +276,13 @@ export default {
     confessionSub:
       'The site was finished like forty commits ago. But “finished” felt like a threat, so I kept going — fixing things nobody would ever notice and adding analytics to PROVE the cool parts get used. It’s deeply nerdy. I’ve made peace with it.',
     acts: { build: 'The Build', engine: 'The Engine Room', hidden: 'The Secret Stuff' },
+    engineBridge: 'So that is how it watches itself. This is how it is built. Could this codebase BE any more organized?',
     commits: {
       title: 'Every Time I Saved',
       range: 'Straight from the real repo. No embellishment. Okay, minimal embellishment.',
-      caption: 'Each square is a day something shipped. Not one lucky montage — a whole, slightly concerning grind.',
-    },
-    ci: {
-      title: 'The Rules',
-      on: 'Runs on',
-      caption:
-        'Every commit has to pass the checks before it merges — lint, types, build. Green or it doesn’t ship. It’s like a bouncer, but for code, and it cannot be charmed. I have tried. Repeatedly.',
+      caption: 'A three-week sprint — the 2026 rebuild, on a repo I’ve apparently had since 2023. Not one lucky montage, a whole grind. And every commit had to pass the checks before it merged — lint, types, build. It’s like a bouncer, but for code, and it cannot be charmed. I have tried.',
     },
     stats: {
-      hours: 'Hours sunk',
-      commits: 'Times I saved',
-      phases: 'Phases',
       voices: 'Voices (incl. this one)',
       lines: 'Lines written',
     },

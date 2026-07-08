@@ -66,6 +66,16 @@ const Observatory = () => {
   const reduce = useReducedMotion();
   const { metrics, constellation, panels } = atelier.observatory;
   const [selected, setSelected] = useState(null);
+  // The event index is collapsed to group headers + counts by default so the
+  // *scale* lands without asking anyone to read ~40 chips (making-of value audit
+  // 2026-07-08); the curious can open a family to reveal its events.
+  const [openGroups, setOpenGroups] = useState(() => new Set());
+  const toggleGroup = (id) =>
+    setOpenGroups((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) { next.delete(id); pick(null); } else { next.add(id); }
+      return next;
+    });
   const rootRef = useRef(null);
   const [inView, setInView] = useState(false);
 
@@ -179,57 +189,76 @@ const Observatory = () => {
                 <circle className="obs-hub__core" cx={CX} cy={CY} r={13} />
               </g>
             </svg>
+          </div>
 
-            {/* the readout — the selected event, or the hub framing at rest */}
-            <div className="observatory__readout" aria-live="polite">
+          {/* Right column — the family index up top, the live signal readout
+              anchored beneath it (so it fills the column instead of leaving the
+              right half of the instrument empty; making-of value audit follow-up). */}
+          <div className="observatory__panel-col">
+            {/* The index — the four instrumented event families, colour-coded.
+                Collapsed to header + count by default so the scale reads at a
+                glance; open a family to reveal its individual events. */}
+            <div className="observatory__index" onMouseLeave={() => pick(null)}>
+              <p className="observatory__index-hint">{t('atelier.observatory.indexHint')}</p>
+              {constellation.groups.map((g) => {
+                const isOpen = openGroups.has(g.id);
+                return (
+                  <div key={g.id} className={`observatory__group observatory__group--${g.id}${isOpen ? ' is-open' : ''}`}>
+                    <button
+                      type="button"
+                      className="observatory__group-head"
+                      aria-expanded={isOpen}
+                      onClick={() => toggleGroup(g.id)}
+                    >
+                      <span className="observatory__legend-dot" aria-hidden="true" />
+                      <span className="observatory__group-label">{t(`atelier.observatory.groups.${g.id}`)}</span>
+                      <span className="observatory__group-count exp-mono">{g.events.length}</span>
+                    </button>
+                    {isOpen && (
+                      <ul className="observatory__chips">
+                        {g.events.map((e) => (
+                          <li key={e.id}>
+                            <button
+                              type="button"
+                              className={`observatory__chip exp-mono${selected === e.id ? ' is-active' : ''}`}
+                              aria-pressed={selected === e.id}
+                              onMouseEnter={() => pick(e.id)}
+                              onFocus={() => pick(e.id)}
+                              onClick={() => pick(selected === e.id ? null : e.id)}
+                            >
+                              {e.id}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* the live signal readout — the selected event, or the hub framing at
+                rest. A proper instrument panel: group-coloured accent rail, a live
+                pulse, name · cadence, then the plain-language 'where it fires'. */}
+            <div className={`observatory__readout${active ? ` observatory__readout--${active.group} is-active` : ''}`} aria-live="polite">
+              <span className="observatory__readout-head">
+                <span className="observatory__readout-dot" aria-hidden="true" />
+                <span className="observatory__readout-name exp-mono">{active ? active.id : constellation.hub}</span>
+                {active && (
+                  <span className="observatory__readout-cadence">{t(`atelier.observatory.cadence.${active.once ? 'once' : 'repeat'}`)}</span>
+                )}
+              </span>
               {active ? (
                 <>
-                  <span className="observatory__readout-name exp-mono">{active.id}</span>
-                  <span className={`observatory__readout-meta observatory__readout-meta--${active.group}`}>
-                    <span className="observatory__legend-dot" aria-hidden="true" />
+                  <span className={`observatory__readout-group observatory__readout-meta--${active.group}`}>
                     {t(`atelier.observatory.groups.${active.group}`)}
-                    <span className="observatory__readout-cadence">{t(`atelier.observatory.cadence.${active.once ? 'once' : 'repeat'}`)}</span>
                   </span>
                   <span className="observatory__readout-where">{active.where}</span>
                 </>
               ) : (
-                <>
-                  <span className="observatory__readout-name exp-mono">{constellation.hub}</span>
-                  <span className="observatory__readout-note">{t('atelier.observatory.hubNote')}</span>
-                </>
+                <span className="observatory__readout-note">{t('atelier.observatory.hubNote')}</span>
               )}
             </div>
-          </div>
-
-          {/* The index — every instrumented event, grouped + colour-coded, always
-              visible so discovery never requires a blind hover. */}
-          <div className="observatory__index" onMouseLeave={() => pick(null)}>
-            <p className="observatory__index-hint">{t('atelier.observatory.indexHint')}</p>
-            {constellation.groups.map((g) => (
-              <div key={g.id} className={`observatory__group observatory__group--${g.id}`}>
-                <div className="observatory__group-head">
-                  <span className="observatory__legend-dot" aria-hidden="true" />
-                  <span className="observatory__group-label">{t(`atelier.observatory.groups.${g.id}`)}</span>
-                  <span className="observatory__group-count exp-mono">{g.events.length}</span>
-                </div>
-                <ul className="observatory__chips">
-                  {g.events.map((e) => (
-                    <li key={e.id}>
-                      <button
-                        type="button"
-                        className={`observatory__chip exp-mono${selected === e.id ? ' is-active' : ''}`}
-                        aria-pressed={selected === e.id}
-                        onMouseEnter={() => pick(e.id)}
-                        onFocus={() => pick(e.id)}
-                        onClick={() => pick(selected === e.id ? null : e.id)}
-                      >
-                        {e.id}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
           </div>
         </div>
       ) : (

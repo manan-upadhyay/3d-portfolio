@@ -272,21 +272,13 @@ export default {
     confessionSub:
       'The site was presentable forty commits ago. External standards are for personnel who require supervision. I held it to the Schrute standard — absolute — and I installed the surveillance to prove which systems are used. Fact.',
     acts: { build: 'The Construction', engine: 'The Engine Room', hidden: 'Concealed Systems' },
+    engineBridge: 'That is how the system is monitored. This is how the system is structured. Both are correct.',
     commits: {
       title: 'The Operations Log',
       range: 'Extracted directly from the repository. Verified.',
-      caption: 'Every square is a day of committed operations. One disciplined campaign. Fact.',
-    },
-    ci: {
-      title: 'Quality Control Checkpoint',
-      on: 'Runs on',
-      caption:
-        'Every commit is inspected before it enters the codebase — lint, types, build, verified on every push and every pull request. Failure is not permitted. Standards are not optional.',
+      caption: 'A disciplined three-week campaign — the 2026 rebuild of a repository established in 2023. Every commit was inspected before entering the codebase — lint, types, build, on every push and every pull request. Failure is not permitted. Standards are not optional.',
     },
     stats: {
-      hours: 'Hours deployed',
-      commits: 'Operations logged',
-      phases: 'Strategic phases',
       voices: 'Voices commanded',
       lines: 'Lines fortified',
     },

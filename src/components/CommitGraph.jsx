@@ -57,7 +57,7 @@ function buildWindow(days, startStr, endStr) {
   return { cells, total, active, busiest, bestStreak };
 }
 
-const CommitGraph = () => {
+const CommitGraph = ({ extraStats = [] }) => {
   const { t } = useTranslation();
   const reduce = useReducedMotion();
   const rootRef = useRef(null);
@@ -65,7 +65,7 @@ const CommitGraph = () => {
   const [inView, setInView] = useState(false);
   const [hover, setHover] = useState(null); // { count, pct, isPeak, x, y }
 
-  const { cells, total, active, busiest, bestStreak } = useMemo(
+  const { cells, total, busiest, bestStreak } = useMemo(
     () => buildWindow(commitHistory.days, commitHistory.windowStart, commitHistory.last),
     [],
   );
@@ -90,11 +90,17 @@ const CommitGraph = () => {
     if (el) el.scrollLeft = el.scrollWidth;
   }, []);
 
+  // The Act I stat cluster (making-of value audit 2026-07-08 + follow-up):
+  // deliberately cadence-forward. The "busiest day" figure was dropped — it read
+  // as cramming ("24 in a day"), reinforcing a rushed-build signal — and "days
+  // building" too (it overlapped the streak). What's left leans on discipline
+  // (commits, longest streak) plus the two static figures merged from the cut
+  // Tally (lines, voices), for one tight ≤4-figure readout. `busiest` is still
+  // computed above — it powers the peak tooltip on the graph, just isn't a stat.
   const stats = [
-    { key: 'commits', value: total },
-    { key: 'days', value: active },
-    { key: 'busiest', value: t('atelier.commits.busyUnit', { count: busiest.count }) },
-    { key: 'streak', value: t('atelier.commits.streakUnit', { count: bestStreak }) },
+    { key: 'commits', value: total, label: t('atelier.commits.stats.commits') },
+    { key: 'streak', value: t('atelier.commits.streakUnit', { count: bestStreak }), label: t('atelier.commits.stats.streak') },
+    ...extraStats,
   ];
 
   return (
@@ -152,7 +158,7 @@ const CommitGraph = () => {
         {stats.map((s) => (
           <div key={s.key} className="commit-graph__stat">
             <dt className="commit-graph__stat-value">{s.value}</dt>
-            <dd className="commit-graph__stat-label">{t(`atelier.commits.stats.${s.key}`)}</dd>
+            <dd className="commit-graph__stat-label">{s.label}</dd>
           </div>
         ))}
       </dl>

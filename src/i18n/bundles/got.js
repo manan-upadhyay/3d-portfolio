@@ -277,21 +277,13 @@ export default {
     confessionSub:
       'The keep was finished forty commits ago. But “finished” is a word for the dead. So he stayed, mended stones no eye would ever find, and set watchers to prove the clever passages are walked. Proof outranks pride.',
     acts: { build: 'The Raising', engine: 'The Engine Room', hidden: 'The Sealed Crypts' },
+    engineBridge: 'So the realm is watched. Now see how the realm is built.',
     commits: {
       title: 'Every Stone Laid',
       range: 'From the true chronicle — not a flattering septon’s tale.',
-      caption: 'Each square is a day something shipped. A long campaign, not a single reckless charge.',
-    },
-    ci: {
-      title: 'The Law of the Land',
-      on: 'Runs on',
-      caption:
-        'Every commit is tried before it may pass the gate — lint, types, build. Green, or it does not ship. What do we say to a broken build? Not today.',
+      caption: 'A three-week campaign — the 2026 rebuild of a hold first raised in 2023. Not a single reckless charge. Every commit was tried before it could pass the gate — lint, types, build. What do we say to a broken build? Not today.',
     },
     stats: {
-      hours: 'Hours spent',
-      commits: 'Stones laid',
-      phases: 'Campaigns',
       voices: 'Voices (this realm included)',
       lines: 'Lines written',
     },

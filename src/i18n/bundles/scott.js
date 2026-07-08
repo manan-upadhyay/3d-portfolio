@@ -275,21 +275,13 @@ export default {
     confessionSub:
       'The website was done like forty saves ago. But “done” is what other people settle for — so I stayed, fixed stuff nobody would notice, and added analytics to PROVE people use the cool stuff. That’s my gift. Mostly gift.',
     acts: { build: 'How I Made It', engine: 'The Machine Room', hidden: 'Secret Stuff' },
+    engineBridge: 'That is how I watch it. THIS is how I built it. Both, obviously, flawless.',
     commits: {
       title: 'Every Time I Hit Save',
       range: 'Straight from the repo. The REAL one.',
-      caption: 'Every square is a day I shipped. One glorious, caffeinated burst. Boom.',
-    },
-    ci: {
-      title: 'The Rules. I Make Them.',
-      on: 'Runs on',
-      caption:
-        'Every single commit has to pass The Test before it gets in. Lint. Types. Build. Green, or it does not ship. That is not being mean. That is leadership.',
+      caption: 'A three-week sprint — the 2026 rebuild, on a repo I’ve had since 2023, by the way. One glorious, caffeinated push. Boom. And every single commit had to pass The Test first — lint, types, build. Green, or it does not ship. That is leadership.',
     },
     stats: {
-      hours: 'Hours of me',
-      commits: 'Times I saved',
-      phases: 'Genius phases',
       voices: 'Voices (incl. mine)',
       lines: 'Lines, baby',
     },

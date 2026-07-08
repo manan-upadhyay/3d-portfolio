@@ -459,11 +459,14 @@ export default {
     portrait: { drag: 'drag to reveal', tilt: 'tap to tilt' },
     // The commit trail — a GitHub-style heatmap drawn from this repo's real git
     // history (CommitGraph + src/constants/commitHistory.js). All figures are data.
+    // The Act II breather — one line bridging the Observatory (how the site
+    // watches itself) to the Codebase Atlas (how it is built).
+    engineBridge: 'So much for how the site watches itself. Here is how it is built to be understood.',
     commits: {
       title: 'The Commit Trail',
       range: 'The build window, straight from this repo’s git log',
       caption:
-        'Every square is a day I shipped to this repository — one intense burst, drawn from its own git history.',
+        'A focused three-week sprint — the 2026 rebuild of a repo I first pushed back in 2023. Real git history, no touch-ups: every commit crossed the same gate first — lint, types, a clean build on every push and pull request — or it never merged.',
       less: 'Less',
       more: 'More',
       tip_one: '{{count}} commit',
@@ -480,16 +483,7 @@ export default {
         streak: 'Longest streak',
       },
     },
-    ci: {
-      title: 'The Gate',
-      on: 'Runs on',
-      caption:
-        'Every commit above crosses the same gate before it can merge — lint, types, and a clean build, on every push and every pull request. Green, or it never ships.',
-    },
     stats: {
-      hours: 'Hours poured',
-      commits: 'Revamp commits',
-      phases: 'Wonder phases',
       voices: 'Site voices',
       lines: 'Lines of craft',
     },
@@ -500,13 +494,13 @@ export default {
       cut: 'What I cut, and why',
     },
     phases: {
-      voice: { title: 'The Voice switcher', why: 'A full i18next layer — the whole site re-skins through five personalities, scalable to fifteen, with easter-egg voices unlocked by discovery.' },
+      voice: { title: 'The Voice switcher', why: 'A full i18next layer — the whole site re-skins through ten personalities, built to scale further, with easter-egg voices unlocked by discovery.' },
       marginalia: { title: 'Footnotes', why: 'Hover a flavor phrase and the real engineering fact unfolds in a footnote — the fantasy made to earn its keep.' },
       sky: { title: 'Time-aware sky', why: 'Five theme modes that resolve from your real local time via SunCalc — no geolocation prompt, pure math from your timezone.' },
       sound: { title: 'Interactive sound', why: 'A Web Audio system of synthesized cues (zero bytes) that reward intent, never motion — default-on, silenced under reduced-motion.' },
       recap: { title: 'The Expedition recap', why: 'A cinematic instrument that reads your device and connection client-side and pins you on a live polar map — nothing stored, nothing sent.' },
       eggs: { title: 'Voice easter eggs', why: 'Type a secret word anywhere and a sealed personality wakes — Scott, Dwight, a cow — each authored in full character.' },
-      telemetry: { title: 'Telemetry & discoverability', why: 'Thirty-three product events folding into one per-visit session recap, thirteen super-properties, and five PostHog dashboards — all cookieless, anonymous, and silenced under Do-Not-Track. Beside it, structured-data SEO and a bespoke logger. The instrument answers "are the moments touched?" without harvesting a thing about who touches them.' },
+      telemetry: { title: 'Telemetry & discoverability', why: 'Forty-eight product events folding into one per-visit session recap, twenty-three super-properties, and five PostHog dashboards — all cookieless, anonymous, and silenced under Do-Not-Track. Beside it, structured-data SEO and a bespoke logger. The instrument answers "are the moments touched?" without harvesting a thing about who touches them.' },
     },
     cuts: {
       assets: { title: 'A folder of images, GIFs & audio files', why: 'Almost none of this site is shipped media. The hero compass is drawn in Canvas2D, the starfield is pure CSS, and every interface sound is synthesised live through the Web Audio API. The whole feedback layer ships as code, not megabytes — a smaller bundle, fewer network round-trips, and a faster first paint.' },

@@ -276,21 +276,13 @@ export default {
     confessionSub:
       'Finished some forty commits ago, the site was. But “finished,” a word for the tired it is. So stayed on, I did — mended what no one would notice, and wired analytics to prove the clever parts, used they are. More persuasive than pride, proof is.',
     acts: { build: 'The Building', engine: 'The Machine Room', hidden: 'The Sealed Rooms' },
+    engineBridge: 'Watch itself, the site does. Built to be understood, also it is. See now, you will.',
     commits: {
       title: 'Every Time Committed, I Did',
       range: 'From the true history it comes — not a flattering copy.',
-      caption: 'A day something shipped, each square is. A steady campaign, this was — not one lucky charge.',
-    },
-    ci: {
-      title: 'The Law of the Land',
-      on: 'Runs on',
-      caption:
-        'Judged, every commit must be, before enter it may — lint, types, build. Green, or ship it does not. Rules that bribed cannot be, fond of them I am.',
+      caption: 'A focused three-week campaign, this was — the 2026 rebuild, begun on a repo from 2023. Not one lucky charge. Judged, every commit was, before pass the gate it could — lint, types, build. Green, or ship it did not.',
     },
     stats: {
-      hours: 'Hours spent',
-      commits: 'Commits made',
-      phases: 'Phases',
       voices: 'Voices (mine included)',
       lines: 'Lines written',
     },

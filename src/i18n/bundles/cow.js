@@ -205,20 +205,13 @@ export default {
     confessionSub:
       'Moo moo moo moo moo, moo moo moo moo moo moo moo — moo moo moo.',
     acts: { build: 'Moo Moo', engine: 'Moo Moo Moo', hidden: 'Moo Moo' },
+    engineBridge: 'Moo moo moo moo moo. Moo moo moo moo moo moo.',
     commits: {
       title: 'Moo Moo Moo',
       range: 'Moo moo moo git moo. Moo.',
-      caption: 'Moo moo moo moo moo moo — moo moo moo moo. Moo.',
-    },
-    ci: {
-      title: 'Moo Moo Gate',
-      on: 'Moo',
-      caption: 'Moo moo moo moo moo — moo, moo, moo — moo moo moo moo moo. Moo moo moo.',
+      caption: 'Moo moo moo moo — moo 2026, moo moo 2023. Moo moo moo moo. Moo. Moo moo moo — moo, moo, moo — moo moo moo moo moo. Moo moo moo.',
     },
     stats: {
-      hours: 'Moo moo',
-      commits: 'Moo moo moo',
-      phases: 'Moo moo',
       voices: 'Moo moo',
       lines: 'Moo moo moo',
     },

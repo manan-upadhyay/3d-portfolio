@@ -243,18 +243,74 @@ and the emotional payoff reached with attention still in the tank.
 
 ## 5. Action board
 
-| Pri | Item | Action | Effort |
-|-----|------|--------|--------|
-| P0 | The Gate (CI) | **Cut**; fold into one caption line under commit graph | S |
-| P0 | Tally | **Cut** "200+ hours"; merge surviving figures into commit-graph stats | S |
-| P0 | Ledger | **Move** to lead Act I | S |
-| P1 | Observatory index | Collapse 39 chips → 4 group headers + counts | M |
-| P1 | Observatory metrics | Trim 5 → 2–3 credible figures | S |
-| P1 | Act II | Insert a breather between Observatory and Atlas | S |
-| P2 | Commit Trail | Reframe copy away from "one intense burst" | S |
-| P2 | Field Guide | Consider trimming 10 → 6–7 strongest | M |
-| P3 | Built-with | Leave as-is; do not expand | — |
-| — | Cold open, Atlas, Coda | Keep | — |
+| Pri | Item | Action | Effort | Status |
+|-----|------|--------|--------|--------|
+| P0 | The Gate (CI) | **Cut**; fold into one caption line under commit graph | S | ✅ Done — `CiPipeline` component + `atelier.ci` data + CSS deleted; gate signal folded into `atelier.commits.caption` (all voices) |
+| P0 | Tally | **Cut** "200+ hours"; merge surviving figures into commit-graph stats | S | ✅ Done — standalone `Tally` removed; `hours`/`phases`/`commits` labels dropped; `lines` + `voices` merged into `CommitGraph` via new `extraStats` prop |
+| P0 | Ledger | **Move** to lead Act I | S | ✅ Done — ledger now opens Act I; commit trail demoted below it as supporting evidence |
+| P1 | Observatory index | Collapse 39 chips → 4 group headers + counts | M | ✅ Done — groups collapse to header + count by default (rotating `+`), expand on click; dots stay hoverable |
+| P1 | Observatory metrics | Trim 5 → 2–3 credible figures | S | ✅ Done — dropped the two vanity metrics (21 super-props, 2 webhooks); kept events / dashboards / schemas; grid now 3-up |
+| P1 | Act II | Insert a breather between Observatory and Atlas | S | ✅ Done — new `atelier.engineBridge` line (all voices), centered `.atelier-act-bridge` |
+| P2 | Commit Trail | Reframe copy away from "one intense burst" | S | ✅ Done+ — see "rushed-build" follow-up below: reframed AND the cramming stat cut |
+| P2 | Field Guide | Consider trimming 10 → 6–7 strongest | M | ✅ Done — trimmed to **7** (each a different surface): needle, portrait, sky, voices, raven, recap, console. Dropped `spin` (astrolabe sub-moment), `sound` + `map` (their controls are visible) |
+| P3 | Built-with | Leave as-is; do not expand | — | ✅ Kept |
+| — | Cold open, Atlas, Coda | Keep | — | ✅ Kept — Atlas already opens hotspots-first (`src/` only expanded), §2.6 satisfied |
+
+> **Implemented 2026-07-08 (two passes).** Pass 1: P0 + P1 + the P2 copy reframe
+> (10 instruments → 8; Act I stat clusters 2 → 1; Observatory metrics 5 → 3).
+> Pass 2 (below): the commit-graph "rushed build" substance + a full number-accuracy
+> re-count + the Field-Guide trim. Every audit finding is now resolved.
+
+### 5a. Follow-up pass — the "built in a rush" signal (§2.1) + number sync
+
+The first pass only reframed the commit caption; the *substance* of §2.1 (the
+heatmap resolving to a dense sprint, reinforced by a cramming stat) was still
+open. Resolved by **owning it**, not hiding it:
+
+- **Cut the cramming stat.** The Act I stat row dropped **"busiest day / 24-in-a-day"**
+  (the figure that most read as cramming) *and* "days building" (it overlapped the
+  streak). The cluster is now a tight, cadence-forward **4 figures**: Commits ·
+  Longest streak · Lines of craft · Site voices — which also finally hits the
+  §3 "≤ 4 per cluster" target. (`busiest` is still computed — it powers the graph's
+  peak tooltip — just isn't a headline number.)
+- **Own the window.** Every voice's caption now frames it as *"a focused three-week
+  sprint — the 2026 rebuild of a repo first pushed in 2023,"* so ~3 weeks reads as
+  one deliberate chapter of a longer-lived project, not the whole story.
+- **Number-accuracy re-count** (owner flagged "site voices: 5" was stale now that
+  there are 8–10 voices). Re-verified every figure against the codebase and synced:
+  - Site voices **5 → 10** (`src/i18n/voices.js` registry + bundles).
+  - Lines of craft **13K → 22K** (`wc -l` hand-written src ≈ 21.8K).
+  - Observatory events **50 → 48** (distinct `track`/`trackOnce`/`capture` names).
+  - Telemetry ledger copy: **"33 events" → 48**, **"13 super-properties" → 23**.
+  - Voice-count prose ("five personalities, scalable to fifteen" → "ten…"), the
+    Atlas i18n blurbs ("five switchable voices", the 5-name bundle list), and the
+    stale constants comments (event/super-prop counts) all corrected.
+  - **Schemas kept at 5** (verified defensible: 5 named JSON-LD entities — Person ·
+    WebSite · ProfilePage · Organization · PostalAddress; the 6th `@type` is a
+    nested logo `ImageObject`, not a discoverability schema).
+
+> Note: the now-unused `atelier.observatory.metrics.superProps`/`webhooks` labels
+> and the dropped-egg copy (`atelier.eggs.{spin,sound,map}`) were left in the
+> bundles (dead but harmless) rather than pruned from all ten files.
+
+### 5b. Act II UI refinements (owner feedback on the rendered result)
+
+Three polish items after seeing Act II live:
+
+- **Observatory readout panel.** Collapsing the index left the right half of the
+  instrument empty while the readout floated in the bottom-left corner. The readout
+  now moves into the right column, anchored to its bottom (`observatory__panel-col`
+  + `margin-top: auto`), so it fills the column beside the constellation. It was
+  also redesigned into a proper signal panel — a group-coloured accent rail + live
+  pulse dot, `event_name · cadence`, the family label, then the plain-language
+  "where it fires."
+- **The breather divider.** The plain centered line read cheap. Replaced with a
+  cartographer's divider — two gold gradient rules converging on the shared
+  `CompassRose` ornament, the bridging line in serif beneath, with `clamp()` air
+  above/below (`.atelier-bridge`).
+- **Act II order — kept Observatory → Atlas** (owner decision). The Observatory
+  intro bridges from Act I's realms and the constellation is the stronger opener;
+  the Atlas stays the deeper second beat. No swap.
 
 ---
 

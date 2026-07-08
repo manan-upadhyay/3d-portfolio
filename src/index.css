@@ -2274,6 +2274,36 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--color-text-muted);
 }
 .atelier-instrument--gap { margin-top: clamp(64px, 9vw, 108px); }
+
+/* the Act II breather — a cartographer's divider between the two heavy developer
+   instruments (Observatory → Codebase Atlas): two rules converging on the compass
+   rose, with deliberate air above and below. Purely a visual pause — no copy. */
+.atelier-bridge {
+  margin: clamp(72px, 11vw, 140px) auto;
+  max-width: 660px;
+}
+.atelier-bridge__mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(14px, 3vw, 28px);
+  width: 100%;
+}
+.atelier-bridge__rule {
+  flex: 1 1 auto;
+  max-width: 190px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(var(--color-gold-rgb), 0.5));
+}
+.atelier-bridge__rule--r { background: linear-gradient(to left, transparent, rgba(var(--color-gold-rgb), 0.5)); }
+.atelier-bridge__rose {
+  flex: none;
+  display: block;
+  width: clamp(38px, 6vw, 50px);
+  height: clamp(38px, 6vw, 50px);
+  opacity: 0.92;
+  filter: drop-shadow(0 0 10px rgba(var(--color-gold-rgb), 0.28));
+}
 /* the vertical spine — runs through the numerals, connecting the acts (md+ only) */
 @media (min-width: 768px) {
   .atelier-act { padding-left: 56px; }
@@ -2290,36 +2320,9 @@ h1, h2, h3, h4, h5, h6 {
   .atelier-act:last-child::before { bottom: 0; background: var(--color-card-border); opacity: 0.5; }
 }
 
-/* the tally — headline figures dissolved into one inline run, not a grid */
-.atelier-tally {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 8px 22px;
-}
-.atelier-tally__item { display: inline-flex; align-items: baseline; gap: 8px; }
-.atelier-tally__item + .atelier-tally__item { position: relative; }
-.atelier-tally__item + .atelier-tally__item::before {
-  content: "·";
-  position: absolute;
-  left: -14px;
-  color: var(--color-text-muted);
-  opacity: 0.6;
-}
-.atelier-tally__value {
-  font-size: clamp(20px, 2.6vw, 26px);
-  font-weight: 600;
-  line-height: 1;
-  color: var(--color-ember);
-}
-.atelier-tally__label {
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-}
+/* (The standalone .atelier-tally run was removed — making-of value audit
+   2026-07-08. Its two surviving figures now render in the commit-trail stat
+   row via CommitGraph's `extraStats`.) */
 
 /* ── The Director's Reel — the build as a film in nine scrubbable scenes ── */
 .reel { display: flex; flex-direction: column; gap: 18px; }
@@ -2805,14 +2808,19 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 0 6px var(--g, var(--color-gold));
 }
 
-/* the instrument — constellation + readout on the left, the event index right */
+/* the instrument — the constellation left, and a right column that stacks the
+   family index over the live readout (readout anchored to the bottom so it fills
+   the column instead of leaving the right half empty) */
 .observatory__instrument { display: grid; gap: 22px; align-items: start; }
 @media (min-width: 900px) {
-  .observatory__instrument { grid-template-columns: minmax(0, 360px) 1fr; gap: 34px; }
+  .observatory__instrument { grid-template-columns: minmax(0, 320px) 1fr; gap: 40px; align-items: stretch; }
 }
 
-/* the constellation + its readout */
-.observatory__viz { display: flex; flex-direction: column; gap: 16px; align-items: center; }
+/* the constellation */
+.observatory__viz { display: flex; flex-direction: column; gap: 16px; align-items: center; justify-content: center; }
+
+/* the right column */
+.observatory__panel-col { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
 .observatory__sky {
   width: 100%;
   max-width: 340px;
@@ -2862,26 +2870,57 @@ h1, h2, h3, h4, h5, h6 {
   50%      { opacity: 0.9;  transform: scale(1.1); }
 }
 
-/* the readout — the selected event, or the hub framing at rest */
+/* the readout — the selected event, or the hub framing at rest. A desktop-only
+   instrument panel (the phone has its own .obs-signal): a group-coloured accent
+   rail, a live pulse, name · cadence, then the plain-language 'where it fires'.
+   `margin-top: auto` drops it to the bottom of the right column so it fills the
+   space beside the (short) collapsed index rather than floating in a corner. */
 .observatory__readout {
-  width: 100%;
-  min-height: 84px;
-  text-align: center;
-  padding: 12px 14px;
-  border-radius: 14px;
+  margin-top: auto;
+  position: relative;
+  padding: 20px 22px 20px 24px;
+  min-height: 132px;
+  border-radius: 16px;
   background: var(--color-card-bg);
   border: 1px solid var(--color-card-border);
+  overflow: hidden;
 }
+.observatory__readout--origin { --g: var(--obs-origin); }
+.observatory__readout--craft  { --g: var(--obs-craft); }
+.observatory__readout--realms { --g: var(--obs-realms); }
+.observatory__readout--intent { --g: var(--obs-intent); }
+/* group-coloured accent rail down the left edge — brightens on a live selection */
+.observatory__readout::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--g, var(--color-gold));
+  opacity: 0.45;
+  transition: opacity 0.25s ease, background 0.25s ease;
+}
+.observatory__readout.is-active::before { opacity: 1; }
+
+.observatory__readout-head { display: flex; align-items: center; gap: 10px; }
+.observatory__readout-dot {
+  flex: none;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--g, var(--color-gold));
+  box-shadow: 0 0 9px var(--g, var(--color-gold));
+  animation: obsReadoutDot 2.6s ease-in-out infinite;
+}
+@keyframes obsReadoutDot { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .observatory__readout-dot { animation: none; } }
 .observatory__readout-name {
-  display: inline-block;
-  font-size: 13px;
-  letter-spacing: 0.04em;
+  font-size: 14px;
+  letter-spacing: 0.03em;
   color: var(--color-gold);
 }
+/* the mobile signal readout still uses -meta; keep it flex-left there */
 .observatory__readout-meta {
   display: flex;
   align-items: center;
-  justify-content: center;
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 7px;
@@ -2895,22 +2934,42 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--color-text-muted);
-  padding: 2px 7px;
+  padding: 2px 8px;
   border-radius: 9999px;
   border: 1px solid var(--color-card-border);
 }
+.observatory__readout-head .observatory__readout-cadence { margin-left: auto; }
+.observatory__readout-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--g, var(--color-text));
+}
+.observatory__readout-group::before {
+  content: "";
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--g, var(--color-gold));
+}
 .observatory__readout-where {
   display: block;
-  margin-top: 8px;
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--color-text-muted);
+  margin-top: 10px;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--color-text);
 }
 .observatory__readout-note {
   display: block;
-  margin-top: 7px;
-  font-size: 12.5px;
-  line-height: 1.5;
+  margin-top: 10px;
+  font-size: 13px;
+  line-height: 1.6;
+  max-width: 48ch;
   color: var(--color-text-muted);
 }
 
@@ -2956,8 +3015,29 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 9px;
+  width: 100%;
+  padding: 7px 0;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--color-card-border);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s ease;
 }
+.observatory__group.is-open .observatory__group-head,
+.observatory__group-head:hover { border-bottom-color: var(--g, var(--color-gold)); }
+.observatory__group.is-open .observatory__group-head { margin-bottom: 9px; }
+/* count sits at the right edge; a rotating "+" hints the family opens */
+.observatory__group-count { margin-left: auto; }
+.observatory__group-head::after {
+  content: "+";
+  font-size: 13px;
+  line-height: 1;
+  color: var(--color-text-muted);
+  transition: transform 0.2s ease, color 0.15s ease;
+}
+.observatory__group.is-open .observatory__group-head::after { transform: rotate(45deg); color: var(--color-text); }
+.observatory__group-head:hover::after { color: var(--color-text); }
 .observatory__group-label {
   font-family: "Plus Jakarta Sans", sans-serif;
   font-size: 10px;
@@ -2995,15 +3075,15 @@ h1, h2, h3, h4, h5, h6 {
 /* the readouts */
 .observatory__metrics {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* three credible metrics since the value-audit trim (was five) — one row at
+     every breakpoint so no empty bordered cells show */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1px;
   background: var(--color-card-border);
   border: 1px solid var(--color-card-border);
   border-radius: 16px;
   overflow: hidden;
 }
-@media (min-width: 560px) { .observatory__metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-@media (min-width: 768px) { .observatory__metrics { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
 .observatory__metric { background: var(--color-card-bg); padding: 18px 12px; text-align: center; }
 .observatory__metric-value {
   font-size: clamp(24px, 3.4vw, 32px);
@@ -3495,63 +3575,8 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--color-text-muted);
 }
 
-/* ===== CiPipeline — "The Gate": the CI workflow as a quiet step-chain ===== */
-.ci-pipeline__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
-.ci-pipeline__on {
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--color-text-muted);
-}
-.ci-pipeline__triggers { display: flex; flex-wrap: wrap; gap: 8px; }
-.ci-pipeline__trigger {
-  font-size: 11px; padding: 3px 9px; border-radius: 999px;
-  color: var(--color-ember);
-  background: rgba(var(--color-ember-rgb), 0.08);
-  border: 1px solid rgba(var(--color-ember-rgb), 0.22);
-}
-/* The run: a vertical timeline of stages on a rail of nodes, flowing down into
-   the green merge-ready gate. Full width on every screen — never scrolls
-   horizontally, never truncates. */
-.ci-run { list-style: none; margin: 22px 0 0; padding: 0; }
-.ci-stage {
-  position: relative;
-  display: flex; align-items: center; gap: 15px;
-  padding: 8px 0;
-  padding-left: 48px;   /* room for the node rail */
-  min-height: 46px;
-}
-/* the through-line at the node centre (x = 18, node is 36 wide from left:0) */
-.ci-stage::before {
-  content: ''; position: absolute; left: 17px; top: 0; bottom: 0; width: 2px;
-  background: linear-gradient(var(--color-card-border), var(--color-card-border));
-}
-.ci-stage:first-child::before { top: 50%; }        /* line begins at the first node */
-.ci-stage:last-child::before { bottom: 50%; }       /* …and ends at the last node */
-.ci-stage__node {
-  position: absolute; left: 0; top: 50%; transform: translateY(-50%);
-  display: grid; place-items: center; width: 36px; height: 36px;
-  border-radius: 10px; z-index: 1;
-  color: var(--color-ember); background: rgba(var(--color-ember-rgb), 0.12);
-  border: 1px solid rgba(var(--color-ember-rgb), 0.25);
-}
-.ci-stage__text { display: flex; flex-direction: column; min-width: 0; }
-.ci-stage__label { font-size: 13px; font-weight: 600; letter-spacing: 0.02em; color: var(--color-text); }
-.ci-stage__cmd { font-size: 11px; margin-top: 1px; color: var(--color-text-muted); }
-/* the terminal gate — a solid green node that closes the run */
-.ci-stage--gate .ci-stage__node {
-  color: #fff; background: var(--color-success);
-  border-color: var(--color-success);
-  box-shadow: 0 0 14px rgba(var(--color-success-rgb), 0.4);
-}
-.ci-stage--gate .ci-stage__label { color: var(--color-success); font-weight: 700; }
-
-/* Staggered rise as the run enters view. */
-.ci-run .ci-stage { opacity: 0; transform: translateY(6px); }
-.ci-run.is-in .ci-stage { animation: ci-rise 0.5s ease both; animation-delay: calc(var(--i) * 0.07s); }
-@keyframes ci-rise { to { opacity: 1; transform: none; } }
-@media (prefers-reduced-motion: reduce) {
-  .ci-run .ci-stage { opacity: 1; transform: none; animation: none; }
-}
+/* (The CiPipeline "Gate" styles were removed with the panel — making-of value
+   audit 2026-07-08. The gate's one signal now lives in the commit-trail caption.) */
 
 /* Map overlay quick-action pills — hover lifts the surface + border (design-
    system sync). The Making-of doorway variant carries the ember accent so it

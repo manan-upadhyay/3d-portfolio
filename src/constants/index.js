@@ -450,17 +450,19 @@ export const stats = [
 // ledger/phase/cut/tech IDs. The voiced labels live in the bundles, keyed by
 // these ids: t('atelier.stats.<key>'), t('atelier.phases.<id>'), etc.
 export const atelier = {
-  // Headline instrument metrics. `value` is data; the label is voiced
-  // (t('atelier.stats.<key>')). `count` cells animate via CountUp; literals
-  // (e.g. "0 KB") render as-is. Sourced from `git log` + the file census:
-  //   lines   → `wc -l` of hand-written src/ (js/jsx/ts/css ≈ 13K)
-  //   voices  → src/i18n/bundles/* (chronicle, plain, scott, dwight, cow)
-  // (commits now live in the CommitGraph — real git history — not a hand figure.)
+  // The two static figures that survive into the Act I stat cluster — merged into
+  // the CommitGraph's live stat row (via its `extraStats` prop) so Act I reads out
+  // ONE numeric cluster, not two. The standalone Tally, and the vanity "hours
+  // poured" figure with it, were cut (making-of value audit 2026-07-08). `value`
+  // is data; the label is voiced (t('atelier.stats.<key>')); `count` cells animate
+  // via CountUp, literals render as-is. Figures re-verified against the codebase
+  // 2026-07-08 (audit follow-up — the old 13K/5 were stale):
+  //   lines   → `wc -l` of hand-written src/ (js/jsx/ts/css, excl. generated
+  //             commitHistory.js) ≈ 21.8K → "22K"
+  //   voices  → src/i18n/voices.js registry + src/i18n/bundles/* = 10
   stats: [
-    { key: 'hours', value: '200+', count: true },
-    { key: 'phases', value: '7', count: true },
-    { key: 'voices', value: '5', count: true },
-    { key: 'lines', value: '13K', count: false },
+    { key: 'lines', value: '22K', count: false },
+    { key: 'voices', value: '10', count: true },
   ],
   // The build timeline — daily commit counts across the "Cartographer revamp"
   // (Jun 20–30 2026, per `git log`). `done` flags the day the site was already a
@@ -487,14 +489,16 @@ export const atelier = {
   // find. `icon` keys a lucide glyph in Atelier.jsx; the name + how-to-trigger
   // copy is voiced: t('atelier.eggs.<id>.title' / '.how'). `act` (optional) wires
   // the card's "Show me" button to the actual feature — see EGG_ACTIONS.
+  // Curated to the seven strongest, each a DIFFERENT surface, so it reads as a
+  // chosen set rather than a checklist (making-of value audit 2026-07-08). Dropped:
+  // `spin` (a sub-moment of the astrolabe, already represented), `sound` and `map`
+  // (their controls are visible, so less of a hidden discovery). Their voiced copy
+  // (atelier.eggs.{spin,sound,map}) is left in the bundles, unused but harmless.
   eggs: [
     { id: 'astrolabe', icon: 'compass', act: 'origin' },
-    { id: 'spin', icon: 'refresh', act: 'origin' },
     { id: 'lens', icon: 'lens', act: 'portrait' },
-    { id: 'sound', icon: 'audio' },
     { id: 'sky', icon: 'sky', act: 'sky' },
     { id: 'voices', icon: 'drama', act: 'voices' },
-    { id: 'map', icon: 'map', act: 'map' },
     { id: 'raven', icon: 'send', act: 'contact' },
     { id: 'recap', icon: 'fingerprint', act: 'contact' },
     { id: 'console', icon: 'terminal' },
@@ -507,25 +511,9 @@ export const atelier = {
     'PostHog', 'Vercel Analytics', 'Speed Insights',
   ],
   techCore: ['React 18', 'GSAP · ScrollTrigger', 'Web Audio', 'Canvas2D', 'i18next', 'Zustand'],
-  // "The Gate" — the CI pipeline every commit in the graph above passed through
-  // (.github/workflows/ci.yml). NON-COPY data only: the real trigger + ordered
-  // stages, mirrored 1:1 from the workflow so it can't drift. `glyph` keys a
-  // lucide icon in CiPipeline.jsx; `label`/`cmd` are technical narration
-  // (EN-only, exempt from voice like the atlas chips). Framing copy is voiced
-  // under t('atelier.ci.title' / '.caption'). Drives the CiPipeline component.
-  ci: {
-    file: '.github/workflows/ci.yml',
-    triggers: ['push → main', 'every pull request'],
-    steps: [
-      { id: 'checkout', glyph: 'branch', label: 'checkout', cmd: 'actions/checkout' },
-      { id: 'node', glyph: 'node', label: 'node 24', cmd: 'setup-node · npm cache' },
-      { id: 'install', glyph: 'package', label: 'install', cmd: 'npm ci' },
-      { id: 'lint', glyph: 'scan', label: 'lint', cmd: 'eslint · 0 warnings' },
-      { id: 'types', glyph: 'braces', label: 'types', cmd: 'tsc --noEmit' },
-      { id: 'build', glyph: 'hammer', label: 'build', cmd: 'vite build' },
-    ],
-    pass: 'merge-ready',
-  },
+  // (The standalone "Gate" CI-pipeline panel was cut — a table-stakes widget every
+  // pro repo has; making-of value audit 2026-07-08. Its one honest signal now
+  // lives as a folded line in the commit-trail caption, t('atelier.commits.caption').)
   // "Off the map" — the three sides of the person behind the build, as an
   // interactive triptych (PersonaTriptych). `glyph` keys a lucide icon; `chips`
   // are proper-noun names (data). Voiced copy: t('atelier.personas.<id>.label'
@@ -539,29 +527,30 @@ export const atelier = {
   // structured-data SEO, and observability, framed as one instrument. This is
   // NON-COPY data only (real event names, counts, capability chips); every label
   // is voiced under t('atelier.observatory.*'). Drives the Observatory component.
-  // Sourced from the live code:
-  //   events     → grep of track()/trackOnce()/capture() across src (50+ named
-  //                product events; session_recap is the aggregating hub). The
-  //                constellation below visualises a curated subset; drill-down
+  // Sourced from the live code (re-counted 2026-07-08, audit follow-up):
+  //   events     → grep of track()/trackOnce()/capture() across src = 48 distinct
+  //                named product events; session_recap is the aggregating hub. The
+  //                constellation below visualises a curated subset of 39; drill-down
   //                events (atlas_node_open, mobile_menu_view, egg_show,
   //                ledger_expand ids, portrait_interact, voice_clue_*) fire too
   //                but are omitted here to keep the map readable.
   //   superProps → registerContext() in main.jsx + Layout.jsx + the stores
-  //                (21 properties — device/screen/viewport/input, theme, sky,
-  //                voice, sound, returning_visitor…).
+  //                (23 properties — device/screen/viewport/input, theme, sky,
+  //                voice, sound, returning_visitor…). No longer a displayed metric.
   //   schemas    → JSON-LD @type blocks in index.html (WebSite, ProfilePage,
   //                Person, Organization, PostalAddress).
   //   dashboards → PostHog (funnels, cohorts, retention, weekly alerts).
   observatory: {
     // The instrument readouts — `value` is data; `count` cells animate via CountUp.
+    // Trimmed 5 → 3 credible figures in the making-of value audit (2026-07-08):
+    // the two vanity metrics (21 super-properties, 2 webhook routes) were dropped
+    // to drain the page's "number soup"; events / dashboards / schemas remain.
     metrics: [
-      { key: 'events', value: '50', count: true },
-      { key: 'superProps', value: '21', count: true },
-      { key: 'webhooks', value: '2', count: true },
+      { key: 'events', value: '48', count: true },
       { key: 'dashboards', value: '5', count: true },
       { key: 'schemas', value: '5', count: true },
     ],
-    // The product-event constellation — the 33 named events grouped by the surface
+    // The product-event constellation — the 39 curated events grouped by the surface
     // they instrument, all orbiting the `session_recap` hub. Each event is the real
     // event id + `where` it fires (technical narration, EN-only — exempt from voice
     // translation like the capability `tags`) + `once` (true = trackOnce, i.e. once
@@ -653,11 +642,11 @@ export const atelier = {
           blurb: 'Every non-copy value — links, icons, map coordinates, chapter ids, project facts, skill names, stat values.',
           signal: 'One source of truth for data. No magic numbers or stray literals scattered through components — change a fact once and the whole site follows.' },
         { id: 'i18n', name: 'i18n/', type: 'dir', glyph: 'globe', hotspot: true,
-          blurb: 'Every visible string, in five switchable voices. chronicle is the complete base; the rest override only the keys that change.',
+          blurb: 'Every visible string, in ten switchable voices. chronicle is the complete base; the rest override only the keys that change.',
           signal: 'All copy lives behind t(), so the entire site re-voices in one click — personality and translation are a data concern, never a code change.',
           children: [
             { id: 'bundles', name: 'bundles/', type: 'dir', glyph: 'globe',
-              blurb: 'chronicle · plain · scott · dwight · cow — one file per voice. Core voices bundle eagerly; egg voices are code-split and loaded on demand.',
+              blurb: 'chronicle · plain · scott · dwight · cow · got · yoda · avengers · chandler · deadpool — one file per voice. Core voices bundle eagerly; egg voices are code-split and loaded on demand.',
               signal: 'Adding a personality is adding a bundle; components are never touched, and the easter-egg voices cost nothing until summoned.' },
             { id: 'voices', name: 'voices.js', type: 'file', glyph: 'filecode',
               blurb: 'The voice registry — categories, glyphs, and the unlock triggers for sealed voices.',

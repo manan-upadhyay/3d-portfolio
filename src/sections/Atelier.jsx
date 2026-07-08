@@ -8,7 +8,7 @@ import { atelier } from '../constants';
 import { requestSection } from '../lib/smoothScroll';
 import { track } from '../lib/analytics';
 import { useVoiceStore } from '../store/useVoiceStore';
-import { ChapterHeading, ScrollReveal, CountUp, CommitGraph, CiPipeline, Observatory, CodebaseAtlas, PersonaTriptych, FaceParticles } from '../components';
+import { ChapterHeading, ScrollReveal, CountUp, CommitGraph, Observatory, CodebaseAtlas, PersonaTriptych, FaceParticles, CompassRose } from '../components';
 
 /* lucide glyph per field-guide entry (icon id → component). */
 const EGG_ICONS = { compass: Compass, refresh: RefreshCcw, lens: ScanSearch, audio: AudioLines, sky: CloudSun, drama: Drama, map: Map, send: Send, fingerprint: Fingerprint, terminal: Terminal };
@@ -172,19 +172,13 @@ const Atelier = () => {
 
   const manifesto = t('atelier.manifesto', { returnObjects: true });
 
-  /* The headline figures, dissolved into one inline tally rather than a 5-up grid. */
-  const Tally = () => (
-    <p className="atelier-tally" aria-label={t('atelier.acts.build')}>
-      {atelier.stats.map((s) => (
-        <span key={s.key} className="atelier-tally__item">
-          <span className="atelier-tally__value exp-mono">
-            {s.count ? <CountUp value={s.value} /> : s.value}
-          </span>
-          <span className="atelier-tally__label">{t(`atelier.stats.${s.key}`)}</span>
-        </span>
-      ))}
-    </p>
-  );
+  /* The two static figures that survive the (now-cut) Tally, merged into the
+     commit-trail stat row so Act I reads out one numeric cluster, not two. */
+  const commitExtraStats = atelier.stats.map((s) => ({
+    key: s.key,
+    value: s.count ? <CountUp value={s.value} /> : s.value,
+    label: t(`atelier.stats.${s.key}`),
+  }));
 
   return (
     <>
@@ -199,37 +193,14 @@ const Atelier = () => {
       </div>
 
       <div className="atelier-acts mt-16">
-        {/* Act I — The Build: the reel, the tally of figures, the built/cut ledger. */}
+        {/* Act I — The Build. Lead with JUDGMENT (the built/cut ledger — the single
+            most senior-differentiating artifact), then show the work that earned
+            the right to those cuts: the real commit trail (making-of value audit
+            2026-07-08). The standalone CI "Gate" panel and the "hours poured" Tally
+            were cut; the CI signal is folded into the commit caption, and the two
+            surviving figures (lines, voices) merged into the commit stat row. */}
         <Act num="I" id="build" eyebrow={t('atelier.acts.build')}>
-          <ScrollReveal direction="up" delay={0.05} className="realm-card atelier-card p-6 sm:p-8">
-            <div className="flex items-baseline justify-between gap-4 flex-wrap">
-              <span className="atelier-sublabel">{t('atelier.commits.title')}</span>
-              <span className="atelier-card__hint exp-mono">{t('atelier.commits.range')}</span>
-            </div>
-            <div className="mt-6">
-              <CommitGraph />
-            </div>
-            <p className="atelier-card__caption mt-6">{t('atelier.commits.caption')}</p>
-          </ScrollReveal>
-
-          {/* The Gate — the CI pipeline every one of those commits crossed. Sits
-              right under the trail so the two read as one thought: cadence, then
-              the discipline that gated it (persona audit 2026-07-05, item 6). */}
-          <ScrollReveal direction="up" delay={0.05} className="realm-card atelier-card p-6 sm:p-8 mt-8">
-            <div className="flex items-baseline justify-between gap-4 flex-wrap">
-              <span className="atelier-sublabel">{t('atelier.ci.title')}</span>
-              <span className="atelier-card__hint exp-mono">{atelier.ci.file}</span>
-            </div>
-            <div className="mt-6">
-              <CiPipeline />
-            </div>
-          </ScrollReveal>
-
-          <ScrollReveal direction="up" className="mt-14">
-            <Tally />
-          </ScrollReveal>
-
-          <ScrollReveal direction="up" className="mt-20">
+          <ScrollReveal direction="up">
             <p className="atelier-ledger__intro">{t('atelier.ledger.intro')}</p>
             <div className="atelier-ledger mt-9">
               <div className="atelier-col">
@@ -256,6 +227,20 @@ const Atelier = () => {
               </div>
             </div>
           </ScrollReveal>
+
+          {/* The commit trail — supporting evidence for the judgment above. The
+              live git stats carry the two surviving Tally figures; the caption
+              folds in the one honest CI signal (every commit crossed the gate). */}
+          <ScrollReveal direction="up" delay={0.05} className="realm-card atelier-card p-6 sm:p-8 mt-20">
+            <div className="flex items-baseline justify-between gap-4 flex-wrap">
+              <span className="atelier-sublabel">{t('atelier.commits.title')}</span>
+              <span className="atelier-card__hint exp-mono">{t('atelier.commits.range')}</span>
+            </div>
+            <div className="mt-6">
+              <CommitGraph extraStats={commitExtraStats} />
+            </div>
+            <p className="atelier-card__caption mt-6">{t('atelier.commits.caption')}</p>
+          </ScrollReveal>
         </Act>
 
         {/* Act II — The Engine Room: the senior-signals showpiece, two parallel
@@ -270,6 +255,18 @@ const Atelier = () => {
             >
               <div className="mt-9"><Observatory /></div>
             </Instrument>
+          </ScrollReveal>
+
+          {/* A breather between the two heavy developer instruments, so Act II
+              reads as two moments, not one exhausting slab (making-of value audit
+              2026-07-08). A cartographer's divider — flanking rules converging on
+              the compass rose — gives the act room without more copy. */}
+          <ScrollReveal direction="up" className="atelier-bridge">
+            <div className="atelier-bridge__mark" aria-hidden="true">
+              <span className="atelier-bridge__rule" />
+              <span className="atelier-bridge__rose"><CompassRose className="w-full h-full" /></span>
+              <span className="atelier-bridge__rule atelier-bridge__rule--r" />
+            </div>
           </ScrollReveal>
 
           <ScrollReveal direction="up" className="atelier-instrument--gap">

@@ -219,11 +219,12 @@ export default {
     confessionSub:
       'How this site is built, what was cut, and the details you might miss — all real, not screenshots of a process.',
     acts: { build: 'The Build', engine: 'Infrastructure', hidden: 'Details & extras' },
+    engineBridge: 'That is how the site measures itself. Here is how it is organised.',
     commits: {
       title: 'Commit history',
       range: 'The build window, straight from this repo’s git log',
       caption:
-        'Each square is a day I committed to this repository — one focused burst, pulled directly from git.',
+        'A focused three-week sprint — the 2026 rebuild, on a repo I first pushed in 2023. Real git history, straight from git: every commit ran the same checks first — lint, type-check, a production build — or it didn’t merge.',
       less: 'Less',
       more: 'More',
       tip_one: '{{count}} commit',
@@ -240,16 +241,7 @@ export default {
         streak: 'Longest streak',
       },
     },
-    ci: {
-      title: 'Continuous integration',
-      on: 'Runs on',
-      caption:
-        'Every commit runs the same checks before it can merge — lint, type-check, and a production build, on every push and every pull request. It has to pass to ship.',
-    },
     stats: {
-      hours: 'Hours invested',
-      commits: 'Rebuild commits',
-      phases: 'Feature phases',
       voices: 'Writing voices',
       lines: 'Lines of code',
     },
@@ -260,13 +252,13 @@ export default {
       cut: 'Cut, and why',
     },
     phases: {
-      voice: { title: 'Multi-voice system', why: 'A full i18next layer; the entire site re-skins through five writing voices, architected to scale to fifteen.' },
+      voice: { title: 'Multi-voice system', why: 'A full i18next layer; the entire site re-skins through ten writing voices, architected to scale further.' },
       marginalia: { title: 'Footnotes', why: 'Hover a phrase to reveal the underlying engineering fact in a footnote.' },
       sky: { title: 'Time-aware theme', why: 'Five theme modes resolved from your local time via SunCalc — no geolocation permission required.' },
       sound: { title: 'Sound design', why: 'A Web Audio cue system (synthesized, zero asset weight); default-on, muted under reduced-motion.' },
       recap: { title: 'Session recap', why: 'A client-side panel that reads device + connection details and maps your location — nothing stored or sent.' },
       eggs: { title: 'Hidden voices', why: 'Type a trigger word to unlock additional personality voices, each fully written.' },
-      telemetry: { title: 'Analytics & SEO', why: 'Thirty-three product events feeding a single per-visit session recap, thirteen super-properties, and five PostHog dashboards — all cookieless, anonymous, and disabled under Do-Not-Track. Plus structured-data SEO and a custom logger. It answers "are these features actually used?" without tracking who uses them.' },
+      telemetry: { title: 'Analytics & SEO', why: 'Forty-eight product events feeding a single per-visit session recap, twenty-three super-properties, and five PostHog dashboards — all cookieless, anonymous, and disabled under Do-Not-Track. Plus structured-data SEO and a custom logger. It answers "are these features actually used?" without tracking who uses them.' },
     },
     cuts: {
       assets: { title: 'Image, GIF and audio files', why: 'Very little of this site is shipped media. The hero is rendered in Canvas2D, the starfield is CSS, and the interface sounds are generated at runtime with the Web Audio API. Shipping the feedback layer as code instead of files means a smaller bundle, fewer requests, and faster loads.' },

@@ -276,21 +276,13 @@ export default {
     confessionSub:
       'The site was finished like forty commits ago. But “finished” is a suggestion, apparently, so he kept going — fixing stuff nobody would ever notice and adding analytics to PROVE people use the cool bits. Nerd behavior. Deeply respect it.',
     acts: { build: 'The Build', engine: 'The Engine Room', hidden: 'The Secret Stuff' },
+    engineBridge: 'That is how it spies on itself — relax, anonymously. This is how it is built. Keep scrolling, gorgeous.',
     commits: {
       title: 'Every Time He Saved',
       range: 'Straight from the real repo. No CGI.',
-      caption: 'Each square is a day something shipped. Not one lucky montage — a whole grind.',
-    },
-    ci: {
-      title: 'The Rules',
-      on: 'Runs on',
-      caption:
-        'Every commit has to pass The Gauntlet before it gets in — lint, types, build. Green or it doesn’t ship. It’s like a bouncer, but for code, and it cannot be flirted with. I checked.',
+      caption: 'A three-week rebuild sprint in 2026 — on a repo kicking around since 2023. Not one lucky montage, a whole grind. And every commit had to pass The Gauntlet before it got in — lint, types, build. It cannot be flirted with. I checked.',
     },
     stats: {
-      hours: 'Hours sunk',
-      commits: 'Times saved',
-      phases: 'Phases',
       voices: 'Voices (incl. yours truly)',
       lines: 'Lines written',
     },

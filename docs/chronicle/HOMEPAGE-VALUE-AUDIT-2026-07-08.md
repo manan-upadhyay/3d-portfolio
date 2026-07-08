@@ -4,7 +4,6 @@
 > now on the front door — the six-chapter Chronicle at `/`. What earns the
 > visitor's ten seconds, what is noise, and what to do about it. **Not** "we
 > built it, so keep it."
->
 > Companion to that doc; read the two together. Source of truth for the homepage
 > prune/scrutiny decisions below.
 
@@ -184,6 +183,43 @@ canonical and correct (see §4).
 
 ---
 
+## 2.5 Desktop vs. Mobile — the audit on both devices
+
+The verdicts above hold on both breakpoints, but the *experience* diverges
+sharply because on `md:` down the entire floating control layer collapses into a
+single bottom-right **MobileMenu** FAB (only the `DayNightToggle` stays visible,
+top-right). Sky-modes, Voice, and Sound all move *inside* that sheet. Per
+section:
+
+| Section | Desktop | Mobile | Mobile verdict |
+|---|---|---|---|
+| **Hero** | Astrolabe off to the right in clear space; discrete spin button on the rim; bearing readout; 3 CTAs | Astrolabe centred up top; the **whole instrument is the tap-target** to spin (one-time hint); **2 CTAs** (résumé moves into the menu); scroll cue hidden | **Good** — deliberately adapted, not shrunk |
+| **About** | Asymmetric 12-col editorial spread | Stacks to a single column | **Good** — clean reflow |
+| **Experience** | Horizontal strip + header prev/next keys + pendulum sway | **Still horizontal**, paged by **floating carousel arrows** over the card | **OK but** — horizontal paging on a phone is a familiar carousel, yet it's still slower to scan a career than a vertical read (§3.B compounds here) |
+| **Tech** | Rotating orbital field | Falls back to **grouped cluster cards** (`Clusters`) | **Better than desktop** — the mobile layout is *more* legible than the showpiece it replaces (tells you something, see §2.03) |
+| **Works** | Alternating parallax plates | Plates stack; carousel + "chart more" intact; Contact becomes a full-bleed band | **Good** |
+| **Contact** | Two-column form + channels | Full-bleed form band + stacked channels | **Good**; but the **Expedition Recap still renders**, a heavy instrument at the foot of a phone page (§2 Recap) |
+
+**The mobile-only headline problem — discoverability collapses into one FAB.**
+On desktop, Sky/Voice/Sound are three visible, *labelled* pills that advertise
+themselves (the file notes labelling the Sky control gave it ~9× the icon-only
+usage). On mobile **all three vanish into the menu sheet**, so a first-time
+visitor has no on-screen signal that a sound layer, five skies, or multiple
+narrating voices even exist. The mitigations are thin: a **one-time coach-tip**
+on the FAB (2.6s after load, auto-hides in 10s) and a **pulsing "sound primed"
+dot**. If the visitor misses that single bubble, the entire wonder layer is
+invisible to them. This is the biggest device-specific gap on the homepage and
+it's carried in full into the features audit
+([FEATURES-VALUE-AUDIT](FEATURES-VALUE-AUDIT-2026-07-08.md)).
+
+**Net:** mobile is *well-built* section-by-section (nothing is a shrunk desktop
+afterthought), and it actually *fixes* the Tech legibility problem via the
+cluster fallback. Its one real liability is **feature invisibility behind the
+FAB** — the cinematic layer the whole site is built on is one missed tooltip
+away from never being found on a phone.
+
+---
+
 ## 3. Cross-cutting problems (bigger than any one section)
 
 ### A. Instrument-motif fatigue — "another spinning circle"
@@ -245,7 +281,7 @@ the order.
 | P0 | Expedition Recap | **Decide**: move to making-of *(preferred)* / consent-gate harder / drop the IP lookup | M |
 | P1 | Experience | Ensure the current role reads fully with **zero** interaction; verify horizontal gesture is discoverable | M |
 | P1 | Tech orbital | Make primaries legible at rest; park rotation on hover so reading never chases | M |
-| P1 | Instrument soup | Keep hero astrolabe + one; demote the Contact compass | S |
+| P1 | Instrument soup | Keep hero astrolabe + one; demote the Contact compass (User Input - Leave it as it is.) | S |
 | P2 | Stat redundancy | One home per figure across Hero proof strip vs. About stats | S |
 | P2 | Hero tagline | Pressure-test the rotating phrase vs. one confident line | S |
 | P3 | Audio systems | No change; keep the count deliberate | — |

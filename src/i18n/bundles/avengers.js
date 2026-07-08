@@ -278,21 +278,13 @@ export default {
     confessionSub:
       'This thing was mission-complete forty commits ago. But “complete” is where most people stop and I start. So I kept going — fixing things nobody would ever notice, wiring telemetry to prove the clever systems get used. I don’t trust vibes. I trust data. I looked at the outcomes and shipped the one where it works.',
     acts: { build: 'The Build', engine: 'The Reactor', hidden: 'Classified' },
+    engineBridge: 'That is how it is monitored. This is how it is assembled. Suit up.',
     commits: {
       title: 'Every Commit',
       range: 'Straight from the real repo. No reconstructions.',
-      caption: 'Each square is a day something shipped. Iterative, relentless, logged.',
-    },
-    ci: {
-      title: 'The Protocol',
-      on: 'Runs on',
-      caption:
-        'Every commit clears the gate before it merges — lint, types, build. Green or it doesn’t ship. Automated, incorruptible, no exceptions. And I can do this all day.',
+      caption: 'A three-week rebuild sprint in 2026 — on a repo that’s been around since 2023. Iterative, relentless, logged. Every commit cleared the gate before it merged — lint, types, build. No exceptions. And I can do this all day.',
     },
     stats: {
-      hours: 'Hours logged',
-      commits: 'Commits',
-      phases: 'Phases',
       voices: 'Voices (mine included)',
       lines: 'Lines of code',
     },
