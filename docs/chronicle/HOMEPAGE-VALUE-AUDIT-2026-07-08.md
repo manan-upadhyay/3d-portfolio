@@ -276,16 +276,16 @@ the order.
 
 ## 5. Action board
 
-| Pri | Item | Action | Effort |
-|-----|------|--------|--------|
-| P0 | Expedition Recap | **Decide**: move to making-of *(preferred)* / consent-gate harder / drop the IP lookup | M |
-| P1 | Experience | Ensure the current role reads fully with **zero** interaction; verify horizontal gesture is discoverable | M |
-| P1 | Tech orbital | Make primaries legible at rest; park rotation on hover so reading never chases | M |
-| P1 | Instrument soup | Keep hero astrolabe + one; demote the Contact compass (User Input - Leave it as it is.) | S |
-| P2 | Stat redundancy | One home per figure across Hero proof strip vs. About stats | S |
-| P2 | Hero tagline | Pressure-test the rotating phrase vs. one confident line | S |
-| P3 | Audio systems | No change; keep the count deliberate | — |
-| — | Works, Contact form/channels, About structure | Keep | — |
+| Pri | Item | Action | Effort | Status |
+|-----|------|--------|--------|--------|
+| P0 | Expedition Recap | **Decided: moved to `/making-of`** — now the send-off below the manifesto; off the money page (`ExpeditionRecap` out of `sections/Contact.jsx`, into `sections/Atelier.jsx`). CLAUDE.md §3 updated. | M | ✅ Done |
+| P1 | Experience | **Done** — first waypoint seeded `wp-active` so the current-most role reads at full opacity from first paint (zero interaction, no dim-flash). Discoverability signals (peek + prev/next keys + progress + NN/NN) already sufficient; no new copy. | M | ✅ Done |
+| P1 | Tech orbital | **Done** — the whole field now parks on pointer-enter (`hovering` state gates every ring's `paused`), so reading never chases a moving target. Primaries already lit + ember-labelled at rest. | M | ✅ Done |
+| P1 | Instrument soup | Keep hero astrolabe + one; demote the Contact compass (User Input - Leave it as it is.) | S | Left as-is |
+| P2 | Stat redundancy | **Done: hero owns `years`; dropped from `constants.stats`** — About now carries only additional figures (20+ projects · 6+ domains · 38% load). | S | ✅ Done |
+| P2 | Hero tagline | Pressure-test the rotating phrase vs. one confident line (User Input - keep rotating). | S | Left as-is |
+| P3 | Audio systems | No change; keep the count deliberate | — | — |
+| — | Works, Contact form/channels, About structure | Keep | — | — |
 
 ---
 

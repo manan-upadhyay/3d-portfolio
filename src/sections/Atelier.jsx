@@ -8,7 +8,7 @@ import { atelier } from '../constants';
 import { requestSection } from '../lib/smoothScroll';
 import { track } from '../lib/analytics';
 import { useVoiceStore } from '../store/useVoiceStore';
-import { ChapterHeading, ScrollReveal, CountUp, CommitGraph, Observatory, CodebaseAtlas, PersonaTriptych, FaceParticles, CompassRose } from '../components';
+import { ChapterHeading, ScrollReveal, CountUp, CommitGraph, Observatory, CodebaseAtlas, PersonaTriptych, FaceParticles, CompassRose, ExpeditionRecap } from '../components';
 
 /* lucide glyph per field-guide entry (icon id → component). */
 const EGG_ICONS = { compass: Compass, refresh: RefreshCcw, lens: ScanSearch, audio: AudioLines, sky: CloudSun, drama: Drama, map: Map, send: Send, fingerprint: Fingerprint, terminal: Terminal };
@@ -347,6 +347,13 @@ const Atelier = () => {
         {/* the maker, assembled from the same characters that built the site */}
         <div id="atelier-portrait"><FaceParticles /></div>
       </ScrollReveal>
+
+      {/* The send-off — the cartographer reads the traveler one last time before
+          the footer. Moved here from the foot of Contact (homepage value audit
+          2026-07-08): it's a wonder/craft artifact, not a hire-decision one, so it
+          belongs on the behind-the-curtain coda — off the money page, where the
+          "how does it know my city?" delight reads as charm, not surveillance. */}
+      <ExpeditionRecap />
 
       {/* No bespoke closing CTA here (v2.0 follow-up): the shared Layout footer
           renders directly below with the same ask + channels — duplicating it

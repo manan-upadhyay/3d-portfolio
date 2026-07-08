@@ -289,7 +289,11 @@ const Experience = () => {
           <div className="exp-track">
             <div className="exp-line" aria-hidden="true" />
             {journey.map((w, i) => (
-              <div key={w.id} className="wp" style={{ '--m': (0.82 + (i % 3) * 0.13).toFixed(2) }}>
+              /* Seed the first waypoint active (homepage value audit 2026-07-08):
+                 it's centred + snapped at rest, so the current-most role must read
+                 at full opacity from first paint — with zero interaction and no
+                 dim-flash before the centering IntersectionObserver first fires. */
+              <div key={w.id} className={`wp${i === 0 ? ' wp-active' : ''}`} style={{ '--m': (0.82 + (i % 3) * 0.13).toFixed(2) }}>
                 <span className="wp-node" aria-hidden="true" />
                 <div className="wp-hang">
                   <span className="wp-thread" aria-hidden="true" />

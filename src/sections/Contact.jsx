@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Mail, Linkedin, Github, MapPin, ArrowUpRight, Send, Loader2, Check, Download, Copy, Feather } from 'lucide-react';
 import { SectionWrapper } from '../hoc';
 import { personalInfo, summon, chapters } from '../constants';
-import { ChapterHeading, ScrollReveal, ExpeditionRecap, RavenBurst, RavenNotice } from '../components';
+import { ChapterHeading, ScrollReveal, RavenBurst, RavenNotice } from '../components';
 import { playCue } from '../lib/sound';
 import { sendRaven, EMAIL_RE } from '../lib/raven';
 import { track, trackOnce } from '../lib/analytics';
@@ -306,9 +306,6 @@ const Contact = () => {
           </p>
         </ScrollReveal>
       </div>
-
-      {/* Phase 5 — in-session "expedition recap" send-off */}
-      <ExpeditionRecap />
     </>
   );
 };

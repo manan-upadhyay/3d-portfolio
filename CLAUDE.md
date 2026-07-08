@@ -121,8 +121,12 @@ All color via CSS variables in `src/index.css`. See
   (`src/store/useVoiceStore.ts`) + sound store (`src/store/useSoundStore.ts`) +
   the **session-only** expedition store (`src/hooks/useExpedition.js`, *not*
   persisted — powers the Phase 5 recap). See [LEGENDARY-ROADMAP](docs/chronicle/LEGENDARY-ROADMAP.md) §5.
-- **Phase 5 recap** → `ExpeditionRecap` (a cinematic instrument panel at the foot
-  of Contact) "reads" the visitor from the browser via `src/lib/visitor.js` +
+- **Phase 5 recap** → `ExpeditionRecap` (a cinematic instrument panel that closes
+  the **Atelier** (`/making-of`), as the send-off below the manifesto — moved off
+  the homepage's Contact foot per the 2026-07-08 homepage value audit: it's a
+  wonder/craft artifact, not a hire-decision one, and the IP-geolocation read is
+  charming on the behind-the-curtain coda, not on the money page) "reads" the
+  visitor from the browser via `src/lib/visitor.js` +
   `useVisitor` — a cached `navigator`/`screen`/WebGL snapshot (GPU, OS/browser,
   display+Hz, battery, network) **plus one opt-in IP-geolocation lookup**
   (`ipwho.is`) for city/coords. That is the recap's *only* network call; nothing

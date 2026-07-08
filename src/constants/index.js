@@ -437,8 +437,11 @@ const projects = [...featuredProjects, ...otherProjects];
 
 // Stats to showcase achievements. `value` is data; the label is voice-bearing —
 // t(`about.stats.<key>`).
+// NB: `years` deliberately omitted here — the hero proof strip ("5+ yrs · React
+// · …") already owns that figure above the fold. Repeating it in About spent the
+// number's impact within the first two screens (homepage value audit 2026-07-08
+// §3.C), so About carries only the *additional* figures.
 export const stats = [
-  { value: '5+', key: 'years' },
   { value: '20+', key: 'projects' },
   { value: '6+', key: 'domains' },
   { value: '38%', key: 'load' },
