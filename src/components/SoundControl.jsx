@@ -34,7 +34,8 @@ const EXPANDED_H = 164;  // the capsule the circle morphs into on hover
 const SoundControl = () => {
   const { t } = useTranslation();
   const { enabled, volume, unlocked, toggle, setVolume, setEnabled } = useSoundStore();
-  const { active: activeCoach, request: requestCoach, release: releaseCoach } = useCoachmark();
+  const { active: activeCoach, request: requestCoach, release: releaseCoach, dismiss: dismissCoach, isDismissed } = useCoachmark();
+  const seen = isDismissed('sound');
   const [expanded, setExpanded] = useState(false);
   const [dragging, setDragging] = useState(false);
   const trackRef = useRef(null);
@@ -60,19 +61,34 @@ const SoundControl = () => {
   useEffect(() => { targetPct.set(level * 100); }, [level, targetPct]);
 
   // Coachmark: appears a beat after landing while still locked, and dismisses the
-  // instant we leave the armed state (the gate opens, or the visitor mutes).
+  // instant we leave the armed state (the gate opens, or the visitor mutes). It's
+  // a ONE-TIME invitation — `seen` (persisted) suppresses it forever once handled,
+  // and if the visitor never acts, a ~9s show window retires it anyway so a
+  // returning visitor is never nagged (value-audit "unmissable once, then quiet").
   useEffect(() => {
-    if (!armed) { releaseCoach('sound'); return undefined; }
+    if (!armed || seen) { releaseCoach('sound'); return undefined; }
     const inT = setTimeout(() => requestCoach('sound'), 1200);
-    return () => { clearTimeout(inT); releaseCoach('sound'); };
-  }, [armed, requestCoach, releaseCoach]);
+    const outT = setTimeout(() => dismissCoach('sound'), 1200 + 9000);
+    return () => { clearTimeout(inT); clearTimeout(outT); releaseCoach('sound'); };
+  }, [armed, seen, requestCoach, releaseCoach, dismissCoach]);
 
   const capturePress = () => { pressLocked.current = !sound.isUnlocked(); };
+
+  // The coachmark bubble is itself the unlock target — tapping the invitation does
+  // exactly what it promises (armed → live), so the note and the action aren't two
+  // separate hunts. Mirrors onPress's locked-press branch, then retires the hint.
+  const onNoteClick = () => {
+    sound.suppressReward();
+    if (!enabled) toggle();                        // muted + locked → enable unlocks + confirms
+    else { sound.unlock(); sound.playCue('confirm'); } // armed → open the gate + confirm audibly
+    dismissCoach('sound');
+  };
 
   const onPress = () => {
     if (pressLocked.current) {
       // First press while the browser gate is shut: this click IS the unlock
       // gesture, and sound ends up ON either way (never a mute on a locked press).
+      dismissCoach('sound'); // acted on the invitation → retire it for good
       if (!enabled) {
         // muted + locked → enabling already unlocks the gate AND plays the confirm
         // cue (see store.setEnabled), so this single call lands us in the live state.
@@ -125,21 +141,28 @@ const SoundControl = () => {
   const onEnter = () => { if (window.matchMedia('(hover: hover)').matches) setExpanded(true); };
 
   return (
-    <div
-      className="relative"
-      onMouseEnter={onEnter}
-      onMouseLeave={() => { setExpanded(false); setDragging(false); }}
-    >
-      {/* Armed-but-locked coachmark — a clear, action-first invitation pointing at
-          the speaker, which (above) genuinely turns sound on when pressed. */}
+    // Hover-to-expand lives on the CAPSULE, not this wrapper: the coach-tip is a
+    // child here, and if the wrapper drove the expand, hovering the tip would grow
+    // the capsule, shove the tip off the cursor, fire mouseleave, collapse, and
+    // flicker. Scoping the hover to the capsule alone breaks that loop.
+    <div className="relative">
+      {/* Armed-but-locked coachmark — a clear, action-first invitation that is
+          ITSELF the unlock button (tap the bubble OR the speaker below; both turn
+          sound on). One-time: it retires for good once tapped or after its window. */}
       <AnimatePresence>
         {showNote && armed && (
-          <motion.div
+          <motion.button
+            type="button"
+            onClick={onNoteClick}
+            data-cursor="hover"
+            aria-label={t('sound.enableHint')}
             initial={{ opacity: 0, y: 8, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.96 }}
+            whileHover={{ y: -1 }}
+            whileTap={{ scale: 0.97 }}
             transition={JELLY}
-            className="absolute bottom-full right-0 mb-3 w-56 origin-bottom-right rounded-2xl px-4 py-3 pointer-events-none"
+            className="absolute bottom-full right-0 mb-3 w-56 origin-bottom-right rounded-2xl px-4 py-3 text-left cursor-pointer"
             style={{
               background: 'color-mix(in srgb, var(--color-card-bg) 96%, transparent)',
               border: '1px solid var(--color-card-border)',
@@ -155,7 +178,7 @@ const SoundControl = () => {
               className="absolute -bottom-1.5 right-6 w-3 h-3 rotate-45"
               style={{ background: 'var(--color-card-bg)', borderRight: '1px solid var(--color-card-border)', borderBottom: '1px solid var(--color-card-border)' }}
             />
-          </motion.div>
+          </motion.button>
         )}
       </AnimatePresence>
 
@@ -165,6 +188,8 @@ const SoundControl = () => {
         animate={{ height: expanded ? EXPANDED_H : COLLAPSED }}
         transition={JELLY}
         className="soundpop w-12 relative overflow-hidden rounded-full"
+        onMouseEnter={onEnter}
+        onMouseLeave={() => { setExpanded(false); setDragging(false); }}
         onPointerDown={expanded ? onDown : undefined}
         onPointerMove={expanded ? onMove : undefined}
         onPointerUp={expanded ? onUp : undefined}

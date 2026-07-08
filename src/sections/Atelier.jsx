@@ -259,14 +259,17 @@ const Atelier = () => {
 
           {/* A breather between the two heavy developer instruments, so Act II
               reads as two moments, not one exhausting slab (making-of value audit
-              2026-07-08). A cartographer's divider — flanking rules converging on
-              the compass rose — gives the act room without more copy. */}
+              2026-07-08, Problem B). Not a horizontal divider — that read as a
+              page-ending flourish — but a waypoint on the cartographer's trail: the
+              compass rose as a node on a descending thread, above the connective
+              line that hinges the act (observability → architecture). Vertical, so
+              the trail reads as *continuing*, not ending. */}
           <ScrollReveal direction="up" className="atelier-bridge">
-            <div className="atelier-bridge__mark" aria-hidden="true">
-              <span className="atelier-bridge__rule" />
-              <span className="atelier-bridge__rose"><CompassRose className="w-full h-full" /></span>
-              <span className="atelier-bridge__rule atelier-bridge__rule--r" />
-            </div>
+            <span className="atelier-bridge__thread" aria-hidden="true" />
+            <span className="atelier-bridge__rose" aria-hidden="true">
+              <CompassRose className="w-full h-full" />
+            </span>
+            <p className="atelier-bridge__line font-chronicle">{t('atelier.engineBridge')}</p>
           </ScrollReveal>
 
           <ScrollReveal direction="up" className="atelier-instrument--gap">

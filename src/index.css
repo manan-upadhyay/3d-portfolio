@@ -2275,34 +2275,37 @@ h1, h2, h3, h4, h5, h6 {
 }
 .atelier-instrument--gap { margin-top: clamp(64px, 9vw, 108px); }
 
-/* the Act II breather — a cartographer's divider between the two heavy developer
-   instruments (Observatory → Codebase Atlas): two rules converging on the compass
-   rose, with deliberate air above and below. Purely a visual pause — no copy. */
+/* the Act II breather — a waypoint on the cartographer's trail between the two
+   heavy developer instruments (Observatory → Codebase Atlas). A thread descends
+   through the compass-rose node into the connective line that hinges the act, so
+   it reads as the trail *continuing*, not a section ending. */
 .atelier-bridge {
-  margin: clamp(72px, 11vw, 140px) auto;
-  max-width: 660px;
-}
-.atelier-bridge__mark {
+  margin: clamp(56px, 9vw, 116px) auto;
+  max-width: 620px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: clamp(14px, 3vw, 28px);
-  width: 100%;
+  text-align: center;
+  gap: clamp(14px, 2.2vw, 24px);
 }
-.atelier-bridge__rule {
-  flex: 1 1 auto;
-  max-width: 190px;
-  height: 1px;
-  background: linear-gradient(to right, transparent, rgba(var(--color-gold-rgb), 0.5));
+.atelier-bridge__thread {
+  width: 1px;
+  height: clamp(34px, 5.5vw, 58px);
+  background: linear-gradient(to bottom, transparent, rgba(var(--color-gold-rgb), 0.55));
 }
-.atelier-bridge__rule--r { background: linear-gradient(to left, transparent, rgba(var(--color-gold-rgb), 0.5)); }
 .atelier-bridge__rose {
-  flex: none;
   display: block;
-  width: clamp(38px, 6vw, 50px);
-  height: clamp(38px, 6vw, 50px);
+  width: clamp(34px, 5vw, 44px);
+  height: clamp(34px, 5vw, 44px);
   opacity: 0.92;
   filter: drop-shadow(0 0 10px rgba(var(--color-gold-rgb), 0.28));
+}
+.atelier-bridge__line {
+  max-width: 32ch;
+  font-size: clamp(15px, 1.5vw, 18px);
+  line-height: 1.55;
+  font-style: italic;
+  color: var(--color-text-muted);
 }
 /* the vertical spine — runs through the numerals, connecting the acts (md+ only) */
 @media (min-width: 768px) {
