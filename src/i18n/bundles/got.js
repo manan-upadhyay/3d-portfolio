@@ -47,7 +47,6 @@ export default {
       fullstack: { title: 'The Whole Realm', description: 'End to end, requirement to production monitoring. The man who passes the sentence should swing the sword — he owns the frontend, the backend, and every edge case lesser lords pretend they never saw.' },
     },
     stats: {
-      years: 'Years Sworn',
       projects: 'Releases Shipped',
       domains: 'Kingdoms Served',
       load: 'Swifter Than Before',
@@ -300,14 +299,6 @@ export default {
         title: 'The Turning Compass',
         how: 'Pass your cursor over the great compass above. It follows, faithfully, and turns a small gear as it goes. Even instruments crave attention — as do kings.',
       },
-      spin: {
-        title: 'The Spinning Needle',
-        how: 'A button rides the compass rim. Press it. The needle spins and slows of its own accord — real weight, real friction. Physics keeps no secrets and swears no false oaths.',
-      },
-      sound: {
-        title: 'The Music of the Realm',
-        how: 'Every chime here is conjured live by the machine — nothing downloaded. Wake the sound, bottom right, then change the sky and listen.',
-      },
       sky: {
         title: 'The Sky',
         how: 'Top right: five skies. One is “auto,” and it knows the hour where you sit. Sorcery, some would call it. A maester calls it arithmetic.',
@@ -315,10 +306,6 @@ export default {
       voices: {
         title: 'The Other Narrators',
         how: 'The whole keep will speak in other tongues. Press ⇧⌘V. Some are sealed — type the right word anywhere to free them. A hint, since I favour you: type “winter.”',
-      },
-      map: {
-        title: 'The Map of the Realm',
-        how: 'Press ⌘K and a map unfurls — every realm he has taken, marked and one ride away.',
       },
       raven: {
         title: 'The Ravens',
@@ -343,8 +330,6 @@ export default {
       cadence: { once: 'Once a visit', repeat: 'Every time' },
       metrics: {
         events: 'Tracked events',
-        superProps: 'Auto-tags',
-        webhooks: 'Alert pipes',
         dashboards: 'Dashboards',
         schemas: 'SEO schemas',
       },
@@ -473,7 +458,7 @@ export default {
     resume: 'Résumé',
   },
   stickyCta: {
-    text: 'Seen enough?',
+    text: 'The night is dark and full of terrors. An unfilled role is darker.',
     cta: 'Send a raven',
     resume: 'Take my résumé',
     dismiss: 'Not now',

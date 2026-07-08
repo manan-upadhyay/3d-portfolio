@@ -83,9 +83,15 @@ const VoiceChip = ({ v, active, locked, selected, desktop, onSelect, onPreview }
             {locked ? <Lock size={14} /> : <span className="font-chronicle">{v.glyph}</span>}
           </span>
           <span className="min-w-0 flex-1">
-            <span className="voice-chip__label" style={{ fontStyle: locked ? 'italic' : 'normal' }}>
-              {locked ? v.sample : v.label}
-            </span>
+            {locked && v.info?.source && (
+              <span
+                className="block text-[10px] font-semibold uppercase tracking-wide leading-tight truncate mb-[3px]"
+                style={{ color: 'var(--color-ember)' }}
+              >
+                {v.info.source}
+              </span>
+            )}
+            <span className="voice-chip__label">{v.label}</span>
             <span className="voice-chip__sub">{locked ? `Clue — ${v.hint}` : v.sample}</span>
           </span>
           {active ? (
@@ -171,6 +177,9 @@ const VoiceHall = () => {
       lenis?.start();
       popOverlay();
     };
+    // `voice` is read only to SEED the preview at open — re-running this effect
+    // on every voice switch would re-lock scroll / re-push the overlay mid-session.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hallOpen, closeHall]);
 
   const groups = voicesByCategory();

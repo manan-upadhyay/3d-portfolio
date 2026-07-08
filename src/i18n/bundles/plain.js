@@ -119,7 +119,7 @@ export default {
   map: {
     footerHint: 'enter to go · esc to close',
     actions: {
-      voices: 'Narration',
+      voices: 'Change narrator',
       resume: 'Resume',
       themeLight: 'Light mode',
       themeDark: 'Dark mode',
@@ -127,7 +127,7 @@ export default {
   },
 
   voiceHall: {
-    title: 'Narration',
+    title: 'Narrators',
     subtitle: 'Pick the narrator — or request one that isn’t here yet.',
     nowNarrating: 'Current narrator',
     preview: {
@@ -231,13 +231,10 @@ export default {
       tip_other: '{{count}} commits',
       share: '{{pct}}% of the build',
       peak: 'Busiest day',
-      busyUnit: '{{count}} in a day',
       streakUnit: '{{count}} days',
       aria: 'A calendar heatmap of daily commits to this repository',
       stats: {
         commits: 'Commits',
-        days: 'Days building',
-        busiest: 'Busiest day',
         streak: 'Longest streak',
       },
     },
@@ -273,25 +270,13 @@ export default {
         title: 'Cursor-tracked needle',
         how: 'Move your cursor over the hero compass — the needle tracks your pointer, and a gear sound spins at the exact speed you move it.',
       },
-      spin: {
-        title: 'Spin the needle',
-        how: 'Click the spin button on the compass’s edge to flick the needle — it speeds up and slows to a stop with real momentum physics.',
-      },
-      sound: {
-        title: 'Synthesized sound',
-        how: 'All audio is generated live in the browser (Web Audio, zero bytes). Toggle it with the speaker control, bottom-right; you’ll hear it on theme changes, form sends, and more.',
-      },
       sky: {
         title: 'Five themes',
         how: 'The control at top-right offers five skies, including “auto”, which picks dawn/day/dusk/night from your local time.',
       },
       voices: {
         title: 'Alternate narrators',
-        how: 'Every line of copy can switch personality. Open the Narration Hall with ⇧⌘V; locked narrators unlock when you type their secret word on the page.',
-      },
-      map: {
-        title: 'Command map',
-        how: 'Press ⌘K (Ctrl+K) to open a searchable map of every section.',
+        how: 'Every line of copy can switch personality. Open the full narrator list with ⇧⌘V; locked narrators unlock when you type their secret word on the page.',
       },
       raven: {
         title: 'Raven on send',
@@ -316,8 +301,6 @@ export default {
       cadence: { once: 'Once per visit', repeat: 'Every time' },
       metrics: {
         events: 'Product events',
-        superProps: 'Super-properties',
-        webhooks: 'Webhook routes',
         dashboards: 'Live dashboards',
         schemas: 'Structured schemas',
       },

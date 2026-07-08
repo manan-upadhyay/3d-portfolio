@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Drama, Check, Lock, Info, ArrowRight, ChevronDown } from 'lucide-react';
+import { VenetianMask, Check, Lock, Info, ArrowRight, ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useVoiceStore } from '../store/useVoiceStore';
 import { useCoachmark } from '../store/useCoachmark';
@@ -44,7 +44,7 @@ const VoiceRow = ({ v, active, locked, onSelect }) => {
         boxShadow: answering && !active ? 'inset 0 0 0 1px var(--color-card-border)' : 'none',
       }}
     >
-      <div className="flex items-start gap-1 px-2 py-1.5">
+      <div className="flex items-start gap-1 px-2 py-2">
         <button
           type="button"
           role="menuitemradio"
@@ -65,13 +65,21 @@ const VoiceRow = ({ v, active, locked, onSelect }) => {
             )}
           </span>
           <span className="min-w-0 flex-1">
+            {locked && v.info?.source && (
+              <span
+                className="block text-[10px] font-semibold uppercase tracking-wide leading-tight truncate mb-[3px]"
+                style={{ color: 'var(--color-ember)' }}
+              >
+                {v.info.source}
+              </span>
+            )}
             <span
               className="block text-[13px] font-medium leading-tight truncate"
-              style={{ color: active ? 'var(--color-ember)' : 'var(--color-text)', fontStyle: locked ? 'italic' : 'normal' }}
+              style={{ color: active ? 'var(--color-ember)' : 'var(--color-text)' }}
             >
-              {locked ? v.sample : v.label}
+              {v.label}
             </span>
-            <span className="block text-[11px] leading-snug mt-0.5" style={{ color: 'var(--color-text-muted)' }}>
+            <span className="block text-[11px] leading-snug mt-1" style={{ color: 'var(--color-text-muted)' }}>
               {locked ? `Clue — ${v.hint}` : v.sample}
             </span>
           </span>
@@ -221,7 +229,7 @@ const VoiceSwitcher = ({ activeId }) => {
             exit={{ opacity: 0, y: 10, scale: 0.96 }}
             transition={JELLY}
             data-lenis-prevent
-            className="absolute bottom-full right-0 mb-3 w-[272px] origin-bottom-right rounded-2xl p-1.5 overflow-y-auto"
+            className="absolute bottom-full right-0 mb-3 w-[300px] origin-bottom-right rounded-2xl p-1.5 overflow-y-auto"
             style={{
               maxHeight: 'min(70vh, 540px)',
               overscrollBehavior: 'contain',
@@ -306,14 +314,15 @@ const VoiceSwitcher = ({ activeId }) => {
           boxShadow: 'var(--shadow-card)',
         }}
       >
-        {/* Masks, not a feather — signals "different personalities" and reads as
+        {/* A mask, not a feather — signals "different personalities" and reads as
             distinct from the Sound control. A visible label lifts discoverability
-            (the labelled Sky control gets ~9× the usage of the old icon-only one). */}
+            (the labelled Sky control gets ~9× the usage of the old icon-only one).
+            The same mask marks the Narrator row in the SideRail + mobile menu. */}
         <span
           className="grid place-items-center w-7 h-7 rounded-full flex-shrink-0"
           style={{ background: 'rgba(var(--color-ember-rgb),0.16)', color: 'var(--color-ember)' }}
         >
-          <Drama size={15} />
+          <VenetianMask size={15} />
         </span>
         <span className="text-[12.5px] font-medium tracking-wide" style={{ color: 'var(--color-text)' }}>
           {t('voice.menuTitle')}

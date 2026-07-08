@@ -46,7 +46,6 @@ export default {
       fullstack: { title: 'All of It, Apparently', description: 'End to end, requirement to production monitoring. Front, back, and the deeply frightening middle — I own the whole thing. Could I BE any more responsible for this? I really, really could not.' },
     },
     stats: {
-      years: 'Years In',
       projects: 'Things Shipped',
       domains: 'Industries Survived',
       load: 'Faster Now',
@@ -299,14 +298,6 @@ export default {
         title: 'The Spinny Compass',
         how: 'Wave your mouse over the big compass up top. It follows you around. Clingy. Relatable. It also makes a little gear sound, which — could that BE any more satisfying? No.',
       },
-      spin: {
-        title: 'The Spin',
-        how: 'See the button on the compass? Push it. The needle spins and slows down on its own. That’s real physics. No faking. Unlike my confidence, which is entirely fabricated.',
-      },
-      sound: {
-        title: 'The Sounds',
-        how: 'Every beep and whoosh here is made live by the computer. Zero downloads. Hit the speaker button, bottom right, then change the theme and listen. You’re welcome.',
-      },
       sky: {
         title: 'The Sky Button',
         how: 'Top right. Five skies. One’s “auto” and it knows what time it is where you are. Could that BE any more slightly unsettling? And yet, cool. Both things.',
@@ -314,10 +305,6 @@ export default {
       voices: {
         title: 'The Other Narrators',
         how: 'The whole site can talk in different voices — press ⇧⌘V. Some are locked. Type the secret word anywhere to unlock them. Hint, because I like you: type “chandler.” That’s me. Hi.',
-      },
-      map: {
-        title: 'The Map',
-        how: 'Press ⌘K. A map pops up with everything on it. It’s fast travel, basically. Every good thing has fast travel. And snacks. This one only has the fast travel.',
       },
       raven: {
         title: 'The Birds',
@@ -342,8 +329,6 @@ export default {
       cadence: { once: 'Once a visit', repeat: 'Every single time' },
       metrics: {
         events: 'Tracked events',
-        superProps: 'Auto-tags',
-        webhooks: 'Alert pipes',
         dashboards: 'Dashboards',
         schemas: 'SEO schemas',
       },
@@ -472,7 +457,7 @@ export default {
     resume: 'Résumé',
   },
   stickyCta: {
-    text: 'Seen enough?',
+    text: 'Could you BE any more convinced?',
     cta: 'Could we talk?',
     resume: 'Grab my résumé',
     dismiss: 'Not now',

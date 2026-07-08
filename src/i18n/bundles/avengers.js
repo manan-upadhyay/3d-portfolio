@@ -48,7 +48,6 @@ export default {
       fullstack: { title: 'A One-Man Avengers', description: 'End to end, requirement to production monitoring. Front, back, and the terrifying middle — I hold the whole schematic in my head at once. With great power comes a very long changelog, and I own every line of it.' },
     },
     stats: {
-      years: 'Years of Service',
       projects: 'Missions Shipped',
       domains: 'Sectors Defended',
       load: 'Faster Than Before',
@@ -301,14 +300,6 @@ export default {
         title: 'The Compass',
         how: 'Move your cursor over the compass up top. It tracks you — and turns a gear as it goes. Every good instrument gives feedback.',
       },
-      spin: {
-        title: 'The Needle',
-        how: 'See the button on the compass? Hit it. The needle spins up and coasts down on its own — real inertia, real friction. That’s a physics simulation, not an animation loop.',
-      },
-      sound: {
-        title: 'The Audio',
-        how: 'Every tone here is synthesized live in the browser — nothing downloaded. Bring the sound online, bottom right, then change the sky and listen. Generative audio. Zero assets.',
-      },
       sky: {
         title: 'The Sky System',
         how: 'Top right: five skies. One’s “auto” — it reads the actual time where you are and sets the scene. Context-aware. The way everything should be.',
@@ -316,10 +307,6 @@ export default {
       voices: {
         title: 'The Narration System',
         how: 'The whole site re-narrates in different voices — press ⇧⌘V. Some are locked. Type the right word anywhere to bring one online. Since you’ve earned clearance: type “assemble.”',
-      },
-      map: {
-        title: 'The Map',
-        how: 'Press ⌘K for a full map of the work — every mission, marked and one click away. Navigation should be instant.',
       },
       raven: {
         title: 'The Send-Off',
@@ -344,8 +331,6 @@ export default {
       cadence: { once: 'Once a visit', repeat: 'Every time' },
       metrics: {
         events: 'Tracked events',
-        superProps: 'Auto-tags',
-        webhooks: 'Alert pipes',
         dashboards: 'Dashboards',
         schemas: 'SEO schemas',
       },

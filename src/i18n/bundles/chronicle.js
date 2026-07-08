@@ -27,7 +27,7 @@ export default {
     close: 'Close menu',
     theme: 'Theme',
     sound: 'Sound',
-    voice: 'Narration',
+    voice: 'Narrator',
     voiceSub: 'Change who narrates the site',
     makingOfSub: 'How this site was built',
     menuCoach: 'Sound, themes & narrators live in here — tap to explore.',
@@ -74,7 +74,6 @@ export default {
     },
     // Stat-band labels (keyed by the stat `key` in constants; values are data).
     stats: {
-      years: 'Years Experience',
       projects: 'Projects Delivered',
       domains: 'Industry Domains',
       load: 'Faster Load Times',
@@ -305,7 +304,7 @@ export default {
     hint: 'Tap a realm to travel',
     actions: {
       makingOf: 'The Making-of',
-      voices: 'Change narration',
+      voices: 'Change narrator',
       resume: 'Read the Scroll (Resume)',
       github: 'GitHub',
       linkedin: 'LinkedIn',
@@ -316,7 +315,7 @@ export default {
 
   // The Voice Hall — the command-palette voice picker (scales past the popover).
   voiceHall: {
-    title: 'The Narration Hall',
+    title: 'The Hall of Narrators',
     // Plain, non-technical explainer shown at the top of the roster.
     explainer: 'Pick who narrates this site. The words change to match the narrator — everything else stays the same. Just for fun.',
     subtitle: 'Choose who narrates the chronicle — or request a narrator not yet among us.',
@@ -345,7 +344,7 @@ export default {
       cta: 'Summon a new narrator',
       ctaSub: 'A character you’d love to hear narrate this? Send word to the cartographer.',
       back: 'Back',
-      persona: 'Whose narration?',
+      persona: 'Which narrator?',
       personaPlaceholder: 'Gandalf · a dread pirate · your favourite villain…',
       email: 'Your email',
       emailPlaceholder: 'your email — so I can tell you when it lands',
@@ -473,13 +472,10 @@ export default {
       tip_other: '{{count}} commits',
       share: '{{pct}}% of the whole build',
       peak: 'The peak — my busiest day',
-      busyUnit: '{{count}} in a day',
       streakUnit: '{{count}} days',
       aria: 'A calendar heatmap of daily commits to this repository',
       stats: {
         commits: 'Commits',
-        days: 'Days building',
-        busiest: 'Busiest day',
         streak: 'Longest streak',
       },
     },
@@ -516,17 +512,9 @@ export default {
         title: 'The living needle',
         how: 'Sweep your cursor across the hero compass — the needle follows your hand, and a gear-mechanism sound turns at exactly the speed you move it.',
       },
-      spin: {
-        title: 'Spin the needle',
-        how: 'Press the spin button on the instrument’s rim to flick the needle into a free spin — real flywheel physics wind it up and let it coast to rest.',
-      },
       lens: {
         title: 'The living portrait',
         how: 'On a computer, sweep your cursor over my photo — a lens reveals the real image beneath the particles. On a phone, drag the lens across it, or tilt and shake the device: it moves with real physics.',
-      },
-      sound: {
-        title: 'A synthesised score',
-        how: 'Every cue on the page is generated live by Web Audio — zero bytes shipped. Toggle it from the speaker control, bottom-right, then listen on a theme change, a send, a map open.',
       },
       sky: {
         title: 'Five skies',
@@ -534,11 +522,7 @@ export default {
       },
       voices: {
         title: 'Hidden voices',
-        how: 'The whole site can be re-voiced. Open the Narration Hall (⇧⌘V) — sealed personalities unlock when you type their secret word anywhere on the page. (Try “boss”.)',
-      },
-      map: {
-        title: 'The chart',
-        how: 'Press ⌘K (Ctrl K) to summon the realm map — a searchable chart of every chapter of the journey.',
+        how: 'The whole site can be re-voiced. Open the Hall of Narrators (⇧⌘V) — sealed personalities unlock when you type their secret word anywhere on the page. (Try “boss”.)',
       },
       raven: {
         title: 'The raven',
@@ -564,8 +548,6 @@ export default {
       cadence: { once: 'Once per visit', repeat: 'Every time' },
       metrics: {
         events: 'Product events',
-        superProps: 'Super-properties',
-        webhooks: 'Webhook routes',
         dashboards: 'Live dashboards',
         schemas: 'Structured schemas',
       },
@@ -631,7 +613,7 @@ export default {
   },
 
   voice: {
-    menuTitle: 'Narration',
+    menuTitle: 'Narrator',
     menuSub: 'Who narrates this chronicle? Pick a narrator.',
     pinned: 'Marked Narrators',
     sealed: 'Sealed Narrators',
@@ -644,7 +626,7 @@ export default {
     clueCloser: 'Closer — {{hint}}',
     clueGiveaway: 'The word is',
     clueTapUnlock: 'tap to speak it',
-    openHall: 'Enter the Narration Hall',
+    openHall: 'Enter the Hall of Narrators',
     hallTeaserSome: '{{count}} sealed narrators await discovery',
     hallTeaserAll: 'Every narrator discovered — wander them all',
     // The one-time entice note above the quill (replaces the old static ring).

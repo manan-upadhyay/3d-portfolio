@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, VenetianMask } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { scrollToTop } from '../lib/smoothScroll';
 import { useThemeStore } from '../store/useThemeStore';
@@ -195,11 +195,13 @@ const SideRail = ({ items, activeId, actions = [], visible, ariaLabel, crestLabe
               label={activeVoice.label}
               ariaLabel={`${t('voiceHall.nowNarrating')}: ${activeVoice.label}`}
               glyph={
+                /* Same mask as the bottom-right Narrator control + mobile menu —
+                   one recognizable icon teaches "this is the narrator switch". */
                 <span
-                  className="grid place-items-center w-7 h-7 rounded-full font-chronicle text-[11.5px] leading-none"
-                  style={{ color: 'var(--color-text-muted)', border: '1px solid var(--color-card-border)' }}
+                  className="grid place-items-center w-7 h-7 rounded-full flex-shrink-0"
+                  style={{ background: 'rgba(var(--color-ember-rgb),0.16)', color: 'var(--color-ember)' }}
                 >
-                  {activeVoice.glyph}
+                  <VenetianMask size={15} />
                 </span>
               }
             />

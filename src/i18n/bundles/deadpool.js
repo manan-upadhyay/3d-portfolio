@@ -46,7 +46,6 @@ export default {
       fullstack: { title: 'The Whole Enchilada', description: 'End to end, requirement to production monitoring. Front, back, the scary middle bit — all of it. Also enchiladas are just chimichangas that gave up. Anyway. He owns the whole stack.' },
     },
     stats: {
-      years: 'Years In',
       projects: 'Things Shipped',
       domains: 'Industries Hit',
       load: 'Faster Now',
@@ -299,14 +298,6 @@ export default {
         title: 'The Spinny Compass',
         how: 'Wave your mouse over the big compass up top. It follows you. Clingy. Relatable. It also makes a little gear sound, which, chef’s kiss.',
       },
-      spin: {
-        title: 'The Spin',
-        how: 'See the button on the compass? Push it. The needle spins and slows down on its own. That’s real physics, baby, no faking. Unlike some things about me.',
-      },
-      sound: {
-        title: 'The Sounds',
-        how: 'Every beep and whoosh here is made LIVE by the computer. Zero downloads. Hit the speaker button, bottom right, then change the theme and listen. You’re welcome.',
-      },
       sky: {
         title: 'The Sky Button',
         how: 'Top right. Five skies. One’s “auto” and it knows what time it is where you are. Which is either magic or surveillance. Why not both?',
@@ -314,10 +305,6 @@ export default {
       voices: {
         title: 'The Other Narrators',
         how: 'The whole site can talk in different voices — press ⇧⌘V. Some are locked. Type the secret word anywhere to bust ’em out. Hint, because I like you: type my name. It’s “deadpool.” Obviously.',
-      },
-      map: {
-        title: 'The Map',
-        how: 'Press ⌘K. A map pops up. It’s got all the projects on it. Fast travel, basically. Every good game has fast travel.',
       },
       raven: {
         title: 'The Birds',
@@ -342,8 +329,6 @@ export default {
       cadence: { once: 'Once a visit', repeat: 'Every single time' },
       metrics: {
         events: 'Tracked events',
-        superProps: 'Auto-tags',
-        webhooks: 'Alert pipes',
         dashboards: 'Dashboards',
         schemas: 'SEO schemas',
       },
@@ -472,8 +457,8 @@ export default {
     resume: 'Résumé',
   },
   stickyCta: {
-    text: 'Seen enough?',
-    cta: 'Let’s talk',
+    text: 'Still scrolling? At this point we’re basically a team-up.',
+    cta: 'Maximum effort — talk',
     resume: 'Grab the résumé',
     dismiss: 'Not now',
   },

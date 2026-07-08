@@ -41,7 +41,6 @@ export default {
       fullstack: { title: 'Moooo', description: 'Moo moo moo moo moo moo moo moo.' },
     },
     stats: {
-      years: 'Moo',
       projects: 'Moo Moo',
       domains: 'Moo Moo Moo',
       load: 'Mooooo',
@@ -224,11 +223,8 @@ export default {
       title: 'Moo Moo',
       intro: 'Moo moo moo moo — moo moo moo. Moo!',
       astrolabe: { title: 'Moo moo', how: 'Moo moo moo moo — moo moo, moo moo moo moo moo.' },
-      spin: { title: 'Moo moo moo', how: 'Moo moo moo moo moo moo. Moo moo moo.' },
-      sound: { title: 'Moo', how: 'Moo moo moo moo, moo moo moo moo moo. Moo.' },
       sky: { title: 'Moo moo', how: 'Moo moo moo moo moo. Moo moo moo moo.' },
       voices: { title: 'Moo moo moo', how: 'Moo moo moo moo (⇧⌘V) moo moo. Moo: “moo”.' },
-      map: { title: 'Moo', how: 'Moo moo ⌘K moo moo moo moo.' },
       raven: { title: 'Moo moo', how: 'Moo moo moo moo moo moo moo moo moo.' },
       recap: { title: 'Moo moo moo', how: 'Moo moo moo moo, moo moo moo moo moo moo.' },
       console: { title: 'Moo moo', how: 'Moo moo moo moo (DevTools) — moo moo moo moo, moo moo moo moo moo.' },
@@ -243,8 +239,6 @@ export default {
       cadence: { once: 'Moo moo', repeat: 'Moo moo moo' },
       metrics: {
         events: 'Moo moo',
-        superProps: 'Moo moo moo',
-        webhooks: 'Moo moo',
         dashboards: 'Moo moo',
         schemas: 'Moo moo',
       },

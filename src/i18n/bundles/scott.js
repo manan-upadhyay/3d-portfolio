@@ -45,7 +45,6 @@ export default {
       fullstack: { title: 'Doing It All', description: 'End to end, soup to nuts, grooming to production. I wear all the hats. I love hats. The edge cases and reusable components nobody claps for? I’m not superstitious about those — I’m a little stitious. They quietly save the day.' },
     },
     stats: {
-      years: 'Years In The Game',
       projects: 'Hits Delivered',
       domains: 'Industries Conquered',
       load: 'Faster Than Before',
@@ -298,14 +297,6 @@ export default {
         title: 'The Spinny Compass',
         how: 'Wave your mouse over the big compass thing up top. It follows you. Like a loyal employee. And it makes a little gear noise. I did that.',
       },
-      spin: {
-        title: 'Give It a Whirl',
-        how: 'See the little button on the compass? Push it. The needle spins like a fidget spinner and slows down all by itself. Physics. I’m basically a scientist.',
-      },
-      sound: {
-        title: 'The Sounds',
-        how: 'Every beep and whoosh here? Made by a computer, live, zero downloads. Hit the speaker button, bottom right. Then change the theme and listen. You’re welcome.',
-      },
       sky: {
         title: 'The Sky Button',
         how: 'Top right. Five skies. One of them is “auto” and it knows what time it is where you are. Creepy? A little. Cool? Extremely.',
@@ -313,10 +304,6 @@ export default {
       voices: {
         title: 'The Other Mes',
         how: 'The whole site can talk in different voices. Hit ⇧⌘V. Some are locked — type the magic word to unlock them. Hint: type “boss”. Trust me on this one.',
-      },
-      map: {
-        title: 'The Map Thing',
-        how: 'Press ⌘K. A map pops up. You can search it. It’s like Google Maps, but for me.',
       },
       raven: {
         title: 'The Birds',
@@ -341,8 +328,6 @@ export default {
       cadence: { once: 'Once a visit', repeat: 'Every single time' },
       metrics: {
         events: 'Things I track',
-        superProps: 'Auto-tags',
-        webhooks: 'Alert pipes',
         dashboards: 'Dashboards',
         schemas: 'SEO schemas',
       },
@@ -471,8 +456,8 @@ export default {
     resume: 'Résumé',
   },
   stickyCta: {
-    text: 'Seen enough?',
-    cta: 'Let’s talk',
+    text: '“You miss 100% of the shots you don’t take.” — Wayne Gretzky — Michael Scott',
+    cta: 'Take the shot',
     resume: 'Grab my résumé',
     dismiss: 'Not now',
   },

@@ -58,6 +58,11 @@
 
 > Impact/Effort/Risk are 1–10 gut estimates to help sequencing, matched to the
 > LEGENDARY-ROADMAP scale. Re-score when a task is picked up.
+>
+> **2026-07-09:** the remaining 🔵 explore items (S2 voice cue palettes, C1
+> cinematics, P1 sub-pages) + the arsenal-hum keep/cut question are **pending
+> owner review** — nothing is scheduled until Manan picks from this board
+> (see the [Release-2.0 E2E audit](reports/audit/2026-07-09-release-2.0-e2e-audit.md) §4.6/§7).
 
 ---
 
@@ -209,12 +214,21 @@ vigilance/perimeter, security) was already covered by his `services.*`, so no
 further salvage was needed. `hero.hook` / `about.principles` / `about.scribeNote`
 then removed from all five bundles. Build clean.
 
-**Remaining tasks (future copy sprint — not blocking).**
-- [ ] Walk every *other* high-visibility key per voice and rate 1–5 for "does
-      this land in character"; rewrite anything ≤3 (this pass covered the
-      owner-flagged + salvage items).
-- [ ] Re-verify each bundle still covers all array keys (no fallback holes) — the
-      deletions removed only dead keys, so no new fallback holes were introduced.
+**Remaining tasks — ✅ closed by the 2026-07-09 full-roster sweep.**
+- [x] Walked every high-visibility slot across all 8 sealed voices (hero
+      lead/phrases/proof, chapter labels+subs, pull-quote, arsenal subtitle,
+      works intro/realm/enterRealm/nod, contact availability/success, footer
+      quote/closeHead, summonCta, stickyCta). Verdict: the roster is at full
+      character — nearly every slot rates 4–5. The one systematic ≤3: four
+      voices fell back to the plain "Seen enough?" **stickyCta.text**; punched
+      up in character (Scott → the Gretzky/Michael double-attribution shot;
+      GoT → "The night is dark and full of terrors…"; Deadpool → the team-up
+      bit + "Maximum effort — talk"; Chandler → "Could you BE any more
+      convinced?").
+- [x] Bundle key-parity re-verified after the 2026-07-09 dead-key sweep (eggs
+      spin/sound/map, observatory superProps/webhooks, about.stats.years,
+      commits days/busiest/busyUnit pruned from every bundle; all 10 parse and
+      the build is clean).
 
 ---
 
@@ -396,6 +410,15 @@ Voice Hall groups them meaningfully as the roster grows.
 > picker via a `ui:open-voice` event). Uses the registry `glyph` monogram (the
 > voice's canonical mark); a per-voice insignia SVG can replace it later without
 > rewiring. Reused on both routes (the rail is shared).
+>
+> #### Locked-row reveal (owner decision, 2026-07-09)
+> Sealed rows in the switcher / Hall / mobile drawer now show the voice's
+> **label + source** (e.g. "The Regional Manager · The Office") instead of the
+> old italic mystery-sample, and every clue became a fill-in-the-blank quote
+> ("Bears. ___. Battlestar Galactica."). This deliberately trades a little of
+> the reveal-is-the-reward mystique for discoverability — the goal is
+> *exploration, not locked doors* (same reasoning as the earlier obvious-hints
+> pass). The unlock game itself (type the word / solve the clue) is unchanged.
 
 **Original question from owner:** *"Should we try a UI for a logo/person-image
 particle show of the current voice, or an element resembling them?"*

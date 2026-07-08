@@ -496,7 +496,7 @@ export const atelier = {
   // chosen set rather than a checklist (making-of value audit 2026-07-08). Dropped:
   // `spin` (a sub-moment of the astrolabe, already represented), `sound` and `map`
   // (their controls are visible, so less of a hidden discovery). Their voiced copy
-  // (atelier.eggs.{spin,sound,map}) is left in the bundles, unused but harmless.
+  // was pruned from all bundles in the 2026-07-09 dead-key sweep.
   eggs: [
     { id: 'astrolabe', icon: 'compass', act: 'origin' },
     { id: 'lens', icon: 'lens', act: 'portrait' },

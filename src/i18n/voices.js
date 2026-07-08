@@ -69,7 +69,7 @@ export const voices = [
   },
   {
     id: 'scott',
-    label: 'World’s Best Boss',
+    label: 'The Regional Manager',
     sample: 'That’s what she said.',
     locked: true,
     pinned: true, // dormant "marked voice" flag — popover surfacing is hidden for now
@@ -77,11 +77,11 @@ export const voices = [
     glyph: 'Ms',
     popoverOrder: 2,
     trigger: 'boss',
-    hint: 'His famous mug reads “World’s Best ____.”',
+    hint: 'his mug reads “World’s Best ___.”',
     hint2: 'Rhymes with “floss”. The title he gives himself, over and over.',
     info: {
       name: 'Michael Scott',
-      source: 'The Office (US)',
+      source: 'The Office',
       note: 'Regional Manager of Dunder Mifflin, Scranton. Self-proclaimed World’s Best Boss.',
     },
   },
@@ -94,11 +94,11 @@ export const voices = [
     glyph: 'Dw',
     popoverOrder: 5,
     trigger: 'beets',
-    hint: 'What grows in the Schrute Farms?',
+    hint: '“Bears. ___. Battlestar Galactica.”',
     hint2: 'Five letters, starts with B and ends with S.',
     info: {
       name: 'Dwight Schrute',
-      source: 'The Office (US)',
+      source: 'The Office',
       note: 'Assistant (to the) Regional Manager. Beet farmer, black belt, owner of Schrute Farms.',
     },
   },
@@ -111,7 +111,7 @@ export const voices = [
     glyph: 'Mo',
     popoverOrder: 6,
     trigger: 'moo',
-    hint: 'Type the only sound a cow makes.',
+    hint: '“A cow says ___.”',
     hint2: 'Three letters: M-O-O. That’s the whole word.',
     info: {
       name: 'A cow',
@@ -121,14 +121,14 @@ export const voices = [
   },
   {
     id: 'got',
-    label: 'The Game of Thrones',
+    label: 'The Realm of Westeros',
     sample: 'When you play, you win or you die.',
     locked: true,
     category: 'sealed',
     glyph: 'GoT',
     popoverOrder: 3,
     trigger: 'winter',
-    hint: '“______ is coming.” Finish the most famous Game of Thrones line.',
+    hint: '“___ is coming.”',
     hint2: 'Six letters: W-I-N-T-E-R. House Stark’s words.',
     info: {
       name: 'The Realm of Westeros',
@@ -145,11 +145,11 @@ export const voices = [
     glyph: 'Dp',
     popoverOrder: 7,
     trigger: 'deadpool',
-    hint: 'The red-suited Marvel hero played by Ryan Reynolds.',
+    hint: '“Maximum effort. The name’s ___.”',
     hint2: 'It’s his name: D-E-A-D-P-O-O-L. Type “deadpool”.',
     info: {
       name: 'Wade Wilson',
-      source: 'Deadpool (Marvel)',
+      source: 'Marvel',
       note: 'The Merc with a Mouth. Breaks the fourth wall, regenerates, never stops talking.',
     },
   },
@@ -162,7 +162,7 @@ export const voices = [
     glyph: 'Av',
     popoverOrder: 4,
     trigger: 'assemble',
-    hint: '“Avengers, ______!” Finish the famous rallying cry.',
+    hint: '“Avengers, ___!”',
     hint2: 'It’s “assemble” — A-S-S-E-M-B-L-E. Avengers, assemble!',
     info: {
       name: 'The Avengers',
@@ -179,7 +179,7 @@ export const voices = [
     glyph: 'Yo',
     popoverOrder: 8,
     trigger: 'yoda',
-    hint: 'The small, green Jedi Master from Star Wars. Type his name.',
+    hint: '“___, my name is. Yes, hmmm.”',
     hint2: 'Four letters: Y-O-D-A. “Do or do not.”',
     info: {
       name: 'Yoda',
@@ -196,7 +196,7 @@ export const voices = [
     glyph: 'Ch',
     popoverOrder: 9,
     trigger: 'chandler',
-    hint: 'The sarcastic one from Friends — “Could I BE any more…?” Type his first name.',
+    hint: '“Hi, I’m ___. I make jokes when I’m uncomfortable.”',
     hint2: 'It’s Chandler — C-H-A-N-D-L-E-R. From Friends.',
     info: {
       name: 'Chandler Bing',

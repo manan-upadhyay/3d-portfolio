@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   Menu, X, Compass, Mail, Download, ChevronLeft, ChevronRight,
-  Drama, Check, Lock, Plus, Clapperboard, ArrowUpRight, ArrowLeft,
+  VenetianMask, Check, Lock, Plus, Clapperboard, ArrowUpRight, ArrowLeft,
 } from 'lucide-react';
 import { useVoiceStore } from '../store/useVoiceStore';
 import { useSoundStore } from '../store/useSoundStore';
@@ -129,8 +129,13 @@ const VoiceDrawerRow = ({ v, active, locked, onPreview }) => (
         : <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--color-card-border)' }} />}
     </span>
     <span className="min-w-0 flex-1 ml-3">
-      <span className="block text-[14px] font-medium leading-tight" style={{ color: active ? 'var(--color-ember)' : 'var(--color-text)', fontStyle: locked ? 'italic' : 'normal' }}>
-        {locked ? v.sample : v.label}
+      {locked && v.info?.source && (
+        <span className="block text-[10px] font-semibold uppercase tracking-wide leading-tight truncate mb-[3px]" style={{ color: 'var(--color-ember)' }}>
+          {v.info.source}
+        </span>
+      )}
+      <span className="block text-[14px] font-medium leading-tight" style={{ color: active ? 'var(--color-ember)' : 'var(--color-text)' }}>
+        {v.label}
       </span>
       <span className="block text-[11.5px] leading-snug mt-0.5" style={{ color: 'var(--color-text-muted)' }}>
         {locked ? `Clue — ${v.hint}` : v.sample}
@@ -174,9 +179,21 @@ const VoiceDrawer = ({ onSummon, onPreview }) => {
         <div className="flex flex-col gap-4 pb-2">
           {groups.map((g) => (
             <div key={g.id} className="flex flex-col gap-2">
-              <p className="text-[10px] tracking-[0.2em] uppercase font-bold px-1" style={{ color: 'var(--color-text-muted)' }}>
-                {t(`voiceHall.categories.${g.id}`)}
-              </p>
+              {/* sticky category header — pins to the top of the scrolling roster;
+                  the sealed row carries the discovery count on the right. */}
+              <div
+                className="sticky top-0 z-10 flex items-center justify-between gap-2 -mx-1 px-2 py-2"
+                style={{ background: 'linear-gradient(var(--color-card-bg), var(--color-card-bg)), var(--color-primary)' }}
+              >
+                <span className="text-[10px] tracking-[0.2em] uppercase font-bold" style={{ color: 'var(--color-text-muted)' }}>
+                  {t(`voiceHall.categories.${g.id}`)}
+                </span>
+                {g.id === 'sealed' && (
+                  <span className="font-mono text-[10px] font-semibold tracking-wider" style={{ color: 'var(--color-gold)' }}>
+                    {t('voiceHall.foundShort', { count: discovered, total: SEALED_VOICES.length })}
+                  </span>
+                )}
+              </div>
               {g.items.map((v) => (
                 <VoiceDrawerRow key={v.id} v={v} active={voice === v.id}
                   locked={v.locked && !isUnlocked(v.id)} onPreview={onPreview} />
@@ -186,7 +203,8 @@ const VoiceDrawer = ({ onSummon, onPreview }) => {
         </div>
       </div>
 
-      {/* sticky footer — summon (its own page) + the discovery count */}
+      {/* sticky footer — summon (its own page). The discovery count moved up to
+          the sealed category header (desktop parity). */}
       <div className="flex-shrink-0 pt-3" style={{ borderTop: '1px solid var(--color-card-border)' }}>
         <button type="button" onClick={onSummon}
           className="flex items-center gap-2.5 w-full px-3.5 py-3 rounded-xl text-[13px] font-medium"
@@ -195,9 +213,6 @@ const VoiceDrawer = ({ onSummon, onPreview }) => {
           <span className="flex-1 text-left">{t('voiceHall.request.cta')}</span>
           <ChevronRight size={15} style={{ color: 'var(--color-text-muted)' }} />
         </button>
-        <p className="text-[11px] text-center mt-2.5" style={{ color: 'var(--color-text-muted)' }}>
-          <span className="font-mono uppercase tracking-wider">{t('voiceHall.found', { count: discovered, total: SEALED_VOICES.length })}</span>
-        </p>
       </div>
     </div>
   );
@@ -458,7 +473,7 @@ const MobileMenu = ({ activeId }) => {
                         own act list in the drawer. */}
                     <div className="menu-list mt-4">
                       <ExploreRow icon={Compass} label={t('nav.navigate')} onClick={() => setView('nav')} />
-                      <ExploreRow icon={Drama} label={t('nav.voice')} onClick={() => setView('voice')} />
+                      <ExploreRow icon={VenetianMask} label={t('nav.voice')} onClick={() => setView('voice')} />
                     </div>
 
                     {/* 4 · The other route — a quiet footnote (not a peer of the

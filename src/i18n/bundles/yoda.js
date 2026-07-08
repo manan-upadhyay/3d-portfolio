@@ -46,7 +46,6 @@ export default {
       fullstack: { title: 'All of It, He Holds', description: 'End to end, requirement to production monitoring. The whole system, in his mind at once he keeps — the front, the back, the edge cases feared by lesser developers. The way of the full-stack, this is.' },
     },
     stats: {
-      years: 'Years Trained',
       projects: 'Releases Shipped',
       domains: 'Industries Served',
       load: 'Swifter Than Before',
@@ -299,14 +298,6 @@ export default {
         title: 'The Turning Compass',
         how: 'Across the great compass above, your cursor pass. Follow it does, faithfully — and a small gear it turns as it goes. Attention, even instruments like.',
       },
-      spin: {
-        title: 'The Spinning Needle',
-        how: 'A button on the compass, there is. Press it, you will. Spin the needle does, then slow of its own accord — real weight, real friction. Keep no secrets, physics does.',
-      },
-      sound: {
-        title: 'The Music',
-        how: 'Every chime here, live by the machine conjured it is — nothing downloaded. The sound, wake it, bottom right; then change the sky, and listen you will.',
-      },
       sky: {
         title: 'The Sky',
         how: 'Top right: five skies. One is “auto,” and the hour where you are, know it does. Useful, this trick is. Unsettling, only slightly.',
@@ -314,10 +305,6 @@ export default {
       voices: {
         title: 'The Other Narrators',
         how: 'In other tongues, speak this whole site will. Press ⇧⌘V. Sealed, some are — the right word, type it anywhere to free them. A hint, since like you I do: type “yoda.”',
-      },
-      map: {
-        title: 'The Chart',
-        how: 'Press ⌘K, and a map of the realm appears. Every place built, marked and reachable it is.',
       },
       raven: {
         title: 'The Ravens',
@@ -342,8 +329,6 @@ export default {
       cadence: { once: 'Once a visit', repeat: 'Every time' },
       metrics: {
         events: 'Tracked events',
-        superProps: 'Auto-tags',
-        webhooks: 'Alert pipes',
         dashboards: 'Dashboards',
         schemas: 'SEO schemas',
       },

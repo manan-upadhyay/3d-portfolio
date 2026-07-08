@@ -87,7 +87,6 @@
 
   /* Shadows */
   --shadow-card: 0px 20px 60px -20px rgba(120, 95, 60, 0.22), 0px 4px 20px rgba(0, 0, 0, 0.05);
-  --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.3);
 
   /* Hero sky — backdrop gradient + scrim base (Phase 3: time-aware sky).
      Default = "day" (full warm daylight). Dawn overrides below. */
@@ -149,7 +148,6 @@
 
   /* Shadows */
   --shadow-card: 0px 25px 80px -15px rgba(0, 0, 0, 0.6), 0px 0px 30px rgba(129, 140, 248, 0.08);
-  --shadow-glow: 0 0 40px rgba(129, 140, 248, 0.25);
 
   /* Hero sky — default = "night" (deep ink + starfield). Dusk overrides below. */
   --hero-backdrop: radial-gradient(130% 100% at 75% 12%, #1B2440 0%, #0E1426 48%, #0B0F1A 100%);
@@ -281,56 +279,6 @@ h1, h2, h3, h4, h5, h6 {
   display: block;
 }
 
-/* ===== Gradient Backgrounds ===== */
-.black-gradient {
-  background: var(--gradient-card);
-  backdrop-filter: blur(12px);
-}
-
-.violet-gradient {
-  background: linear-gradient(-90deg, var(--color-accent) 0%, transparent 100%);
-}
-
-.green-pink-gradient {
-  background: var(--gradient-accent);
-}
-
-/* ===== Text Gradients ===== */
-.orange-text-gradient {
-  background: linear-gradient(to top, #f12711, #f5af19);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.green-text-gradient {
-  background: linear-gradient(to top, #11998e, #38ef7d);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.blue-text-gradient {
-  background: linear-gradient(to top, #4F46E5, #818CF8);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.pink-text-gradient {
-  background: linear-gradient(to top, #ec008c, #fc6767);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.accent-text-gradient {
-  background: var(--gradient-accent);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
 /* ===== Aurora Effect (Dark Mode) ===== */
 .dark .aurora-bg {
   position: fixed;
@@ -421,24 +369,6 @@ h1, h2, h3, h4, h5, h6 {
     opacity: 1;
     transform: translateX(-50%) scale(1.03);
   }
-}
-
-/* ===== Glassmorphism Cards ===== */
-.glass-card {
-  background: var(--gradient-card);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--color-card-border);
-  border-radius: 20px;
-}
-
-/* ===== Glow Effects ===== */
-.glow {
-  box-shadow: var(--shadow-glow);
-}
-
-.glow-text {
-  text-shadow: 0 0 20px var(--color-glow);
 }
 
 /* ===== Buttons — single source of truth for every CTA (light + dark) ===== */
@@ -1727,7 +1657,7 @@ h1, h2, h3, h4, h5, h6 {
   padding: 10px 20px 12px;
   border-bottom: 1px solid var(--color-card-border);
 }
-.voice-hall__list { display: grid; gap: 9px; grid-template-columns: 1fr; }
+.voice-hall__list { display: grid; gap: 11px; grid-template-columns: 1fr; }
 /* The summon request is its own Hall PAGE now (v2.0 D4) — the form sits flush
    in the body pane, no bordered aside chrome. */
 .voice-hall__body .voice-summon { border: none; background: transparent; }
@@ -1897,7 +1827,7 @@ h1, h2, h3, h4, h5, h6 {
 .voice-chip[data-active="true"] { border-color: rgba(var(--color-ember-rgb), 0.55); background: rgba(var(--color-ember-rgb), 0.1); box-shadow: 0 0 22px rgba(var(--color-ember-rgb), 0.16); }
 .voice-chip[data-locked="false"]:hover { border-color: rgba(var(--color-ember-rgb), 0.45); transform: translateY(-2px); box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16); }
 .voice-chip__top { display: flex; align-items: flex-start; }
-.voice-chip__hit { display: flex; align-items: flex-start; gap: 12px; flex: 1; min-width: 0; text-align: left; padding: 13px; }
+.voice-chip__hit { display: flex; align-items: flex-start; gap: 13px; flex: 1; min-width: 0; text-align: left; padding: 15px 14px; }
 /* monogram medallion — a small gold-rimmed serif mark */
 .voice-chip__glyph {
   display: grid; place-items: center; flex-shrink: 0;
@@ -1916,7 +1846,7 @@ h1, h2, h3, h4, h5, h6 {
 .voice-chip[data-active="true"] .voice-chip__glyph { color: var(--color-ember); background: rgba(var(--color-ember-rgb), 0.16); border-color: rgba(var(--color-ember-rgb), 0.55); box-shadow: 0 0 16px rgba(var(--color-ember-rgb), 0.35); }
 .voice-chip__label { display: block; font-size: 14px; font-weight: 600; color: var(--color-text); line-height: 1.2; }
 .voice-chip[data-active="true"] .voice-chip__label { color: var(--color-ember); }
-.voice-chip__sub { display: block; font-size: 11.5px; line-height: 1.35; margin-top: 3px; color: var(--color-text-muted); }
+.voice-chip__sub { display: block; font-size: 11.5px; line-height: 1.4; margin-top: 4px; color: var(--color-text-muted); }
 /* slim active marker — a small corner tick (the full "Now narrating" read lives
    in the fixed spotlight), so the card's label/sample never get squeezed */
 .voice-chip__tick {
