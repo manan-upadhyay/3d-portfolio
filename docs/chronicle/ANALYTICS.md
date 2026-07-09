@@ -77,6 +77,9 @@ via autocapture — the list below is our *intentional* product events.)
 | `works_show_all` | `Works` | — | wanted to see the minor realms? |
 | `expedition_view` | `ExpeditionRecap` (in-view) | — | reached the recap? |
 | `atelier_view` | `MakingOf` route | — | went behind the curtain? |
+| `void_view` | `Void` (404) | `path` | **broken inbound links** — which dead URLs get hit |
+| `void_bearing` | `Void` (404) | — | played with the "find your bearing" delight? |
+| `void_home` | `Void` (404) | — | took the way home from the 404 |
 | `buildreel_scrub` | `BuildReel` | — | directed the reel? |
 | `persona_card_expand` | `PersonaTriptych` | `persona` | expanded a persona? |
 | `inquiry_selected` | `Contact` | `inquiry` | what kind of work do they come for? |

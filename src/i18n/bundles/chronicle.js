@@ -698,4 +698,17 @@ export default {
       night: 'Night',
     },
   },
+
+  // The cinematic 404 — "Off the Map" (spec 09). Function first: it must read
+  // instantly as a not-found page (the "404" tag + a clear eyebrow) with an
+  // obvious way home; the cartographer flavour frames that, never replaces it.
+  // `{{path}}` = the bad pathname.
+  void: {
+    eyebrow: 'page not found',
+    title: 'You’ve sailed off the map.',
+    body: 'This route was never charted — there’s nothing here. Let’s set a course back to solid ground.',
+    position: 'last known position: {{path}}',
+    cta: 'Find your bearing',
+    home: 'Back to the homepage',
+  },
 };

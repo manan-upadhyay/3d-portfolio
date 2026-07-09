@@ -497,4 +497,13 @@ export default {
   makingOf: {
     back: 'To the tale, back',
   },
+
+  void: {
+    eyebrow: 'lost, you are',
+    title: 'Lost, you are. Found, you will be.',
+    body: 'Exist, this page does not. The path you seek, back the way you came, it lies. Patience, young padawan.',
+    position: 'last sensed at: {{path}}',
+    cta: 'The way, find it',
+    home: 'To the chronicle, return',
+  },
 };

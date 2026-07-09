@@ -174,15 +174,31 @@ const VoiceDrawer = ({ onSummon, onPreview }) => {
         </div>
       )}
 
-      {/* scrolling roster — the only scrollable region */}
+      {/* plain, non-technical explainer — parity with the desktop Hall and the
+          popover subtitle, so a phone visitor knows what this menu actually does
+          before diving into the roster. Fixed above the scroll region. */}
+      <p className="text-[12.5px] leading-snug pb-3 flex-shrink-0" style={{ color: 'var(--color-text-muted)' }}>
+        {t('voiceHall.explainer')}
+      </p>
+
+      {/* scrolling roster — the only scrollable region. NB: groups carry NO flex
+          gap between them — inter-group spacing lives INSIDE each sticky header as
+          top padding (`pt-5`). An external gap here would be a transparent strip
+          that the outgoing group's card shows through as it scrolls behind the next
+          pinned header; folding that space into the header's own opaque box means a
+          header is always flush against the card above it and covers it cleanly. */}
       <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain -mx-1 px-1" data-lenis-prevent>
-        <div className="flex flex-col gap-4 pb-2">
+        <div className="flex flex-col pb-2">
           {groups.map((g) => (
-            <div key={g.id} className="flex flex-col gap-2">
+            <div key={g.id} className="flex flex-col">
               {/* sticky category header — pins to the top of the scrolling roster;
-                  the sealed row carries the discovery count on the right. */}
+                  the sealed row carries the discovery count on the right. It sits
+                  FLUSH against the card list below (no gap between them) and carries
+                  the breathing room as its own opaque `pb-3`, so a card scrolling up
+                  behind it is covered right down to the first card's edge — no
+                  transparent strip for an outgoing row to flash through. */}
               <div
-                className="sticky top-0 z-10 flex items-center justify-between gap-2 -mx-1 px-2 py-2"
+                className="sticky -top-1 z-10 flex items-center justify-between gap-2 -mx-1 px-2 pb-3 pt-5"
                 style={{ background: 'linear-gradient(var(--color-card-bg), var(--color-card-bg)), var(--color-primary)' }}
               >
                 <span className="text-[10px] tracking-[0.2em] uppercase font-bold" style={{ color: 'var(--color-text-muted)' }}>
@@ -194,10 +210,14 @@ const VoiceDrawer = ({ onSummon, onPreview }) => {
                   </span>
                 )}
               </div>
-              {g.items.map((v) => (
-                <VoiceDrawerRow key={v.id} v={v} active={voice === v.id}
-                  locked={v.locked && !isUnlocked(v.id)} onPreview={onPreview} />
-              ))}
+              {/* card list — its own gap lives here, between cards only, never
+                  between the header and the first card. */}
+              <div className="flex flex-col gap-2">
+                {g.items.map((v) => (
+                  <VoiceDrawerRow key={v.id} v={v} active={voice === v.id}
+                    locked={v.locked && !isUnlocked(v.id)} onPreview={onPreview} />
+                ))}
+              </div>
             </div>
           ))}
         </div>
@@ -320,16 +340,10 @@ const MobileMenu = ({ activeId }) => {
   useEffect(() => { if (open) track('mobile_menu_open'); }, [open]);
   useEffect(() => { if (open && view !== 'main') track('mobile_menu_view', { view }); }, [open, view]);
   // The Atelier field guide opens this sheet on mobile (sky/theme lives here).
-  // The ambient voice mark opens it straight to the persona picker.
   useEffect(() => {
     const openMenu = () => setOpen(true);
-    const openVoice = () => { setOpen(true); setView('voice'); };
     window.addEventListener('ui:open-menu', openMenu);
-    window.addEventListener('ui:open-voice', openVoice);
-    return () => {
-      window.removeEventListener('ui:open-menu', openMenu);
-      window.removeEventListener('ui:open-voice', openVoice);
-    };
+    return () => window.removeEventListener('ui:open-menu', openMenu);
   }, []);
   // While the sheet is open it sits IN FRONT of the hero — register it as an overlay
   // so the astrolabe goes dormant (frozen needle, silent gear) behind it.

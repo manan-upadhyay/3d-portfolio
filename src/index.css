@@ -92,6 +92,10 @@
      Default = "day" (full warm daylight). Dawn overrides below. */
   --hero-backdrop: radial-gradient(130% 110% at 72% 105%, #FAF1DC 0%, #F2E7CF 45%, #E8D9BD 100%);
   --hero-scrim-rgb: 245, 240, 230;
+
+  /* Edge-of-the-chart fog (404 Void / Threshold loader). A pale mist that reads
+     ABOVE the page ground — never `--color-primary`, or it would be invisible. */
+  --color-fog-rgb: 250, 244, 232;
 }
 
 .dark {
@@ -152,6 +156,9 @@
   /* Hero sky — default = "night" (deep ink + starfield). Dusk overrides below. */
   --hero-backdrop: radial-gradient(130% 100% at 75% 12%, #1B2440 0%, #0E1426 48%, #0B0F1A 100%);
   --hero-scrim-rgb: 7, 10, 20;
+
+  /* Cool luminous mist against the ink ground. */
+  --color-fog-rgb: 150, 165, 205;
 }
 
 /* ===== Sky palettes (Phase 3) — dawn/dusk are warm tints layered on the
@@ -171,6 +178,7 @@
   --gradient-hero: linear-gradient(180deg, #FCEFE2 0%, #F6DEC9 55%, #EFCDB2 100%);
   --hero-backdrop: radial-gradient(130% 110% at 72% 104%, #FDEAD6 0%, #F7D5BB 45%, #EDBE9F 100%);
   --hero-scrim-rgb: 251, 238, 226;
+  --color-fog-rgb: 252, 226, 205;
 }
 
 /* Dusk — embered twilight (warm violet ink, dark base). */
@@ -185,6 +193,7 @@
   --gradient-hero: linear-gradient(180deg, #130E1E 0%, #221634 50%, #130E1E 100%);
   --hero-backdrop: radial-gradient(130% 100% at 78% 13%, #3B2742 0%, #1F1531 48%, #130C1E 100%);
   --hero-scrim-rgb: 19, 12, 26;
+  --color-fog-rgb: 178, 152, 208;
 }
 
 /* ===== Base Styles ===== */
@@ -775,10 +784,223 @@ h1, h2, h3, h4, h5, h6 {
   .wp .realm-card { height: auto; min-height: 420px; }
 }
 
-/* ===== Hero fog drift ===== */
-@keyframes herofog {
-  0% { transform: translateX(-3%); opacity: 0.75; }
-  100% { transform: translateX(3%); opacity: 1; }
+/* ===== Fog drift utilities (404 Void + Threshold loader) =====
+   Two banks of mist rising from the page's bottom edge, breathing on slightly
+   different cadences so the "ground" of the chart never sits still. Colour comes
+   from `--color-fog-rgb` (a pale mist ABOVE the ground — never the ground itself,
+   or it vanishes). */
+@keyframes fog-drift {
+  0%   { transform: translate3d(-4%, 0, 0) scaleY(1);    opacity: 0.55; }
+  50%  { transform: translate3d(3%, -3%, 0) scaleY(1.08); opacity: 0.9; }
+  100% { transform: translate3d(-4%, 0, 0) scaleY(1);    opacity: 0.55; }
+}
+@keyframes fog-drift-reverse {
+  0%   { transform: translate3d(4%, 0, 0) scaleY(1.04);  opacity: 0.4; }
+  50%  { transform: translate3d(-4%, -2%, 0) scaleY(0.96); opacity: 0.7; }
+  100% { transform: translate3d(4%, 0, 0) scaleY(1.04);  opacity: 0.4; }
+}
+
+/* ===== Void (404) page — "Off the Map" =====
+   Function first: reads instantly as a 404 with an obvious way home. The
+   cartographer atmosphere frames that message; it never replaces it. The whole
+   scene is sized to fit one viewport with no scroll (desktop + mobile). */
+.void-scene {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  padding: clamp(1.5rem, 4vh, 3rem) 1.5rem;
+}
+
+/* The uncharted sky — the hero's backdrop gradient (theme/sky aware), so the
+   404 feels carved from the same world, just emptier. */
+.void-sky {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--hero-backdrop);
+}
+/* The sparse starfield sits in this layer (spans injected from Void.jsx). */
+.void-star {
+  position: absolute;
+  border-radius: 9999px;
+  background: #fff;
+}
+
+/* Ember aura pooled behind the instrument — a light source that lifts the type. */
+.void-aura {
+  position: absolute;
+  z-index: 1;
+  top: 38%;
+  left: 50%;
+  width: min(72vw, 640px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  background: radial-gradient(circle at center,
+    rgba(var(--color-ember-rgb), 0.13) 0%,
+    rgba(var(--color-ember-rgb), 0.05) 34%,
+    transparent 66%);
+}
+
+/* Edge-of-the-chart fog — two banks hugging the bottom, visibly luminous against
+   the ground so the map's edge dissolves into mist. */
+.void-fog {
+  position: absolute;
+  left: -12%;
+  right: -12%;
+  bottom: -6%;
+  pointer-events: none;
+  z-index: 2;
+  will-change: transform, opacity;
+}
+.void-fog--back {
+  height: 46%;
+  background: radial-gradient(ellipse 90% 100% at 50% 118%,
+    rgba(var(--color-fog-rgb), 0.30) 0%,
+    rgba(var(--color-fog-rgb), 0.12) 42%,
+    transparent 72%);
+  animation: fog-drift 16s ease-in-out infinite;
+}
+.void-fog--front {
+  height: 34%;
+  background: radial-gradient(ellipse 70% 100% at 56% 122%,
+    rgba(var(--color-fog-rgb), 0.34) 0%,
+    rgba(var(--color-fog-rgb), 0.10) 48%,
+    transparent 66%);
+  animation: fog-drift-reverse 22s ease-in-out infinite;
+}
+
+/* The single centered content column — every child stacks in one compact rhythm. */
+.void-content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 560px;
+}
+
+/* The lost astrolabe — a compact centerpiece (subordinate to the message), with
+   the compass rose at its heart. */
+.void-astrolabe {
+  position: relative;
+  width: clamp(150px, 22vw, 240px);
+  aspect-ratio: 1;
+  margin-bottom: clamp(0.75rem, 2.5vh, 1.75rem);
+}
+.void-astrolabe canvas { display: block; width: 100%; height: 100%; }
+.void-rose {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 18%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+/* Unmistakable status tag — "404 · page not found". The number is the universal
+   signal; the label carries a touch of voice. */
+.void-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.void-tag__code {
+  font-weight: 700;
+  color: var(--color-ember);
+  background: rgba(var(--color-ember-rgb), 0.1);
+  border: 1px solid rgba(var(--color-ember-rgb), 0.35);
+  border-radius: 5px;
+  padding: 0.15rem 0.5rem;
+  letter-spacing: 0.08em;
+}
+.void-tag__sep { opacity: 0.5; }
+
+.void-title {
+  font-family: "Cormorant Garamond", "Plus Jakarta Sans", serif;
+  font-weight: 600;
+  font-size: clamp(32px, 5.5vw, 58px);
+  line-height: 1.04;
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+  margin-top: clamp(0.6rem, 1.6vh, 1rem);
+}
+.void-body {
+  font-size: clamp(14.5px, 1.5vw, 16.5px);
+  line-height: 1.65;
+  color: var(--color-text-muted);
+  max-width: 430px;
+  margin-top: clamp(0.7rem, 1.8vh, 1.1rem);
+}
+.void-position {
+  font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.03em;
+  color: var(--color-text-muted);
+  opacity: 0.7;
+  margin-top: clamp(0.8rem, 2vh, 1.2rem);
+  padding: 0.28rem 0.65rem;
+  border: 1px solid var(--color-card-border);
+  border-radius: 5px;
+  max-width: 100%;
+  word-break: break-all;
+}
+
+/* Actions — the way home is the obvious primary (solid pill); "find your
+   bearing" is a clearly-subordinate ghost-text delight that only moves the
+   instrument. Side by side, wrapping on the narrowest screens. */
+.void-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem 1.4rem;
+  margin-top: clamp(1.25rem, 3.5vh, 2rem);
+}
+.void-home { text-decoration: none; }
+
+.void-bearing-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  background: transparent;
+  border: none;
+  padding: 0.4rem 0.2rem;
+  cursor: pointer;
+  transition: color 0.25s ease;
+}
+.void-bearing-btn svg { opacity: 0.8; transition: transform 0.5s ease; }
+.void-bearing-btn:hover { color: var(--color-ember); }
+.void-bearing-btn:hover svg { transform: rotate(90deg); }
+.void-bearing-btn:focus-visible {
+  outline: 2px solid var(--color-ember);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Reduced motion: static fog, no drift. */
+@media (prefers-reduced-motion: reduce) {
+  .void-fog--back,
+  .void-fog--front {
+    animation: none;
+    opacity: 0.5;
+  }
 }
 
 /* ===== Floating Animation ===== */

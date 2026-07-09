@@ -497,4 +497,13 @@ export default {
   makingOf: {
     back: 'Okay, back to the good stuff',
   },
+
+  void: {
+    eyebrow: 'nice try',
+    title: 'You typed that URL yourself. I saw you.',
+    body: 'This page doesn’t exist. It never did. You just made it up. I’m not mad, I’m impressed — but the actual portfolio is back that way.',
+    position: 'your little adventure: {{path}}',
+    cta: 'Fine, fix this',
+    home: 'Back to the real page',
+  },
 };

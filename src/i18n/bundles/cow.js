@@ -390,4 +390,13 @@ export default {
     clueTapUnlock: 'moo moo moo',
     more: 'Moo {{count}} moo',
   },
+
+  void: {
+    eyebrow: 'moo?',
+    title: 'Moo.',
+    body: 'This pasture has no grass. The herd grazes back the way you came. Moo.',
+    position: 'last moo: {{path}}',
+    cta: 'Moo your way back',
+    home: 'Return to the herd',
+  },
 };

@@ -497,4 +497,13 @@ export default {
   makingOf: {
     back: 'Okay, back to the good stuff',
   },
+
+  void: {
+    eyebrow: 'oh no',
+    title: 'Could this page BE any less real?',
+    body: 'So. You wanted a page. This isn’t it. Could I BE any more sorry? Actually, no — the portfolio is right over there. I’ll wait.',
+    position: 'you were looking for: {{path}}',
+    cta: 'Could you find your bearing',
+    home: 'Back to the portfolio, please',
+  },
 };

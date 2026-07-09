@@ -1,13 +1,36 @@
 # 09 — Off the Map (the cinematic 404)
 
-> **Status:** 🟡 specced 2026-07-09 (owner-greenlit for spec at the
-> [WONDER-AUDIT](../WONDER-AUDIT-2026-07.md) §5 review), **pending build
-> greenlight.** Owner brief: *"very unique, with amazing cinematic animations
-> and interactions, and a clear way to navigate to the homepage. Assets can be
-> downloaded if they provide value."*
+> **Status:** ✅ **built 2026-07-10.** Owner brief: *"very unique, with amazing
+> cinematic animations and interactions, and a clear way to navigate to the
+> homepage. Assets can be downloaded if they provide value."*
 >
 > **Read first:** [CLAUDE.md](../../../CLAUDE.md) §2–§4,
 > [DESIGN-SYSTEM](../DESIGN-SYSTEM.md), [common-ai-signs](../common-ai-signs.md).
+>
+> ### ⚠️ Build deviations from this spec (owner feedback 2026-07-10 — *function first*)
+> The first build followed §3 literally and the owner pushed back: the wow only
+> works if the page is obviously usable. So the shipped page **re-prioritises
+> clarity + the way home over the ceremony**:
+> - **The footer is hidden on this route** (Layout `is404` guard). A 404 owns its
+>   whole viewport; a conversion footer under it is noise and forces a scroll.
+> - **The whole scene fits one viewport with no scroll** (desktop + mobile). The
+>   astrolabe was shrunk to a compact centerpiece (`clamp(150px,22vw,240px)`) so
+>   the message + CTAs are never pushed off-screen.
+> - **It reads as a 404 instantly:** a literal `404 · page not found` tag leads
+>   the copy (the number is universal; the eyebrow adds voice). The default
+>   `chronicle` title changed from the cryptic "Here be dragons." to the clear
+>   **"You've sailed off the map."**
+> - **CTA hierarchy inverted from §3:** the way home is now the **prominent
+>   primary** (`.btn-primary` solid pill, `void.home` → "Back to the homepage"),
+>   and **"Find your bearing"** is a clearly-subordinate ghost-text delight that
+>   only spins the instrument. The needle still decelerates to lock at N (a
+>   pointer toward the home button), but it **no longer gates or "ignites" the
+>   home link** — home is always the obvious action. The live bearing readout was
+>   dropped for compactness.
+>
+> The atmosphere (uncharted sky + sparse starfield, ember aura, edge-of-chart
+> fog, vignette, the serpent constellation, the distressed wander) all shipped as
+> specced below. The `distressed`/`findBearing`/`onLock` astrolabe API is intact.
 
 ---
 
@@ -179,15 +202,20 @@ the same change (docs/code never diverge).
 
 ## 9. Build tasks
 
-- [ ] `distressed` option in `src/lib/astrolabe.js` (wander behavior + `lost`
-      readout state) — additive, hero behavior untouched.
-- [ ] The serpent constellation (seeded points + polyline) in the same canvas.
-- [ ] Fog utilities (shared with the [Threshold loader](10-the-threshold-loading.md) —
-      build once): back-bank + drift keyframes on theme tokens; retire or reuse
-      the orphaned `herofog` keyframes.
-- [ ] `src/pages/Void.jsx` (scene + wayfinding) wired as `path="*"`, lazy +
-      ErrorBoundary; SEO title/noindex effect.
-- [ ] `void.*` keys authored in all 10 bundles, in character; parity-checked.
-- [ ] Analytics events (`void_view`/`void_bearing`/`void_home`) + ANALYTICS.md.
-- [ ] Verify per §8 (headless screenshots dark+light, reduced-motion, mobile).
-- [ ] Cross-link status back in [WONDER-AUDIT](../WONDER-AUDIT-2026-07.md) §5.
+- [x] `distressed` option in `src/lib/astrolabe.js` (wander behavior + lock via
+      `findBearing()`/`onLock`) — additive, hero behavior untouched. Wander is
+      centered on N (the compass fighting to settle, not idling east).
+- [x] The serpent constellation (seeded points + polyline) in the same canvas.
+- [x] Fog utilities (shared-ready with the [Threshold loader](10-the-threshold-loading.md)):
+      `fog-drift`/`fog-drift-reverse` keyframes + a new `--color-fog-rgb` token
+      per sky (a pale mist *above* the ground, not `--color-primary`); the
+      orphaned `herofog` keyframe was retired.
+- [x] `src/pages/Void.jsx` (scene + wayfinding) wired as `path="*"`, lazy +
+      ErrorBoundary; SEO title/noindex effect. Footer hidden via Layout `is404`.
+- [x] `void.*` keys authored in all 10 bundles, in character; parity-checked
+      (all 6 keys × 10 voices). Default voices lead with a clear "page not found".
+- [x] Analytics events (`void_view`/`void_bearing`/`void_home`) fire from Void.jsx.
+- [x] Verified headless: dark+light (1280/1440), mobile 390×844 (fits, no scroll),
+      find-bearing locks N, `document.title`+noindex set, zero console errors,
+      `npm run build` clean.
+- [x] Cross-linked status back in [WONDER-AUDIT](../WONDER-AUDIT-2026-07.md) §5.

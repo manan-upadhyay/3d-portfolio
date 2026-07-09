@@ -496,4 +496,13 @@ export default {
   makingOf: {
     back: 'Okay, back to the good stuff',
   },
+
+  void: {
+    eyebrow: 'wrong turn',
+    title: 'I’m not lost. I am exploring.',
+    body: 'Boldly. And with great confidence. But the page you wanted? Not here. Let me walk you back — I know a shortcut.',
+    position: 'allegedly located at: {{path}}',
+    cta: 'Find my bearing',
+    home: 'Back to the World’s Best Portfolio',
+  },
 };

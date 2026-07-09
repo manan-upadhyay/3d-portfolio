@@ -498,4 +498,13 @@ export default {
   makingOf: {
     back: 'Back to the tale',
   },
+
+  void: {
+    eyebrow: 'beyond the wall',
+    title: 'The map is dark and full of terrors.',
+    body: 'You have ridden past the edge of every chart. The realm you seek was never claimed. Turn back before the night takes you.',
+    position: 'last raven from: {{path}}',
+    cta: 'Find your heading',
+    home: 'Return to the realm',
+  },
 };

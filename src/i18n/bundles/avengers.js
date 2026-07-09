@@ -499,4 +499,13 @@ export default {
   makingOf: {
     back: 'Back to the mission',
   },
+
+  void: {
+    eyebrow: 'signal lost',
+    title: 'We’ve lost telemetry.',
+    body: 'Mission control has no data on this sector. The coordinates resolve to empty space. Recommend immediate RTB.',
+    position: 'last known signal: {{path}}',
+    cta: 'Recalibrate nav',
+    home: 'Return to base',
+  },
 };

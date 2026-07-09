@@ -436,4 +436,13 @@ export default {
   makingOf: {
     back: 'Back to the portfolio',
   },
+
+  void: {
+    eyebrow: 'page not found',
+    title: 'This page doesn’t exist.',
+    body: 'The link may be broken or the page may have moved. Head back to the homepage to keep exploring.',
+    position: 'path: {{path}}',
+    cta: 'Spin the compass',
+    home: 'Back to homepage',
+  },
 };

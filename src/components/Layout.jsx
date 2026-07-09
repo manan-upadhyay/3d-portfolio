@@ -18,7 +18,6 @@ import Cursor from './Cursor';
 import SkyControl from './SkyControl';
 import ControlCluster from './ControlCluster';
 import MobileMenu from './MobileMenu';
-import MobileVoiceMark from './MobileVoiceMark';
 import DayNightToggle from './DayNightToggle';
 import EasterEggListener from './EasterEggListener';
 import VoiceTransition from './VoiceTransition';
@@ -52,6 +51,10 @@ const Layout = () => {
   const isDark = resolvedTheme === 'dark';
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  // The catch-all 404 ("Off the Map") is a self-contained full-viewport scene
+  // with its own way home — so it drops the global conversion footer (a footer
+  // under a not-found page is noise, and it would force a scroll past the fold).
+  const is404 = pathname !== '/' && pathname !== '/making-of';
   useSmoothScroll();
   const activeId = useActiveSection();
   useEngagementAnalytics(activeId, pathname); // section_view + scroll_depth
@@ -121,7 +124,6 @@ const Layout = () => {
       <div className="md:hidden fixed top-4 right-4 z-40"><DayNightToggle /></div>
       <div className="hidden md:contents"><ControlCluster activeId={activeId} /></div>
       <MobileMenu activeId={activeId} />
-      <MobileVoiceMark />
       <EasterEggListener />
       <VoiceTransition />
       <VoiceHall />
@@ -130,7 +132,9 @@ const Layout = () => {
       <Outlet context={{ activeId }} />
 
       {/* Final conversion scene — the journey closes on a clear ask, not a dead
-          end (v1.1 Workstream B). Doubles as the /making-of closing CTA. */}
+          end (v1.1 Workstream B). Doubles as the /making-of closing CTA. Hidden
+          on the 404, which owns its whole viewport. */}
+      {!is404 && (
       <footer className="border-t" style={{ borderColor: 'var(--color-card-border)' }}>
         <div className="max-w-3xl mx-auto px-6 py-20 text-center">
           <h2 className="font-chronicle font-semibold leading-[1.05] text-[clamp(32px,5vw,54px)]" style={{ color: 'var(--color-text)' }}>
@@ -182,6 +186,7 @@ const Layout = () => {
           </p>
         </div>
       </footer>
+      )}
 
       <Analytics />
       <SpeedInsights />

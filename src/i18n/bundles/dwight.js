@@ -494,4 +494,13 @@ export default {
   makingOf: {
     back: 'Return to the survey',
   },
+
+  void: {
+    eyebrow: 'unauthorized location',
+    title: 'You have left the designated area.',
+    body: 'FACT: this page does not exist. FACT: you navigated here yourself. I have already reported the breach. Return to headquarters immediately.',
+    position: 'unauthorized coordinates: {{path}}',
+    cta: 'Recalibrate position',
+    home: 'Return to headquarters',
+  },
 };
