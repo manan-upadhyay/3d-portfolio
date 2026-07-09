@@ -531,9 +531,9 @@ export const atelier = {
   // NON-COPY data only (real event names, counts, capability chips); every label
   // is voiced under t('atelier.observatory.*'). Drives the Observatory component.
   // Sourced from the live code (re-counted 2026-07-08, audit follow-up):
-  //   events     → grep of track()/trackOnce()/capture() across src = 48 distinct
+  //   events     → grep of track()/trackOnce()/capture() across src = 50 distinct
   //                named product events; session_recap is the aggregating hub. The
-  //                constellation below visualises a curated subset of 39; drill-down
+  //                constellation below visualises a curated subset of 40; drill-down
   //                events (atlas_node_open, mobile_menu_view, egg_show,
   //                ledger_expand ids, portrait_interact, voice_clue_*) fire too
   //                but are omitted here to keep the map readable.
@@ -549,11 +549,11 @@ export const atelier = {
     // the two vanity metrics (21 super-properties, 2 webhook routes) were dropped
     // to drain the page's "number soup"; events / dashboards / schemas remain.
     metrics: [
-      { key: 'events', value: '48', count: true },
+      { key: 'events', value: '50', count: true },
       { key: 'dashboards', value: '5', count: true },
       { key: 'schemas', value: '5', count: true },
     ],
-    // The product-event constellation — the 39 curated events grouped by the surface
+    // The product-event constellation — the 40 curated events grouped by the surface
     // they instrument, all orbiting the `session_recap` hub. Each event is the real
     // event id + `where` it fires (technical narration, EN-only — exempt from voice
     // translation like the capability `tags`) + `once` (true = trackOnce, i.e. once
@@ -589,6 +589,7 @@ export const atelier = {
           { id: 'marginalia_reveal', where: 'A flavor↔fact footnote revealed', once: true },
           { id: 'atlas_explore', where: 'Codebase Atlas explored', once: true },
           { id: 'observatory_explore', where: 'Analytics constellation explored', once: true },
+          { id: 'blueprint_explore', where: 'The system blueprint explored', once: true },
         ] },
         { id: 'realms', events: [
           { id: 'carousel_open', where: 'A realm opened in the carousel', once: true },
@@ -625,6 +626,74 @@ export const atelier = {
     ],
   },
   // "The Codebase Atlas" — a curated, annotated subset of the real repo tree (NOT
+  // The Blueprint (Act II) — the runtime system chart: what runs where, and the
+  // only signals that ever leave the visitor's device. NON-COPY data: node ids,
+  // lucide glyph keys, and the desktop chart's layout coordinates on a 1000×560
+  // design grid — the SVG edge layer and the HTML node buttons both read these,
+  // so the drawing and the labels can never drift apart. Gate `sub` captions are
+  // EN-only technical readouts (exempt from voice, like the observatory `where`
+  // strings and the atlas blurbs). All framing copy + every node's name/why is
+  // voiced under t('atelier.blueprint.*') in all ten bundles.
+  // Ground truth (verified 2026-07-09): fonts self-hosted (/fonts), sound
+  // synthesized (0 bytes), raven posts to same-origin /api/send-raven (Resend key
+  // server-side), telemetry = PostHog (cookieless/DNT-off) + Vercel Analytics,
+  // and the recap's ipwho.is lookup is opt-in on /making-of only. Exactly three
+  // outbound signals — the chart claims nothing the network tab won't confirm.
+  blueprint: {
+    traveler: { id: 'traveler', icon: 'user', x: 75, y: 280 },
+    hub: { id: 'shell', icon: 'scroll', x: 330, y: 280 },
+    // Client-realm satellites — a ring around the shell hub.
+    client: [
+      { id: 'motion', icon: 'waves', x: 330, y: 118 },
+      { id: 'narrator', icon: 'mask', x: 198, y: 176 },
+      { id: 'sky', icon: 'cloudsun', x: 462, y: 176 },
+      { id: 'sound', icon: 'audio', x: 462, y: 384 },
+      { id: 'memory', icon: 'fingerprint', x: 198, y: 384 },
+    ],
+    // The wall — the client/network boundary. Gaps open only where a gate edge
+    // crosses; everything else stops here.
+    wall: { x: 640, y1: 48, y2: 512 },
+    // The three gates — the ONLY outbound signals. `sub` = the technical readout
+    // (kept plain — no idioms/abbreviations, readable by non-native speakers);
+    // `subShort` is the compact mobile caption.
+    gates: [
+      { id: 'telemetry', icon: 'radar', x: 845, y: 128, sub: 'no cookies · anonymous · off with Do-Not-Track', subShort: 'no cookies · anonymous' },
+      { id: 'raven', icon: 'send', x: 845, y: 280, sub: 'serverless send · the key never leaves the server', subShort: 'key stays on the server' },
+      { id: 'reading', icon: 'mappin', x: 845, y: 432, sub: 'one lookup, only if you ask · this page only', subShort: 'only if you ask' },
+    ],
+    // The ghost edge — what never crosses; dies at the wall with a cross-mark.
+    ghost: { x: 640, y: 505 },
+    // The MOBILE mini-chart — same topology, rotated: the client realm is a
+    // hub-and-spoke cluster ABOVE a horizontal wall; the three gate edges fan
+    // DOWN from beneath the hub, cross the wall at its only gaps, and land on
+    // the gates below. Its own 390×610 design grid (not a shrunk desktop).
+    mobile: {
+      w: 390, h: 610,
+      traveler: { x: 66, y: 58 },
+      hub: { x: 195, y: 235 },
+      client: {
+        motion: { x: 195, y: 113 },
+        narrator: { x: 94, y: 167 },
+        sky: { x: 296, y: 167 },
+        sound: { x: 296, y: 303 },
+        memory: { x: 94, y: 303 },
+      },
+      // The gate fan leaves from BELOW the hub's label (hub.y + fanDrop) so the
+      // centre edge never strikes the hub's own caption.
+      fanDrop: 55,
+      wall: { y: 420, x1: 14, x2: 376 },
+      gates: {
+        telemetry: { x: 78, y: 512 },
+        raven: { x: 195, y: 512 },
+        reading: { x: 312, y: 512 },
+      },
+      // The ghost leaves from the cluster's right flank (not the hub) so its
+      // dashed line clears "The sound" station's caption on the way down.
+      ghostStart: { x: 330, y: 243 },
+      ghost: { x: 346, y: 420 },
+    },
+  },
+
   // the filesystem; depth/breadth chosen for story). Drives CodebaseAtlas.jsx.
   // `blurb`/`signal` are technical narration (EN-only, exempt from voice like the
   // capability `tags`); the framing copy is voiced under t('atelier.atlas.*').

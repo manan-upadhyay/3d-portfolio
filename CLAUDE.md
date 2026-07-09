@@ -252,6 +252,8 @@ clean, and it looks like a *moment* — not a list.
 | [sections/06-map-overlay.md](docs/chronicle/sections/06-map-overlay.md) | Interactive map (⌘K) |
 | [sections/07-the-atelier.md](docs/chronicle/sections/07-the-atelier.md) | Making-of revamp (acts, Observatory interaction model, webhooks/alerting) |
 | [sections/08-codebase-atlas.md](docs/chronicle/sections/08-codebase-atlas.md) | Cinematic codebase explorer (new) |
+| [sections/09-off-the-map-404.md](docs/chronicle/sections/09-off-the-map-404.md) | The cinematic 404 — "Off the Map" (specced, pending greenlight) |
+| [sections/10-the-threshold-loading.md](docs/chronicle/sections/10-the-threshold-loading.md) | Loading states — the fog Threshold loader (specced, pending greenlight) |
 
 ---
 

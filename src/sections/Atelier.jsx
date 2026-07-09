@@ -8,7 +8,7 @@ import { atelier } from '../constants';
 import { requestSection } from '../lib/smoothScroll';
 import { track } from '../lib/analytics';
 import { useVoiceStore } from '../store/useVoiceStore';
-import { ChapterHeading, ScrollReveal, CountUp, CommitGraph, Observatory, CodebaseAtlas, PersonaTriptych, FaceParticles, CompassRose, ExpeditionRecap } from '../components';
+import { ChapterHeading, ScrollReveal, CountUp, CommitGraph, Observatory, Blueprint, CodebaseAtlas, PersonaTriptych, FaceParticles, CompassRose, ExpeditionRecap } from '../components';
 
 /* lucide glyph per field-guide entry (icon id → component). */
 const EGG_ICONS = { compass: Compass, refresh: RefreshCcw, lens: ScanSearch, audio: AudioLines, sky: CloudSun, drama: Drama, map: Map, send: Send, fingerprint: Fingerprint, terminal: Terminal };
@@ -247,7 +247,23 @@ const Atelier = () => {
             instruments — the Observatory (analytics/SEO/observability + the Discord
             alert path) and the Codebase Atlas (structure as proof of craft). */}
         <Act num="II" id="engine" eyebrow={t('atelier.acts.engine')}>
+          {/* The Blueprint OPENS the act (owner call, 2026-07-09): it is the
+              overview — the whole machine on one chart, payload readable with
+              zero interaction — and the two instruments below it are the
+              drill-downs (Observatory = how it watches itself, Atlas = how the
+              files sit). Overview before detail; the act's highest-value
+              artifact lands while attention is freshest. */}
           <ScrollReveal direction="up">
+            <Instrument
+              label={t('atelier.blueprint.eyebrow')}
+              title={t('atelier.blueprint.title')}
+              intro={t('atelier.blueprint.intro')}
+            >
+              <Blueprint />
+            </Instrument>
+          </ScrollReveal>
+
+          <ScrollReveal direction="up" className="atelier-instrument--gap">
             <Instrument
               label={t('atelier.observatory.eyebrow')}
               title={t('atelier.observatory.title')}

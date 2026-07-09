@@ -112,7 +112,10 @@ export default {
   arsenal: {
     subtitle: 'The utility belt. Every tool here has been used in an actual fight — I mean project. Hover one and it’ll rat out its friends. Snitches, all of them.',
     coreLabel: 'The Utility Belt',
-    coreLegend: 'the glowy ones are the mains. everything else is a very confident side quest.',
+    coreLegend: 'the ringed ones are the mains. everything else is a very confident side quest.',
+    inventoryLegend: 'marks a main. everything else: confident side quests.',
+    viewChart: 'Fancy Mode',
+    viewInventory: 'Spreadsheet Mode',
   },
 
   works: {
@@ -353,6 +356,34 @@ export default {
         },
       },
     },
+    // The Blueprint — the runtime system chart (Act II). Node ids + geometry are
+    // data in constants.atelier.blueprint; gate captions stay EN-technical there.
+    blueprint: {
+      eyebrow: 'The Behind-the-Scenes Tour',
+      title: 'One set. Three phone calls.',
+      intro: 'Okay, exposition time. This whole movie shoots inside YOUR device. Exactly three calls ever leave the set, and I name every single one — transparency is my third-best quality, after the suit and the humility.',
+      clientZone: 'The set',
+      clientZoneSub: 'shot entirely on location (your device)',
+      beyondZone: 'Off set',
+      beyondZoneSub: 'the only three calls that go out',
+      wall: 'The fourth wall',
+      sealedNote: 'Nothing else gets past it. No cookies, no stalking, no shipped media. Even the fonts live on set. The fourth wall only breaks when I do it.',
+      hint: 'Poke something',
+      readoutRest: 'Every department here has a reason to exist, which is more than I can say for most sequels. Poke around.',
+      nodes: {
+        traveler: { name: 'You (hi!)', why: 'One request, one page, and you’re in. No login, no popup asking about your feelings. You’re welcome.' },
+        shell: { name: 'The set build', why: 'One HTML file with the styles baked in, so it looks finished before the scripts even show up to work. Two locations, one crew.' },
+        motion: { name: 'Stunt coordination', why: 'One clock choreographs every scroll stunt so nobody collides mid-air. On phones we use your native scroll — practical effects, baby.' },
+        narrator: { name: 'The voice cast', why: 'Ten voices, including yours truly — best casting decision of this production. The locked ones don’t exist until you say the magic word. Union rules.' },
+        sky: { name: 'Lighting department', why: 'Checks your clock — NOT your GPS — and lights the set to match. Dawn, day, dusk, night. Zero creep factor.' },
+        sound: { name: 'Foley artist', why: 'Every sound effect is improvised live by the browser. Zero audio files shipped. The foley guy is literally math, and he works for free.' },
+        memory: { name: 'Continuity notes', why: 'Your session notes die when the tab does; the visit count stays in your browser. Nothing leaks to the tabloids.' },
+        telemetry: { name: 'Box office numbers', why: 'Counts the moments, not the audience members. No cookies, no names. Do-Not-Track on? The studio gets nothing. Nada.' },
+        raven: { name: 'The courier', why: 'Your message goes to a serverless back office holding the only key. The browser never touches it. Even I can’t steal it, and I steal everything.' },
+        reading: { name: 'The cameo', why: 'One opt-in IP lookup names your city, shows it to you, keeps nothing. A one-scene appearance. No spin-off.' },
+      },
+    },
+
     atlas: {
       eyebrow: 'The Filing System',
       title: 'Where Everything Lives',

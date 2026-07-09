@@ -114,7 +114,10 @@ export default {
   arsenal: {
     subtitle: 'My armory — every tool here is combat-tested, not tutorial-grade. But the tools aren’t the hero: if I were nothing without the suit, I shouldn’t have it. The hands matter more. Hover one and I’ll show you the squad it runs with. Puny bugs. (And yes, I speak Groot: I am Groot — rough translation, full-stack.)',
     coreLabel: 'The Armory',
-    coreLegend: 'the glowing ones are my heavy hitters — bring me the hard problems',
+    coreLegend: 'the ringed ones are my heavy hitters — bring me the hard problems',
+    inventoryLegend: 'marks a heavy hitter — bring me the hard problems',
+    viewChart: 'Holotable',
+    viewInventory: 'Debrief',
   },
 
   works: {
@@ -355,6 +358,34 @@ export default {
         },
       },
     },
+    // The Blueprint — the runtime system chart (Act II). Node ids + geometry are
+    // data in constants.atelier.blueprint; gate captions stay EN-technical there.
+    blueprint: {
+      eyebrow: 'Mission Schematics',
+      title: 'One base. Three uplinks.',
+      intro: 'Schematics on screen. The entire operation runs inside your device — local processing, no cloud dependency. Exactly three uplinks ever leave the base, each one designated below. FRIDAY, run the tour.',
+      clientZone: 'The base',
+      clientZoneSub: 'all systems run local, on your device',
+      beyondZone: 'Uplink range',
+      beyondZoneSub: 'the only three transmissions',
+      wall: 'The shield perimeter',
+      sealedNote: 'Nothing else transmits. No cookies, no identity beacons, no heavy payloads. Even the fonts are stationed on-base.',
+      hint: 'Select a system',
+      readoutRest: 'Every system on this board earned its slot. Select one for the briefing.',
+      nodes: {
+        traveler: { name: 'You, the recruit', why: 'One request and the doors open — no clearance forms, no S.H.I.E.L.D. paperwork.' },
+        shell: { name: 'The tower', why: 'One structure, armor pre-fitted: styles inlined at build, so it renders before a single script boots. Two wings, one core.' },
+        motion: { name: 'Thrusters', why: 'One clock drives all flight systems — scroll and animation never fight for control. On touch: manual override, native scroll.' },
+        narrator: { name: 'The comms array', why: 'Ten voice channels on one protocol. The classified ones stay encrypted until someone speaks the passphrase. They assemble on demand.' },
+        sky: { name: 'Environmental systems', why: 'Reads your local clock — never your coordinates — and matches the lighting to your actual sky. JARVIS-grade courtesy.' },
+        sound: { name: 'The arc reactor (audio)', why: 'Self-sustaining: every cue synthesized on-device, zero bytes shipped. Clean energy, for the ears.' },
+        memory: { name: 'Mission logs', why: 'Session telemetry self-destructs with the tab; your visit count stays in your own systems. Nothing phones home.' },
+        telemetry: { name: 'Mission control', why: 'Counts engagements, not identities — cookieless, anonymous. Do-Not-Track engages full radio silence.' },
+        raven: { name: 'The courier drone', why: 'Your message uplinks to a serverless relay; the launch codes never touch the browser. Secure channel — whatever it takes.' },
+        reading: { name: 'Satellite pass', why: 'One authorized flyover names your city — displayed to you, logged nowhere. Then the satellite stands down.' },
+      },
+    },
+
     atlas: {
       eyebrow: 'The Blueprint',
       title: 'Where Everything Lives',

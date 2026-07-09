@@ -2233,7 +2233,7 @@ h1, h2, h3, h4, h5, h6 {
    through the compass-rose node into the connective line that hinges the act, so
    it reads as the trail *continuing*, not a section ending. */
 .atelier-bridge {
-  margin: clamp(56px, 9vw, 116px) auto;
+  margin: clamp(56px, 9vw, 76px) auto;
   max-width: 620px;
   display: flex;
   flex-direction: column;
@@ -4022,15 +4022,44 @@ h1, h2, h3, h4, h5, h6 {
 .works-story__caret { transition: transform 0.25s ease; }
 .works-story__caret[data-open] { transform: rotate(180deg); }
 
-/* ── Arsenal luminary suns (D3, refined per owner follow-up) — the primary
-   node's own disc breathes a soft ember glow; no extra ring element (the
-   corona ring sat visually off-center against the label). ── */
-.orbit-sun {
-  animation: sun-breathe 4.2s ease-in-out infinite;
+/* ── Arsenal core-stack marker (v2.0 D3 ×3 — "ringed planet") — the permanent
+   breathing glow washed out the logos (worst on cream); emphasis is now a MARK,
+   not a light: solid card ground under the logo, ember border, and a slow
+   dashed halo ring orbiting the disc. Luminance is reserved for two moments:
+   hover (light as a reward for intent) and a one-time staggered IGNITION pulse
+   when the section first scrolls into view. ── */
+.orbit-disc--sun {
+  border: 1.5px solid rgba(var(--color-ember-rgb), 0.65);
+  background: var(--color-card-bg);
 }
-@keyframes sun-breathe {
-  0%, 100% { box-shadow: 0 0 16px 2px rgba(var(--color-ember-rgb), 0.3), inset 0 0 10px rgba(var(--color-ember-rgb), 0.12); }
-  50%      { box-shadow: 0 0 30px 6px rgba(var(--color-ember-rgb), 0.55), inset 0 0 16px rgba(var(--color-ember-rgb), 0.2); }
+.orbit-halo {
+  position: absolute; inset: -7px; border-radius: 9999px;
+  border: 1px dashed rgba(var(--color-ember-rgb), 0.5);
+  pointer-events: none;
+  animation: orbit-spin 60s linear infinite;
+  transition: border-color 0.3s ease, opacity 0.4s ease;
+}
+.group:hover .orbit-halo, .group:focus-visible .orbit-halo {
+  border-color: rgba(var(--color-ember-rgb), 0.9);
+}
+.group:hover .orbit-disc, .group:focus-visible .orbit-disc {
+  border-color: rgba(var(--color-ember-rgb), 0.5);
+  box-shadow: 0 0 22px rgba(var(--color-ember-rgb), 0.26), inset 0 0 12px rgba(var(--color-ember-rgb), 0.1);
+}
+.group:hover .orbit-disc--sun, .group:focus-visible .orbit-disc--sun {
+  border-color: rgba(var(--color-ember-rgb), 0.95);
+  box-shadow: 0 0 30px rgba(var(--color-ember-rgb), 0.4), inset 0 0 14px rgba(var(--color-ember-rgb), 0.16);
+}
+/* One-time ignition — each sun blooms once (staggered by --ignite-i) as the
+   field first enters view, then settles back to the quiet ringed state. */
+.orbit-ignite {
+  animation: sun-ignite 1.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(0.25s + var(--ignite-i, 0) * 0.18s);
+}
+@keyframes sun-ignite {
+  0%   { box-shadow: 0 0 0 0 rgba(var(--color-ember-rgb), 0); }
+  38%  { box-shadow: 0 0 36px 10px rgba(var(--color-ember-rgb), 0.5), inset 0 0 16px rgba(var(--color-ember-rgb), 0.28); }
+  100% { box-shadow: 0 0 0 0 rgba(var(--color-ember-rgb), 0); }
 }
 .orbit-legend {
   display: flex; align-items: center; justify-content: center; gap: 9px;
@@ -4040,17 +4069,95 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--color-text-muted);
 }
 .orbit-legend__sun {
-  width: 9px; height: 9px; border-radius: 50%; flex: none;
-  background: rgba(var(--color-ember-rgb), 0.5);
-  box-shadow: 0 0 8px rgba(var(--color-ember-rgb), 0.6);
-  animation: legend-breathe 4.2s ease-in-out infinite;
+  position: relative; width: 13px; height: 13px; border-radius: 50%; flex: none;
+  border: 1px dashed rgba(var(--color-ember-rgb), 0.6);
 }
-@keyframes legend-breathe {
-  0%, 100% { opacity: 0.6; }
-  50%      { opacity: 1; }
+.orbit-legend__sun::after {
+  content: ''; position: absolute; inset: 3px; border-radius: 50%;
+  background: rgba(var(--color-ember-rgb), 0.8);
 }
+.orbit-legend__star { color: var(--color-ember); font-size: 12px; line-height: 1; flex: none; }
+
+/* ── Arsenal view toggle — sky-chart ⇄ inventory. Quiet segmented control at
+   the field's top-right; the active thumb slides via framer layoutId. ── */
+.arsenal-view {
+  position: absolute; top: -6px; right: 0; z-index: 20;
+  display: inline-flex; padding: 3px; border-radius: 999px;
+  border: 1px solid var(--color-card-border);
+  background: var(--color-card-bg);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.arsenal-view__btn {
+  position: relative; display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 13px; border-radius: 999px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 10.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--color-text-muted);
+  transition: color 0.25s ease;
+}
+.arsenal-view__btn:hover { color: var(--color-text); }
+.arsenal-view__btn[aria-pressed="true"] { color: var(--color-ember); }
+.arsenal-view__glyph, .arsenal-view__txt { position: relative; z-index: 1; display: grid; place-items: center; }
+.arsenal-view__thumb {
+  position: absolute; inset: 0; border-radius: 999px;
+  background: rgba(var(--color-ember-rgb), 0.09);
+  border: 1px solid rgba(var(--color-ember-rgb), 0.35);
+}
+
+/* ── Arsenal inventory — the cartographer's manifest: the same sky, committed
+   to paper. An editorial three-column index (numbered groups, ruled rows);
+   deliberately static — rows are not interactive, so no hover response (W4). ── */
+.arsenal-inv { position: absolute; inset: 0; display: grid; place-items: center; }
+.arsenal-inv__grid {
+  width: 100%;
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  column-gap: 52px; align-items: start;
+  padding: 0 6px;
+}
+.arsenal-inv__head { display: flex; align-items: baseline; gap: 10px; }
+.arsenal-inv__no {
+  font-family: ui-monospace, "SFMono-Regular", monospace;
+  font-size: 11px; letter-spacing: 0.18em;
+  color: var(--color-ember); opacity: 0.85;
+}
+.arsenal-inv__cat { font-size: 19px; font-weight: 600; color: var(--color-text); }
+.arsenal-inv__rule {
+  display: block; height: 1px; margin-top: 10px;
+  background: linear-gradient(90deg, rgba(var(--color-ember-rgb), 0.55), var(--color-card-border) 60%, transparent);
+}
+.arsenal-inv__rows { margin-top: 4px; list-style: none; padding: 0; }
+.arsenal-inv__row { position: relative; display: flex; align-items: center; gap: 12px; padding: 11px 2px; }
+.arsenal-inv__glyph {
+  position: relative; z-index: 2; width: 26px; height: 26px; padding: 4px;
+  display: grid; place-items: center; flex: none;
+  /* the little docked "planet" — also keeps dark wordmarks (Splunk, Next)
+     legible on the ink page, same job the orbit disc does in the sky */
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  border-radius: 50%;
+}
+.arsenal-inv__glyph img { width: 100%; height: 100%; object-fit: contain; }
+.arsenal-inv__name { font-size: 14px; font-weight: 500; letter-spacing: 0.01em; color: var(--color-text); }
+.arsenal-inv__row[data-primary] .arsenal-inv__name { color: var(--color-ember); font-weight: 600; }
+.arsenal-inv__star { margin-left: auto; font-size: 11px; color: var(--color-ember); opacity: 0.9; }
+.arsenal-inv__line {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+  background: var(--color-card-border);
+}
+
+/* Transition gates — while the field is mid-flight, the per-node CSS
+   transitions (and React-managed label opacities) must not fight the GSAP
+   timeline; the orchestrator adds/removes these classes around the flip. */
+.is-departing [data-orbit-node], .is-departing [data-orbit-disc], .is-departing [data-orbit-label],
+.is-arriving [data-orbit-disc] { transition: none !important; }
+.is-arriving [data-orbit-label] { opacity: 0 !important; transition: none !important; }
+/* the halo keeps its opacity transition so it fades back in when the gate lifts */
+.is-arriving .orbit-halo { opacity: 0 !important; }
+/* mid-flight the field is scenery, not UI */
+.is-departing [data-orbit-node], .is-arriving [data-orbit-node] { pointer-events: none; }
+
 @media (prefers-reduced-motion: reduce) {
-  .orbit-sun, .orbit-legend__sun { animation: none; }
+  .orbit-halo, .orbit-ignite { animation: none; }
 }
 
 /* ── Contact panels (v2.0 rounds 3–4) — cards on desktop; on phones the cards
@@ -4103,4 +4210,271 @@ h1, h2, h3, h4, h5, h6 {
   input[type='text'], input[type='email'], input:not([type]), textarea, select {
     font-size: 16px;
   }
+}
+
+/* ============================================================================
+   The Blueprint — Act II runtime system chart (Blueprint.jsx).
+   Desktop (≥1024px): an authored cartographer's chart on a 1000×560 design
+   grid — SVG draws geometry only; the stations are real positioned buttons.
+   Mobile: a bespoke vertical signal trail (NOT a shrunk chart).
+   All color via theme tokens — correct in every sky, both themes.
+   ========================================================================= */
+.blueprint { margin-top: 36px; }
+
+/* --- zones (the two territories) --- */
+.blueprint__zone { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.blueprint__zone-name {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+.blueprint__zone--beyond .blueprint__zone-name { color: var(--color-ember); }
+.blueprint__zone-sub { font-size: 12px; color: var(--color-text-muted); }
+
+/* ------------------------------------------------------------- desktop --- */
+.blueprint__chart { max-width: 1040px; margin-inline: auto; }
+.blueprint__zones { display: flex; align-items: flex-end; gap: 20px; padding: 0 4px 10px; }
+.blueprint__zones .blueprint__zone--beyond { flex: 1; padding-left: 26px; }
+
+.blueprint__stage { position: relative; }
+.blueprint__svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+/* edges — dash-drawn in once the chart scrolls into view (pathLength trick) */
+.bp-edge {
+  stroke: rgba(var(--color-gold-rgb), 0.34);
+  stroke-width: 1;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.9s ease var(--d, 0s), opacity 0.35s ease;
+}
+.is-drawn .bp-edge { stroke-dashoffset: 0; }
+.bp-edge--gate { stroke: rgba(var(--color-ember-rgb), 0.44); }
+.bp-arrow {
+  fill: none;
+  stroke: rgba(var(--color-ember-rgb), 0.7);
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  opacity: 0;
+  transition: opacity 0.5s ease 1.1s;
+}
+.is-drawn .bp-arrow { opacity: 1; }
+
+/* selection — dim the field, light the chosen thread (hub lights everything) */
+.blueprint__chart[data-active] .bp-edge,
+.blueprint__chart[data-active] .bp-arrow { opacity: 0.18; }
+.blueprint__chart[data-active='shell'] .bp-edge,
+.blueprint__chart[data-active='shell'] .bp-arrow,
+.blueprint__chart[data-active='traveler'] .bp-edge--traveler,
+.blueprint__chart[data-active='motion'] .bp-edge--motion,
+.blueprint__chart[data-active='narrator'] .bp-edge--narrator,
+.blueprint__chart[data-active='sky'] .bp-edge--sky,
+.blueprint__chart[data-active='sound'] .bp-edge--sound,
+.blueprint__chart[data-active='memory'] .bp-edge--memory,
+.blueprint__chart[data-active='telemetry'] .bp-edge--telemetry,
+.blueprint__chart[data-active='raven'] .bp-edge--raven,
+.blueprint__chart[data-active='reading'] .bp-edge--reading { opacity: 1; }
+
+/* the wall — a double rule, broken only at the three gates */
+.bp-wall line { stroke: rgba(var(--color-gold-rgb), 0.55); stroke-width: 1.1; }
+.bp-wall__gate { fill: var(--color-ember); opacity: 0.9; }
+.blueprint__wall-label {
+  position: absolute;
+  top: 1.5%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  background: var(--color-primary);
+  padding: 0 8px;
+  white-space: nowrap;
+}
+
+/* the ghost edge — what tries to leave and dies at the wall */
+.bp-ghost {
+  stroke: color-mix(in srgb, var(--color-text-muted) 55%, transparent);
+  stroke-width: 1;
+  stroke-dasharray: 3 7;
+}
+.bp-ghost__x line { stroke: var(--color-error); stroke-width: 1.4; stroke-linecap: round; opacity: 0.75; }
+.blueprint__sealed {
+  position: absolute;
+  transform: translateY(-50%);
+  max-width: 31ch;
+  text-align: right;
+  font-size: 11.5px;
+  line-height: 1.55;
+  font-style: italic;
+  color: var(--color-text-muted);
+}
+
+/* stations — the disc + label as one focusable button */
+.bp-node {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  width: max-content;
+  max-width: 168px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+.bp-node__disc {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  border: 1px solid rgba(var(--color-gold-rgb), 0.55);
+  color: var(--color-gold);
+  box-shadow: 0 0 0 5px var(--color-primary);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
+}
+.bp-node--hub .bp-node__disc {
+  width: 60px;
+  height: 60px;
+  border-width: 1.5px;
+  box-shadow: 0 0 0 5px var(--color-primary), 0 0 0 6px rgba(var(--color-gold-rgb), 0.18);
+}
+.bp-node--traveler .bp-node__disc { border-style: dashed; color: var(--color-text-muted); }
+.bp-node--gate .bp-node__disc {
+  border-color: rgba(var(--color-ember-rgb), 0.6);
+  color: var(--color-ember);
+  border-radius: 14px;
+}
+.bp-node__name {
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--color-text);
+  white-space: nowrap;
+  transition: color 0.25s ease;
+}
+.bp-node__sub { font-size: 10px; line-height: 1.4; color: var(--color-text-muted); white-space: nowrap; }
+.bp-node:hover .bp-node__disc,
+.bp-node.is-active .bp-node__disc {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 5px var(--color-primary), 0 0 18px rgba(var(--color-gold-rgb), 0.35);
+}
+.bp-node--gate:hover .bp-node__disc,
+.bp-node--gate.is-active .bp-node__disc {
+  border-color: var(--color-ember);
+  box-shadow: 0 0 0 5px var(--color-primary), 0 0 18px rgba(var(--color-ember-rgb), 0.4);
+}
+.bp-node:hover .bp-node__name, .bp-node.is-active .bp-node__name { color: var(--color-gold); }
+.bp-node--gate:hover .bp-node__name, .bp-node--gate.is-active .bp-node__name { color: var(--color-ember); }
+.bp-node:focus-visible { outline: none; }
+.bp-node:focus-visible .bp-node__disc {
+  border-color: var(--color-ember);
+  box-shadow: 0 0 0 5px var(--color-primary), 0 0 0 7px rgba(var(--color-ember-rgb), 0.45);
+}
+
+/* the readout — the decision behind the selected station */
+.blueprint__readout {
+  position: relative;
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 82px;
+  padding: 15px 20px 15px 24px;
+  border: 1px solid var(--color-card-border);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--color-card-bg) 92%, transparent);
+  overflow: hidden;
+}
+.blueprint__readout::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--color-gold);
+  opacity: 0.35;
+  transition: opacity 0.3s ease, background 0.3s ease;
+}
+.blueprint__readout.is-active::before { opacity: 1; }
+.blueprint__readout--gate::before { background: var(--color-ember); }
+.blueprint__readout-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.blueprint__readout-dot {
+  flex: none;
+  align-self: center;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-gold);
+  box-shadow: 0 0 8px var(--color-gold);
+  animation: obsReadoutDot 2.6s ease-in-out infinite;
+}
+.blueprint__readout--gate .blueprint__readout-dot { background: var(--color-ember); box-shadow: 0 0 8px var(--color-ember); }
+.blueprint__readout-name { font-size: 16.5px; color: var(--color-text); }
+.blueprint__readout-sub { font-size: 10.5px; color: var(--color-text-muted); }
+.blueprint__readout-why { font-size: 13.5px; line-height: 1.6; color: var(--color-text-muted); max-width: 74ch; }
+
+/* -------------------------------------------------------------- mobile --- */
+/* The mini-chart: same hub-and-spoke topology, rotated — cluster above a
+   horizontal wall, gates beneath. Compact station sizing for a 390px grid. */
+.blueprint__chart--m { max-width: 430px; margin-inline: auto; }
+.blueprint__zone--m { margin-bottom: 12px; }
+
+.bp-node--compact { max-width: 118px; gap: 6px; }
+.bp-node--compact .bp-node__disc { width: 40px; height: 40px; box-shadow: 0 0 0 4px var(--color-primary); }
+.bp-node--compact.bp-node--hub .bp-node__disc {
+  width: 52px;
+  height: 52px;
+  box-shadow: 0 0 0 4px var(--color-primary), 0 0 0 5px rgba(var(--color-gold-rgb), 0.18);
+}
+.bp-node--compact .bp-node__name { font-size: 11.5px; white-space: normal; text-align: center; line-height: 1.2; }
+.bp-node--compact .bp-node__sub { font-size: 9px; white-space: normal; text-align: center; max-width: 112px; line-height: 1.35; }
+.bp-node--compact:hover .bp-node__disc { box-shadow: 0 0 0 4px var(--color-primary); border-color: rgba(var(--color-gold-rgb), 0.55); }
+.bp-node--compact.is-active .bp-node__disc {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 4px var(--color-primary), 0 0 16px rgba(var(--color-gold-rgb), 0.4);
+}
+.bp-node--compact.bp-node--gate.is-active .bp-node__disc {
+  border-color: var(--color-ember);
+  box-shadow: 0 0 0 4px var(--color-primary), 0 0 16px rgba(var(--color-ember-rgb), 0.45);
+}
+
+/* the wall's name on the horizontal wall — knocked out of the rules, left end */
+.blueprint__wall-label--m {
+  left: 10px;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+}
+.blueprint__wall-label--m svg { color: var(--color-error); opacity: 0.8; }
+
+/* the far territory's name, sitting just under the wall on the right */
+.blueprint__zone--mbeyond {
+  position: absolute;
+  right: 4px;
+  text-align: right;
+  align-items: flex-end;
+}
+.blueprint__zone--mbeyond .blueprint__zone-sub { font-size: 10.5px; }
+
+.blueprint__sealed--m {
+  position: static;
+  transform: none;
+  max-width: none;
+  text-align: left;
+  margin: 10px 2px 0;
+  font-size: 12px;
+}
+.blueprint__chart--m .blueprint__readout { margin-top: 16px; padding: 13px 16px 13px 20px; min-height: 92px; }
+
+/* reduced motion — everything lands instantly; nothing pulses */
+@media (prefers-reduced-motion: reduce) {
+  .bp-edge { stroke-dashoffset: 0; transition: none; }
+  .bp-arrow { opacity: 1; transition: none; }
+  .blueprint__readout-dot { animation: none; }
+  .bp-node__disc { transition: none; }
 }

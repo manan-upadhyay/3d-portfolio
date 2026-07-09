@@ -32,6 +32,7 @@ export const CONFIG = {
   theme: { peak: 0.10, dur: 0.62 }, // theme-toggle swoosh (length-synced to the wipe)
   mapOpen: { peak: 0.09 },          // map-open swoosh
   mapClose: { peak: 0.08 },         // map-close swoosh
+  chartSwap: { peak: 0.1 },         // arsenal orbit⇄inventory fold/unfurl
   error: { peak: 0.16 },            // contact-form error tone (sleek two-note)
   glitch: { peak: 0.10 },           // voice-change decode
   blip: { peak: 0.11 },             // arsenal hover pluck
@@ -199,6 +200,21 @@ const CUES = {
   // Map closes — a shorter, gentle downward fall (the chart rolling shut).
   mapClose(t0) {
     swoosh(t0, { dur: 0.38, peak: CONFIG.mapClose.peak, from: 1400, to: 260, q: 0.6 });
+  },
+
+  // Arsenal view swap, orbit → inventory — the sky committed to paper: a soft
+  // downward fold that lands on a low "settle" as the last row docks.
+  chartFold(t0) {
+    swoosh(t0, { dur: 0.55, peak: CONFIG.chartSwap.peak, from: 1300, to: 240, q: 0.7 });
+    blip(t0 + 0.45, { freq: 150, glideTo: 100, type: 'triangle', dur: 0.16, peak: CONFIG.chartSwap.peak * 0.8, attack: 0.004 });
+  },
+
+  // Arsenal view swap, inventory → orbit — the page unfurls back into sky: an
+  // upward swell that blooms into a soft high resolve as the rings redraw.
+  chartUnfurl(t0) {
+    swoosh(t0, { dur: 0.6, peak: CONFIG.chartSwap.peak, from: 240, to: 1500, q: 0.7 });
+    blip(t0 + 0.45, { freq: 659.25, type: 'sine', dur: 0.22, peak: CONFIG.chartSwap.peak * 0.55, attack: 0.006 });
+    blip(t0 + 0.45, { freq: 1318.5, type: 'sine', dur: 0.12, peak: CONFIG.chartSwap.peak * 0.18, attack: 0.004 });
   },
 
   // Arsenal hover — a tiny pluck; pitch varies per node so a sweep across the

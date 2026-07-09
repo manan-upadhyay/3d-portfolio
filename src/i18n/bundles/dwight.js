@@ -108,7 +108,10 @@ export default {
   arsenal: {
     subtitle: 'These are not skills. These are survival competencies. Each one field-tested in combat. Hover one to identify its known associates.',
     coreLabel: 'The Arsenal',
-    coreLegend: 'the burning ones are my primary weapons. fact.',
+    coreLegend: 'the ringed ones are my primary weapons. fact.',
+    inventoryLegend: 'marks a primary weapon. fact.',
+    viewChart: 'Radar',
+    viewInventory: 'Manifest',
   },
 
   works: {
@@ -349,6 +352,34 @@ export default {
         },
       },
     },
+    // The Blueprint — the runtime system chart (Act II). Node ids + geometry are
+    // data in constants.atelier.blueprint; gate captions stay EN-technical there.
+    blueprint: {
+      eyebrow: 'The Perimeter',
+      title: 'One territory. Three sanctioned exits.',
+      intro: 'Study this map. Everything operates inside your device — the territory. Exactly three transmissions are permitted through the perimeter. All others are neutralized. Fact.',
+      clientZone: 'The territory',
+      clientZoneSub: 'all operations run on your device',
+      beyondZone: 'Beyond the perimeter',
+      beyondZoneSub: 'sanctioned transmissions only',
+      wall: 'The perimeter',
+      sealedNote: 'Nothing else gets out. No cookies, no identity, no media payloads. The fonts are grown on-site, like my beets.',
+      hint: 'Interrogate a station',
+      readoutRest: 'Every post has a purpose. Inspect them. I have already inspected you.',
+      nodes: {
+        traveler: { name: 'You, the visitor', why: 'You enter once, through the front. I see you. One request, one page, no detours.' },
+        shell: { name: 'Command post', why: 'One HTML file, styles installed at build. It renders before the scripts report for duty. Two routes, one Layout — chain of command, respected.' },
+        motion: { name: 'Locomotion', why: 'One clock commands all movement. Two clocks would be chaos. On touch devices: native scroll. Use what the land gives you.' },
+        narrator: { name: 'Identity roster', why: 'Ten approved identities. The sealed ones stay dark until the code word is spoken. I respect that protocol deeply.' },
+        sky: { name: 'Weather station', why: 'Reads your clock, never your coordinates. It could find your coordinates. It chooses not to. Discipline.' },
+        sound: { name: 'Alarm systems', why: 'All audio synthesized on-site. Zero bytes shipped. An armory that manufactures its own ammunition. Ideal.' },
+        memory: { name: 'The files', why: 'The session log dies with the tab. The visit count stays in YOUR browser. Nothing leaves. Identity theft is not a joke.' },
+        telemetry: { name: 'Surveillance (ethical)', why: 'Counts events, not people. Cookieless. Anonymous. Do-Not-Track shuts it down instantly. I wish Jim had that setting.' },
+        raven: { name: 'The messenger', why: 'Your message routes through a serverless post. The key never enters the browser. I would trust it with the farm.' },
+        reading: { name: 'Reconnaissance', why: 'One IP lookup, only if you request it, shown to you, then destroyed. That is how you run recon.' },
+      },
+    },
+
     atlas: {
       eyebrow: 'The Filing Protocol',
       title: 'Every File In Its Place',

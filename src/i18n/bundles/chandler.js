@@ -112,7 +112,10 @@ export default {
   arsenal: {
     subtitle: 'My skills. Could there BE any more of them? Hover one — it’ll tell you which tools it hangs out with. They’re a very codependent group. I relate to them deeply.',
     coreLabel: 'The Skills',
-    coreLegend: 'the glowing ones are the mains — the rest are, and I cannot stress this enough, also good',
+    coreLegend: 'the ringed ones are the mains — the rest are, and I cannot stress this enough, also good',
+    inventoryLegend: 'marks a main. the rest? also good. I cannot stress this enough.',
+    viewChart: 'Spinny Mode',
+    viewInventory: 'Readable Mode',
   },
 
   works: {
@@ -353,6 +356,34 @@ export default {
         },
       },
     },
+    // The Blueprint — the runtime system chart (Act II). Node ids + geometry are
+    // data in constants.atelier.blueprint; gate captions stay EN-technical there.
+    blueprint: {
+      eyebrow: 'The Floor Plan',
+      title: 'Could this site BE any more self-contained?',
+      intro: 'So here’s the floor plan. Everything runs in your browser — all of it, right there. Exactly three things ever leave, and I labelled each one, because apparently I’m the responsible one now. Nobody saw that coming.',
+      clientZone: 'The apartment',
+      clientZoneSub: 'everything happens in here',
+      beyondZone: 'Across the hall',
+      beyondZoneSub: 'the only three things that ever leave',
+      wall: 'The door',
+      sealedNote: 'Nothing else gets out. No cookies, no identity, no media files. Even the fonts live here — they don’t pay rent, and we don’t talk about it.',
+      hint: 'Tap a room',
+      readoutRest: 'Every room has a story, and most of them are even true. Go ahead, snoop — everyone does.',
+      nodes: {
+        traveler: { name: 'You, the guest', why: 'You knock once and you’re in — no buzzer, no “who is it”, no small talk. The dream.' },
+        shell: { name: 'The living room', why: 'One page with the furniture — the styles — already arranged before the scripts wake up. Two rooms share one layout, and somehow nobody fights about it.' },
+        motion: { name: 'The recliner mechanism', why: 'One clock runs all the moving parts, so the scrolling never does that jerky thing. On phones it’s your native scroll. We know our limits.' },
+        narrator: { name: 'The roommates', why: 'Ten voices in one apartment, and the hidden ones only come out when you say the secret word. It’s like Joey behind the door, but with better vocabulary.' },
+        sky: { name: 'The window', why: 'It checks your clock — not where you live — and matches the light outside. Dawn, day, dusk, night. Zero stalking. We had a meeting about it.' },
+        sound: { name: 'The keyboard in the corner', why: 'Every sound is made up live by the browser. Zero audio files shipped. It plays better than Ross. Low bar, granted.' },
+        memory: { name: 'The junk drawer', why: 'Your session stuff dies with the tab; the visit count stays in your browser. Nothing leaves the drawer. Ever. Like Monica would allow that.' },
+        telemetry: { name: 'The building ledger', why: 'Counts what happens, not who you are — no cookies, no names. Do-Not-Track? The ledger closes. Treeger never knows.' },
+        raven: { name: 'The mail slot', why: 'Your message goes to a serverless mailroom holding the only key — the browser never sees it. Could the delivery BE any more secure?' },
+        reading: { name: 'The peephole', why: 'One opt-in look names your city, shows you, remembers nothing. The least creepy peephole in the building.' },
+      },
+    },
+
     atlas: {
       eyebrow: 'The Filing System',
       title: 'Where Everything Lives',

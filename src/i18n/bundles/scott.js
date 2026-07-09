@@ -111,7 +111,10 @@ export default {
   arsenal: {
     subtitle: 'These are my many talents. Hover one — go ahead, I’ll wait. I’m great at waiting, too. That’s another one.',
     coreLabel: 'My Skillset',
-    coreLegend: 'the glowy ones are the ones I’m REALLY good at. boom.',
+    coreLegend: 'the ones with the ring around them? REALLY good at those. boom.',
+    inventoryLegend: 'star = one of my very best things. boom.',
+    viewChart: 'Fun Mode',
+    viewInventory: 'Serious Mode',
   },
 
   works: {
@@ -352,6 +355,34 @@ export default {
         },
       },
     },
+    // The Blueprint — the runtime system chart (Act II). Node ids + geometry are
+    // data in constants.atelier.blueprint; gate captions stay EN-technical there.
+    blueprint: {
+      eyebrow: 'The Big Board',
+      title: 'Where the magic happens',
+      intro: 'This is the org chart of the website, and everything happens in-house, in your browser. Only three things ever leave the office. That’s called efficiency. Look it up.',
+      clientZone: 'The office',
+      clientZoneSub: 'everything happens right here, in-house',
+      beyondZone: 'Corporate',
+      beyondZoneSub: 'the only three memos we ever send up',
+      wall: 'The wall',
+      sealedNote: 'Nothing else leaves this office. No cookies (Kevin ate them), no tracking, no files. Even the fonts work here full-time.',
+      hint: 'Click somebody',
+      readoutRest: 'Everyone here has a job and I know all of them. Click around. Get to know the team.',
+      nodes: {
+        traveler: { name: 'You, the client', why: 'You walk in once and get the whole tour — no waiting room, no receptionist, no “please hold”. That is the Michael Scott guarantee.' },
+        shell: { name: 'Reception', why: 'One page, styles pre-loaded, so it looks amazing before it even starts working. Like me. Two departments share one office and split the rent perfectly.' },
+        motion: { name: 'Party planning (scrolling)', why: 'One clock runs all the movement so nothing bumps into anything. On phones we let the phone do it — delegation. I invented that.' },
+        narrator: { name: 'The improv troupe', why: 'Ten voices, one of them literally me. The secret ones don’t even show up until you say the magic word. Very exclusive club.' },
+        sky: { name: 'Facilities (lighting)', why: 'The site checks YOUR clock and sets the lighting — dawn, day, dusk, night. Not your location. We are not creeps.' },
+        sound: { name: 'The office band', why: 'Every sound is made up on the spot by the browser. We ship zero audio files. The band never gets paid, because the band is math.' },
+        memory: { name: 'HR files', why: 'Your visit record stays in your own browser. HR here actually protects your information. Take notes, Toby.' },
+        telemetry: { name: 'Accounting', why: 'They count what happens, not who you are. No cookies, no names. If you say Do-Not-Track, accounting goes home early.' },
+        raven: { name: 'The mailroom', why: 'Your message goes to a back office that holds the only key — the browser never sees it. Security level: Threat Level Midnight.' },
+        reading: { name: 'The wildcard', why: 'One time, if you ask, it looks up your city and shows you. Then forgets. Like me with birthdays, except on purpose.' },
+      },
+    },
+
     atlas: {
       eyebrow: 'My Filing System',
       title: 'Where Everything Lives',

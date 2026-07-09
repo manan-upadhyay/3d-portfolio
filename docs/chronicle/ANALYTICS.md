@@ -71,6 +71,7 @@ via autocapture — the list below is our *intentional* product events.)
 | `map_open` / `map_travel` | `Chronicle` / `MapOverlay` | (`id`) | opened the map / jumped a realm? |
 | `rail_nav` | `SideRail` | `id` | navigate via the rail vs free scroll? |
 | `arsenal_tools_hovered` | `Tech` (on scroll-away) | `count` (unique) | explored tools? how many? |
+| `arsenal_view_switched` | `Tech` view toggle | `view: 'orbit'\|'inventory'` | wanted the readable manifest? do people come back to the orbit? |
 | `project_link_open` | `Works` | `project`, `kind` | which project links opened? |
 | `carousel_open` | `Works` Cover | `project` | browsed screenshots? |
 | `works_show_all` | `Works` | — | wanted to see the minor realms? |
@@ -100,6 +101,7 @@ via autocapture — the list below is our *intentional* product events.)
 | `marginalia_reveal` | `Marginalia` | `id` (once/note) | **discovered a flavor↔fact footnote?** |
 | `atlas_explore` / `atlas_node_open` | `CodebaseAtlas` | (`id`) | explored the codebase map / which files draw interest |
 | `observatory_explore` | `Observatory` | — | explored the analytics constellation |
+| `blueprint_explore` / `blueprint_node_open` | `Blueprint` | (`id`) | explored the runtime system chart / which stations draw interest (open = deliberate click/tap; hover is a preview and never fires) |
 | `making_of_enter` / `making_of_exit` | rail / works / map / mobile / **footer** | `from` | how they reach & leave the Atelier |
 | `experience_progress` | `Experience` | `pct` 25/50/75/100 | **how far through the horizontal career journey** (desktop scrub) |
 | `egg_reveal` / `egg_show` | `Atelier` egg cards | `id` | which hidden features they're curious about vs. actually jump to try |

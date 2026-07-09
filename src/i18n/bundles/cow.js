@@ -84,6 +84,9 @@ export default {
     subtitle: 'Moo moo moo moo moo moo moo — moo moo moo moo moo moo moo.',
     coreLabel: 'Moo',
     coreLegend: 'moo moo moo, moo moo MOO',
+    inventoryLegend: 'moo moo MOO',
+    viewChart: 'Moo',
+    viewInventory: 'Moo Moo',
   },
 
   works: {
@@ -254,6 +257,34 @@ export default {
         observability: { title: 'Moo moo', body: 'Moo moo moo moo moo — moo moo Discord. Moo.' },
       },
     },
+    // The Blueprint — the runtime system chart (Act II). Node ids + geometry are
+    // data in constants.atelier.blueprint; gate captions stay EN-technical there.
+    blueprint: {
+      eyebrow: 'Moo',
+      title: 'Moo moo, moo moo moo',
+      intro: 'Moo moo moo moo moo moo — moo moo moo moo. Moo moo moo: moo, moo, moo. Moo.',
+      clientZone: 'Moo',
+      clientZoneSub: 'moo moo moo moo moo',
+      beyondZone: 'Moo moo',
+      beyondZoneSub: 'moo moo moo moo',
+      wall: 'Moo',
+      sealedNote: 'Moo moo moo moo. Moo moo, moo moo, moo moo moo. Moo moo moo moo moo.',
+      hint: 'Moo',
+      readoutRest: 'Moo moo moo moo. Moo moo — moo moo moo moo.',
+      nodes: {
+        traveler: { name: 'Moo (moo)', why: 'Moo moo, moo moo. Moo moo moo moo moo — moo moo, moo moo moo.' },
+        shell: { name: 'Moo', why: 'Moo moo moo moo moo moo — moo moo moo moo moo moo. Moo moo moo moo.' },
+        motion: { name: 'Moooo', why: 'Moo moo moo moo moo — moo moo moo moo moo moo. Moo moo: moo moo.' },
+        narrator: { name: 'Moo moo', why: 'Moo moo moo moo moo moo. Moo moo moo moo moo moo moo — moo.' },
+        sky: { name: 'Moo (moo moo)', why: 'Moo moo moo moo — moo moo moo — moo moo moo moo moo moo.' },
+        sound: { name: 'Moo moo moo', why: 'Moo moo moo moo moo moo moo — moo moo moo moo. Moo moo moo.' },
+        memory: { name: 'Moo', why: 'Moo moo moo moo moo moo; moo moo moo moo moo moo. Moo moo moo.' },
+        telemetry: { name: 'Moo moo', why: 'Moo moo moo, moo moo moo — moo moo, moo moo. Moo moo moo, moo moo.' },
+        raven: { name: 'Moo moooo', why: 'Moo moo moo moo moo moo moo — moo moo moo moo moo moo. Moo.' },
+        reading: { name: 'Moo (moo)', why: 'Moo moo moo moo moo moo — moo moo moo, moo moo moo. Moo.' },
+      },
+    },
+
     atlas: {
       eyebrow: 'Moo Moo',
       title: 'Moo moo moo moo',

@@ -151,7 +151,13 @@ export default {
   arsenal: {
     subtitle: 'The tools I reach for across the stack — hover a skill to trace its constellation.',
     coreLabel: 'The Arsenal',
-    coreLegend: 'the brighter the body, the deeper the mastery',
+    coreLegend: 'the ringed bodies are the core stack — the tools reached for first',
+    inventoryLegend: 'marks the core stack — the tools reached for first',
+    viewChart: 'Sky-chart',
+    viewInventory: 'Inventory',
+    // Load-bearing control copy — kept plain and inherited by every voice.
+    viewToggle: 'Switch between the sky-chart and inventory views',
+    coreSr: 'core stack',
   },
 
   works: {
@@ -496,7 +502,7 @@ export default {
       sound: { title: 'Interactive sound', why: 'A Web Audio system of synthesized cues (zero bytes) that reward intent, never motion — default-on, silenced under reduced-motion.' },
       recap: { title: 'The Expedition recap', why: 'A cinematic instrument that reads your device and connection client-side and pins you on a live polar map — nothing stored, nothing sent.' },
       eggs: { title: 'Voice easter eggs', why: 'Type a secret word anywhere and a sealed personality wakes — Scott, Dwight, a cow — each authored in full character.' },
-      telemetry: { title: 'Telemetry & discoverability', why: 'Forty-eight product events folding into one per-visit session recap, twenty-three super-properties, and five PostHog dashboards — all cookieless, anonymous, and silenced under Do-Not-Track. Beside it, structured-data SEO and a bespoke logger. The instrument answers "are the moments touched?" without harvesting a thing about who touches them.' },
+      telemetry: { title: 'Telemetry & discoverability', why: 'Fifty product events folding into one per-visit session recap, twenty-three super-properties, and five PostHog dashboards — all cookieless, anonymous, and silenced under Do-Not-Track. Beside it, structured-data SEO and a bespoke logger. The instrument answers "are the moments touched?" without harvesting a thing about who touches them.' },
     },
     cuts: {
       assets: { title: 'A folder of images, GIFs & audio files', why: 'Almost none of this site is shipped media. The hero compass is drawn in Canvas2D, the starfield is pure CSS, and every interface sound is synthesised live through the Web Audio API. The whole feedback layer ships as code, not megabytes — a smaller bundle, fewer network round-trips, and a faster first paint.' },
@@ -572,6 +578,34 @@ export default {
         },
       },
     },
+    // The Blueprint — the runtime system chart (Act II). Node ids + geometry are
+    // data in constants.atelier.blueprint; gate captions stay EN-technical there.
+    blueprint: {
+      eyebrow: 'The Blueprint',
+      title: 'One realm, three signals',
+      intro: 'The runtime, drawn as a chart: everything here happens on your own device, and exactly three signals ever leave it — each one named at the wall. Open the network tab and count.',
+      clientZone: 'The client realm',
+      clientZoneSub: 'everything here runs on your device',
+      beyondZone: 'Beyond the wall',
+      beyondZoneSub: 'the only signals that ever leave',
+      wall: 'The Wall',
+      sealedNote: 'Nothing else crosses — no cookies, no identity, no media files. Even the fonts live on this side.',
+      hint: 'Touch a station',
+      readoutRest: 'Every station holds a decision. Touch one, and it explains itself.',
+      nodes: {
+        traveler: { name: 'You, the traveler', why: 'One request, one page. You arrive once and the whole Chronicle unfolds from here — no redirects, no gatekeeping, no account.' },
+        shell: { name: 'The page', why: 'A single HTML file with the styles inlined at build — the realm paints before any script wakes. Two routes share one Layout; everything below the fold loads lazily.' },
+        motion: { name: 'The scroll', why: 'Lenis and GSAP share one ticker — a single clock drives every scroll scene, so motion never fights itself. On touch it steps aside entirely for native scroll.' },
+        narrator: { name: 'The narrators', why: 'Ten personalities over one i18next layer. The sealed ones ship as separate chunks and cost nothing until someone speaks the word that wakes them.' },
+        sky: { name: 'The sky', why: 'SunCalc reads your local clock — never your location — and sets dawn, day, dusk, or night to match the sky outside your window.' },
+        sound: { name: 'The sound', why: 'Every cue is synthesised live in the Web Audio API — zero audio bytes shipped, unlocked by your first gesture, silent under reduced motion.' },
+        memory: { name: 'The memory', why: 'Your expedition log lives for one session and dies with the tab; the visit counter stays in your own browser. Neither is ever sent anywhere.' },
+        telemetry: { name: 'The analytics', why: 'PostHog and Vercel count moments, not people — cookieless, anonymous, no cross-session identity. Set Do-Not-Track and this gate seals entirely.' },
+        raven: { name: 'Your message', why: 'Your message flies to a serverless function and on to the courier — the API key never enters the browser. This is the one crossing you create yourself.' },
+        reading: { name: 'Your city', why: 'One IP lookup names your city for the Expedition Recap below — only after you ask, shown to you in full, and kept nowhere.' },
+      },
+    },
+
     atlas: {
       eyebrow: 'The Codebase',
       title: 'How the map is built',

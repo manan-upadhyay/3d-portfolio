@@ -37,7 +37,7 @@ it is.
 |---|---|---|---|
 | **Cold open** | Confession + sub (keep) | the human *why* | sparse, centered, quiet |
 | **I · The Build** | `BuildReel` + **stats dissolved into prose** + the built/cut ledger | all *process & decisions* — one cohesive act, not three cards | one dense centerpiece, generous padding |
-| **II · The Engine Room** | **Observatory (redesigned)** + **webhooks/alerting (new)** + **Codebase Atlas** (see [08](08-codebase-atlas.md)) | the senior-signals showpiece: analytics, observability, alerting, structure | richest, most interactive |
+| **II · The Engine Room** | **Observatory (redesigned)** + **webhooks/alerting (new)** + **The Blueprint (2026-07-09, see below)** + **Codebase Atlas** (see [08](08-codebase-atlas.md)) | the senior-signals showpiece: analytics, observability, alerting, architecture, structure | richest, most interactive |
 | **III · The Hidden Layer** | Field guide (eggs) + built-with chips folded in | playful palate-cleanser after the dense act | light, airy, change of pace |
 | **Coda** | Personas (`PersonaTriptych`) + manifesto + signature | the person; rhymes with the cold open | sparse, centered, quiet |
 
@@ -93,6 +93,48 @@ translation** like the existing capability `tags`. Extend each `names` entry:
 
 Only the framing sentences (intro, hub note, panel bodies, footnote) stay voiced
 under `t('atelier.observatory.*')` across **all** bundles.
+
+## The Blueprint (added 2026-07-09 — OPENS Act II)
+
+The runtime system chart approved from the [Release-2.0 E2E audit §7a](../reports/audit/2026-07-09-release-2.0-e2e-audit.md)
+proposal. One claim, drawn: **everything runs inside "the client realm" (the
+visitor's device); exactly three named signals ever cross the wall** — analytics
+(PostHog + Vercel, cookieless/DNT-off), the raven (same-origin `/api/send-raven`
+→ Resend, key server-side), and the reading (the recap's opt-in IP lookup). A
+ghost edge dies at the wall with the sealed note (no cookies, no identity, no
+shipped media, self-hosted fonts). Every edge was verified against the code
+before drawing — the chart claims nothing the network tab won't confirm.
+
+- **Component:** `components/Blueprint.jsx` · data (node ids, glyphs, 1000×560
+  grid coordinates, EN-only gate captions) in `constants.atelier.blueprint` ·
+  copy under `t('atelier.blueprint.*')` in **all ten** bundles (name + why per
+  node).
+- **Desktop (≥1024px):** an authored chart — the SVG layer draws geometry only
+  (edges dash-draw in once, the double-rule wall opens gaps only at the gates,
+  the ghost line, outbound arrowheads) and is `aria-hidden`; every station is a
+  real positioned `<button>` centered on its grid coordinate. Hover/focus
+  previews the station in the readout panel below (observatory-style accent
+  rail + pitched note); click commits. Selecting dims the field and lights that
+  station's thread; selecting the shell hub lights everything.
+- **Mobile (<1024px):** a bespoke vertical **signal trail**, not a shrunk chart —
+  client stations descend a gold thread, the trail breaks at the wall divider
+  (✕ chip + sealed note), and only the three ember gate stations continue
+  beyond. Tap unfolds the decision (one at a time, field-guide accordion).
+- **Placement:** it **opens Act II** as the overview; Observatory and Atlas are
+  its drill-downs (watching / files). With the Blueprint moved out from between
+  them, the two heavy instruments are adjacent again — so the **bridge divider
+  stays** exactly where it was, doing the job it was built for.
+- **Naming rule (2026-07-09):** station titles in `chronicle` + `plain` must be
+  instantly readable by a non-native English speaker ("The page", "The scroll",
+  "The analytics", "Your message", "Your city" — flavor lives in the *why*, and
+  gate captions avoid idioms/abbreviations). Sealed voices keep full character.
+- **It charts the RUNTIME; the Atlas charts the FILES** — deliberately no
+  overlap, and it doubles as the static one-line takeaway Act II's instruments
+  were missing.
+- **Analytics:** `blueprint_explore` (once, first interaction) +
+  `blueprint_node_open {id}` (deliberate click/tap only; hover never fires).
+- **A11y / motion:** stations are native buttons, readout is `aria-live`;
+  reduced-motion = no draw-in, no stagger, no pulse, instant accordion.
 
 ## Webhooks / alerting (new — Act II, inside the Observatory)
 

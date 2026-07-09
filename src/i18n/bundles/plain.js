@@ -61,7 +61,10 @@ export default {
   arsenal: {
     subtitle: 'The tools I use across the stack — hover a skill to see how it connects.',
     coreLabel: 'Skills',
-    coreLegend: 'the larger, glowing tools are my core stack',
+    coreLegend: 'the ringed, larger tools are my core stack',
+    inventoryLegend: 'marks my core stack',
+    viewChart: 'Orbit',
+    viewInventory: 'List',
   },
 
   works: {
@@ -255,7 +258,7 @@ export default {
       sound: { title: 'Sound design', why: 'A Web Audio cue system (synthesized, zero asset weight); default-on, muted under reduced-motion.' },
       recap: { title: 'Session recap', why: 'A client-side panel that reads device + connection details and maps your location — nothing stored or sent.' },
       eggs: { title: 'Hidden voices', why: 'Type a trigger word to unlock additional personality voices, each fully written.' },
-      telemetry: { title: 'Analytics & SEO', why: 'Forty-eight product events feeding a single per-visit session recap, twenty-three super-properties, and five PostHog dashboards — all cookieless, anonymous, and disabled under Do-Not-Track. Plus structured-data SEO and a custom logger. It answers "are these features actually used?" without tracking who uses them.' },
+      telemetry: { title: 'Analytics & SEO', why: 'Fifty product events feeding a single per-visit session recap, twenty-three super-properties, and five PostHog dashboards — all cookieless, anonymous, and disabled under Do-Not-Track. Plus structured-data SEO and a custom logger. It answers "are these features actually used?" without tracking who uses them.' },
     },
     cuts: {
       assets: { title: 'Image, GIF and audio files', why: 'Very little of this site is shipped media. The hero is rendered in Canvas2D, the starfield is CSS, and the interface sounds are generated at runtime with the Web Audio API. Shipping the feedback layer as code instead of files means a smaller bundle, fewer requests, and faster loads.' },
@@ -325,6 +328,34 @@ export default {
         },
       },
     },
+    // The Blueprint — the runtime system chart (Act II). Node ids + geometry are
+    // data in constants.atelier.blueprint; gate captions stay EN-technical there.
+    blueprint: {
+      eyebrow: 'Architecture',
+      title: 'System map — what runs where',
+      intro: 'Everything on this site runs in your browser. Exactly three network calls ever leave it, each one labelled below — open the network tab and verify.',
+      clientZone: 'Your browser',
+      clientZoneSub: 'everything here runs locally',
+      beyondZone: 'Network',
+      beyondZoneSub: 'the only outbound calls',
+      wall: 'The boundary',
+      sealedNote: 'Nothing else goes out — no cookies, no identity, no media files. Even the fonts are self-hosted.',
+      hint: 'Select a component',
+      readoutRest: 'Each component carries the decision behind it. Click one — or check the network tab.',
+      nodes: {
+        traveler: { name: 'You', why: 'One request, one page — no redirects, no login, no paywall.' },
+        shell: { name: 'The page', why: 'A single HTML file with the CSS inlined at build time, so the first paint doesn’t wait on a stylesheet request. Two routes share one layout; sections lazy-load.' },
+        motion: { name: 'The scroll', why: 'Lenis and GSAP run on one shared ticker, so scrolling and animation never compete. Touch devices get native scroll.' },
+        narrator: { name: 'The narrators', why: 'Ten narration styles over one i18next layer; the hidden ones are code-split and load only when unlocked.' },
+        sky: { name: 'The theme', why: 'SunCalc derives the theme from your local time — no geolocation involved.' },
+        sound: { name: 'The sound', why: 'All interface sound is synthesized with the Web Audio API — zero audio files shipped; muted when reduced motion is set.' },
+        memory: { name: 'The memory', why: 'Session-only visit data plus a local visit counter — stored in your browser, never transmitted.' },
+        telemetry: { name: 'Analytics', why: 'PostHog and Vercel Analytics, cookieless and anonymous — fully disabled when Do-Not-Track is on.' },
+        raven: { name: 'Contact form', why: 'Messages post to a serverless function which calls Resend — the API key stays server-side.' },
+        reading: { name: 'City lookup', why: 'One opt-in IP lookup powers the visitor recap on this page — displayed to you, stored nowhere.' },
+      },
+    },
+
     atlas: {
       eyebrow: 'The codebase',
       title: 'How it’s structured',

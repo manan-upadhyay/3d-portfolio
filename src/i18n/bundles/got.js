@@ -113,7 +113,10 @@ export default {
   arsenal: {
     subtitle: 'Words are wind; steel is not. A mind is a weapon, and these are his — every blade blooded in production, never in a tourney. Hover one and it names the house it rides with.',
     coreLabel: 'The Arsenal',
-    coreLegend: 'the burning ones are the swords he draws first',
+    coreLegend: 'the ringed ones are the swords he draws first',
+    inventoryLegend: 'marks a sword he draws first',
+    viewChart: 'The Stars',
+    viewInventory: 'The Ledger',
   },
 
   works: {
@@ -354,6 +357,34 @@ export default {
         },
       },
     },
+    // The Blueprint — the runtime system chart (Act II). Node ids + geometry are
+    // data in constants.atelier.blueprint; gate captions stay EN-technical there.
+    blueprint: {
+      eyebrow: 'The Map of the Realm',
+      title: 'One realm. Three ravens.',
+      intro: 'Mark this chart well: every hall and every engine stands inside your own device. Only three ravens ever fly beyond the Wall, and each one is named. The night is dark, but this map is honest.',
+      clientZone: 'The realm',
+      clientZoneSub: 'all of it stands on your device',
+      beyondZone: 'Beyond the Wall',
+      beyondZoneSub: 'only three ravens fly',
+      wall: 'The Wall',
+      sealedNote: 'Nothing else crosses. No cookies, no watchers, no baggage trains of media. Even the letters — the fonts — were forged in this keep.',
+      hint: 'Name a holdfast',
+      readoutRest: 'Every holdfast keeps its own counsel. Touch one and it will speak — a map that lies is worth less than its parchment.',
+      nodes: {
+        traveler: { name: 'You, the traveler', why: 'You come to the gates once — one request, one page. No tolls, no oaths demanded at the door.' },
+        shell: { name: 'The keep', why: 'One page, its banners — the styles — sewn in at the forging, so the hall stands dressed before a single script stirs. Two roads share one gatehouse.' },
+        motion: { name: 'The river', why: 'One current moves everything — Lenis and GSAP row to a single drum, so the water never fights itself. On touch, the river yields to your own hands.' },
+        narrator: { name: 'The faceless ones', why: 'Ten faces, one truth beneath. The sealed ones sleep across the narrow sea and cross only when their word is spoken. Valar morghulis.' },
+        sky: { name: 'The maesters', why: 'They read your own clock — never your whereabouts — and call the hour: dawn, day, dusk, or night. The Citadel needs no spies for this.' },
+        sound: { name: 'The bells', why: 'Every toll is cast fresh in the moment — no bells shipped, no wagons of sound. The music is conjured, not carried.' },
+        memory: { name: 'The archives', why: 'The record of your journey burns with the session; the count of your visits stays in your own vault. No ledger leaves the realm.' },
+        telemetry: { name: 'The small council', why: 'It counts deeds, never names — no seals on your person, no little birds following you home. Whisper “do not track” and the council disbands.' },
+        raven: { name: 'The raven', why: 'Your words fly to a roost beyond — a serverless keep — and the key to it never leaves that tower. A Lannister pays his debts; this raven always flies.' },
+        reading: { name: 'The far-eyes', why: 'Once, and only at your command, a single look names your city — shown to you openly, written down nowhere.' },
+      },
+    },
+
     atlas: {
       eyebrow: 'The Archive',
       title: 'Where Every Thing Is Kept',

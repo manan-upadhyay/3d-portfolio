@@ -112,7 +112,10 @@ export default {
   arsenal: {
     subtitle: 'His tools, these are. Field-tested in production, every one — not in a tutorial. Hover one, and its allies name it will. Much it keeps, hmm.',
     coreLabel: 'The Tools',
-    coreLegend: 'the glowing ones, reach for them first he does',
+    coreLegend: 'the ringed ones, reach for them first he does',
+    inventoryLegend: 'marked so, the tools he reaches for first are',
+    viewChart: 'The Galaxy',
+    viewInventory: 'The Archives',
   },
 
   works: {
@@ -353,6 +356,34 @@ export default {
         },
       },
     },
+    // The Blueprint — the runtime system chart (Act II). Node ids + geometry are
+    // data in constants.atelier.blueprint; gate captions stay EN-technical there.
+    blueprint: {
+      eyebrow: 'The Schematic',
+      title: 'One realm, it is. Three signals, there are.',
+      intro: 'Study this map, you should. Inside your own device, everything runs — yes. Three signals only, ever leave. Named, each one is. Hide, this site does not.',
+      clientZone: 'Your device',
+      clientZoneSub: 'run here, everything does',
+      beyondZone: 'Beyond',
+      beyondZoneSub: 'three signals only, pass they do',
+      wall: 'The threshold',
+      sealedNote: 'Cross, nothing else does. Cookies, there are none. Identity, taken it is not. Even the fonts — live here, they do.',
+      hint: 'Touch a station, you may',
+      readoutRest: 'A reason, every station has. Explore, and revealed it will be. Patience.',
+      nodes: {
+        traveler: { name: 'You, it is', why: 'Arrive once, you do. One request, one page. Gates, there are none. Welcome, you are.' },
+        shell: { name: 'The vessel', why: 'One file, the styles woven in at the forging. Paint before the scripts wake, it does. Two paths, one vessel — wasteful, this is not.' },
+        motion: { name: 'The current', why: 'One clock, all movement obeys. Fight itself, the motion does not. On touch — flow natively, it must.' },
+        narrator: { name: 'The voices', why: 'Ten voices, one truth. Sleep, the sealed ones do, until spoken their word is. Do, or do not narrate — there is no try.' },
+        sky: { name: 'The suns', why: 'Your clock it reads — your location, never. Dawn or night it chooses, as your own sky stands. Spy, it need not.' },
+        sound: { name: 'The hum', why: 'Conjured in the moment, every sound is. Shipped, zero bytes are. Luminous math — not crude recordings.' },
+        memory: { name: 'The holocron', why: 'With the session, your log dies. In your own browser, the visit count stays. Sent, nothing is.' },
+        telemetry: { name: 'The council', why: 'Moments it counts, not beings. Nameless, you remain. Say “track me not,” and silent the council goes.' },
+        raven: { name: 'The messenger', why: 'To a serverless temple, your words fly. The key — board the browser, it never does. Strong, this security is.' },
+        reading: { name: 'The seeing stone', why: 'Once, if ask you do, your city it names — shown to you, kept nowhere. Then rest, it does.' },
+      },
+    },
+
     atlas: {
       eyebrow: 'The Archive',
       title: 'Kept, Every Thing Is — Where',

@@ -3,6 +3,7 @@ export { default as ChapterHeading } from './ChapterHeading';
 export { default as CommitGraph } from './CommitGraph';
 export { default as NdaSchematic } from './NdaSchematic';
 export { default as ClueUnlock } from './ClueUnlock';
+export { default as Blueprint } from './Blueprint';
 export { default as CodebaseAtlas } from './CodebaseAtlas';
 export { default as CompassRose } from './CompassRose';
 export { default as ControlCluster } from './ControlCluster';

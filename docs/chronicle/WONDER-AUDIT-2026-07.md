@@ -11,7 +11,8 @@
 > four-part "dilution rule" every new interaction must pass).
 >
 > **Status legend:** 🟢 building · 🟡 specced, not started · 🔵 explore
-> (uncertain) · ✅ done · ⏸️ parked
+> (uncertain) · ✅ done · ⏸️ parked · ❌ closed (owner decision — do not revive
+> without a new owner ask)
 >
 > **Read first:** [CLAUDE.md](../../CLAUDE.md) §2–§4 (canon + standards),
 > [common-ai-signs.md](common-ai-signs.md) (anti-slop), and the governing
@@ -50,19 +51,33 @@
 | V3 | Voice-personality **content-strength pass** (per-voice table below) | Voices | ✅ | 8 | 5 | low |
 | V4 | New voices — **roster expansion** (shortlist below) | Voices | ✅ | 8 | 6 | med |
 | V5 | **Voice identity in the UI** — Voice Hall preview panel (desktop + mobile) + pre-rendered plates + ambient voice mark | Voices | ✅ | 8 | 7 | med |
-| S1 | Micro-moment sweep — new intent-gated sound/motion (map below) | Interaction | ⏸️ | 8 | 6 | med |
-| S2 | **Voice-specific cue palettes** (each voice sounds different) | Interaction | 🔵 | 7 | 5 | med |
-| C1 | Cinematic upgrades to existing sections (list below) | Cinematics | 🔵 | 7 | 6 | med |
-| P1 | New sub-pages / wild flows (concepts below) | Sub-pages | 🔵 | 8 | 7 | med |
+| S1 | Micro-moment sweep — new intent-gated sound/motion (map below) | Interaction | ❌ | 8 | 6 | med |
+| S2 | **Voice-specific cue palettes** (each voice sounds different) | Interaction | ❌ | 7 | 5 | med |
+| C1 | Cinematics — **narrowed to 2**: time-of-day dissolve (C1-a) + living pull-quotes (C1-b), specced below | Cinematics | 🟡 | 7 | 4 | low |
+| P1 | Sub-pages — **narrowed to the cinematic 404** ([spec](sections/09-off-the-map-404.md)); other 5 routes closed | Sub-pages | 🟡 | 8 | 5 | low |
+| L1 | **Loading states** — the fog-threshold loader ([spec](sections/10-the-threshold-loading.md)); owner-added 2026-07-09 | Cinematics | 🟡 | 6 | 3 | low |
 | A1 | **Analytics coverage** for every post-v1 wonder feature (adoption data → V3 keep/cut) | Instrumentation | ✅ | 8 | 3 | low |
 
 > Impact/Effort/Risk are 1–10 gut estimates to help sequencing, matched to the
 > LEGENDARY-ROADMAP scale. Re-score when a task is picked up.
 >
-> **2026-07-09:** the remaining 🔵 explore items (S2 voice cue palettes, C1
-> cinematics, P1 sub-pages) + the arsenal-hum keep/cut question are **pending
-> owner review** — nothing is scheduled until Manan picks from this board
-> (see the [Release-2.0 E2E audit](reports/audit/2026-07-09-release-2.0-e2e-audit.md) §4.6/§7).
+> **2026-07-09 — owner review happened.** Decisions, item by item:
+> - **S1** ❌ closed (stays reverted) · **S2** ❌ closed.
+> - **C1:** hero title-sequence intro ❌ (adds first-load wait → bounce risk),
+>   chapter-transition map traversal ❌, realms fly-through ❌, raven viewport
+>   flight ❌ (the form-success raven animation already covers it). **Kept for
+>   spec:** the time-of-day theme dissolve (→ C1-a) + living pull-quotes (→ C1-b).
+> - **P1:** the cinematic **404** is wanted ("very unique, amazing cinematic
+>   animations, a clear way home; assets can be sourced") → specced in
+>   [sections/09-off-the-map-404.md](sections/09-off-the-map-404.md). The other
+>   five routes (oracle / constellation / atlas / soundboard / seasons) ❌ closed.
+> - **L1 (new):** cinematic **loading states** — owner direction: a cloudy/foggy
+>   spinning astrolabe, fog both behind and overlapping it → specced in
+>   [sections/10-the-threshold-loading.md](sections/10-the-threshold-loading.md).
+> - Still pending from the [Release-2.0 E2E audit](reports/audit/2026-07-09-release-2.0-e2e-audit.md)
+>   §4.6/§7: the **arsenal-hum keep/cut** question (not part of this review).
+>
+> Nothing below is scheduled to build until Manan greenlights the four 🟡 specs.
 
 ---
 
@@ -487,9 +502,13 @@ The site has a **dense** interactive-sound texture already (this is why the
 **Takeaway:** input surfaces are well covered. The **gaps** are (a) a few
 sections with *no* signature moment, and (b) no *voice-specific* audio identity.
 
-### S1 — Micro-moment sweep (new intent-gated moments) · ⏸️ PARKED (built then reverted 2026-07-07)
+### S1 — Micro-moment sweep (new intent-gated moments) · ❌ CLOSED (owner, 2026-07-09)
 
-> **Built then reverted by owner request.** The owner-picked 3 (realm-plate
+> **Closed by owner review 2026-07-09** — "don't want it." The revert stands as
+> the final state; do not revive any of the seven ideas without a new owner ask.
+> The specs below are kept only as a historical record.
+>
+> **Built then reverted by owner request (2026-07-07).** The owner-picked 3 (realm-plate
 > "unfurl", copy-email "seal", recap "sigil stamp") were implemented — cues in
 > [sound.js](../../src/lib/sound.js) `CUES`/`CONFIG` + matching motion in
 > [Works.jsx](../../src/sections/Works.jsx) / [Contact.jsx](../../src/sections/Contact.jsx)
@@ -521,7 +540,9 @@ Each must pass the 4-part test. Ranked by impact-to-effort:
 - [ ] Re-audit total density against the dilution rule before shipping *all* of
       them — pick the best 3, not all 7.
 
-### S2 — Voice-specific cue palettes · 🔵
+### S2 — Voice-specific cue palettes · ❌ CLOSED (owner, 2026-07-09)
+
+> **Closed by owner review 2026-07-09** — "don't want it." Kept for the record.
 
 **Concept:** each voice subtly retunes the synth palette so the site *sounds*
 like the character (chronicle = airy/celestial default; plain = drier/quieter;
@@ -537,54 +558,168 @@ multipliers in `CONFIG`, selected by active voice).
 
 ---
 
-## 4. Cinematics & awwwards-worthy upgrades (C1) · 🔵
+## 4. Cinematics & awwwards-worthy upgrades (C1) · 🟡 narrowed (owner review 2026-07-09)
 
 Broader "moment" ideas beyond sound. Each should make a section feel like *a
 film beat*, per the CLAUDE.md quality bar.
 
-- **Hero title-sequence intro (first load only):** a 1.5s cinematic assemble of
-  the astrolabe + title, skippable, once per session. The site currently starts
-  "on" — a brief overture would raise the "awwwards" first impression. Respect
-  reduced-motion (instant).
-- **Chapter transitions as map traversal:** between chapters, a faint animated
-  *route line* draws on the SideRail/map as you cross into a new realm — makes
-  the "cartographer's journey" literal during scroll.
-- **Realms as a true map fly-through:** an optional mode where selecting a realm
-  "flies" the camera across the chart to that plate (Canvas2D pan/zoom), instead
-  of a standard scroll. Ties Works to the ⌘K map.
-- **Light/dark as a *time-of-day* dissolve:** upgrade the theme swap from a wipe
-  to a brief god-rays / starfield cross-dissolve — the sky *changing*, not a
-  toggle.
-- **Living pull-quotes:** kinetic type on the big pull-quotes (already in TACTILE
-  scope as "kinetic headings" — cross-link).
-- **Contact "raven" flight across the viewport:** on successful send, the raven
-  actually crosses the screen (paired with the existing `raven` cue) carrying the
-  message off — a payoff moment for the one conversion that matters.
+**Owner decisions (2026-07-09):**
 
-**Task:** score these against effort + the anti-slop codex, pick 2 for a
-cinematics mini-cycle, spec each in its section doc before building.
+| Idea | Decision |
+|---|---|
+| Hero title-sequence intro (first load only) | ❌ closed — any overture adds wait before content; not worth the bounce risk on the money page (same logic later applied to loading: never *add* wait, only dress wait that already exists) |
+| Chapter transitions as map traversal | ❌ closed |
+| Realms as a true map fly-through | ❌ closed |
+| Light/dark as a *time-of-day* dissolve | 🟡 **specced below (C1-a)**, pending greenlight |
+| Living pull-quotes | 🟡 **specced below (C1-b)**, pending greenlight |
+| Contact "raven" flight across the viewport | ❌ closed — the form-success state already has a raven animation (`RavenBurst` + the `raven` cue); no further work |
 
 ---
 
-## 5. New sub-pages / wild flows (P1) · 🔵
+### C1-a — Light/dark as a time-of-day dissolve · 🟡 SPEC
+
+**What exists today (baseline).** The theme swap is already good:
+[DayNightToggle.jsx](../../src/components/DayNightToggle.jsx) uses the **View
+Transitions API** — it snapshots old + new themes and grows a hard `circle()`
+clip-path on the *new* snapshot from the button outward (480ms), with a
+`vt-theme-swap` class suppressing per-element color transitions and a
+reduced-motion / no-VT fallback to a plain swap. One `theme` cue plays in both
+directions. The dissolve upgrade **builds on this machinery, not a rewrite** —
+three additive layers:
+
+**Layer 1 — the horizon edge (the wipe becomes a sky-line).**
+Replace the hard clip edge with a **feathered, tinted rim** so the new sky
+*bleeds* over the old like light spreading past a horizon, rather than being
+stamped over it:
+
+- Animate a radial-gradient `mask-image` on `::view-transition-new(root)`
+  (feather ≈ 8–12% of the end radius) instead of the hard `circle()`; same
+  center/radius math as today. Where animated masks on VT pseudos prove flaky
+  in a target browser, fall back to the current hard clip — the feature must
+  degrade to exactly today's behavior.
+- Stretch the duration to ~700ms with a gentler ease-out (the current 480ms
+  cubic reads as UI; the sky changing should read as *weather*).
+- The rim is **destination-tinted** via a fixed ring overlay tracking the same
+  radius (a sibling DOM layer animated in lock-step, `pointer-events:none`):
+  toward **day/dawn** → a warm `--color-ember`/`--color-gold` glow (sunrise
+  cresting); toward **night/dusk** → a cool indigo rim (needs one new token
+  pair in `index.css`, e.g. `--color-sky-rim`, defined for both themes — rule
+  §4.3, no raw hex).
+
+**Layer 2 — the celestial settle (after the wipe).**
+On `transition.finished`, mount a one-shot, self-destroying Canvas2D overlay
+(`SkyDissolve`, full-viewport, `pointer-events:none`, `aria-hidden`) that plays
+≤1.2s and unmounts (the FaceParticles contract — zero idle cost):
+
+- **→ night / dusk:** ~30–40 tiny stars twinkle-pop in, ordered radially
+  outward from the toggle (they "arrive with the dark"), plus at most one faint
+  shooting-star streak. Gold/muted tokens only.
+- **→ day / dawn:** 3–4 translucent god-ray wedges sweep out from the toggle's
+  corner across ~40% of the viewport and fade, with a few drifting dust motes
+  caught in them.
+
+**Layer 3 — directional sound.** Split the single `theme` cue into two
+variants: to-day = the existing warm wipe pitched slightly *rising*/brighter;
+to-night = *falling*/darker with a longer shimmer tail. Same length, same gain,
+synth-only (0 bytes).
+
+**Trigger points.** `DayNightToggle` (the flip) **and** `SkyControl`/
+`ThemeWheel` mode picks — but only when the **resolved base theme actually
+flips** (light↔dark). A dawn→day pick (same light base) keeps the plain swap;
+`auto` re-resolutions on tab-wake never fire it (nobody asked for a show).
+
+**Guards.** Reduced-motion → exactly today's instant swap, no overlay, base
+cue. Coarse pointer fine (click-gated = intent). Budget: no deps, no images,
+one small component + one token pair; rAF runs only during the ~1.2s overlay.
+
+**Acceptance.** The swap reads as *the sky changing*, not a toggle; 60fps
+through the transition; no flash frame; verified in both directions × all four
+sky targets × 360/1280; reduced-motion identical to current; zero idle rAF
+after settle; build clean.
+
+---
+
+### C1-b — Living pull-quotes · 🟡 SPEC
+
+**Surfaces.** The two big rendered quote slots: `about.pullQuote` (the wide
+serif lead statement in [About.jsx](../../src/sections/About.jsx)) and
+`contact.quote` (the italic ember sign-off line in
+[Contact.jsx](../../src/sections/Contact.jsx)). Extendable later to the Atelier
+manifesto quote — start with these two.
+
+**Concept — "the ink settles as you arrive."** The quote is **scroll-scrubbed,
+word by word**: every word pre-renders as ghost ink (opacity ≈ 0.16–0.2 — the
+sentence's *shape* is always visible, no blank hole), and resolves to full ink
+in reading order as the block traverses a viewport band. Scrolling back
+un-inks it. It is driven by the visitor's own scroll gesture (scrub, not a
+one-shot trigger), which is why it passes governing principle 3 — the same
+allowance that admitted TM-2. **Distinct from TM-2** (velocity-skew on
+`ChapterHeading`s): this is scroll-*progress* ink on quote bodies; the two
+never apply to the same element. Silent — no cue.
+
+**Reference sites (owner asked for examples):**
+- **apple.com** product pages (AirPods Pro / iPhone marketing pages) — the
+  canonical version: a big statement sentence whose words scrub from ghost to
+  full ink with scroll. Exactly this mechanic, proven at massive scale.
+- **lusion.co** — large editorial statements resolving progressively on scroll.
+- **basement.studio** — kinetic editorial type moments in the same register.
+
+**Implementation.**
+- A small shared component (e.g. `LivingQuote`) wrapping the existing `<p>`:
+  splits the translated string into **word** spans once (words, not letters —
+  cheaper, and serif kerning/ligatures survive), then a GSAP `ScrollTrigger`
+  with `scrub: true` (band ≈ `top 85%` → `top 40%`) staggers each word's
+  opacity + a ~4px `y` settle. **Transform/opacity only** (budget rule §4.6 —
+  no blur filters).
+- **Voice-safety:** the split must key off the translated string so a voice
+  swap re-splits (arrays of spans rebuilt when `t()` output changes). One-word
+  quotes (`cow`: "Moo.") degrade to a single-span fade — verify explicitly.
+- **A11y:** the block keeps one accessible string (`aria-label` on the wrapper,
+  word spans `aria-hidden`) so screen readers never hear word-by-word soup.
+  Ghost words stay ≥0.16 opacity so the element never reads as missing content.
+- **Guards:** reduced-motion → no split, no trigger, full-ink static (exactly
+  today). Touch is fine (scroll-driven). `gsap.context()` + revert on unmount.
+
+**Acceptance.** Scroll scrubs the ink smoothly in both directions; no layout
+shift (the split must not re-wrap lines vs. the plain string); voice swap
+re-splits correctly incl. `cow`; both slots verified at 360/768/1280/1920 ×
+both themes; reduced-motion identical to current; build clean.
+
+---
+
+## 5. New sub-pages / wild flows (P1) · 🟡 narrowed (owner review 2026-07-09)
 
 The app is already a 2-route SPA (`/` + `/making-of`) sharing `Layout.jsx`, and
 `vercel.json` rewrites client routes — **adding a route is cheap and safe.** Use
 sub-pages for ideas too wild for the portfolio spine.
 
-| Route idea | Concept | Why it's worth it |
+**Owner decisions (2026-07-09):**
+
+| Route idea | Concept | Decision |
 |---|---|---|
-| `/void` or `/404` **cinematic** | A bespoke, in-world lost-traveler page ("you've wandered off the map") with the astrolabe spinning wildly + a way back. | 404s are a free surprise-and-delight surface almost no portfolio bothers with. |
-| `/oracle` | An **ask-the-cartographer** page: a small guided Q&A ("What are you hiring for?") that routes the visitor to the right realm/section + tailors the pitch. | Turns a passive site into a conversation; strong for CTOs/recruiters. |
-| `/constellation` | A full-screen version of the recap's **sealed-voice constellation** — a playground for the unlock game, showing which voices are found vs sealed. | Makes the voice game a destination, not a side effect. |
-| `/atlas` (expand) | Promote the existing `CodebaseAtlas` component into its own cinematic route — the "how this site is built" explorer. | Already have the component; a route gives it room to breathe. |
-| `/soundboard` (playful) | A hidden page that lets you *play* the synth cues like an instrument (the astrolabe gear, the pentatonic hover, the raven). | Pure delight for the curious; shows off the audio craft. |
-| `/seasons` | The site re-skinned for a time/season (an entirely different palette + copy layer) as a limited "event." | Awwwards-bait novelty; reuses the theme + voice infra. |
+| `/404` **cinematic** | A bespoke, in-world lost-traveler page ("you've wandered off the map") with the distressed astrolabe + a way back. | 🟡 **Greenlit for spec** — owner wants it "very unique, with amazing cinematic animations and interactions and a clear way to the homepage"; willing to source/download assets if they add value. **Full spec: [sections/09-off-the-map-404.md](sections/09-off-the-map-404.md).** Bonus finding: today an unknown URL renders a **blank shell** (no catch-all route in `App.jsx`), so this also fixes a real hole. |
+| `/oracle` | Ask-the-cartographer guided Q&A. | ❌ closed |
+| `/constellation` | Full-screen voice-unlock constellation. | ❌ closed |
+| `/atlas` (expand) | CodebaseAtlas as its own route. | ❌ closed |
+| `/soundboard` | Playable synth-cue instrument page. | ❌ closed |
+| `/seasons` | Seasonal re-skin event. | ❌ closed |
+
+**L1 — Loading states (owner-added at this review).** Not a route, but specced
+in the same pass: replace the two generic ember spinners (`SectionLoader` in
+`pages/Chronicle.jsx`, `PageLoader` in `pages/MakingOf.jsx`) with a cinematic
+**fog-threshold loader** — the owner's direction: *a cloudy, foggy astrolabe
+spinning; themed fog/cloud layers behind it and some overlapping it for a
+cinematic depth effect* — plus counter-proposals (a show-delay gate so fast
+loads never flash it; a needle-settles-on-resolve payoff). **Full spec:
+[sections/10-the-threshold-loading.md](sections/10-the-threshold-loading.md).**
+Explicitly out of scope there: any boot/splash screen — same bounce-risk
+reasoning that closed the hero title-sequence intro (C1).
 
 **Guardrails:** sub-pages must not clutter the portfolio spine (keep them out of
 `chapters`/⌘K, like the Atelier is). Each needs: a graceful fallback, an
 `ErrorBoundary`, reduced-motion/touch correctness, and a clear way *back* to the
-Chronicle. Spec any greenlit route in a new `docs/chronicle/sections/` doc.
+Chronicle. Spec any greenlit route in a new `docs/chronicle/sections/` doc
+(done for the 404 + loading above).
 
 ---
 
@@ -610,6 +745,13 @@ Chronicle. Spec any greenlit route in a new `docs/chronicle/sections/` doc.
    mobile). See the expanded V5 spec above. C1 cinematics + P1 sub-pages stay queued
    behind it — one "wow" per cycle, fully finished, verified in all
    themes/reduced-motion/touch, `npm run build` clean.
+5. **Post-review queue (2026-07-09):** the owner cut the board down to four 🟡
+   specs — **C1-a** (time-of-day dissolve), **C1-b** (living pull-quotes), the
+   **404** ([spec](sections/09-off-the-map-404.md)), and **L1 loading**
+   ([spec](sections/10-the-threshold-loading.md)). Everything else in S1/S2/C1/P1
+   is ❌ closed. Suggested build order once greenlit: **L1 → 404 → C1-b → C1-a**
+   (smallest risk first; the 404 shares the loader; the dissolve is the most
+   browser-sensitive so it goes last with the most verification room).
 
 > Update this board's Status column as items move. When any item ships, land its
 > canon in the relevant `docs/chronicle/` doc (per CLAUDE.md §5) and cross-link
