@@ -4759,15 +4759,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 .tm-fog--static .tm-fog__bank { animation: none; }
 
-/* Vignette that deepens with age (over the page background, behind cards). */
-.tm-grade {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background: radial-gradient(120% 100% at 50% 0%,
-    transparent 40%, color-mix(in srgb, #1a1206 calc(52% * var(--age)), transparent) 100%);
-}
 /* Film grain over the page, intensifying with age (behind cards). */
 .tm-grain {
   position: fixed;

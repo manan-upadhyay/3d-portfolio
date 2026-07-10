@@ -75,7 +75,6 @@ const TimeMachine = () => {
       {/* Ambient — fog (thickens with age) + vignette + grain, all BEHIND the
           cards so the live frames stay clean windows. */}
       <Fog density={density} />
-      <div className="tm-grade" aria-hidden />
       <div className="tm-grain" aria-hidden />
 
       {/* THRESHOLD — the present; the mouth of the descent. */}
