@@ -2,51 +2,126 @@
 
 How the app is wired, the canonical patterns to copy, and how to verify work.
 
+> [!NOTE]
+> **This document describes the v1.0 architecture as built** — and it stays
+> accurate: the wiring below is not changing in v1.1. For the *changes* v1.1
+> layers on top of it, see the addendum immediately below and the
+> [V1.1 Release Plan](V1.1-RELEASE-PLAN.md).
+
+---
+
+## 0. v1.1 addendum — engineering deltas
+
+v1.1 ("The Restraint Pass") is a content/UX/perf revamp, **not** a re-architecture.
+The stack, routing, stores, and folder map are unchanged. Engineering-facing work
+concentrates in three areas — full detail in the
+[combined action plan §7 (P0.5–P0.7), §9, §14](reports/synthesis/2026-07-01-combined-beta-action-plan.md):
+
+- **Performance / leak audit (P0).** Beta 1 surfaced session-long degradation on a
+  4K display. Re-verify the §3 cleanup contract on *every* effect: `gsap.context()`
+  + `ctx.revert()`, cancel every `requestAnimationFrame`, remove every listener,
+  kill every `ScrollTrigger`. Prime suspects: the pinned horizontal `Experience`,
+  the hero canvas/astrolabe (`useAstrolabe`), and `FaceParticles`. **Cap canvas
+  DPR at 2** (`Math.min(window.devicePixelRatio, 2)`) — 4K panels otherwise
+  multiply per-frame cost. Profile a 3-minute session for heap/listener/detached-
+  node growth as part of Verification.
+- **Analytics instrumentation (P0).** Register PostHog super-properties *before*
+  first capture (currently ~90% null device/browser), add `beta_round` /
+  `tracking_version`, session heartbeats (15/30/60s), and the v1.1 event catalog.
+  Instrument `/making-of` (`pages/MakingOf.jsx`) beyond pageview. See
+  [ANALYTICS.md](ANALYTICS.md) and action plan §14.
+- **Scroll tuning (P1).** Lower Lenis smoothing in
+  `lib/smoothScroll.js`; use native scroll on mobile / reduced-motion; make the
+  horizontal `Experience` timeline accept horizontal + keyboard input.
+- **Security headers (done).** `vercel.json` now carries `X-Frame-Options`,
+  `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, and
+  `Strict-Transport-Security` alongside the SPA rewrite.
+
+Nothing here adds a dependency or a WebGL/3D surface — the CLAUDE.md stack lock
+still holds.
+
 ---
 
 ## 1. Folder map
 
 ```
 src/
-  App.jsx                 # Router: BrowserRouter → Layout wrapping the two routes
-                          #   (/ = Chronicle, /making-of = the Atelier)
-  main.jsx                # Entry
+  App.jsx                 # Router: BrowserRouter → Layout wrapping FOUR routes
+                          #   (/ = Chronicle, /making-of = Atelier, /time-machine = Time Machine, * = 404)
+  main.jsx                # Entry (PostHog init, theme bootstrap, super-properties)
   index.css               # Theme tokens + global utilities + keyframes (SOURCE OF TRUTH for style)
-  constants/index.js      # ALL content: personalInfo, summon, chapters, services,
-                          #   skillCategories, experiences, projects, stats, education
-  store/useThemeStore.ts  # Zustand "sky" theme (auto+dawn/day/dusk/night) → <html> class + data-sky
-  store/useVoiceStore.ts  # Zustand voice (i18next language) + unlocked sealed voices
-  store/useSoundStore.ts  # Zustand sound prefs (enabled/volume/engaged) → drives lib/sound.js
+  fonts.css               # Self-hosted font-face declarations (Cormorant, Plus Jakarta, Inter)
+  constants/
+    index.js              # ALL non-copy data: personalInfo, summon, chapters, services,
+                          #   skillCategories, experiences, projects, stats, education,
+                          #   archive, eraActs, timeTunnel, atelierActs
+    commitHistory.js      # Generated commit graph data (prebuild script)
+  store/
+    useThemeStore.ts      # Zustand "sky" theme (auto+dawn/day/dusk/night) → <html> class + data-sky
+    useVoiceStore.ts      # Zustand voice (i18next language) + unlocked sealed voices
+    useSoundStore.ts      # Zustand sound prefs (enabled/volume/engaged) → drives lib/sound.js
+    useCoachmark.ts       # Zustand coachmark coordinator (sound/voice hint one-at-a-time)
   lib/
-    smoothScroll.js       # Lenis + GSAP ticker; scrollToSection/scrollToTop
+    smoothScroll.js       # Lenis + GSAP ticker; scrollToSection/scrollToTop/rememberScroll/restoreScroll
     motion.js             # Framer Motion variants (staggerContainer, fadeIn, …)
     sky.js                # SunCalc time→sky resolver + timezone→coords (theme auto mode)
-    sound.js              # Web-Audio engine: CONFIG, cues, hum/watch beds (mp3 loop or synth), samples
+    sound.js              # Web-Audio engine: CONFIG, ~15 cues, 5 beds, samples
     voiceChange.js        # tiny emitter: voice store → VoiceTransition
     voiceScramble.js      # per-text "decode" scramble on voice change (DOM TreeWalker)
+    analytics.js          # PostHog facade: track/trackOnce/registerContext/captureError/capturePageview
+    astrolabe.js          # Canvas2D astrolabe renderer (hero + 404)
+    visitor.js            # readVisitor — sync browser/GPU/screen snapshot (no network)
+    sigil.js              # Device-hash "Traveler's Sigil" for ExpeditionRecap
+    raven.js              # Resend contact-form client (shared by Contact + VoiceRequest)
+    uiOverlay.js          # Overlay stack coordinator (pushOverlay/popOverlay)
+    log.js                # Structured console logger (createLogger, greet)
   hooks/
-    useActiveSection.js   # Scroll-spy → active chapter id (drives SideRail/MapOverlay)
+    useActiveSection.js   # Scroll-spy → active chapter/act/era id (drives SideRail/MapOverlay)
+    useAstrolabe.js       # Canvas2D astrolabe hook for the hero
+    useEngagementAnalytics.js # section_view + scroll_depth tracking
+    useExpedition.js      # Session scroll accumulator + useVisitStore (visit counter)
+    useVisitor.js         # Cached readVisitor() hook (for ExpeditionRecap)
   hoc/SectionWrapper.jsx  # Standard padded <section> + stagger container
+  i18n/
+    index.js              # i18next init: chronicle+plain eager, sealed voices code-split
+    voices.js             # Voice registry: 2 open + 8 sealed voices, categories, popover config
+    bundles/              # Per-voice copy bundles (chronicle, plain, scott, dwight, cow,
+                          #   got, deadpool, avengers, yoda, chandler)
   pages/                  # Route-level views (rendered through Layout's <Outlet/>)
     Chronicle.jsx         #   / — the scroll spine (Hero + chapters 00–05) + its chrome
     MakingOf.jsx          #   /making-of — return doorway + the lazy Atelier
-  sections/               # Page chapters (00–05) + the Atelier coda + index.js barrel
-    Hero.jsx About.jsx Experience.jsx Tech.jsx Works.jsx Contact.jsx Atelier.jsx
+    TimeMachine.jsx       #   /time-machine — the STRATA coda (descent through past portfolios)
+    Void.jsx              #   * — cinematic 404 ("Off the Map")
+  sections/               # Page chapters (00–05) + codas + index.js barrel
+    Hero.jsx About.jsx Experience.jsx Tech.jsx Works.jsx Contact.jsx
+    Atelier.jsx           # Making-of coda (acts: Build, Engine, Hidden, off-map)
+    TimeMachine.jsx       # Time Machine coda (era cards + time tunnel transitions)
   components/             # Reusable widgets (flat) + index.js barrel:
-                          #   Layout (shared shell), SideRail, MapOverlay, Cursor,
+                          #   Layout (shell), SideRail, MapOverlay, Cursor,
                           #   SkyControl(+DayNightToggle), CompassRose, ChapterHeading,
                           #   MapDivider, CountUp, ScrollReveal, ErrorBoundary,
-                          #   ControlCluster(=VoiceSwitcher + SoundControl), Magnet
+                          #   ControlCluster(=VoiceSwitcher + SoundControl), Magnet,
+                          #   MobileMenu (bottom-sheet on md:down), StickyCta,
+                          #   VoiceHall, VoiceSwitcher, VoicePreviewCard, VoiceRequest,
+                          #   VoiceTransition, ClueUnlock, Hovercard,
+                          #   ExpeditionRecap, FaceParticles, SunArc, PersonaTriptych,
+                          #   Marginalia, Observatory, Blueprint, CodebaseAtlas,
+                          #   NdaSchematic, CommitGraph, RavenBurst, RavenNotice,
+                          #   TimeRail, TimeTunnel, EraExhibit,
+                          #   ThemeWheel, VolumeDial, Fog
   assets/                 # backend/creator/mobile/web pngs + tech/*.svg (import via assets/index.js)
 public/                   # PRODUCTION ASSETS ONLY (everything here ships):
   favicon.ico favicon-16x16.png favicon-32x32.png apple-touch-icon.png
   android-chrome-192x192.png android-chrome-512x512.png
   og-image.png logo-light.png logo-dark.png
   site.webmanifest robots.txt sitemap.xml resume.pdf
+  sounds/raven.mp3        # Optional raven one-shot (Contact send); other beds synth-only
   realms/<slug>/…         # project gallery screenshots (per-theme subfolders when themed)
+  archive/<id>.webp       # Time Machine era posters (probed; optional)
 branding/                 # Brand SOURCE/ARCHIVE — NOT deployed (out of public/)
   source/  archive/v1/  hero-sky/   # master art, old icon sets, retired hero skies
 tools/og-image/           # og-image template + regeneration steps (headless Chrome)
+scripts/gen-commit-history.mjs # Generates constants/commitHistory.js (prebuild)
 docs/chronicle/           # THIS documentation set (source of truth)
 ```
 
@@ -62,38 +137,57 @@ docs/chronicle/           # THIS documentation set (source of truth)
 shared by both routes (z-stacking + mount order matters):
 
 ```jsx
-// App.jsx
+// App.jsx — four routes sharing one shell
 <BrowserRouter><Routes>
   <Route element={<Layout/>}>
-    <Route index element={<Chronicle/>} />          // /
-    <Route path="making-of" element={<MakingOf/>} />// /making-of
+    <Route index element={<Chronicle/>} />                    // /
+    <Route path="making-of" element={<MakingOf/>} />          // /making-of
+    <Route path="time-machine" element={                      // /time-machine
+      <ErrorBoundary><Suspense><TimeMachine/></Suspense></ErrorBoundary>} />
+    <Route path="*" element={                                 // cinematic 404
+      <ErrorBoundary><Suspense><Void/></Suspense></ErrorBoundary>} />
   </Route>
 </Routes></BrowserRouter>
 
 // components/Layout.jsx — present on EVERY route
 useSmoothScroll();                       // Lenis + GSAP ticker (once, persists across routes)
 const activeId = useActiveSection();     // scroll-spy → active chapter id (→ Outlet context)
+const is404 = /* not / or /making-of or /time-machine */;    // hides the footer on 404
 <div bg=theme>
   <div aurora-bg / sunrise-bg />         // ambient background
   <Cursor />                             // custom cursor (fixed, top z)
-  <SkyControl />                         // fixed top-right (sky menu)
-  <ControlCluster activeId />            // fixed bottom-right (voice + sound)
+  <SkyControl />                         // fixed top-right (sky menu, desktop only)
+  <DayNightToggle />                     // fixed top-right (just the sun/moon, mobile only)
+  <ControlCluster activeId />            // fixed bottom-right (voice + sound, desktop only)
+  <MobileMenu activeId />                // bottom-sheet w/ nav/voice/sound/sky (mobile only)
   <EasterEggListener/> <VoiceTransition/> <VoiceHall/>  // global ⇧⌘V + decode FX
-  <ScrollManager/>                       // resets scroll on entering /making-of
+  <ScrollManager/>                       // resets scroll on entering coda routes
   <Outlet context={{ activeId }} />      // ← the active route renders here
-  <footer/* + the quiet /making-of link */> <Analytics/> <SpeedInsights/>
+  {!is404 && <footer>…</footer>}         // conversion footer (hidden on 404)
+  <Analytics/> <SpeedInsights/>
 </div>
 
 // pages/Chronicle.jsx — / only
 const { activeId } = useOutletContext();
-useEffect(() => restoreScroll(), []);    // land back at the doorway on return from the Atelier
-<SideRail activeId visible={activeId!=='origin'} onOpenMap />  // collapsible chapter nav
-<button mobile-map/> <MapOverlay open activeId />             // ⌘K interactive map (Chronicle-only)
-<Hero /> {lazy sections each <ErrorBoundary><Suspense>…}      // chapters 00–05 (no Atelier)
+useEffect(() => restoreScroll(), []);    // land back at the doorway on return
+<SideRail activeId items={chapterList} actions={[map,makingOf,timeMachine]} />
+<StickyCta activeId />                   // scroll-triggered contact CTA
+<MapOverlay open activeId />             // ⌘K interactive map (Chronicle-only)
+<Hero /> {lazy sections each <ErrorBoundary><Suspense>…}  // chapters 00–05
 
 // pages/MakingOf.jsx — /making-of only
-<Link to="/" className="atelier-return">{t('makingOf.back')}</Link>  // the return doorway
-<ErrorBoundary><Suspense><Atelier/></Suspense></ErrorBoundary>       // lazy Atelier
+<SideRail activeId items={atelierActs} actions={[timeMachine,home]} />  // acts rail
+<Link to="/" className="atelier-return md:hidden" />  // mobile return doorway
+<ErrorBoundary><Suspense><Atelier/></Suspense></ErrorBoundary>
+
+// pages/TimeMachine.jsx — /time-machine only
+<SideRail activeId items={eraActs} actions={[home]} />  // era rail
+<Link to="/" className="atelier-return md:hidden" />    // mobile return doorway
+<ErrorBoundary><Suspense><TimeMachine/></Suspense></ErrorBoundary>
+
+// pages/Void.jsx — * (cinematic 404, "Off the Map")
+// Self-contained one-viewport scene: lost astrolabe, sparse starfield, 404 tag,
+// primary "way home" + secondary "find your bearing" delight. No footer, no scroll.
 ```
 
 - **Sections are `lazy()` + `Suspense` + `ErrorBoundary`.** An `ErrorBoundary`
@@ -171,7 +265,7 @@ if (reduce || coarse) { /* static fallback */ return; }
 
 ## 4b. Sound (Phase 4)
 
-A small Web-Audio "sound design system": sparse cues that reward *intent*, never
+A Web-Audio "sound design system": sparse cues that reward *intent*, never
 accompany motion. Three layers:
 
 - **Engine** (`lib/sound.js`) — pure audio, no React. ONE shared `AudioContext`,
@@ -179,21 +273,27 @@ accompany motion. Three layers:
   → destination` bus. All **tunables live in the `CONFIG` block** at the top (cue
   loudness/length, bed loudness, sample paths). Abstract cues are synthesized (osc
   + ADSR + biquad + noise → 0 bytes); the **raven** is an optional one-shot mp3.
-  Two continuous *beds* (Arsenal **hum**, Hero **watch**) each play an **optional
-  looping mp3** (`CONFIG.beds.*.sample`) or a synth fallback, built lazily and torn
-  down at zero. **Page-visibility gated:** the context suspends on tab/window switch
-  and resumes on return. Everything no-ops until unlocked + enabled + in view.
+  **Five** continuous *beds* each play an **optional looping mp3**
+  (`CONFIG.beds.*.sample`) or a synth fallback, built lazily and torn down at zero.
+  **Page-visibility gated:** the context suspends on tab/window switch and resumes
+  on return. Everything no-ops until unlocked + enabled + in view.
 - **Store** (`useSoundStore`) — persisted prefs (`enabled`/`volume`/`engaged`);
   **default-on but auto-muted under `prefers-reduced-motion`**; pushes changes
   into the engine.
 - **Cues** — fired with `playCue(name)`: `theme` (DayNightToggle, swoosh synced to
   the wipe), `glitch` (voice change), `error` (Contact validation), `mapOpen`/
-  `mapClose` (App), `raven` (Contact send), `blip` (Tech hover), `confirm` (sound
-  on). Beds: `sound.hum` (Arsenal, proximity-faded via a Tech ScrollTrigger),
-  `sound.watch` (Hero, scroll-faded). `sound.loadRaven()` + `sound.loadBeds()`
-  preload the optional samples at boot.
+  `mapClose` (Chronicle), `raven` (Contact send), `blip` (Tech hover), `detent`
+  (BuildReel sprocket tick), `settle` (BuildReel playhead landing), `click` (physical
+  prev/next key), `hoverNote` (Observatory chip hover), `rewind` (Time Machine era
+  crossing), `pageflip` (Time Tunnel page turn), `assembleSwell` (FaceParticles
+  gathering), `volumeTick` (volume slider tick), `chartSwap` (Arsenal orbit⇄inventory
+  fold/unfurl). **Beds:** `sound.watch` (Hero astrolabe, scroll-faded),
+  `sound.hum` (Arsenal ambience, proximity-faded via a Tech ScrollTrigger),
+  `sound.lens` (FaceParticles magic-lantern hover buzz), `sound.orbit` (Observatory
+  constellation hover), `sound.reel` (BuildReel film-transport whir, velocity-driven).
+  `sound.loadRaven()` + `sound.loadBeds()` preload the optional samples at boot.
 - **Voice transition** — `lib/voiceChange.js` is a tiny emitter; the voice store
-  calls `fireVoiceChange()` after a switch, and `VoiceTransition` (App) plays the
+  calls `fireVoiceChange()` after a switch, and `VoiceTransition` (Layout) plays the
   `glitch` cue + runs `lib/voiceScramble.js`, which walks visible text nodes and
   **decodes the new copy in** (per-text scramble; restores exact targets so React
   stays consistent). No overlay. Skipped under reduced-motion.
@@ -204,15 +304,32 @@ accompany motion. Three layers:
 
 | Component | Contract |
 |---|---|
-| `Layout` | The shell shared by both routes: mounts smooth scroll + the boot side-effects, the always-present controls (`SkyControl`, `ControlCluster`, `VoiceHall`, ⇧⌘V), the footer (with the quiet `/making-of` link), analytics, and a `ScrollManager`. Renders the active route through `<Outlet context={{ activeId }} />`. Imported directly by `App.jsx` (not barrel-exported). |
-| `SideRail({ activeId, onOpenMap, visible })` | **Chronicle-only** (rendered by `pages/Chronicle.jsx`). Desktop-only collapsible glass rail (left, vertically centered); hidden on the hero (`visible={activeId!=='origin'}`); springs open on hover. Sigil = themed brand crest (`/logo-{light,dark}.png`); chapter rows → `scrollToSection`; Map row uses `CompassRose`. Chapters come from `constants.chapterList` (single source). |
+| `Layout` | The shell shared by **all** routes: mounts smooth scroll + the boot side-effects, the always-present controls (`SkyControl`/`DayNightToggle`, `ControlCluster`, `MobileMenu`, `VoiceHall`, ⇧⌘V), the conversion footer (with quiet doorways to `/making-of` and `/time-machine` — footer hidden on the 404), analytics (`capturePageview` on route change), and a `ScrollManager`. Renders the active route through `<Outlet context={{ activeId }} />`. Imported directly by `App.jsx` (not barrel-exported). |
+| `SideRail({ activeId, items, actions, visible })` | **Desktop-only** (md:up) collapsible glass rail (left, vertically centered). **Shared by all three routes** — Chronicle (chapter rows + map/makingOf/timeMachine actions), MakingOf (Atelier act rows + timeMachine/home actions), TimeMachine (era rows + home action). `items` are clickable nav rows (scroll-to-section); `actions` are footer-slot buttons. Sigil = themed brand crest (`/logo-{light,dark}.png`). Springs open on hover. |
+| `MobileMenu({ activeId })` | **Mobile-only** (md:down) bottom-sheet that collapses the desktop floating controls into one touch-friendly surface: chapter/act nav, voice picker (with preview + sealed-voice clue unlock), sound control, full 5-mode sky picker (`ThemeWheel`). Slides up from a persistent pill; manages its own overlay stack (`lib/uiOverlay.js`). |
+| `StickyCta({ activeId })` | Scroll-triggered CTA bar that appears once the visitor has engaged past the hero. A quiet "get in touch" / résumé nudge that follows the scroll. |
 | `MapOverlay({ open, onClose, activeId })` | **Chronicle-only** ⌘K interactive map overlay (the realized "Command Palette"). Pins are `constants.chapterList` (each chapter's `x`/`y`/`kw`); probes `/chronicle/map/realm-map.webp`, degrades gracefully; commands map to `scrollToSection` + external links. |
 | `Cursor` | Dot + trailing ring (+grows over `a,button,[data-cursor=hover]`) + backlight. Auto-off on touch/reduced-motion. Add `data-cursor="hover"` to custom interactive targets. |
-| `SkyControl` | Top-right theme control: the 5-mode sky menu (Auto/Dawn/Day/Dusk/Night) wrapping `DayNightToggle`. The trigger pill is a live sky status chip. |
-| `DayNightToggle({ compact? })` | The base light↔dark toggle (inside `SkyControl`). Sun↔moon morph, orbit ring, spring press, radial View-Transition ripple; fires the `theme` sound cue. |
-| `CompassRose({ className })` | Shared ember/gold compass-star SVG. Used at the astrolabe hub, the SideRail map row, and the map overlay. |
-| `ControlCluster` | Bottom-right fixed flex row: `[VoiceSwitcher] · [SoundControl]`. Sound expands on hover and pushes voice left. |
-| `SoundControl` | Audio half of the cluster: master mute/volume + the one-time "turn on sound" onboarding note. Drives `useSoundStore` → `lib/sound.js`. |
+| `SkyControl` | Top-right theme control (desktop): the 5-mode sky menu (Auto/Dawn/Day/Dusk/Night) wrapping `DayNightToggle`. The trigger pill is a live sky status chip. |
+| `DayNightToggle({ compact? })` | The base light↔dark toggle (inside `SkyControl`, also standalone on mobile top-right). Sun↔moon morph, orbit ring, spring press, radial View-Transition ripple; fires the `theme` sound cue. |
+| `CompassRose({ className })` | Shared ember/gold compass-star SVG. Used at the astrolabe hub, the SideRail map row, the map overlay, and the 404 compass. |
+| `ControlCluster` | Bottom-right fixed flex row (desktop): `[VoiceSwitcher] · [SoundControl]`. Sound expands on hover and pushes voice left. |
+| `VoiceSwitcher` | Compact bottom-right voice popover (the teaser surface): open voices + sealed rows (capped at `POPOVER_SEALED_LIMIT`) + CTA to Voice Hall. Uses `useCoachmark` for the one-time entice note. |
+| `VoiceHall` | Full-screen searchable, category-grouped voice picker overlay (⇧⌘V). Includes `VoicePreviewCard` (detail panel) + `VoiceRequest` ("Summon a Voice" form). |
+| `VoicePreviewCard` | Voice detail card — shared by the Voice Hall side panel and the MobileMenu voice preview. Shows pre-rendered portrait plate + identity + sealed-voice clue unlock. |
+| `ClueUnlock` | Touch-friendly sealed-voice clue/answer field — inline in popover rows and preview cards. |
+| `SoundControl` | Audio half of the cluster: master mute/volume (`VolumeDial`) + the one-time "turn on sound" onboarding note (`useCoachmark`). Drives `useSoundStore` → `lib/sound.js`. |
+| `VolumeDial` | Apple-style drag/click volume slider with `volumeTick` sound feedback. |
+| `ThemeWheel` | 5-mode sky picker used inside `MobileMenu` (the full palette on mobile). |
+| `Hovercard` | Portalled info popover (never clipped by overflow containers). Used by `VoiceSwitcher` attribution ⓘ. |
+| `TimeRail` | **Time Machine**: right-edge continuous year/event timeline with MacBook-dock magnification. Fixed decoration reading scroll progress. |
+| `TimeTunnel` | **Time Machine**: the "going back in time" news-headline transitions between era cards (scroll-driven, scrubbed). |
+| `EraExhibit` | **Time Machine**: an archived portfolio card — iframe embed (if framable) or poster + link-out. |
+| `Blueprint` | **Atelier Act II**: interactive runtime system chart — nodes + connections, click to explore. Custom `chartSwap` synthesis sounds. |
+| `Observatory` | **Atelier Act II**: interactive analytics constellation with event-specific readouts and `orbit` bed hover. |
+| `CodebaseAtlas` | **Atelier Act II**: cinematic codebase explorer tree with boundary-aware scroll chaining. |
+| `ExpeditionRecap` | **Atelier off-map**: cinematic visitor instrument panel — `TravelerMap`, `SunArc`, Sigil, visit counter, voice constellation. |
+| `FaceParticles` | **Atelier off-map**: interactive portrait with particle assembly (`assembleSwell` cue) + `lens` bed. |
 | `ErrorBoundary({ fallback? })` | Class boundary; wrap any risky subtree. |
 | `SectionWrapper(Component, id)` | HOC (`hoc/`): padded `max-w-7xl` section, `<span id>` anchor, Framer stagger container (`lib/motion`). Use for standard sections. |
 | `ChapterHeading({ no, eyebrow, title, align })` | The one section header. Use everywhere; never hand-roll headers. |
@@ -235,10 +352,12 @@ accompany motion. Three layers:
 - Brand/icon assets: the favicon family + `og-image.png` are generated from the
   brand crest via [`/tools/og-image/`](../../tools/og-image/). Full spec +
   filenames + prompts: [ASSETS.md](ASSETS.md).
-- **Sound (Phase 4):** optional mp3s in `public/sounds/` — `raven.mp3` (one-shot),
-  `astrolabe.mp3` (Hero bed loop), `arsenal.mp3` (Arsenal bed loop). Each degrades
-  to a synthesized fallback if absent — never block on them. Paths are configurable
-  in `lib/sound.js` → `CONFIG`. All other cues are synthesized (0 bytes).
+- **Sound (Phase 4):** `public/sounds/raven.mp3` (one-shot raven sample) ships.
+  The bed CONFIG references `astrolabe.mp3` and `arsenal.mp3` as optional mp3 loop
+  samples — if present they play; if absent (current state) a synthesized fallback
+  is used seamlessly. All other cues and the three remaining beds (`lens`, `orbit`,
+  `reel`) are synthesized (0 bytes). Paths are configurable in `lib/sound.js` →
+  `CONFIG`. Never block on an absent sample.
 
 ---
 
@@ -272,9 +391,11 @@ CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 - Check **dark + light**, and **360 / 768 / 1280 / 1920** widths.
 - Confirm no console errors: add `--enable-logging=stderr --v=0 --dump-dom`.
 - Verify reduced-motion (emulate) and that scroll never locks.
-- **Verify both routes:** `/` (no Atelier inline, doorway + footer link present)
-  and `/making-of` (return doorway + Atelier body, no chapter chrome). Deep-link
-  `/making-of` works because of the `vercel.json` SPA rewrite (dev: Vite serves
+- **Verify all routes:** `/` (no Atelier inline, doorway + footer link present),
+  `/making-of` (return doorway + Atelier body, no chapter chrome),
+  `/time-machine` (era cards + time rail + return doorway, no chapter chrome), and
+  any unknown path (cinematic 404: "Off the Map" scene, no footer, `noindex` meta).
+  Deep-links work because of the `vercel.json` SPA rewrite (dev: Vite serves
   `index.html` for any path).
 
 > To verify scroll-dependent chrome (the `SideRail`, which is hidden on the hero)

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Volume2, VolumeX } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useSoundStore } from '../store/useSoundStore';
@@ -7,8 +7,8 @@ import { useCoachmark } from '../store/useCoachmark';
 import { sound } from '../lib/sound';
 
 const JELLY = { type: 'spring', stiffness: 320, damping: 24, mass: 0.7 };
-const COLLAPSED = 48;
-const EXPANDED = 248;
+const COLLAPSED = 48;    // the resting button (a circle)
+const EXPANDED_H = 164;  // the capsule the circle morphs into on hover
 
 /**
  * Sound control — the audio half of the bottom-right control cluster (Phase 4).
@@ -25,13 +25,21 @@ const EXPANDED = 248;
  * IS the unlock gesture (it opens the gate and keeps sound on, with an audible
  * confirm), never a mute. So following the coachmark does exactly what it says.
  * Past the gate the button is an ordinary mute/unmute toggle.
+ *
+ * Volume (v2.0 follow-up): on hover the circle ITSELF morphs into the volume
+ * bar — the same white-bordered pill, with a light-ember liquid rising to the
+ * volume level on a jelly spring (the mobile dial's physics). One icon, one
+ * object; drag anywhere on the capsule to pour, click the icon to mute.
  */
 const SoundControl = () => {
   const { t } = useTranslation();
-  const { enabled, volume, unlocked, toggle, setVolume } = useSoundStore();
-  const { active: activeCoach, request: requestCoach, release: releaseCoach } = useCoachmark();
+  const { enabled, volume, unlocked, toggle, setVolume, setEnabled } = useSoundStore();
+  const { active: activeCoach, request: requestCoach, release: releaseCoach, dismiss: dismissCoach, isDismissed } = useCoachmark();
+  const seen = isDismissed('sound');
   const [expanded, setExpanded] = useState(false);
-  const liveBar = useRef(null);
+  const [dragging, setDragging] = useState(false);
+  const trackRef = useRef(null);
+  const lastTick = useRef(volume);
   // The hint is visible only while THIS control owns the shared coachmark stage,
   // so it can never overlap the Voice entice note (see useCoachmark).
   const showNote = activeCoach === 'sound';
@@ -42,21 +50,45 @@ const SoundControl = () => {
 
   const armed = enabled && !unlocked; // on by preference, but the browser holds it
   const live = enabled && unlocked;   // actually audible
+  const level = enabled ? volume : 0;
+
+  // Jelly liquid — the fill target snaps, the spring overshoots and settles
+  // (identical physics to the mobile VolumeDial, so the two controls feel like
+  // one instrument).
+  const targetPct = useMotionValue(level * 100);
+  const springPct = useSpring(targetPct, { stiffness: 170, damping: 12, mass: 1 });
+  const fillHeight = useTransform(springPct, (v) => `${Math.max(0, Math.min(100, v))}%`);
+  useEffect(() => { targetPct.set(level * 100); }, [level, targetPct]);
 
   // Coachmark: appears a beat after landing while still locked, and dismisses the
-  // instant we leave the armed state (the gate opens, or the visitor mutes).
+  // instant we leave the armed state (the gate opens, or the visitor mutes). It's
+  // a ONE-TIME invitation — `seen` (persisted) suppresses it forever once handled,
+  // and if the visitor never acts, a ~9s show window retires it anyway so a
+  // returning visitor is never nagged (value-audit "unmissable once, then quiet").
   useEffect(() => {
-    if (!armed) { releaseCoach('sound'); return undefined; }
+    if (!armed || seen) { releaseCoach('sound'); return undefined; }
     const inT = setTimeout(() => requestCoach('sound'), 1200);
-    return () => { clearTimeout(inT); releaseCoach('sound'); };
-  }, [armed, requestCoach, releaseCoach]);
+    const outT = setTimeout(() => dismissCoach('sound'), 1200 + 9000);
+    return () => { clearTimeout(inT); clearTimeout(outT); releaseCoach('sound'); };
+  }, [armed, seen, requestCoach, releaseCoach, dismissCoach]);
 
   const capturePress = () => { pressLocked.current = !sound.isUnlocked(); };
+
+  // The coachmark bubble is itself the unlock target — tapping the invitation does
+  // exactly what it promises (armed → live), so the note and the action aren't two
+  // separate hunts. Mirrors onPress's locked-press branch, then retires the hint.
+  const onNoteClick = () => {
+    sound.suppressReward();
+    if (!enabled) toggle();                        // muted + locked → enable unlocks + confirms
+    else { sound.unlock(); sound.playCue('confirm'); } // armed → open the gate + confirm audibly
+    dismissCoach('sound');
+  };
 
   const onPress = () => {
     if (pressLocked.current) {
       // First press while the browser gate is shut: this click IS the unlock
       // gesture, and sound ends up ON either way (never a mute on a locked press).
+      dismissCoach('sound'); // acted on the invitation → retire it for good
       if (!enabled) {
         // muted + locked → enabling already unlocks the gate AND plays the confirm
         // cue (see store.setEnabled), so this single call lands us in the live state.
@@ -71,29 +103,66 @@ const SoundControl = () => {
       toggle();
     }
   };
-  const onVolume = (e) => setVolume(parseFloat(e.target.value));
 
-  // Expand the volume slider on hover — but only on devices that actually hover.
+  // Pouring — drag (or click) anywhere on the capsule sets the level; hitting
+  // zero mutes, rising from zero unmutes, ticks pitch up with the level.
+  const apply = (v) => {
+    const c = Math.max(0, Math.min(1, v));
+    if (c > 0 && !enabled) setEnabled(true);
+    else if (c === 0 && enabled) setEnabled(false);
+    if (c > 0) setVolume(c);
+    targetPct.set(c * 100);
+    if (Math.abs(c - lastTick.current) > 0.05) {
+      lastTick.current = c;
+      sound.playCue('volumeTick', { level: c });
+    }
+  };
+  const fromPointer = (clientY) => {
+    const r = trackRef.current.getBoundingClientRect();
+    apply(1 - (clientY - r.top) / r.height);
+  };
+  const onDown = (e) => {
+    sound.suppressReward(); // pouring volume isn't the hero — no off-screen spin reward
+    sound.unlock();
+    e.currentTarget.setPointerCapture(e.pointerId);
+    setDragging(true);
+    fromPointer(e.clientY);
+  };
+  const onMove = (e) => { if (dragging) fromPointer(e.clientY); };
+  const onUp = () => setDragging(false);
+  const onKey = (e) => {
+    if (e.key === 'ArrowUp' || e.key === 'ArrowRight') { e.preventDefault(); apply(level + 0.1); }
+    else if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') { e.preventDefault(); apply(level - 0.1); }
+  };
+
+  // Expand into the bar on hover — but only on devices that actually hover.
   // On touch, a synthetic `mouseenter` (with no matching `mouseleave`) would leave
   // the control stuck open; coarse pointers just tap the button to toggle.
   const onEnter = () => { if (window.matchMedia('(hover: hover)').matches) setExpanded(true); };
 
   return (
-    <div
-      className="relative"
-      onMouseEnter={onEnter}
-      onMouseLeave={() => setExpanded(false)}
-    >
-      {/* Armed-but-locked coachmark — a clear, action-first invitation pointing at
-          the speaker, which (above) genuinely turns sound on when pressed. */}
+    // Hover-to-expand lives on the CAPSULE, not this wrapper: the coach-tip is a
+    // child here, and if the wrapper drove the expand, hovering the tip would grow
+    // the capsule, shove the tip off the cursor, fire mouseleave, collapse, and
+    // flicker. Scoping the hover to the capsule alone breaks that loop.
+    <div className="relative">
+      {/* Armed-but-locked coachmark — a clear, action-first invitation that is
+          ITSELF the unlock button (tap the bubble OR the speaker below; both turn
+          sound on). One-time: it retires for good once tapped or after its window. */}
       <AnimatePresence>
         {showNote && armed && (
-          <motion.div
+          <motion.button
+            type="button"
+            onClick={onNoteClick}
+            data-cursor="hover"
+            aria-label={t('sound.enableHint')}
             initial={{ opacity: 0, y: 8, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.96 }}
+            whileHover={{ y: -1 }}
+            whileTap={{ scale: 0.97 }}
             transition={JELLY}
-            className="absolute bottom-full right-0 mb-3 w-56 origin-bottom-right rounded-2xl px-4 py-3 pointer-events-none"
+            className="absolute bottom-full right-0 mb-3 w-56 origin-bottom-right rounded-2xl px-4 py-3 text-left cursor-pointer"
             style={{
               background: 'color-mix(in srgb, var(--color-card-bg) 96%, transparent)',
               border: '1px solid var(--color-card-border)',
@@ -109,36 +178,65 @@ const SoundControl = () => {
               className="absolute -bottom-1.5 right-6 w-3 h-3 rotate-45"
               style={{ background: 'var(--color-card-bg)', borderRight: '1px solid var(--color-card-border)', borderBottom: '1px solid var(--color-card-border)' }}
             />
-          </motion.div>
+          </motion.button>
         )}
       </AnimatePresence>
 
+      {/* The one object: a circle at rest, THE volume bar on hover. */}
       <motion.div
-        animate={{ width: expanded ? EXPANDED : COLLAPSED }}
+        ref={trackRef}
+        animate={{ height: expanded ? EXPANDED_H : COLLAPSED }}
         transition={JELLY}
-        className="h-12 flex flex-row-reverse items-center overflow-hidden rounded-full"
+        className="soundpop w-12 relative overflow-hidden rounded-full"
+        onMouseEnter={onEnter}
+        onMouseLeave={() => { setExpanded(false); setDragging(false); }}
+        onPointerDown={expanded ? onDown : undefined}
+        onPointerMove={expanded ? onMove : undefined}
+        onPointerUp={expanded ? onUp : undefined}
+        onPointerCancel={expanded ? onUp : undefined}
+        onKeyDown={expanded ? onKey : undefined}
+        role={expanded ? 'slider' : undefined}
+        tabIndex={expanded ? 0 : -1}
+        aria-label={t('sound.volume')}
+        aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(level * 100)}
         style={{
           background: 'var(--color-card-bg)',
           border: '1px solid var(--color-card-border)',
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
           boxShadow: 'var(--shadow-card)',
+          cursor: expanded ? 'ns-resize' : 'pointer',
+          touchAction: 'none',
         }}
       >
-        {/* press = activate (while locked) or mute/unmute (once live) */}
+        {/* the light-ember liquid — rises to the level on the jelly spring; at
+            rest it's clipped away, so the collapsed circle looks untouched */}
+        <motion.span
+          className="soundpop__fill"
+          style={{ height: fillHeight, opacity: expanded ? 1 : 0 }}
+          aria-hidden="true"
+        />
+
+        {/* press = activate (while locked) or mute/unmute (once live) —
+            pinned to the capsule's foot, the same single icon in both states */}
         <motion.button
-          onPointerDown={capturePress}
+          onPointerDown={(e) => { e.stopPropagation(); capturePress(); }}
           onClick={onPress}
           data-cursor="hover"
           whileTap={{ scale: 0.88 }}
           transition={JELLY}
           aria-label={live ? t('sound.toggleOff') : t('sound.toggleOn')}
+          title={live ? t('sound.toggleOff') : t('sound.toggleOn')}
           aria-pressed={live}
-          className="relative grid place-items-center flex-shrink-0 w-12 h-12"
+          /* Sized by the container's CONTENT box (inset-x-0 + aspect-square), not
+             a fixed 48px: the 1px border makes the content box 46px, and a 48px
+             button overflowed it under overflow:hidden — the inner circle sat
+             visibly off-center (v2.0 round 3). */
+          className="absolute inset-x-0 bottom-0 aspect-square grid place-items-center"
         >
           {/* "Primed" pulse — shown ONLY while armed (locked). A plain conditional
               (not AnimatePresence) so it vanishes the very instant audio unlocks. */}
-          {armed && (
+          {armed && !expanded && (
             <motion.span
               className="absolute top-2 right-2 w-2 h-2 rounded-full pointer-events-none"
               style={{ background: 'var(--color-ember)' }}
@@ -148,37 +246,21 @@ const SoundControl = () => {
           )}
           <span
             className="grid place-items-center w-9 h-9 rounded-full transition-colors"
-            style={{
-              // live = ember fill; armed = dormant-but-inviting; muted = neutral.
-              background: live ? 'rgba(var(--color-ember-rgb),0.16)' : 'var(--color-card-bg)',
-              color: live ? 'var(--color-ember)' : armed ? 'var(--color-text)' : 'var(--color-text-muted)',
-              border: live ? 'none' : `1px solid ${armed ? 'rgba(var(--color-ember-rgb),0.5)' : 'var(--color-card-border)'}`,
-            }}
+            style={
+              expanded
+                // Expanded: the liquid IS the state colour — the icon rides bare on it.
+                ? { background: 'transparent', border: 'none', color: level > 0.08 ? 'var(--color-ember)' : 'var(--color-text-muted)' }
+                // Collapsed: live = ember wash; armed = dormant-but-inviting; muted = neutral.
+                : {
+                    background: live ? 'rgba(var(--color-ember-rgb),0.16)' : 'var(--color-card-bg)',
+                    color: live ? 'var(--color-ember)' : armed ? 'var(--color-text)' : 'var(--color-text-muted)',
+                    border: live ? 'none' : `1px solid ${armed ? 'rgba(var(--color-ember-rgb),0.5)' : 'var(--color-card-border)'}`,
+                  }
+            }
           >
             {enabled ? <Volume2 size={15} /> : <VolumeX size={15} />}
           </span>
         </motion.button>
-
-        {/* revealed controls (left of the button, clipped when collapsed) */}
-        <motion.div
-          animate={{ opacity: expanded ? 1 : 0 }}
-          transition={{ duration: 0.2, delay: expanded ? 0.06 : 0 }}
-          className="flex items-center gap-3 pl-4 pr-1 flex-shrink-0"
-          style={{ width: EXPANDED - COLLAPSED }}
-        >
-          <span
-            className="text-[10px] tracking-[0.18em] uppercase font-medium whitespace-nowrap"
-            style={{ color: enabled ? 'var(--color-ember)' : 'var(--color-text-muted)' }}
-          >
-            {live ? t('sound.on') : armed ? t('sound.ready') : t('sound.off')}
-          </span>
-          <input
-            ref={liveBar}
-            type="range" min={0} max={1} step={0.01} value={volume}
-            onChange={onVolume} aria-label={t('sound.volume')}
-            className="vol-slider flex-1" style={{ minWidth: 70 }}
-          />
-        </motion.div>
       </motion.div>
     </div>
   );

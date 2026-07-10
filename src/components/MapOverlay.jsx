@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Search, FileText, Github, Linkedin, Sun, Moon, X, CornerDownLeft, Star, Feather } from 'lucide-react';
+import { FileText, Github, Linkedin, Sun, Moon, X, Star, Feather, Mountain, Waves, Hammer, ArrowUpRight } from 'lucide-react';
 import { personalInfo, chapterList } from '../constants';
 import { scrollToSection } from '../lib/smoothScroll';
 import { pushOverlay, popOverlay } from '../lib/uiOverlay';
@@ -35,23 +36,20 @@ const trailPath = (pts) => {
 
 const MapOverlay = ({ open, onClose, activeId }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { resolvedTheme, toggleTheme } = useThemeStore();
   const isDark = resolvedTheme === 'dark';
   const labelOf = (p) => t(`chapters.${p.id}.label`);
-  const [query, setQuery] = useState('');
   const [hasMap, setHasMap] = useState(false);
-  const inputRef = useRef(null);
 
   useEffect(() => { const img = new Image(); img.onload = () => setHasMap(true); img.src = MAP_SRC; }, []);
 
   useEffect(() => {
-    if (!open) return;
-    setQuery('');
+    if (!open) return undefined;
     pushOverlay(); // hush the hero astrolabe behind the blur
-    const t = setTimeout(() => inputRef.current?.focus(), 60);
     const onKey = (e) => { if (e.key === 'Escape') onClose(); };
     window.addEventListener('keydown', onKey);
-    return () => { clearTimeout(t); window.removeEventListener('keydown', onKey); popOverlay(); };
+    return () => { window.removeEventListener('keydown', onKey); popOverlay(); };
   }, [open, onClose]);
 
   const actions = [
@@ -62,17 +60,9 @@ const MapOverlay = ({ open, onClose, activeId }) => {
     { id: 'theme', label: isDark ? t('map.actions.themeLight') : t('map.actions.themeDark'), icon: isDark ? Sun : Moon, run: toggleTheme },
   ];
 
-  const q = query.trim().toLowerCase();
-  const match = (p) => !q || (labelOf(p) + ' ' + p.kw).toLowerCase().includes(q);
-  const pins = PINS.filter(match);
-  const acts = q ? actions.filter((a) => a.label.toLowerCase().includes(q)) : actions;
-
+  const pins = PINS;
+  const acts = actions;
   const travel = (id) => { track('map_travel', { id }); onClose(); setTimeout(() => scrollToSection(id), 120); };
-  const onSubmit = (e) => {
-    e.preventDefault();
-    if (pins[0]) travel(pins[0].id);
-    else if (acts[0]) { acts[0].run(); onClose(); }
-  };
 
   // parchment palettes
   const plateBg = isDark
@@ -92,17 +82,14 @@ const MapOverlay = ({ open, onClose, activeId }) => {
             initial={{ scale: 0.94, y: 14, opacity: 0 }} animate={{ scale: 1, y: 0, opacity: 1 }} exit={{ scale: 0.96, y: 10, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 260, damping: 26 }}>
 
-            {/* search */}
-            <form onSubmit={onSubmit} className="flex items-center gap-3 px-5 py-4 border-b" style={{ borderColor: 'var(--color-card-border)' }}>
-              <Search size={18} style={{ color: 'var(--color-ember)' }} />
-              <input ref={inputRef} value={query} onChange={(e) => setQuery(e.target.value)}
-                placeholder={t('map.searchPlaceholder')}
-                className="flex-1 bg-transparent outline-none text-[15px]" style={{ color: 'var(--color-text)' }} data-cursor="hover" />
-              <button type="button" onClick={onClose} aria-label="Close" data-cursor="hover"
-                className="grid place-items-center w-7 h-7 rounded-lg" style={{ border: '1px solid var(--color-card-border)', color: 'var(--color-text-muted)' }}>
-                <X size={15} />
+            {/* header — the map is a pure navigator (search removed; it went unused) */}
+            <div className="flex items-center justify-between px-5 py-3.5 border-b" style={{ borderColor: 'var(--color-card-border)' }}>
+              <span className="text-[12px] font-semibold tracking-[0.16em] uppercase" style={{ color: 'var(--color-text-muted)' }}>{t('map.title')}</span>
+              <button type="button" onClick={onClose} aria-label={t('map.close')} data-cursor="hover"
+                className="grid place-items-center w-8 h-8 rounded-lg" style={{ border: '1px solid var(--color-card-border)', color: 'var(--color-text-muted)' }}>
+                <X size={16} />
               </button>
-            </form>
+            </div>
 
             {/* treasure plate */}
             <div className="relative" style={{ aspectRatio: '16 / 9', background: plateBg }}>
@@ -118,9 +105,9 @@ const MapOverlay = ({ open, onClose, activeId }) => {
                 <path d="M5 88 q10 -6 20 0 t20 0" fill="none" stroke="var(--color-card-border)" strokeWidth="0.3" opacity="0.5" />
                 <path d="M60 92 q8 -5 16 0" fill="none" stroke="var(--color-card-border)" strokeWidth="0.3" opacity="0.4" />
               </svg>
-              {/* tiny mountain + wave glyphs for map flavour */}
-              <span className="absolute" style={{ left: '48%', top: '78%', color: 'var(--color-text-muted)', opacity: 0.4, fontSize: 12 }} aria-hidden="true">⛰</span>
-              <span className="absolute" style={{ left: '20%', top: '85%', color: 'var(--color-text-muted)', opacity: 0.35, fontSize: 11 }} aria-hidden="true">〜</span>
+              {/* tiny mountain + wave marks for map flavour (lucide, not emoji — L8) */}
+              <Mountain className="absolute" size={12} strokeWidth={1.5} style={{ left: '48%', top: '78%', color: 'var(--color-text-muted)', opacity: 0.4 }} aria-hidden="true" />
+              <Waves className="absolute" size={11} strokeWidth={1.5} style={{ left: '20%', top: '85%', color: 'var(--color-text-muted)', opacity: 0.35 }} aria-hidden="true" />
 
               {/* compass rose */}
               <div className="absolute top-4 right-5"><CompassRose /></div>
@@ -128,17 +115,16 @@ const MapOverlay = ({ open, onClose, activeId }) => {
               {/* the trail */}
               <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
                 <path d={trailPath(PINS)} fill="none" stroke="var(--color-ember)" strokeWidth="0.5"
-                  strokeDasharray="1.4 1.8" strokeLinecap="round" opacity={q ? 0.25 : 0.75} vectorEffect="non-scaling-stroke" />
+                  strokeDasharray="1.4 1.8" strokeLinecap="round" opacity={0.75} vectorEffect="non-scaling-stroke" />
               </svg>
 
               {/* waypoints */}
-              {PINS.map((p) => {
+              {pins.map((p) => {
                 const active = activeId === p.id;
-                const dim = q && !pins.includes(p);
                 return (
                   <button key={p.id} onClick={() => travel(p.id)} data-cursor="hover"
                     className="group absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center transition-all duration-200"
-                    style={{ left: `${p.x}%`, top: `${p.y}%`, opacity: dim ? 0.22 : 1, zIndex: active ? 3 : 2 }}
+                    style={{ left: `${p.x}%`, top: `${p.y}%`, zIndex: active ? 3 : 2 }}
                     aria-label={`Go to ${labelOf(p)}`} aria-current={active ? 'true' : undefined}>
                     {active && <Star size={12} className="mb-0.5" style={{ color: 'var(--color-ember)' }} fill="var(--color-ember)" />}
                     {/* stamp */}
@@ -152,8 +138,9 @@ const MapOverlay = ({ open, onClose, activeId }) => {
                       }}>
                       {p.no}
                     </span>
-                    {/* always-visible label */}
-                    <span className="mt-1.5 px-2 py-0.5 rounded-md text-[11px] whitespace-nowrap font-medium"
+                    {/* label — the active one always shows; the rest reveal on ≥sm
+                        so the mobile plate stays uncluttered (just numbered stamps) */}
+                    <span className={`mt-1.5 px-2 py-0.5 rounded-md text-[11px] whitespace-nowrap font-medium ${active ? '' : 'hidden sm:block'}`}
                       style={{
                         background: 'color-mix(in srgb, var(--color-primary) 80%, transparent)',
                         color: active ? 'var(--color-ember)' : 'var(--color-text)',
@@ -165,24 +152,25 @@ const MapOverlay = ({ open, onClose, activeId }) => {
                 );
               })}
 
-              {q && pins.length === 0 && (
-                <div className="absolute inset-0 grid place-items-center text-[14px]" style={{ color: 'var(--color-text-muted)' }}>
-                  {t('map.noResult')}
-                </div>
-              )}
             </div>
 
-            {/* quick actions */}
+            {/* quick actions + the Making-of doorway. The doorway sits APART from
+                the six realm pins above (it isn't a seventh realm — it's the
+                workshop beyond the map), given an ember-accented treatment so it
+                reads as a distinct destination, not another utility link. */}
             <div className="flex flex-wrap items-center gap-2 px-5 py-4 border-t" style={{ borderColor: 'var(--color-card-border)' }}>
+              <button type="button" onClick={() => { track('making_of_enter', { from: 'map' }); onClose(); navigate('/making-of'); }} data-cursor="hover"
+                className="map-action map-action--doorway">
+                <Hammer size={14} /> {t('map.actions.makingOf')} <ArrowUpRight size={13} className="opacity-70" />
+              </button>
+              <span className="w-px h-5 mx-0.5 hidden sm:block" style={{ background: 'var(--color-card-border)' }} aria-hidden="true" />
               {acts.map((a) => (
-                <button key={a.id} onClick={() => { a.run(); if (a.id !== 'theme') onClose(); }} data-cursor="hover"
-                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[13px] font-medium transition-colors"
-                  style={{ border: '1px solid var(--color-card-border)', color: 'var(--color-text)' }}>
+                <button key={a.id} onClick={() => { a.run(); if (a.id !== 'theme') onClose(); }} data-cursor="hover" className="map-action">
                   <a.icon size={14} style={{ color: 'var(--color-ember)' }} /> {a.label}
                 </button>
               ))}
-              <span className="ml-auto hidden sm:flex items-center gap-1.5 text-[11px]" style={{ color: 'var(--color-text-muted)' }}>
-                <CornerDownLeft size={12} /> {t('map.footerHint')}
+              <span className="ml-auto hidden sm:block text-[11px]" style={{ color: 'var(--color-text-muted)' }}>
+                {t('map.hint')}
               </span>
             </div>
           </motion.div>

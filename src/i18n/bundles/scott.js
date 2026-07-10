@@ -20,11 +20,12 @@ export default {
   },
 
   hero: {
-    lead: 'I am basically',
-    phrases: ['the world’s best boss', 'a friend, first', 'an entrepreneur', 'an idea man'],
-    hook: 'Sometimes I’ll start a sentence and I don’t even know where it’s going — I just hope I find it along the way. The web apps, though? Those I finish. Every time.',
-    ctaPrimary: 'Let’s be friends',
-    ctaSecondary: 'Call me →',
+    lead: 'I build',
+    phrases: ['the world’s best web apps', 'production React systems', 'full-stack everything', 'apps people actually use'],
+    proof: ['5+ yrs · React · Next.js · Node.js'],
+    ctaPrimary: 'See my work',
+    ctaSecondary: 'Let’s be friends',
+    ctaResume: 'Résumé',
     scroll: 'Scroll, please',
     spin: 'Give it a whirl',
   },
@@ -34,26 +35,19 @@ export default {
     intro: [
       'I’m Manan — a friend first, a developer second, and an entertainer third. Five years in, twenty-plus projects deep, somehow also one of the best full-stack engineers you will meet. Don’t make it weird.',
       'I take an idea from a blank page [[endToEnd|all the way to production]], across six industries, and I make it look easy. It is not easy. I just make it look that way. That’s the whole job.',
+      'Sometimes I’ll start a sentence and I don’t even know where it’s going — I just hope I find it along the way. The web apps, though? Those I finish. Every time.',
     ],
-    scribeNote: 'Things I Believe',
     disciplines: 'My Many Talents',
-    principles: [
-      { title: 'People person', body: 'I own every feature end to end — like family. From the first meeting to the last deploy, nobody gets left behind. That is a guarantee.' },
-      { title: 'A little stitious', body: 'I’m not superstitious about edge cases. I’m a little stitious. Reusable components, accessibility, the unglamorous stuff that quietly saves the day.' },
-      { title: 'Fast', body: 'Code-splitting, caching, CDNs. [[measured|Speed]]. Like a gazelle. A coding gazelle wearing a Bluetooth headset.' },
-      { title: 'Locked down', body: 'JWT, OAuth, Okta, RBAC. Nobody gets in unless I say so. I’m basically a bouncer, but for your data.' },
-    ],
     services: {
       frontend: { title: 'Making Things Look Great', description: 'Production UIs with React, Next.js and TypeScript. If it’s not pretty, it’s not done. I have an eye for these things.' },
       backend: { title: 'The Behind-the-Scenes Stuff', description: 'Scalable APIs with Node, Express, NestJS, JWT/OAuth and RBAC — the plumbing nobody sees but everybody needs.' },
-      performance: { title: 'Fast AND Findable', description: 'Code-splitting, caching, CDNs, Core Web Vitals — nobody likes waiting and I HATE waiting. Plus the SEO schema stuff so Google actually knows who I am. Speed and fame. Both.' },
-      fullstack: { title: 'Doing It All', description: 'End to end, soup to nuts, grooming to production. I wear all the hats. I love hats.' },
+      performance: { title: 'Fast AND Findable', description: 'Code-splitting, caching, CDNs, Core Web Vitals — nobody likes waiting and I HATE waiting. Plus the SEO schema stuff so Google actually knows who I am. Speed and fame. Both. I move like a gazelle. A coding gazelle in a Bluetooth headset.' },
+      fullstack: { title: 'Doing It All', description: 'End to end, soup to nuts, grooming to production. I wear all the hats. I love hats. The edge cases and reusable components nobody claps for? I’m not superstitious about those — I’m a little stitious. They quietly save the day.' },
     },
     stats: {
-      years: 'Years In The Game',
       projects: 'Hits Delivered',
       domains: 'Industries Conquered',
-      load: 'Faster Than Before',
+      shipped: 'Actually Shipped. Boom.',
     },
   },
 
@@ -77,9 +71,9 @@ export default {
         chapter: 'School',
         headline: 'I have a degree. A real one. CGPA 8.36 / 10. Boom.',
         role: 'Student (a good one)',
+        credential: 'Also a LAW degree — LL.B., bar passed (AIBE). Basically a lawyer.',
         points: [
           'Got an engineering degree in IT. Framed it. Looked at it. Still proud.',
-          'Then got a LAW degree too — LL.B., three years, from HNGU — and passed the bar (AIBE). I am basically a lawyer. Don’t sue me, I’ll sue back.',
         ],
       },
       expedition: {
@@ -87,9 +81,9 @@ export default {
         headline: 'Six industries. Production-grade. End to end. Boom — roasted.',
         role: 'Full Stack Developer',
         points: [
-          'Won the first-ever Employee of the Month. Month one. Out of 30 people. Undefeated.',
           'Delivered apps across finance, health, logistics, CRM, SaaS and media.',
           'Owned features end to end — meeting to monitoring, no babysitting required.',
+          'Also? Won the first-ever Employee of the Month. Month one. Out of 30 people. Undefeated.',
         ],
       },
       vanguard: {
@@ -115,8 +109,12 @@ export default {
   },
 
   arsenal: {
-    subtitle: 'These are my many talents. Hover one — go ahead, I’ll wait. I’m great at waiting, too. That’s another one.',
+    subtitle: 'These are my many talents. There are a lot of them. That’s kind of my whole thing.',
     coreLabel: 'My Skillset',
+    inventoryLegend: 'star = one of my very best things. boom.',
+    skimCoach: 'Just want the list? Switch to serious mode. Boom.',
+    viewChart: 'Fun Mode',
+    viewInventory: 'Serious Mode',
   },
 
   works: {
@@ -127,12 +125,15 @@ export default {
     enterRealm: 'Check it out',
     source: 'The Code',
     ndaSealed: 'I’d tell you, but then I’d have to… you know. It’s [[nda|an NDA thing]]. Very official.',
+    ndaArch: 'The secret blueprint. Redacted.',
     chartMore: 'Show {{count}} more hits',
     furl: 'Okay, that’s enough greatness',
+    fullStory: 'The whole saga',
     nod: 'Six hits up there. The seventh one is the website you’re looking at. Boom.',
     nodCta: 'Take the behind-the-scenes tour',
     projects: {
       gajaakriti: {
+        lead: 'A wedding studio site so fancy I almost cried. The photos load FAST.',
         description: 'A gorgeous media-heavy website and admin panel for a fancy wedding studio. Weddings! I love weddings. And the media loads fast.',
         highlights: [
           'Built a slick Next.js site — landing pages, portfolio, blogs, the works — plus an admin panel.',
@@ -142,6 +143,7 @@ export default {
         ],
       },
       'royal-tiles': {
+        lead: 'Design a floor. In a browser. Download the PDF. Tiles! Surprisingly fun.',
         description: 'An interactive tile-design tool — pick layouts, preview live, download order-ready PDFs. Tiles! Surprisingly fun.',
         highlights: [
           'Built a floor visualizer with live preview and downloadable PDF templates.',
@@ -152,6 +154,7 @@ export default {
         ],
       },
       'advisor-portfolio': {
+        lead: 'A whole Wall Street dashboard, from nothing. From NOTHING.',
         description: 'A finance dashboard for advisors, built from scratch — Next.js, Okta login, big interactive charts. Very Wall Street.',
         highlights: [
           'Built the whole frontend from scratch — design, reusable UI, protected routes, the lot.',
@@ -161,11 +164,33 @@ export default {
           'Pitched in on a Spring Boot backend for PDF reports.',
         ],
       },
-      'digital-investor': { description: 'An investment platform with rich interactions and analytics. Money stuff. I’m good with money. Mostly.' },
-      srifin: { description: 'A full-stack CRM/ERP for a microfinance company — data, workflows, ID checks, locked down tight.' },
-      xipper: { description: 'A multi-tenant hotel platform — bookings, billing, eKYC, the whole front desk. Concierge not included.' },
-      'ai-chatbot': { description: 'A context-aware chatbot UI with real-time chat and serious testing. It talks back. Politely.' },
-      'fantasy-cricket': { description: 'A real-money fantasy cricket platform — live scores, secure payouts, admin tools. Sports! I’m great at sports.' },
+      'digital-investor': { description: 'An investment platform with rich interactions and analytics. Money stuff. I’m good with money. Mostly.', highlights: [
+        'Built React/Next.js feature modules with Adobe Analytics tracking. It tracks stuff! I love stuff.',
+        'Integrated Node/Express REST APIs — error handling, performance, all of it.',
+        'Added React Query caching so it stops bugging the server. Boom.',
+      ] },
+      srifin: { description: 'A full-stack CRM/ERP for a microfinance company — data, workflows, ID checks, locked down tight.', highlights: [
+        'Engineered RBAC and audit logs. Locked down. Very secure.',
+        'Sped up onboarding 20–25% with verification APIs.',
+        'Optimized the images and nailed the Core Web Vitals.',
+      ] },
+      xipper: { description: 'A multi-tenant hotel platform — bookings, billing, eKYC, the whole front desk. Concierge not included.', highlights: [
+        'Designed multi-tenant PostgreSQL models and REST APIs. Lots of hotels, one system. Boom.',
+        'Cut manual billing adjustments 30–35%.',
+        'Sped up checkout 15–20%. Fast!',
+      ] },
+      'ai-chatbot': { description: 'A context-aware chatbot UI with real-time chat and serious testing. It talks back. Politely.', highlights: [
+        'Led the UI architecture — Next.js, Redux, WebSocket, real-time.',
+        'Added Storybook and Cypress for testing. Responsible! That’s me.',
+        'Cut regressions 25–30%. Boom. Roasted.',
+      ] },
+      'fantasy-cricket': { description: 'A real-money fantasy cricket platform — live scores, secure payouts, admin tools. Sports! I’m great at sports.', highlights: [
+        'Owned the Node.js backend — MongoDB schema, REST APIs, and cron pipelines pulling live ball-by-ball data in real time.',
+        'Built a real-time points engine — Dream11-style teams, captain/vice-captain multipliers, scored off every match event.',
+        'Back-traceable wallet ledger — auto payouts, winning logic, Razorpay. Real money! No pressure. Okay, some pressure.',
+        'Configurable contests and prize pools per match, plus GST/TDS tax reports in the React admin panel.',
+        'Backed up the React Native app — team building, live tracking. Boom.',
+      ] },
     },
   },
 
@@ -177,12 +202,6 @@ export default {
       name: 'Your name (or a nickname — I love nicknames)',
       email: 'Your email',
       message: 'Tell me everything. I’m a great listener. World’s best, probably.',
-    },
-    messagePlaceholders: {
-      'Senior role': 'Tell me about the team and the role — is it fun? Are they fun? Be honest.',
-      Contract: 'What do you need built, and by when? I deliver. Under-promise, over-deliver. Boom.',
-      Collaboration: 'Pitch me. I love a good pitch. Let’s make something great together.',
-      'Just saying hi': 'Hi! Hello! What’s up! This is already going great.',
     },
     submitIdle: 'Send it! Send it! Send it!',
     submitLoading: 'Sending…',
@@ -222,8 +241,6 @@ export default {
   },
 
   map: {
-    searchPlaceholder: 'Search… try “skills”, “projects”, “contact”',
-    noResult: 'Nothing here. Weird. Try “skills”, “experience”, or “contact”.',
     footerHint: 'enter to go · esc to bail',
     actions: {
       resume: 'My Résumé',
@@ -260,15 +277,15 @@ export default {
       visit: 'Times You Came Back',
     },
     voices: {
-      title: 'Secret Voices',
+      title: 'Secret Narrators',
       unlocked: '{{count}} of {{total}}. boom.',
       sealed: 'Locked',
       switchTo: 'Be {{voice}}',
       locked: 'Locked. Mysterious. Like me.',
     },
     sealed: {
-      none: 'Three secret voices left to find. The hunt is on. That’s what she said.',
-      some: '{{count}} of {{total}} voices still hiding. Keep going, you’re crushing it.',
+      none: 'Three secret narrators left to find. The hunt is on. That’s what she said.',
+      some: '{{count}} of {{total}} narrators still hiding. Keep going, you’re crushing it.',
       all: 'You found all of them. World’s Best Visitor. I’m not crying, you’re crying.',
     },
   },
@@ -280,36 +297,15 @@ export default {
     title: 'How I Made This',
     confession: 'It passed every test but mine. And mine is the hard one.',
     confessionSub:
-      'The website was totally finished like forty saves ago. It was great. It was done. I could’ve left. But “done” is what other people settle for, and I am not other people — I’m an idea man with an eye for detail, which is two things. So I stayed and poured in another two hundred hours fixing stuff nobody would ever notice, AND I added analytics so I can PROVE people use the cool stuff. Because I notice. That’s my gift. And, occasionally, my curse. Mostly gift.',
+      'The website was done like forty saves ago. But “done” is what other people settle for — so I stayed, fixed stuff nobody would notice, and added analytics to PROVE people use the cool stuff. That’s my gift. Mostly gift.',
     acts: { build: 'How I Made It', engine: 'The Machine Room', hidden: 'Secret Stuff' },
-    reel: {
-      title: 'The Director’s Cut',
-      range: 'Jun 20 – 30 · 10 scenes',
-      caption:
-        'Grab the slider, click a scene, hit the arrow keys. Take your time. It’s art.',
-      scene: 'Scene',
-      commits: 'saves',
-      hint: 'just slide across it · click a scene · ← → to step',
-      aria: 'The movie of me building this',
-      prev: 'Previous scene',
-      next: 'Next scene',
-      scenes: {
-        foundation: { title: 'The Cold Open', blurb: 'A starfield and a hand-drawn compass thing for the top of the page. No pictures. I drew it with CODE. Boom.' },
-        canon: { title: 'Setting the Stage', blurb: 'The chapters, the little side menu, and all the smooth scrolling. The skeleton. Every great show has good bones.' },
-        realms: { title: 'My Greatest Hits', blurb: 'The fancy project cards, plus a search map you open with ⌘K. Like Google, but it’s all me.' },
-        journey: { title: 'The Origin Story', blurb: 'A sideways-scrolling timeline of my career and a spinny field of all my skills. There are a lot of skills.' },
-        voice: { title: 'The Other Mes', blurb: 'The whole site can talk in five different voices. Including this one. Especially this one.' },
-        sky: { title: 'Lights & Sound', blurb: 'Five skies that know what time it is, and little sounds the computer makes itself. No downloads. Magic.' },
-        recap: { title: 'The Creepy Part', blurb: 'A little panel that reads your computer and your city. I’m basically the NSA. A friendly NSA.' },
-        atelier: { title: 'Behind the Magic', blurb: 'This whole making-of page, the voice menu, the spinny compass, and a flock of birds when you message me.' },
-        polish: { title: 'The Final Cut', blurb: 'Making it work for everybody, making it fast, and hooking up the actual email. The boring important stuff.' },
-        observatory: { title: 'The Surveillance Van (Polite Version)', blurb: 'After it was done I added analytics so I can SEE which parts you click — but the nice kind, no cookies, totally anonymous. Plus SEO so Google knows who I am, and a secret message in the console. I think of everything.' },
-      },
+    engineBridge: 'That is how I watch it. THIS is how I built it. Both, obviously, flawless.',
+    commits: {
+      title: 'Every Time I Hit Save',
+      range: 'Straight from the repo. The REAL one.',
+      caption: 'A three-week sprint — the 2026 rebuild, on a repo I’ve had since 2023, by the way. One glorious, caffeinated push. Boom. And every single commit had to pass The Test first — lint, types, build. Green, or it does not ship. That is leadership.',
     },
     stats: {
-      hours: 'Hours of me',
-      commits: 'Times I saved',
-      phases: 'Genius phases',
       voices: 'Voices (incl. mine)',
       lines: 'Lines, baby',
     },
@@ -321,18 +317,10 @@ export default {
     },
     eggs: {
       title: 'Secret Stuff I Added',
-      intro: 'I put a bunch of cool things in here that nobody notices. That ends today. Boom — here they are.',
+      intro: 'Cool things nobody notices. Tap one. Boom — secret revealed.',
       astrolabe: {
         title: 'The Spinny Compass',
         how: 'Wave your mouse over the big compass thing up top. It follows you. Like a loyal employee. And it makes a little gear noise. I did that.',
-      },
-      spin: {
-        title: 'Give It a Whirl',
-        how: 'See the little button on the compass? Push it. The needle spins like a fidget spinner and slows down all by itself. Physics. I’m basically a scientist.',
-      },
-      sound: {
-        title: 'The Sounds',
-        how: 'Every beep and whoosh here? Made by a computer, live, zero downloads. Hit the speaker button, bottom right. Then change the theme and listen. You’re welcome.',
       },
       sky: {
         title: 'The Sky Button',
@@ -341,10 +329,6 @@ export default {
       voices: {
         title: 'The Other Mes',
         how: 'The whole site can talk in different voices. Hit ⇧⌘V. Some are locked — type the magic word to unlock them. Hint: type “boss”. Trust me on this one.',
-      },
-      map: {
-        title: 'The Map Thing',
-        how: 'Press ⌘K. A map pops up. You can search it. It’s like Google Maps, but for me.',
       },
       raven: {
         title: 'The Birds',
@@ -369,8 +353,6 @@ export default {
       cadence: { once: 'Once a visit', repeat: 'Every single time' },
       metrics: {
         events: 'Things I track',
-        superProps: 'Auto-tags',
-        webhooks: 'Alert pipes',
         dashboards: 'Dashboards',
         schemas: 'SEO schemas',
       },
@@ -383,29 +365,52 @@ export default {
       panels: {
         privacy: {
           title: 'No Cookies. None.',
-          body: 'It’s anonymous, there’s no login, nothing’s saved between visits, and the second your browser says “don’t track me,” I don’t. No annoying cookie popup, because there’s nothing to pop up about.',
+          body: 'Anonymous, no login, nothing saved. Your browser says “don’t track me”? I don’t. Done.',
         },
         discoverability: {
           title: 'Google Knows Me',
-          body: 'Five of those fancy schema things, the link previews, the whole nine yards — so when you search me, Google puts my face in that little box on the right. The box! I’m in the box!',
+          body: 'Five fancy schema things so Google puts my face in the little box. The box!',
         },
         observability: {
           title: 'I Get Alerts',
-          body: 'There’s a logger, and when something breaks it pings my Discord — my PHONE buzzes — before you even notice. I also get speed reports from real visitors. If something breaks, I know before you do. That’s called being proactive.',
+          body: 'Something breaks, my Discord buzzes before you even notice. That’s called being proactive.',
         },
       },
-      webhooks: {
-        title: 'Stuff Pings My Phone',
-        caption: 'Two little pipes. One yells in my Discord when the site throws an error. The other yells when I push new code. I don’t check a dashboard like a chump — the news comes to ME. Boom. Webhooks. Look it up.',
-        hop: 'webhook',
-      },
-      footnote: 'Thirty-three things tracked, five dashboards, zero cookies. Anybody can build a website. I built a website AND the machine that watches it. That’s two skills. Minimum.',
     },
+    // The Blueprint — the runtime system chart (Act II). Node ids + geometry are
+    // data in constants.atelier.blueprint; gate captions stay EN-technical there.
+    blueprint: {
+      eyebrow: 'The Big Board',
+      title: 'Where the magic happens',
+      intro: 'This is the org chart of the website, and everything happens in-house, in your browser. Only three things ever leave the office. That’s called efficiency. Look it up.',
+      clientZone: 'The office',
+      clientZoneSub: 'everything happens right here, in-house',
+      beyondZone: 'Corporate',
+      beyondZoneSub: 'the only three memos we ever send up',
+      wall: 'The wall',
+      sealedNote: 'Nothing else leaves this office. No cookies (Kevin ate them), no tracking, no files. Even the fonts work here full-time.',
+      hint: 'Click somebody',
+      readoutRest: 'Everyone here has a job and I know all of them. Click around. Get to know the team.',
+      nodes: {
+        traveler: { name: 'You, the client', why: 'You walk in once and get the whole tour — no waiting room, no receptionist, no “please hold”. That is the Michael Scott guarantee.' },
+        shell: { name: 'Reception', why: 'One page, styles pre-loaded, so it looks amazing before it even starts working. Like me. Two departments share one office and split the rent perfectly.' },
+        motion: { name: 'Party planning (scrolling)', why: 'One clock runs all the movement so nothing bumps into anything. On phones we let the phone do it — delegation. I invented that.' },
+        narrator: { name: 'The improv troupe', why: 'Ten voices, one of them literally me. The secret ones don’t even show up until you say the magic word. Very exclusive club.' },
+        sky: { name: 'Facilities (lighting)', why: 'The site checks YOUR clock and sets the lighting — dawn, day, dusk, night. Not your location. We are not creeps.' },
+        sound: { name: 'The office band', why: 'Nearly every sound is made up on the spot by the browser — the one file we ship is the raven’s caw. The band never gets paid, because the band is mostly math.' },
+        memory: { name: 'HR files', why: 'Your visit record stays in your own browser. HR here actually protects your information. Take notes, Toby.' },
+        telemetry: { name: 'Accounting', why: 'They count what happens, not who you are. No cookies, no names. If you say Do-Not-Track, accounting goes home early.' },
+        raven: { name: 'The mailroom', why: 'Your message goes to a back office that holds the only key — the browser never sees it. Security level: Threat Level Midnight.' },
+        reading: { name: 'The wildcard', why: 'One time, if you ask, it looks up your city and shows you. Then forgets. Like me with birthdays, except on purpose.' },
+      },
+    },
+
     atlas: {
       eyebrow: 'My Filing System',
       title: 'Where Everything Lives',
       intro: 'People think a folder is just a folder. Wrong. Every file is exactly where it should be, for a reason. Click around. I’ll explain. You’re welcome.',
       hotspots: 'The Greatest Hits',
+      browseAll: 'Open the whole filing cabinet',
       prompt: 'Click a folder or a greatest hit and I’ll tell you why I did it that way.',
       why: 'Why I Did It This Way',
       repoCta: 'See It On GitHub',
@@ -435,9 +440,7 @@ export default {
     },
     builtWith: 'Made with',
     manifesto: [
-      'Okay, real talk: this isn’t about impressing anybody. I didn’t build it for a boss. I built it because I have this thing where I cannot leave “normal” alone — I have to try the idea nobody tried, push the button nobody pushed, use the tech I haven’t used yet. The website was just my excuse.',
-      'I love this stuff. The code, the puzzles, the moment a giant tangled mess finally goes “click” — I chase the problems that are way too big for me, the ones that scare me a little, because that’s where it gets fun. Fear is just fun wearing a tie.',
-      'But underneath the showmanship? I’m dead serious about four things: owning my mistakes, clients who are thrilled they picked me, work that actually holds up, and details. So many details. Everything else up there is just me proving it. Boom.',
+      'Real talk: I cannot leave “normal” alone. Underneath the showmanship I’m dead serious about work that holds up and details. So many details. Boom.',
     ],
     sign: '— Michael. I mean, Manan. (It’s Manan.)',
   },
@@ -445,25 +448,28 @@ export default {
   voiceHall: {
     title: 'The Improv Stage',
     subtitle: 'Pick who narrates this whole thing. I do all the voices myself. I’m basically a chameleon, but for talking.',
-    searchPlaceholder: 'Search for a voice…  try “the office”, “boss”, “moo”',
     nowNarrating: 'Currently me',
-    tryHint: 'Click a voice and — BOOM — the whole site starts talking like them. Even this part right here. Especially this part.',
+    preview: {
+      eyebrow: 'Now auditioning',
+      sealed: 'Sealed narrator',
+      apply: 'Make me the narrator',
+      active: 'That’s me. Narrating. Boom.',
+    },
+    tryHint: 'Click a narrator and — BOOM — the whole site starts talking like them. Even this part right here. Especially this part.',
     close: 'Close (but don’t go)',
-    noResult: 'Nobody here by that name. And I know everybody. I’m a people person.',
-    sealedHint: 'Some voices are sealed, like a surprise party. Tap one and answer its clue — or type the secret word anywhere on the page — and they wake up. Surprise.',
-    found: '{{count}}/{{total}} secret voices found',
+    sealedHint: 'Some narrators are sealed, like a surprise party. Tap one and answer its clue — or type the secret word anywhere on the page — and they wake up. Surprise.',
+    found: '{{count}}/{{total}} secret narrators found',
     footerHint: 'enter to speak · esc to close',
     categories: {
       core: 'The Professionals',
-      office: 'The Office',
-      bestiary: 'The Animal Kingdom',
+      sealed: 'The Secret Ones',
     },
     request: {
       section: 'Summon',
-      cta: 'Summon a new voice',
+      cta: 'Summon a new narrator',
       ctaSub: 'Want somebody else to narrate this? Tell me who. I will make it happen. I am a people person AND a closer.',
       back: 'Back',
-      persona: 'Whose voice?',
+      persona: 'Whose narration?',
       personaPlaceholder: 'Michael Scott (again) · a celebrity · me, but louder…',
       email: 'Your email',
       emailPlaceholder: 'your email — so I can personally reach out, like a friend',
@@ -473,7 +479,11 @@ export default {
       sending: 'Summoning…',
       done: 'Boom. Sent.',
       doneSub: 'I’ll give “{{persona}}” some real thought. No promises. Okay, a small promise. Thank you, friend.',
-      error: 'Okay, that did not work. Check the name and the email. It’s gonna be fine. We’re a family.',
+      errors: {
+        persona: 'You gotta tell me WHO. That’s the whole point. Give me a name.',
+        email: 'That email looks off. Fix it — or just leave it blank. No pressure.',
+        failed: 'Okay, that did not send. Try again. It’s gonna be fine. We’re a family.',
+      },
     },
   },
 
@@ -485,15 +495,122 @@ export default {
     clueSubmit: 'Boom',
     clueAria: 'Answer the clue: {{hint}}',
     clueWrong: 'Nope. Not the word. It’s okay, guessing is a process.',
-    more: '{{count}} more voices. Like a party. In here.',
+    clueCloser: 'Okay, warmer — {{hint}}',
+    clueGiveaway: 'Fine, I’ll just tell you. It’s',
+    clueTapUnlock: 'boom, tap it',
   },
 
   footer: {
     quote: '“That’s what she said.”',
     atelierLink: 'The making-of. Behind the scenes. Pretty much a documentary.',
+    closeHead: 'Let’s be friends.',
+    closeSub: 'Open to senior roles, collaborations, and mutually beneficial friendships.',
+    getInTouch: 'Let’s talk',
+    resume: 'Résumé',
+  },
+  stickyCta: {
+    text: '“You miss 100% of the shots you don’t take.” — Wayne Gretzky — Michael Scott',
+    cta: 'Take the shot',
+    resume: 'Grab my résumé',
+    dismiss: 'Not now',
   },
 
   makingOf: {
     back: 'Okay, back to the good stuff',
+  },
+
+  // Older portfolios (/time-machine) — framing in character; the factual "world
+  // then" context is inherited from chronicle (same real history).
+  timeMachine: {
+    eyebrow: 'World’s Best Old Websites',
+    title: 'The Time Machine',
+    intro:
+      'These are my old portfolios. Are they perfect? No. Would I hire the guy who made them? …Also no. But he grew up to make this, so. Boom. Roasted — by myself. Scroll down. We’re going back in time. Like a DeLorean, but with more feelings.',
+    readoutLabel: 'The year',
+    booting: 'Firing it up…',
+    wake: 'Fire it up',
+    wakeHint: 'Fire it up to poke around in here, or open the whole thing in a new tab.',
+    enter: 'Open it up',
+    archived: 'Retired',
+    back: 'Okay, back to the good stuff',
+    threshold: { cue: 'Down we go' },
+    floor: {
+      title: 'That’s the whole record',
+      body: 'There is nothing older than this. Well, there is, but it’s embarrassing and I deleted it. A manager knows what to keep and what to shred. This — this we keep.',
+    },
+    eras: {
+      2023: {
+        plaque: 'The one where the website started moving. I was very proud. Too proud, honestly.',
+        note: 'React and Three.js. It’s rougher than the site you’re in and nobody maintains it, so some of it is broken. Like me. But charming. Like me.',
+      },
+      2019: {
+        plaque: 'The first one. We don’t talk about the first one. Okay, we talk about it a little.',
+        note: 'Plain HTML and jQuery, before I knew what half of that meant. It creaks. That’s not a bug, that’s history.',
+      },
+    },
+  },
+
+  // Time Tunnel (feedback §5) — Michael narrates history, mostly about himself.
+  timeTunnel: {
+    hint: 'Slow down. We’re going back in time. Try to keep up.',
+    events: {
+      worldcup26: 'The World Cup. Three countries host it. I can barely run one branch. Respect.',
+      aiagents26: 'AI starts doing people’s work. Finally — an assistant TO the manager.',
+      foldiphone26: 'A folding phone? I fold under pressure too. We’re basically the same.',
+      iphone17: 'New iPhone. I will pretend to understand it and buy it immediately.',
+      lawildfires25: 'L.A. is on fire. I once fought a fire by starting a smaller fire.',
+      nvidia25: 'A chip company runs the world now. I don’t get it, but I’m proud of them.',
+      ghibli25: 'Everyone’s photos turn into cartoons. I’d like mine to look thinner.',
+      minecraft25: 'A movie made of blocks makes a fortune. Art is dead. Long live art.',
+      erastour24: 'Taylor Swift’s tour is the biggest ever. World’s Best Boss of music.',
+      sora24: 'AI makes videos now. I directed a movie once. It took eleven years.',
+      deadpool24: 'Deadpool and Wolverine. Two guys who won’t shut up. I relate to both.',
+      trumpshot24: 'Someone takes a shot at a rally. Yikes. That is a hard no from me.',
+      chatgpt23: 'The whole world starts talking to a robot. I talk to a mug. Same thing.',
+      barbenheimer23: 'Barbie AND the bomb, same day. I contain multitudes. So does cinema.',
+      chandrayaan23: 'India lands on the Moon. I once landed on a trampoline. Also historic.',
+      cricketwc23: 'India hosts the Cricket World Cup. A billion fans. I have, like, nine.',
+      israelhamas23: 'War breaks out. This one isn’t funny, so I’ll just say: be safe.',
+      twitterx23: 'Twitter becomes “X.” I would have called it “Michael.”',
+      threads23: 'A new app gets 100 million people in five days. I peaked at one blog.',
+      gta6_23: 'One game trailer breaks the internet. I once broke a copier. Different.',
+      barbiepink23: 'The whole world wears pink. I look incredible in pink. Fact.',
+      aichatbots23: 'Talking to a machine feels normal now. Done it for years. Hi, mug.',
+      evcars23: 'Electric cars everywhere. My car runs on pretzels and dreams.',
+      applewatch23: 'Your watch scores your sleep now. Mine would say “needs improvement.”',
+      worldcup22: 'Messi wins the World Cup. I don’t know soccer, but I know a winner.',
+      chatgptlaunch22: 'A little site called ChatGPT shows up. The future. I ignored it.',
+      webb22: 'A telescope shows the whole universe. Still didn’t find a bigger boss.',
+      ukraine22: 'War returns to Europe. Not a joke. Sending good thoughts, seriously.',
+      musktwitter22: 'Elon buys Twitter. Rich guy buys website. I bought a condo. Similar.',
+      oscarslap22: 'A slap at the Oscars. The whole world gasps. I would have fainted.',
+      vaccines21: 'The vaccines arrive. The world exhales. I fainted at a flu shot once.',
+      squidgame21: 'A show in green tracksuits takes over Earth. Terrifying. Watched twice.',
+      nft21: 'People pay millions for a JPEG. I have Post-it drawings. Call me.',
+      suez21: 'One ship blocks the whole ocean. Classic Tuesday. Been there.',
+      meta21: 'Facebook becomes “Meta.” Rebrands are healthy. I once became Prison Mike.',
+      taliban21: 'Kabul falls. This one is heavy. Not everything is a bit.',
+      covid20: 'A virus stops the planet. I declared bankruptcy at it. Did not help.',
+      wfh20: 'Everyone works from home. I do my best work not working.',
+      amongus20: 'Everyone hunts the impostor. I am, historically, a terrible liar.',
+      masks20: 'Masks become normal. I made mine from a napkin. It did nothing.',
+      blackhole19: 'We photograph a black hole. A ring of fire. Like my famous chili.',
+      endgame19: 'The Avengers reach “Endgame.” I cried. Not ashamed. Okay, a little.',
+      got19: 'Game of Thrones ends. Everyone’s upset. Never watched. Don’t tell them.',
+      area51_19: 'Two million people want to storm Area 51. Boundaries, people.',
+      babyshark19: '“Baby Shark” becomes the most-watched video ever. Doo doo doo doo.',
+      foldables19: 'Phones start to fold. I fold laundry. We’re all folding something.',
+      fiveg19: '5G phones arrive. Faster. I still can’t send a calendar invite.',
+      covidwuhan19: 'A few odd cases appear in a city called Wuhan. Nobody knows yet.',
+    },
+  },
+
+  void: {
+    eyebrow: 'wrong turn',
+    title: 'I’m not lost. I am exploring.',
+    body: 'Boldly. And with great confidence. But the page you wanted? Not here. Let me walk you back — I know a shortcut.',
+    position: 'allegedly located at: {{path}}',
+    cta: 'Find my bearing',
+    home: 'Back to the World’s Best Portfolio',
   },
 };

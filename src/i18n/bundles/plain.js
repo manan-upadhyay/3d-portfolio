@@ -23,28 +23,21 @@ export default {
 
   hero: {
     lead: 'I build',
-    phrases: ['production systems', 'scalable platforms', 'resilient APIs', 'reusable UI systems'],
-    hook: 'Five years building production web platforms where performance, reliability, and craft drive results.',
-    ctaPrimary: 'View my work',
-    ctaSecondary: 'Contact me →',
+    phrases: ['production web apps', 'React frontends', 'full-stack systems', 'polished interfaces'],
+    proof: ['5+ yrs · React · Next.js · Node.js'],
+    ctaPrimary: 'See my work',
+    ctaSecondary: 'Contact me',
+    ctaResume: 'Résumé',
     spin: 'Spin the pointer',
   },
 
   about: {
-    pullQuote: '“Every project below began as an empty repository and a blinking cursor.”',
+    pullQuote: 'Five years, 20+ releases, six industries — all shipped to production.',
     intro: [
       'I build production web platforms with a focus on solid architecture and the details users feel but never see.',
       'Five years and twenty-plus releases across six industries. I own features end to end — [[endToEnd|from an empty repository to production monitoring]] — and do my best work on hard, ambiguous problems.',
     ],
-    scribeNote: 'How I Work',
     disciplines: 'What I Do',
-    // Principle bodies stay factual; titles are already plain so they fall back.
-    principles: [
-      { title: 'End-to-end ownership', body: 'From requirements and system design to release validation and production monitoring.' },
-      { title: 'Detail as discipline', body: 'Reusable UI systems, edge cases, and accessibility — the work that makes products feel solid.' },
-      { title: 'Performance as a habit', body: 'Code-splitting, caching, CDN, and media optimization — [[measured|measured, not guessed]].' },
-      { title: 'Secure by default', body: 'JWT/OAuth, Okta, RBAC and middleware access control across enterprise apps.' },
-    ],
   },
 
   experience: {
@@ -52,13 +45,13 @@ export default {
     travelTrail: 'Scroll the timeline',
     journey: {
       'first-trail': { chapter: 'First Role', headline: 'Where I started.' },
-      oath: { chapter: 'Education', headline: 'B.E. Information Technology · CGPA 8.36 / 10.' },
+      oath: { chapter: 'Education', headline: 'CGPA 8.36 / 10' },
       expedition: { chapter: 'Full Stack Role', headline: 'Six industries. Production-grade. End to end.' },
       vanguard: {
         chapter: 'Lead Role',
         headline: 'Leading frontend across the Capital Group product network.',
-        org: 'Infosys · embedded with Capital Group',
-        via: 'Employed by Inexture, sub-contracted through Infosys, embedded with Capital Group.',
+        org: 'Infosys · on the Capital Group team (USA)',
+        via: 'Employed by Inexture, placed through Infosys, working on-site with the Capital Group team.',
       },
       horizon: { chapter: "What's Next", headline: 'Open to teams who value craft and ownership.' },
     },
@@ -66,8 +59,12 @@ export default {
   },
 
   arsenal: {
-    subtitle: 'The tools I use across the stack — hover a skill to see how it connects.',
+    subtitle: 'The tools I use across the stack.',
     coreLabel: 'Skills',
+    inventoryLegend: 'marks my core stack',
+    skimCoach: 'Prefer a quick list? Switch to the list view.',
+    viewChart: 'Orbit',
+    viewInventory: 'List',
   },
 
   works: {
@@ -76,25 +73,32 @@ export default {
     realm: 'Project',
     enterRealm: 'View project',
     ndaSealed: "[[nda|Under NDA]] — details limited to what's permissible.",
+    ndaArch: 'System architecture (details under NDA)',
     chartMore: 'Show {{count}} more projects',
     furl: 'Show less',
+    fullStory: 'Full details',
     nod: 'Six projects above. The seventh is this site itself.',
     nodCta: 'See how it was built',
     // (nodCta keeps its literal wording — the doorway reads the same in plain.)
+    projects: {
+      gajaakriti: {
+        lead: 'A media-heavy studio site built so 4K galleries load fast.',
+      },
+      'royal-tiles': {
+        lead: 'Design a tile floor in the browser, preview it live, download an order-ready PDF.',
+      },
+      'advisor-portfolio': {
+        lead: 'An enterprise portfolio-analysis platform, built from scratch.',
+      },
+    },
   },
 
   contact: {
-    availability: 'Open to senior full-stack roles and collaborations — usually replies within a day.',
+    availability: 'Open to senior full-stack roles and collaborations.',
     theMessage: 'Message',
     correspondence: 'Contact',
     placeholders: {
-      message: 'Tell me about the project you want to build…',
-    },
-    messagePlaceholders: {
-      'Senior role': 'Tell me about the team, the role, and what you’re building…',
-      Contract: 'Share the scope, timeline, and what you need shipped…',
-      Collaboration: 'What should we build together? Pitch me the idea…',
-      'Just saying hi': 'Say hello — what brought you here?',
+      message: 'Tell me about the role or project — or just say hi…',
     },
     submitIdle: 'Send Message',
     submitLoading: 'Sending…',
@@ -116,11 +120,9 @@ export default {
   },
 
   map: {
-    searchPlaceholder: 'Search…  try “skills”, “projects”, “contact”',
-    noResult: 'No section found — try “skills”, “experience”, or “contact”.',
     footerHint: 'enter to go · esc to close',
     actions: {
-      voices: 'Voices',
+      voices: 'Change narrator',
       resume: 'Resume',
       themeLight: 'Light mode',
       themeDark: 'Dark mode',
@@ -128,26 +130,30 @@ export default {
   },
 
   voiceHall: {
-    title: 'Voices',
-    subtitle: 'Pick the writing voice — or request one that isn’t here yet.',
-    searchPlaceholder: 'Search voices…',
-    nowNarrating: 'Current voice',
-    tryHint: 'Pick a voice — the whole site, this panel included, re-reads itself in that style.',
+    title: 'Narrators',
+    subtitle: 'Pick the narrator — or request one that isn’t here yet.',
+    nowNarrating: 'Current narrator',
+    preview: {
+      eyebrow: 'Preview',
+      sealed: 'Locked narrator',
+      apply: 'Use this narrator',
+      active: 'Current narrator',
+    },
+    tryHint: 'Pick a narrator — the whole site, this panel included, re-reads itself in that style.',
     close: 'Close',
-    noResult: 'No matching voice.',
-    sealedHint: 'Tap a hidden voice and answer its clue to unlock it — or type the secret word anywhere on the page.',
+    sealedHint: 'Tap a hidden narrator and answer its clue to unlock it — or type the secret word anywhere on the page.',
     found: '{{count}}/{{total}} found',
+    foundShort: '{{count}}/{{total}} found',
     footerHint: 'enter to select · esc to close',
     categories: {
-      core: 'Core',
-      office: 'The Office',
-      bestiary: 'Animals',
+      core: 'Narrators',
+      sealed: 'Hidden',
     },
     request: {
       section: 'Request',
-      cta: 'Request a voice',
-      ctaSub: 'Want a specific voice or personality? Let me know and I’ll consider adding it.',
-      persona: 'Which voice / personality?',
+      cta: 'Request a narrator',
+      ctaSub: 'Want a specific narrator or character? Let me know and I’ll consider adding it.',
+      persona: 'Which narrator / character?',
       personaPlaceholder: 'e.g. a famous character, an accent, a tone…',
       email: 'Your email',
       emailPlaceholder: 'your email — so I can follow up',
@@ -157,7 +163,11 @@ export default {
       sending: 'Sending…',
       done: 'Request sent',
       doneSub: 'Thanks — I’ll consider “{{persona}}.”',
-      error: 'Something went wrong — check the name and a valid email, then retry.',
+      errors: {
+        persona: 'Enter a narrator or character.',
+        email: 'That email doesn’t look right — fix it, or leave it blank.',
+        failed: 'Something went wrong — please try again.',
+      },
     },
   },
 
@@ -189,7 +199,7 @@ export default {
       visit: 'Visit no.',
     },
     voices: {
-      title: 'Hidden Voices',
+      title: 'Hidden Narrators',
       unlocked: '{{count}} / {{total}} found',
       sealed: 'Locked',
       explore: 'Browse all',
@@ -197,49 +207,41 @@ export default {
       locked: 'Locked — not yet found',
     },
     sealed: {
-      none: 'Three hidden voices are still locked — the right words unlock them.',
-      some: '{{count}} of {{total}} hidden voices still locked.',
-      all: 'All hidden voices unlocked. Nice.',
+      none: 'Three hidden narrators are still locked — the right words unlock them.',
+      some: '{{count}} of {{total}} hidden narrators still locked.',
+      all: 'All hidden narrators unlocked. Nice.',
     },
   },
 
   // The Atelier — straight, factual register. Full coverage so plain never falls
   // back into the cinematic voice mid-section.
   atelier: {
-    eyebrow: 'Colophon',
+    eyebrow: 'Making-Of',
     title: 'How this site was built',
-    confession: 'It cleared every bar but mine.',
+    confession: 'Behind the scenes — how this was really made.',
     confessionSub:
-      'The site was a finished, presentable build about forty commits ago — it met every standard a portfolio needs to meet. I held it to a higher one. I have a hard time leaving any detail half-right, so I spent roughly another 200 hours on the things most people never notice: easing, timing, the analytics that confirm which features actually get used, the small frictions that decide whether something feels solid. "Good enough" isn\'t a standard I work to — beating my last version is.',
+      'How this site is built, what was cut, and the details you might miss — all real, not screenshots of a process.',
     acts: { build: 'The Build', engine: 'Infrastructure', hidden: 'Details & extras' },
-    reel: {
-      title: 'Build timeline',
-      range: 'Jun 20 – 30 · 10 days',
+    engineBridge: 'That is how the site measures itself. Here is how it is organised.',
+    commits: {
+      title: 'Commit history',
+      range: 'The build window, straight from this repo’s git log',
       caption:
-        'Drag the marker, click a day, or use the arrow keys to step through what shipped, one day at a time.',
-      scene: 'Day',
-      commits: 'commits',
-      hint: 'move across to scrub · click a day · ← → to step',
-      aria: 'The build, day by day',
-      prev: 'Previous day',
-      next: 'Next day',
-      scenes: {
-        foundation: { title: 'Foundation', blurb: 'A pure-CSS starfield and a Canvas2D astrolabe for the hero — built without any images.' },
-        canon: { title: 'Structure & navigation', blurb: 'The section/chapter system, side-rail navigation, and the scroll choreography.' },
-        realms: { title: 'Projects & command map', blurb: 'The cinematic project cards and a searchable ⌘K map of every section.' },
-        journey: { title: 'Experience & skills', blurb: 'A pinned horizontal experience timeline and an interactive skills field.' },
-        voice: { title: 'Multi-voice system', blurb: 'A full i18next layer — the whole site re-skins through five writing voices, built to scale to fifteen.' },
-        sky: { title: 'Theme & sound', blurb: 'Five time-aware themes from SunCalc, plus a synthesized Web Audio cue system with zero asset weight.' },
-        recap: { title: 'Session recap', blurb: 'A client-side panel that reads device and connection details and maps your location — nothing stored or sent.' },
-        atelier: { title: 'Making-of & send animation', blurb: 'The /making-of page, the voice picker, the interactive hero, and the bird animation on form send.' },
-        polish: { title: 'Polish & backend', blurb: 'Accessibility, reduced-motion support, a performance pass, and the live contact backend.' },
-        observatory: { title: 'Analytics & SEO', blurb: 'After the site was built, I instrumented it — privacy-first product analytics, structured-data SEO, and a custom logger with a console banner for anyone who opens DevTools.' },
+        'A focused three-week sprint — the 2026 rebuild, on a repo I first pushed in 2023. Real git history, straight from git: every commit ran the same checks first — lint, type-check, a production build — or it didn’t merge.',
+      less: 'Less',
+      more: 'More',
+      tip_one: '{{count}} commit',
+      tip_other: '{{count}} commits',
+      share: '{{pct}}% of the build',
+      peak: 'Busiest day',
+      streakUnit: '{{count}} days',
+      aria: 'A calendar heatmap of daily commits to this repository',
+      stats: {
+        commits: 'Commits',
+        streak: 'Longest streak',
       },
     },
     stats: {
-      hours: 'Hours invested',
-      commits: 'Rebuild commits',
-      phases: 'Feature phases',
       voices: 'Writing voices',
       lines: 'Lines of code',
     },
@@ -250,48 +252,34 @@ export default {
       cut: 'Cut, and why',
     },
     phases: {
-      voice: { title: 'Multi-voice system', why: 'A full i18next layer; the entire site re-skins through five writing voices, architected to scale to fifteen.' },
-      marginalia: { title: 'Marginalia', why: 'Hover a phrase to reveal the underlying engineering fact in a footnote.' },
+      voice: { title: 'Multi-voice system', why: 'A full i18next layer; the entire site re-skins through ten writing voices, architected to scale further.' },
+      marginalia: { title: 'Footnotes', why: 'Hover a phrase to reveal the underlying engineering fact in a footnote.' },
       sky: { title: 'Time-aware theme', why: 'Five theme modes resolved from your local time via SunCalc — no geolocation permission required.' },
-      sound: { title: 'Sound design', why: 'A Web Audio cue system (synthesized, zero asset weight); default-on, muted under reduced-motion.' },
+      sound: { title: 'Sound design', why: 'A Web Audio cue system (synthesized — only the raven’s caw ships as a file); default-on, muted under reduced-motion.' },
       recap: { title: 'Session recap', why: 'A client-side panel that reads device + connection details and maps your location — nothing stored or sent.' },
       eggs: { title: 'Hidden voices', why: 'Type a trigger word to unlock additional personality voices, each fully written.' },
-      telemetry: { title: 'Analytics & SEO', why: 'Thirty-three product events feeding a single per-visit session recap, thirteen super-properties, and five PostHog dashboards — all cookieless, anonymous, and disabled under Do-Not-Track. Plus structured-data SEO and a custom logger. It answers "are these features actually used?" without tracking who uses them.' },
+      telemetry: { title: 'Analytics & SEO', why: 'Fifty product events feeding a single per-visit session recap, twenty-three super-properties, and five PostHog dashboards — all cookieless, anonymous, and disabled under Do-Not-Track. Plus structured-data SEO and a custom logger. It answers "are these features actually used?" without tracking who uses them.' },
     },
     cuts: {
       assets: { title: 'Image, GIF and audio files', why: 'Very little of this site is shipped media. The hero is rendered in Canvas2D, the starfield is CSS, and the interface sounds are generated at runtime with the Web Audio API. Shipping the feedback layer as code instead of files means a smaller bundle, fewer requests, and faster loads.' },
-      threejs: { title: 'Three.js and WebGL', why: 'An early version used a 3D library for depth. I removed it and recreated the effect with layered CSS, parallax, and a Canvas2D astrolabe — cutting a large dependency and keeping the initial JS bundle small.' },
+      threejs: { title: 'Three.js and WebGL', why: 'An early version used a 3D library for depth. I removed it and recreated the effect with layered CSS, parallax, and a Canvas2D compass — cutting a large dependency and keeping the initial JS bundle small.' },
       tracking: { title: 'Cookie banners, cross-session tracking and surveillance analytics', why: 'The site does measure itself — but the decision was how. PostHog runs cookieless (memory-only), fully anonymous (no accounts, no identify()), and turns off completely when Do-Not-Track is set. No consent banner, because there is nothing to consent to: no cookies, no cross-session identity, nothing sold. The analytics measure which features get used, not who uses them.' },
       componentLib: { title: 'A pre-built UI kit or template', why: 'Every component is custom-built with Tailwind and CSS variables — no component library. It is more work, but it means full control over the design and no template bloat.' },
-      statusLine: { title: 'Location/moon status line', why: 'Built and reviewed, then removed — it felt invasive, and the time-based theme already delivered the effect.' },
-      battery: { title: 'Battery readout', why: 'Removed because the Battery Status API returns inaccurate values on some platforms; unreliable data has no place in a "reads your device" panel.' },
     },
     eggs: {
       title: 'Things you might miss',
-      intro: 'A lot of the interaction here is intentionally quiet. Here’s where to find it.',
+      intro: 'The quiet details — tap one to see where it lives.',
       astrolabe: {
         title: 'Cursor-tracked needle',
-        how: 'Move your cursor over the hero astrolabe — the needle tracks your pointer, and a gear sound spins at the exact speed you move it.',
-      },
-      spin: {
-        title: 'Spin the needle',
-        how: 'Click the spin button on the astrolabe’s edge to flick the needle — it speeds up and slows to a stop with real momentum physics.',
-      },
-      sound: {
-        title: 'Synthesized sound',
-        how: 'All audio is generated live in the browser (Web Audio, zero bytes). Toggle it with the speaker control, bottom-right; you’ll hear it on theme changes, form sends, and more.',
+        how: 'Move your cursor over the hero compass — the needle tracks your pointer, and a gear sound spins at the exact speed you move it.',
       },
       sky: {
         title: 'Five themes',
         how: 'The control at top-right offers five skies, including “auto”, which picks dawn/day/dusk/night from your local time.',
       },
       voices: {
-        title: 'Alternate voices',
-        how: 'Every line of copy can switch personality. Open the Voice Hall with ⇧⌘V; locked voices unlock when you type their secret word on the page.',
-      },
-      map: {
-        title: 'Command map',
-        how: 'Press ⌘K (Ctrl+K) to open a searchable map of every section.',
+        title: 'Alternate narrators',
+        how: 'Every line of copy can switch personality. Open the full narrator list with ⇧⌘V; locked narrators unlock when you type their secret word on the page.',
       },
       raven: {
         title: 'Raven on send',
@@ -316,8 +304,6 @@ export default {
       cadence: { once: 'Once per visit', repeat: 'Every time' },
       metrics: {
         events: 'Product events',
-        superProps: 'Super-properties',
-        webhooks: 'Webhook routes',
         dashboards: 'Live dashboards',
         schemas: 'Structured schemas',
       },
@@ -330,29 +316,52 @@ export default {
       panels: {
         privacy: {
           title: 'Privacy-first by design',
-          body: 'PostHog runs cookieless and anonymous — no accounts, memory-only persistence — and disables itself when Do-Not-Track is set. No consent banner, because there’s nothing to consent to.',
+          body: 'No cookies, no accounts, nothing kept between visits — and it turns off completely if your browser asks not to be tracked.',
         },
         discoverability: {
           title: 'Built to be found',
-          body: 'Five JSON-LD schemas (Person, WebSite, ProfilePage, Organization, address), Open Graph and Twitter cards, canonical URLs, and an application-name for Google’s Knowledge Panel.',
+          body: 'Five JSON-LD schemas, Open Graph cards, canonical URLs — readable by machines and humans alike.',
         },
         observability: {
-          title: 'Watched, so nothing breaks silently',
-          body: 'A zero-dependency structured logger with a production debug key, errors caught at the error boundary and pushed to a Discord channel the moment they happen, and Vercel Speed Insights tracking Core Web Vitals from real visits.',
+          title: 'Nothing breaks silently',
+          body: 'A structured logger, errors pushed to Discord as they happen, Core Web Vitals from real visits.',
         },
       },
-      webhooks: {
-        title: 'The alert path',
-        caption: 'Two webhooks notify me where I already work: PostHog posts exceptions to a Discord alerts channel, and GitHub posts every push to a deploys channel. Errors and releases reach me without a dashboard to watch.',
-        hop: 'webhook',
-      },
-      footnote: 'Thirty-three events, thirteen super-properties, five dashboards, five schemas — and not one cookie. Shipping a feature is half the job; proving it gets used is the other half.',
     },
+    // The Blueprint — the runtime system chart (Act II). Node ids + geometry are
+    // data in constants.atelier.blueprint; gate captions stay EN-technical there.
+    blueprint: {
+      eyebrow: 'Architecture',
+      title: 'System map — what runs where',
+      intro: 'Everything on this site runs in your browser. Exactly three network calls ever leave it, each one labelled below — open the network tab and verify.',
+      clientZone: 'Your browser',
+      clientZoneSub: 'everything here runs locally',
+      beyondZone: 'Network',
+      beyondZoneSub: 'the only outbound calls',
+      wall: 'The boundary',
+      sealedNote: 'Nothing else goes out — no cookies, no identity, no media files. Even the fonts are self-hosted.',
+      hint: 'Select a component',
+      readoutRest: 'Each component carries the decision behind it. Click one — or check the network tab.',
+      nodes: {
+        traveler: { name: 'You', why: 'One request, one page — no redirects, no login, no paywall.' },
+        shell: { name: 'The page', why: 'A single HTML file with the CSS inlined at build time, so the first paint doesn’t wait on a stylesheet request. Two routes share one layout; sections lazy-load.' },
+        motion: { name: 'The scroll', why: 'Lenis and GSAP run on one shared ticker, so scrolling and animation never compete. Touch devices get native scroll.' },
+        narrator: { name: 'The narrators', why: 'Ten narration styles over one i18next layer; the hidden ones are code-split and load only when unlocked.' },
+        sky: { name: 'The theme', why: 'SunCalc derives the theme from your local time — no geolocation involved.' },
+        sound: { name: 'The sound', why: 'Nearly all interface sound is synthesized with the Web Audio API — only the raven’s caw ships as a file; muted when reduced motion is set.' },
+        memory: { name: 'The memory', why: 'Session-only visit data plus a local visit counter — stored in your browser, never transmitted.' },
+        telemetry: { name: 'Analytics', why: 'PostHog and Vercel Analytics, cookieless and anonymous — fully disabled when Do-Not-Track is on.' },
+        raven: { name: 'Contact form', why: 'Messages post to a serverless function which calls Resend — the API key stays server-side.' },
+        reading: { name: 'City lookup', why: 'One opt-in IP lookup powers the visitor recap on this page — displayed to you, stored nowhere.' },
+      },
+    },
+
     atlas: {
       eyebrow: 'The codebase',
       title: 'How it’s structured',
       intro: 'A guided map of the repository. Expand a folder or jump to a landmark; each file explains the decision behind it, not its source.',
       hotspots: 'Start here',
+      browseAll: 'Browse the full tree',
       prompt: 'Open a folder or pick a landmark to see the reasoning behind it.',
       why: 'Why it’s built this way',
       repoCta: 'View the source',
@@ -382,9 +391,7 @@ export default {
     },
     builtWith: 'Built with',
     manifesto: [
-      'Honestly, this site is less about impressing anyone and more about a need I cannot switch off — to push past the normal version of a thing, try a concept I have not tried, and get my hands on technology I have not used yet. The portfolio was just the excuse to do it.',
-      'I genuinely love this work: the code, the problem-solving, the moment a complicated system finally clicks. I am drawn to the problems big enough to stretch me — the ones that push me to the edge of what I know — because that is where the work gets interesting.',
-      'Under all of that is a simple set of values: accountability, clients who are glad they worked with me, quality that holds up, and real attention to detail. Everything above is just me proving I hold myself to that.',
+      'This site is a habit I can’t switch off: pushing past the normal version of a thing. What I care about is work that holds up under load, and the details most people skip.',
     ],
     sign: '— Manan Upadhyay',
   },
@@ -395,26 +402,146 @@ export default {
   },
 
   voice: {
-    menuSub: 'Change the writing voice of the whole site.',
-    sealedHint: 'Tap a hidden voice and',
+    menuSub: 'Change who narrates the whole site.',
+    sealedHint: 'Tap a hidden narrator and',
     sealedTypeHint: 'answer its clue to unlock it.',
     cluePlaceholder: 'Type your answer…',
     clueSubmit: 'Unlock',
     clueAria: 'Answer the clue: {{hint}}',
     clueWrong: 'That’s not it — check the clue and try again.',
-    more: '{{count}} more in the Voice Hall',
-    openHall: 'Browse all voices',
-    hallTeaserSome: '{{count}} hidden voices to find',
-    hallTeaserAll: 'All voices unlocked',
-    note: 'Tip: you can change the writing voice — try Plainspoken, or find the hidden ones.',
+    clueCloser: 'Getting closer — {{hint}}',
+    clueGiveaway: 'The answer is',
+    clueTapUnlock: 'tap to unlock',
+    openHall: 'Browse all narrators',
+    hallTeaserSome: '{{count}} hidden narrators to find',
+    hallTeaserAll: 'All narrators unlocked',
+    note: 'Tip: you can change who narrates the site — try Story, or find the hidden ones.',
   },
 
   footer: {
     quote: '“The journey is the reward.”',
     atelierLink: 'The making-of — how this site was built',
+    timeMachineLink: 'Older portfolios — my work from 2019 and 2023',
+    closeHead: 'Let’s work together.',
+    closeSub: 'Open to senior full-stack roles and collaborations.',
+    getInTouch: 'Contact me',
+    resume: 'Résumé',
+  },
+  stickyCta: {
+    text: 'Seen enough?',
+    cta: 'Contact me',
+    resume: 'Download résumé',
+    dismiss: 'Dismiss',
   },
 
   makingOf: {
     back: 'Back to the portfolio',
+  },
+
+  // Older portfolios (/time-machine) — straight, professional register. Factual
+  // per-era `context` is inherited from chronicle (it's the same real history).
+  timeMachine: {
+    eyebrow: 'Older work',
+    title: 'Earlier portfolios',
+    intro:
+      'The portfolios I built before this one — from 2019 and 2023 — kept online exactly as they shipped. They’re older and no longer maintained, so a few things may be broken. They’re here to show how the work has grown. Scroll down to go back in time.',
+    readoutLabel: 'Year',
+    booting: 'Loading the live site…',
+    wake: 'Load the live site',
+    wakeHint: 'Load it to preview it here, or open it in a new tab.',
+    enter: 'Open the site',
+    archived: 'Archived',
+    gravestone: 'Built {{built}} · last updated {{touched}} · archived {{preserved}}',
+    back: 'Back to the portfolio',
+    threshold: {
+      rail: 'Now',
+      cue: 'Scroll down to go back',
+    },
+    floor: {
+      rail: 'Earlier',
+      title: 'Before these',
+      body: 'Nothing earlier is preserved — just practice projects with no live URL. The point is the progression from here to now.',
+    },
+    eras: {
+      2023: {
+        rail: '2023',
+        posterAlt: 'Manan’s {{year}} portfolio',
+        plaque: 'My 2023 portfolio — the first animation-heavy one.',
+        note: 'Built with React and Three.js. Rougher than this site and unmaintained since, so some animations may not work. Kept as a reference point for how the work has progressed.',
+      },
+      2019: {
+        rail: '2019',
+        posterAlt: 'Manan’s {{year}} portfolio',
+        plaque: 'My first portfolio, from 2019.',
+        note: 'Plain HTML, CSS and a little jQuery, before I used a build step. Dated by design — this is where it started.',
+      },
+    },
+  },
+
+  // The Time Tunnel (feedback §5) — plain, clean register. Factual + recognizable,
+  // no flourish, easy to read at a glance for any reader.
+  timeTunnel: {
+    hint: 'Slow down to read the years as they pass.',
+    events: {
+      // — Gap 1 (2026 → 2023) —
+      worldcup26: 'The World Cup returns — hosted by three countries at once for the first time.',
+      aiagents26: 'AI “agents” start doing real tasks for people, not just answering questions.',
+      foldiphone26: 'Everyone is talking about a folding iPhone.',
+      iphone17: 'The iPhone 17 Pro is released.',
+      lawildfires25: 'Major wildfires hit Los Angeles.',
+      nvidia25: 'Nvidia becomes the most valuable company in the world.',
+      ghibli25: 'AI turns everyone’s photos into Studio-Ghibli-style art.',
+      minecraft25: 'A Minecraft Movie breaks box-office records.',
+      erastour24: 'Taylor Swift’s Eras Tour becomes the highest-grossing tour ever.',
+      sora24: 'OpenAI shows Sora — AI that makes video from text.',
+      deadpool24: 'Deadpool & Wolverine hits cinemas.',
+      trumpshot24: 'An attempt is made on Donald Trump’s life at a rally.',
+      chatgpt23: 'ChatGPT and GPT-4 put AI in everyone’s hands.',
+      barbenheimer23: '“Barbenheimer” — Barbie and Oppenheimer open on the same day.',
+      chandrayaan23: 'India lands near the Moon’s south pole — a first for any country.',
+      cricketwc23: 'India hosts the Cricket World Cup.',
+      israelhamas23: 'War breaks out between Israel and Hamas.',
+      twitterx23: 'Twitter is renamed “X”.',
+      threads23: 'Threads launches and reaches 100 million users in days.',
+      gta6_23: 'The first GTA VI trailer breaks view records.',
+      barbiepink23: 'The Barbie movie makes pink sell out everywhere.',
+      aichatbots23: 'Talking to AI chatbots becomes an everyday thing.',
+      evcars23: 'Electric cars go mainstream.',
+      applewatch23: 'Smartwatches and rings start tracking everyone’s sleep and health.',
+      // — Gap 2 (2023 → 2019) —
+      worldcup22: 'Argentina and Messi win the World Cup in Qatar.',
+      chatgptlaunch22: 'ChatGPT launches and quickly changes everything.',
+      webb22: 'The James Webb telescope sends back its first images.',
+      ukraine22: 'Russia invades Ukraine.',
+      musktwitter22: 'Elon Musk buys Twitter.',
+      oscarslap22: 'The Will Smith slap at the Oscars.',
+      vaccines21: 'COVID vaccines roll out around the world.',
+      squidgame21: 'Squid Game becomes Netflix’s biggest show ever.',
+      nft21: 'The NFT boom — digital art sells for millions.',
+      suez21: 'A giant ship blocks the Suez Canal for days.',
+      meta21: 'Facebook renames itself “Meta”.',
+      taliban21: 'The Taliban retake Afghanistan.',
+      covid20: 'COVID-19 shuts down the whole world.',
+      wfh20: 'Working from home and Zoom calls become normal.',
+      amongus20: 'Among Us becomes the game of the year.',
+      masks20: 'Face masks become part of daily life.',
+      blackhole19: 'The world sees the first-ever photo of a black hole.',
+      endgame19: 'Avengers: Endgame becomes the biggest movie ever.',
+      got19: 'Game of Thrones airs its final season.',
+      area51_19: 'The “storm Area 51” meme goes viral.',
+      babyshark19: '“Baby Shark” becomes the most-watched video online.',
+      foldables19: 'The first foldable phones appear.',
+      fiveg19: 'The first 5G phones arrive.',
+      covidwuhan19: 'The first COVID cases quietly appear in Wuhan.',
+    },
+  },
+
+  void: {
+    eyebrow: 'page not found',
+    title: 'This page doesn’t exist.',
+    body: 'The link may be broken or the page may have moved. Head back to the homepage to keep exploring.',
+    position: 'path: {{path}}',
+    cta: 'Spin the compass',
+    home: 'Back to homepage',
   },
 };

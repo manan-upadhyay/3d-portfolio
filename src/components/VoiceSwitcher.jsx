@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Feather, Check, Lock, Info, ArrowRight, ChevronDown } from 'lucide-react';
+import { VenetianMask, Check, Lock, Info, ArrowRight, ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useVoiceStore } from '../store/useVoiceStore';
 import { useCoachmark } from '../store/useCoachmark';
 import { pushOverlay, popOverlay } from '../lib/uiOverlay';
 import { trackOnce } from '../lib/analytics';
-import { voices, SEALED_VOICES, POPOVER_SEALED_LIMIT, popoverVoices } from '../i18n/voices';
+import { SEALED_VOICES, POPOVER_SEALED_LIMIT, popoverVoices } from '../i18n/voices';
 import Hovercard from './Hovercard';
 import ClueUnlock from './ClueUnlock';
 
@@ -44,7 +44,7 @@ const VoiceRow = ({ v, active, locked, onSelect }) => {
         boxShadow: answering && !active ? 'inset 0 0 0 1px var(--color-card-border)' : 'none',
       }}
     >
-      <div className="flex items-start gap-1 px-2 py-1.5">
+      <div className="flex items-start gap-1 px-2 py-2">
         <button
           type="button"
           role="menuitemradio"
@@ -65,13 +65,21 @@ const VoiceRow = ({ v, active, locked, onSelect }) => {
             )}
           </span>
           <span className="min-w-0 flex-1">
+            {locked && v.info?.source && (
+              <span
+                className="block text-[10px] font-semibold uppercase tracking-wide leading-tight truncate mb-[3px]"
+                style={{ color: 'var(--color-ember)' }}
+              >
+                {v.info.source}
+              </span>
+            )}
             <span
               className="block text-[13px] font-medium leading-tight truncate"
-              style={{ color: active ? 'var(--color-ember)' : 'var(--color-text)', fontStyle: locked ? 'italic' : 'normal' }}
+              style={{ color: active ? 'var(--color-ember)' : 'var(--color-text)' }}
             >
-              {locked ? v.sample : v.label}
+              {v.label}
             </span>
-            <span className="block text-[11px] leading-snug mt-0.5" style={{ color: 'var(--color-text-muted)' }}>
+            <span className="block text-[11px] leading-snug mt-1" style={{ color: 'var(--color-text-muted)' }}>
               {locked ? `Clue — ${v.hint}` : v.sample}
             </span>
           </span>
@@ -107,8 +115,12 @@ const VoiceRow = ({ v, active, locked, onSelect }) => {
   );
 };
 
-// Sections that count as "deep enough in the journey" to surface the entice note.
-const NOTE_AT = ['arsenal', 'projects', 'contact'];
+// The note surfaces once the visitor reaches the Arsenal (engaged, but still one
+// section short of the conversion zone)…
+const NOTE_ARM_AT = 'arsenal';
+// …and must never linger into the conversion sections (audit #3): reaching either
+// drops it immediately.
+const NOTE_DISMISS_AT = ['projects', 'contact'];
 
 // Module-scoped so it survives section changes AND route swaps (the cluster lives
 // in the shared shell and never remounts between routes): the entice note gets
@@ -121,10 +133,11 @@ let enticeArmed = false;
  * quill button (gently pulsing until the visitor first opens the Hall) that pops a
  * menu UPWARD. The menu is a deliberately short TEASER: a one-line "what is this"
  * subtitle, the OPEN voices, then up to POPOVER_SEALED_LIMIT sealed-voice clues
- * (with the full discovery count), and — when more voices exist than fit — a quiet
- * "+N more" line plus the primary CTA, both routing to the full Voice Hall. The
- * old "Marked Voices" group is retired to keep the menu uncluttered. Click/tap
- * driven; closes on outside-click/Escape.
+ * (with the full discovery count), and the primary CTA into the full Voice Hall.
+ * The full roster lives in the Hall — the header's discovery count already signals
+ * there's more, so no redundant "+N more" line. The old "Marked Voices" group is
+ * retired to keep the menu uncluttered. Click/tap driven; closes on
+ * outside-click/Escape.
  */
 const VoiceSwitcher = ({ activeId }) => {
   const { t } = useTranslation();
@@ -147,20 +160,24 @@ const VoiceSwitcher = ({ activeId }) => {
     return () => { document.removeEventListener('pointerdown', onDown); window.removeEventListener('keydown', onKey); popOverlay(); };
   }, [open]);
 
-  // One-time entice note — once the visitor is engaged (reached the Arsenal or
-  // beyond), a catchy bubble invites them to try the voices. Auto-dismisses ~11s;
-  // permanently dismissed once they engage with the control.
-  // Once the visitor reaches a deep section, claim the coachmark stage a beat
-  // later (which preempts the Sound hint — closing it if it's still up) and yield
-  // it after a spell. Timers are stored in a ref and cleared only on unmount, so
-  // ongoing scrolling (which changes `activeId`) can never cancel the note's show
-  // or its auto-dismiss mid-flight.
+  // One-time entice note. It arms when the visitor first reaches the Arsenal,
+  // shows a beat later (claiming the coachmark stage — which preempts the Sound
+  // hint), and auto-dismisses after 8s. Reaching Projects/Contact drops it at
+  // once (audit #3: 8s or the conversion sections, whichever comes first) —
+  // including cancelling a still-pending show. Timers live in a ref so ordinary
+  // scrolling can't cancel an in-flight show/dismiss.
   useEffect(() => {
-    if (enticeArmed || open || !NOTE_AT.includes(activeId)) return;
+    // Never survive into the conversion sections.
+    if (enticeArmed && NOTE_DISMISS_AT.includes(activeId)) {
+      enticeTimers.current.forEach(clearTimeout);
+      releaseCoach('voice');
+      return;
+    }
+    if (enticeArmed || open || activeId !== NOTE_ARM_AT) return;
     enticeArmed = true;
     enticeTimers.current = [
       setTimeout(() => requestCoach('voice'), 700),
-      setTimeout(() => releaseCoach('voice'), 11700),
+      setTimeout(() => releaseCoach('voice'), 8700), // ~8s of visibility, then yield
     ];
   }, [activeId, open, requestCoach, releaseCoach]);
 
@@ -174,8 +191,6 @@ const VoiceSwitcher = ({ activeId }) => {
   const openVoices = shown.filter((v) => !v.locked);
   const sealed = shown.filter((v) => v.locked).slice(0, POPOVER_SEALED_LIMIT);
   const discovered = SEALED_VOICES.filter((id) => isUnlocked(id)).length;
-  // Voices not previewed here (open or sealed) — the reason to enter the Hall.
-  const moreCount = voices.length - openVoices.length - sealed.length;
 
   const choose = (id) => { setVoice(id); setOpen(false); };
   const toggleMenu = () => { markVoiceNoted(); releaseCoach('voice'); if (!open) trackOnce('voice_switcher_open', 'voice_switcher_open'); setOpen((o) => !o); };
@@ -214,7 +229,7 @@ const VoiceSwitcher = ({ activeId }) => {
             exit={{ opacity: 0, y: 10, scale: 0.96 }}
             transition={JELLY}
             data-lenis-prevent
-            className="absolute bottom-full right-0 mb-3 w-[272px] origin-bottom-right rounded-2xl p-1.5 overflow-y-auto"
+            className="absolute bottom-full right-0 mb-3 w-[300px] origin-bottom-right rounded-2xl p-1.5 overflow-y-auto"
             style={{
               maxHeight: 'min(70vh, 540px)',
               overscrollBehavior: 'contain',
@@ -260,15 +275,6 @@ const VoiceSwitcher = ({ activeId }) => {
                     onSelect={() => choose(v.id)}
                   />
                 ))}
-
-                {/* overflow — quietly signals there are more voices than fit, and
-                    routes to the Hall (the menu's "for more, open the Hall" cue) */}
-                {moreCount > 0 && (
-                  <button type="button" onClick={goHall} data-cursor="hover" className="voice-more">
-                    <span>{t('voice.more', { count: moreCount })}</span>
-                    <ArrowRight size={13} className="flex-shrink-0" />
-                  </button>
-                )}
               </>
             )}
 
@@ -298,7 +304,8 @@ const VoiceSwitcher = ({ activeId }) => {
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label={t('voice.ariaOpen')}
-        className="grid place-items-center w-12 h-12 rounded-full"
+        title={t('voice.ariaOpen')}
+        className="flex items-center gap-2 h-11 pl-2 pr-3.5 rounded-full"
         style={{
           background: 'var(--color-card-bg)',
           border: '1px solid var(--color-card-border)',
@@ -307,11 +314,18 @@ const VoiceSwitcher = ({ activeId }) => {
           boxShadow: 'var(--shadow-card)',
         }}
       >
+        {/* A mask, not a feather — signals "different personalities" and reads as
+            distinct from the Sound control. A visible label lifts discoverability
+            (the labelled Sky control gets ~9× the usage of the old icon-only one).
+            The same mask marks the Narrator row in the SideRail + mobile menu. */}
         <span
-          className="grid place-items-center w-9 h-9 rounded-full"
+          className="grid place-items-center w-7 h-7 rounded-full flex-shrink-0"
           style={{ background: 'rgba(var(--color-ember-rgb),0.16)', color: 'var(--color-ember)' }}
         >
-          <Feather size={15} />
+          <VenetianMask size={15} />
+        </span>
+        <span className="text-[12.5px] font-medium tracking-wide" style={{ color: 'var(--color-text)' }}>
+          {t('voice.menuTitle')}
         </span>
       </motion.button>
     </div>

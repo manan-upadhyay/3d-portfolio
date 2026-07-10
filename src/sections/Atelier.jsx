@@ -1,12 +1,32 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
-import { Hammer, Scissors, Compass, RefreshCcw, AudioLines, CloudSun, Drama, Map, Send, Fingerprint, Terminal } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Hammer, Scissors, Compass, RefreshCcw, AudioLines, CloudSun, Drama, Map, Send, Fingerprint, Terminal, Plus, ScanSearch, ArrowUpRight } from 'lucide-react';
 import { SectionWrapper } from '../hoc';
 import { atelier } from '../constants';
-import { ChapterHeading, ScrollReveal, CountUp, BuildReel, Observatory, CodebaseAtlas, PersonaTriptych, FaceParticles } from '../components';
+import { requestSection } from '../lib/smoothScroll';
+import { track } from '../lib/analytics';
+import { useVoiceStore } from '../store/useVoiceStore';
+import { ChapterHeading, ScrollReveal, CountUp, CommitGraph, Observatory, Blueprint, CodebaseAtlas, PersonaTriptych, FaceParticles, CompassRose, ExpeditionRecap } from '../components';
 
 /* lucide glyph per field-guide entry (icon id → component). */
-const EGG_ICONS = { compass: Compass, refresh: RefreshCcw, audio: AudioLines, sky: CloudSun, drama: Drama, map: Map, send: Send, fingerprint: Fingerprint, terminal: Terminal };
+const EGG_ICONS = { compass: Compass, refresh: RefreshCcw, lens: ScanSearch, audio: AudioLines, sky: CloudSun, drama: Drama, map: Map, send: Send, fingerprint: Fingerprint, terminal: Terminal };
+
+const isDesktop = () => typeof window !== 'undefined' && window.matchMedia('(min-width: 768px)').matches;
+
+/* Wires a field-guide card's "Show me" button to the real feature. The Atelier is
+   its own route, so location-based features (hero, contact) route home and land
+   there; the global overlays (voice hall, sky menu / mobile sheet) open in place;
+   the portrait lives on this page. `run(navigate)` performs the jump. */
+const EGG_ACTIONS = {
+  origin: (navigate) => { requestSection('origin'); navigate('/'); },
+  contact: (navigate) => { requestSection('contact'); navigate('/'); },
+  portrait: () => document.getElementById('atelier-portrait')?.scrollIntoView({ behavior: 'smooth', block: 'center' }),
+  voices: () => useVoiceStore.getState().openHall(), // the canonical voice picker, works on both routes
+  map: (navigate) => { requestSection('origin'); navigate('/'); setTimeout(() => window.dispatchEvent(new Event('chronicle:open-map')), 450); },
+  sky: () => window.dispatchEvent(new Event(isDesktop() ? 'ui:open-sky' : 'ui:open-menu')),
+};
 
 /* HeroInstrument — a faint, slowly-counter-rotating astrolabe that fills the open
    right side of the cold-open. Pure decoration (aria-hidden), masked to bleed off
@@ -58,35 +78,67 @@ const HeroInstrument = () => (
   </svg>
 );
 
-/* One field-guide entry — a subtle interaction + how/where to trigger it. */
-const EggCard = ({ icon, title, how }) => {
+/* One field-guide entry — icon + title only; the "how" reveals on tap (one open
+   at a time, v2.0 W3). The card is a REAL button now, so its hover/press
+   affordance is honest — it does something. */
+const EggCard = ({ icon, title, how, open, onToggle, onShow, showLabel }) => {
   const Icon = EGG_ICONS[icon] ?? Compass;
   return (
     <motion.li
-      className="atelier-egg"
       initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }} transition={{ duration: 0.5 }}
+      className={`atelier-egg ${open ? 'is-open' : ''}`}
     >
-      <span className="atelier-egg__icon" aria-hidden="true"><Icon size={17} strokeWidth={1.5} /></span>
-      <span className="atelier-egg__title">{title}</span>
-      <span className="atelier-egg__how">{how}</span>
+      {/* toggle + the "Show me" jump are SIBLINGS (a button can't nest in a
+          button) — the row reveals both the "how" and a shortcut to the feature. */}
+      <button type="button" className="atelier-egg__hit" data-cursor="hover" aria-expanded={open} onClick={onToggle}>
+        <span className="atelier-egg__icon" aria-hidden="true"><Icon size={17} strokeWidth={1.5} /></span>
+        <span className="atelier-egg__title">{title}</span>
+        <Plus size={14} className="atelier-egg__plus" data-open={open || undefined} aria-hidden="true" />
+      </button>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div key="reveal" className="atelier-egg__reveal"
+            initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
+            transition={{ type: 'spring', stiffness: 340, damping: 32 }} style={{ overflow: 'hidden' }}>
+            <p className="atelier-egg__how">{how}</p>
+            {onShow && (
+              <button type="button" className="atelier-egg__show" data-cursor="hover" onClick={onShow}>
+                {showLabel} <ArrowUpRight size={13} />
+              </button>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.li>
   );
 };
 
-/* One ledger row — a built phase or a deliberate cut. */
-const LedgerEntry = ({ title, why, kind }) => (
-  <li className={`atelier-entry atelier-entry--${kind}`}>
-    <span className="atelier-entry__title">{title}</span>
-    <span className="atelier-entry__why">{why}</span>
-  </li>
-);
+/* One ledger row — a built phase or a deliberate cut. On phones the rationale
+   starts clamped to one line and taps open (the ellipsis + a small rotating +
+   are the affordance — no column of accordion chevrons, v2.0 W6). Desktop shows
+   everything, untappable. */
+const LedgerEntry = ({ id, title, why, kind }) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <li className={`atelier-entry atelier-entry--${kind}`}>
+      <button type="button" className="atelier-entry__hit" aria-expanded={open}
+        onClick={() => setOpen((o) => { if (!o) track('ledger_expand', { id, kind }); return !o; })}>
+        <span className="atelier-entry__title">
+          {title}
+          <Plus size={12} className="atelier-entry__plus" data-open={open || undefined} aria-hidden="true" />
+        </span>
+        <span className={`atelier-entry__why${open ? ' is-open' : ''}`}>{why}</span>
+      </button>
+    </li>
+  );
+};
 
 /* A numbered act — the connective spine of the Making-of. The roman numeral sits
    in a gutter the vertical spine runs through; the body holds the act's content.
    The act eyebrow is the prominent PARENT marker (gold, wide-tracked, longer rule). */
-const Act = ({ num, eyebrow, title, intro, children }) => (
-  <section className="atelier-act">
+const Act = ({ num, id, eyebrow, title, intro, children }) => (
+  <section id={id} className="atelier-act">
     <span className="atelier-act__num exp-mono" aria-hidden="true">{num}</span>
     <div className="atelier-act__body">
       <header className="atelier-act__head">
@@ -115,22 +167,18 @@ const Instrument = ({ label, title, intro, className = '', children }) => (
 
 const Atelier = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const [openEgg, setOpenEgg] = useState(null); // one field-guide reveal at a time
 
   const manifesto = t('atelier.manifesto', { returnObjects: true });
 
-  /* The headline figures, dissolved into one inline tally rather than a 5-up grid. */
-  const Tally = () => (
-    <p className="atelier-tally" aria-label={t('atelier.acts.build')}>
-      {atelier.stats.map((s) => (
-        <span key={s.key} className="atelier-tally__item">
-          <span className="atelier-tally__value exp-mono">
-            {s.count ? <CountUp value={s.value} /> : s.value}
-          </span>
-          <span className="atelier-tally__label">{t(`atelier.stats.${s.key}`)}</span>
-        </span>
-      ))}
-    </p>
-  );
+  /* The two static figures that survive the (now-cut) Tally, merged into the
+     commit-trail stat row so Act I reads out one numeric cluster, not two. */
+  const commitExtraStats = atelier.stats.map((s) => ({
+    key: s.key,
+    value: s.count ? <CountUp value={s.value} /> : s.value,
+    label: t(`atelier.stats.${s.key}`),
+  }));
 
   return (
     <>
@@ -145,24 +193,14 @@ const Atelier = () => {
       </div>
 
       <div className="atelier-acts mt-16">
-        {/* Act I — The Build: the reel, the tally of figures, the built/cut ledger. */}
-        <Act num="I" eyebrow={t('atelier.acts.build')}>
-          <ScrollReveal direction="up" delay={0.05} className="realm-card atelier-card p-6 sm:p-8">
-            <div className="flex items-baseline justify-between gap-4 flex-wrap">
-              <span className="atelier-sublabel">{t('atelier.reel.title')}</span>
-              <span className="atelier-card__hint exp-mono">{t('atelier.reel.range')}</span>
-            </div>
-            <div className="mt-6">
-              <BuildReel data={atelier.reel} />
-            </div>
-            <p className="atelier-card__caption mt-6">{t('atelier.reel.caption')}</p>
-          </ScrollReveal>
-
-          <ScrollReveal direction="up" className="mt-14">
-            <Tally />
-          </ScrollReveal>
-
-          <ScrollReveal direction="up" className="mt-20">
+        {/* Act I — The Build. Lead with JUDGMENT (the built/cut ledger — the single
+            most senior-differentiating artifact), then show the work that earned
+            the right to those cuts: the real commit trail (making-of value audit
+            2026-07-08). The standalone CI "Gate" panel and the "hours poured" Tally
+            were cut; the CI signal is folded into the commit caption, and the two
+            surviving figures (lines, voices) merged into the commit stat row. */}
+        <Act num="I" id="build" eyebrow={t('atelier.acts.build')}>
+          <ScrollReveal direction="up">
             <p className="atelier-ledger__intro">{t('atelier.ledger.intro')}</p>
             <div className="atelier-ledger mt-9">
               <div className="atelier-col">
@@ -171,7 +209,7 @@ const Atelier = () => {
                 </span>
                 <ul className="atelier-col__list">
                   {atelier.built.map((id) => (
-                    <LedgerEntry key={id} kind="built"
+                    <LedgerEntry key={id} id={id} kind="built"
                       title={t(`atelier.phases.${id}.title`)} why={t(`atelier.phases.${id}.why`)} />
                   ))}
                 </ul>
@@ -182,20 +220,50 @@ const Atelier = () => {
                 </span>
                 <ul className="atelier-col__list">
                   {atelier.cut.map((id) => (
-                    <LedgerEntry key={id} kind="cut"
+                    <LedgerEntry key={id} id={id} kind="cut"
                       title={t(`atelier.cuts.${id}.title`)} why={t(`atelier.cuts.${id}.why`)} />
                   ))}
                 </ul>
               </div>
             </div>
           </ScrollReveal>
+
+          {/* The commit trail — supporting evidence for the judgment above. The
+              live git stats carry the two surviving Tally figures; the caption
+              folds in the one honest CI signal (every commit crossed the gate). */}
+          <ScrollReveal direction="up" delay={0.05} className="realm-card atelier-card p-6 sm:p-8 mt-20">
+            <div className="flex items-baseline justify-between gap-4 flex-wrap">
+              <span className="atelier-sublabel">{t('atelier.commits.title')}</span>
+              <span className="atelier-card__hint exp-mono">{t('atelier.commits.range')}</span>
+            </div>
+            <div className="mt-6">
+              <CommitGraph extraStats={commitExtraStats} />
+            </div>
+            <p className="atelier-card__caption mt-6">{t('atelier.commits.caption')}</p>
+          </ScrollReveal>
         </Act>
 
         {/* Act II — The Engine Room: the senior-signals showpiece, two parallel
             instruments — the Observatory (analytics/SEO/observability + the Discord
             alert path) and the Codebase Atlas (structure as proof of craft). */}
-        <Act num="II" eyebrow={t('atelier.acts.engine')}>
+        <Act num="II" id="engine" eyebrow={t('atelier.acts.engine')}>
+          {/* The Blueprint OPENS the act (owner call, 2026-07-09): it is the
+              overview — the whole machine on one chart, payload readable with
+              zero interaction — and the two instruments below it are the
+              drill-downs (Observatory = how it watches itself, Atlas = how the
+              files sit). Overview before detail; the act's highest-value
+              artifact lands while attention is freshest. */}
           <ScrollReveal direction="up">
+            <Instrument
+              label={t('atelier.blueprint.eyebrow')}
+              title={t('atelier.blueprint.title')}
+              intro={t('atelier.blueprint.intro')}
+            >
+              <Blueprint />
+            </Instrument>
+          </ScrollReveal>
+
+          <ScrollReveal direction="up" className="atelier-instrument--gap">
             <Instrument
               label={t('atelier.observatory.eyebrow')}
               title={t('atelier.observatory.title')}
@@ -203,6 +271,21 @@ const Atelier = () => {
             >
               <div className="mt-9"><Observatory /></div>
             </Instrument>
+          </ScrollReveal>
+
+          {/* A breather between the two heavy developer instruments, so Act II
+              reads as two moments, not one exhausting slab (making-of value audit
+              2026-07-08, Problem B). Not a horizontal divider — that read as a
+              page-ending flourish — but a waypoint on the cartographer's trail: the
+              compass rose as a node on a descending thread, above the connective
+              line that hinges the act (observability → architecture). Vertical, so
+              the trail reads as *continuing*, not ending. */}
+          <ScrollReveal direction="up" className="atelier-bridge">
+            <span className="atelier-bridge__thread" aria-hidden="true" />
+            <span className="atelier-bridge__rose" aria-hidden="true">
+              <CompassRose className="w-full h-full" />
+            </span>
+            <p className="atelier-bridge__line font-chronicle">{t('atelier.engineBridge')}</p>
           </ScrollReveal>
 
           <ScrollReveal direction="up" className="atelier-instrument--gap">
@@ -217,23 +300,40 @@ const Atelier = () => {
         </Act>
 
         {/* Act III — The Hidden Layer: the subtle interactions + the locked stack. */}
-        <Act num="III" eyebrow={t('atelier.acts.hidden')}>
+        <Act num="III" id="hidden" eyebrow={t('atelier.acts.hidden')}>
           <ScrollReveal direction="up">
             <span className="atelier-sublabel">{t('atelier.eggs.title')}</span>
             <p className="atelier-ledger__intro mt-4">{t('atelier.eggs.intro')}</p>
             <ul className="atelier-eggs mt-7">
-              {atelier.eggs.map((e) => (
-                <EggCard key={e.id} icon={e.icon}
-                  title={t(`atelier.eggs.${e.id}.title`)} how={t(`atelier.eggs.${e.id}.how`)} />
-              ))}
+              {atelier.eggs.map((e) => {
+                const action = e.act && EGG_ACTIONS[e.act];
+                return (
+                  <EggCard key={e.id} icon={e.icon}
+                    title={t(`atelier.eggs.${e.id}.title`)} how={t(`atelier.eggs.${e.id}.how`)}
+                    open={openEgg === e.id}
+                    onToggle={() => setOpenEgg((cur) => { const next = cur === e.id ? null : e.id; if (next === e.id) track('egg_reveal', { id: e.id }); return next; })}
+                    onShow={action ? () => { track('egg_show', { id: e.id }); action(navigate); } : undefined}
+                    showLabel={t('atelier.eggs.showMe')} />
+                );
+              })}
             </ul>
           </ScrollReveal>
 
+          {/* Built with — the load-bearing tools (atelier.techCore) wear the ember
+              pill; the supporting cast stays a quiet mono line (v2.0 W10). */}
           <ScrollReveal direction="up" className="mt-12">
             <span className="atelier-sublabel">{t('atelier.builtWith')}</span>
-            <div className="atelier-tech mt-4">
-              {atelier.tech.map((name) => (
-                <span key={name} className="atelier-chip exp-mono">{name}</span>
+            <div className="mt-4 flex flex-wrap items-center gap-2">
+              {atelier.tech.filter((n) => atelier.techCore.includes(n)).map((name) => (
+                <span key={name} className="tag-rune">{name}</span>
+              ))}
+            </div>
+            <div className="atelier-tech mt-3 flex flex-wrap items-center gap-x-2.5 gap-y-1 exp-mono text-[12px]" style={{ color: 'var(--color-text-muted)' }}>
+              {atelier.tech.filter((n) => !atelier.techCore.includes(n)).map((name, i) => (
+                <span key={name} className="flex items-center gap-2.5">
+                  {i > 0 && <span aria-hidden="true" className="opacity-40" style={{ color: 'var(--color-ember)' }}>·</span>}
+                  <span>{name}</span>
+                </span>
               ))}
             </div>
           </ScrollReveal>
@@ -242,13 +342,15 @@ const Atelier = () => {
 
       {/* Coda — off the map: the three sides of the person behind the build, then
           the manifesto + signature. No numeral; it rhymes with the cold open. */}
-      <ScrollReveal direction="up" className="atelier-coda mt-20">
-        <span className="chapter-eyebrow">{t('atelier.offmap.title')}</span>
-        <p className="atelier-ledger__intro mt-4">{t('atelier.offmap.intro')}</p>
-        <div className="mt-7">
-          <PersonaTriptych personas={atelier.personas} />
-        </div>
-      </ScrollReveal>
+      <section id="offmap">
+        <ScrollReveal direction="up" className="atelier-coda mt-20">
+          <span className="chapter-eyebrow">{t('atelier.offmap.title')}</span>
+          <p className="atelier-ledger__intro mt-4">{t('atelier.offmap.intro')}</p>
+          <div className="mt-7">
+            <PersonaTriptych personas={atelier.personas} />
+          </div>
+        </ScrollReveal>
+      </section>
 
       <ScrollReveal direction="up" className="atelier-manifesto-row mt-16">
         <div className="atelier-manifesto">
@@ -262,8 +364,19 @@ const Atelier = () => {
           <p className="atelier-sign font-chronicle mt-6">{t('atelier.sign')}</p>
         </div>
         {/* the maker, assembled from the same characters that built the site */}
-        <FaceParticles />
+        <div id="atelier-portrait"><FaceParticles /></div>
       </ScrollReveal>
+
+      {/* The send-off — the cartographer reads the traveler one last time before
+          the footer. Moved here from the foot of Contact (homepage value audit
+          2026-07-08): it's a wonder/craft artifact, not a hire-decision one, so it
+          belongs on the behind-the-curtain coda — off the money page, where the
+          "how does it know my city?" delight reads as charm, not surveillance. */}
+      <ExpeditionRecap />
+
+      {/* No bespoke closing CTA here (v2.0 follow-up): the shared Layout footer
+          renders directly below with the same ask + channels — duplicating it
+          made the page end on two identical button rows back-to-back. */}
     </>
   );
 };

@@ -1,9 +1,19 @@
-# Chronicle Portfolio — Combined Beta Analytics + Reddit Feedback Action Plan
+# Chronicle Portfolio — Combined Beta Action Plan (Source of Truth)
 
-**Document type:** Product truth document + implementation roadmap  
+**Document type:** Product truth document + implementation roadmap for AI agents  
 **Beta round:** First public beta / Reddit feedback wave  
-**Data sources:** Datahog/PostHog analytics report + Reddit user comments from 200+ testers  
-**Primary goal:** Turn the portfolio from an impressive experimental website into a trustworthy, high-converting senior developer portfolio.
+**Data sources:** PostHog analytics report + collective Reddit comment sentiment from 200+ testers  
+**Primary goal:** Turn the portfolio from an impressive experimental website into a trustworthy, high-converting senior developer portfolio.  
+**Last updated:** 2026-07-01T14:58+05:30
+
+> [!IMPORTANT]
+> **For AI agents:** This is the execution layer — the single document to follow when implementing changes. The [feedback report](../feedback/2026-07-01-reddit-beta-feedback.md) provides perception context. The [analytics report](../analytics/2026-07-01-full-analytics-intelligence-report.md) provides behavioral data. Every action item below includes exact file paths and i18n keys.
+
+> [!NOTE]
+> **Action items come from patterns, not from any one comment.** Individual quotes in this document are illustrations of a repeated sentiment, never directives. An item earns P0/P1 status only when a *collective* sentiment aligns with *observed behavior*. No single commenter — regardless of seniority or expertise — sets priority.
+
+> [!CAUTION]
+> **Before starting any work:** Read the `CLAUDE.md` at the repo root for the canon (chapter structure, routing, engineering standards). Changes must honor the existing architecture (React 18 + Vite, GSAP + Lenis smooth scroll, i18n bundles, Zustand stores). Do NOT introduce new dependencies without justification.
 
 ---
 
@@ -13,20 +23,19 @@ The portfolio is **memorable, visually ambitious, and technically interesting**,
 
 > The website currently impresses some users as an interactive creative experiment, but it also makes many users question whether the work is AI-generated, over-designed, confusing, or not recruiter-friendly.
 
-The analytics and comments agree on the same product truth:
+**A significant positive cluster tempers the loudest criticism.** A meaningful share of comments read the site as competent and legitimate — "nice and functional, wonder which front-end skills you used?", "properly reflects your experience level", "no red flags" — and the strongest strategic signal in that cluster is that the **hero carries most of the conversion work and isn't optimized for it** ("better hook, better CTA, better action path"). We don't treat any of these as authority; we treat them as sentiment and confirm against behavior.
 
-- Users are landing and exploring enough to prove the concept has attention value.
-- Users are not converting at a healthy rate because the site creates friction before trust.
-- The strongest positive signals are atmosphere, creativity, sound/theme interaction, and memorability.
-- The strongest negative signals are AI/vibe-coded perception, too much text, confusing controls, scroll irritation, weak proof of real engineering, and contact/form friction.
+**Synthesis:** The site is closer to working than the loudest critics suggest — it polarizes rather than fails. Weighting by *repetition + behavioral confirmation* (not by volume or credential), the two audiences converge on three things:
+
+1. **The hero needs conversion optimization** — biggest measured funnel leak (Origin → About, ~16%)
+2. **The copy over-signals AI** — too much fantasy language, too uniform
+3. **Concrete proof is missing** — no project screenshots, no visual evidence
 
 The next version should not kill the Chronicle identity. It should **make the Chronicle serve the hiring goal**.
 
 ---
 
 ## 2. Desired outcome of the website
-
-The website is not just an art project. It has a business purpose.
 
 ### Primary business outcome
 
@@ -35,7 +44,6 @@ Convert relevant visitors into serious professional opportunities:
 - Senior full-stack / frontend-heavy roles.
 - Remote or high-quality local opportunities.
 - Recruiter, CTO, founder, or senior engineer trust.
-- Occasional freelance/collaboration inquiries, but not at the cost of full-time positioning.
 
 ### Product outcome
 
@@ -52,334 +60,305 @@ A visitor should understand within 10 seconds:
 
 The intended signal should be:
 
-> “This developer uses creativity and AI-assisted speed, but the taste, structure, engineering, and decision-making are clearly human.”
+> "This developer uses creativity and AI-assisted speed, but the taste, structure, engineering, and decision-making are clearly human."
 
 The current risky signal is:
 
-> “This looks like an AI-generated cinematic portfolio with too much copy and unclear UX.”
+> "This looks like an AI-generated cinematic portfolio with too much copy and unclear UX."
 
 The redesign must move the site from the second signal to the first.
 
 ---
 
-## 3. Data caveats before decision-making
+## 3. Data foundation and caveats
 
-The data is valuable but early.
-
-| Data point | Caveat | How to use it |
-|---|---|---|
-| ~358 visitors in 30d | Almost all meaningful traffic came from Jun 29–Jul 1 | Treat this as a launch/beta spike, not a stable monthly trend. |
-| 343 unique visitors in last 24h | Reddit-driven traffic spike | Very useful for developer-community perception. |
-| 123 session_recap events vs 343 pageviews | Only ~36% recap coverage | Session depth KPIs are directional, not complete. |
-| ~90% null device/browser custom properties | Instrumentation bug | Device conversion findings are useful but must be fixed before deeper analysis. |
-| Reddit comments | Opinionated developer audience | Do not obey every comment blindly, but repeated patterns are highly meaningful. |
-| 2 leads | Very small conversion sample | Enough to prove the form works, not enough for statistical conclusions. |
-
-Conclusion: use the analytics for **behavioral direction**, and use the comments for **perception and UX truth**.
+| Data point | Value | Caveat | How to use it |
+|---|---|---|---|
+| ~358 visitors in 30d | All concentrated Jun 29–Jul 1 | Beta spike, not stable trend | Directional behavioral data |
+| 343 unique visitors in 24h | Reddit-driven | Developer-community perception | Very useful for AI/trust perception |
+| 123 session_recap events | 36% coverage | Abrupt closes miss recap | Session depth KPIs are directional |
+| ~90% null device/browser | Instrumentation bug | Must fix before next beta | Device-specific findings are useful but incomplete |
+| Reddit comments | 200+ testers | Opinionated developer audience, NOT the primary target audience | Repeated patterns are highly meaningful; individual opinions are not directives |
+| Positive/competence cluster | Multiple commenters | Includes target-adjacent, conversion-minded voices | Confirms the concept works for a segment; validates hero-first priority. Do not over-weight any single voice |
+| 2 leads | Very small sample | Proves form works | Not statistically significant |
 
 ---
 
 ## 4. Baseline analytics snapshot
 
-| Metric | Current baseline | Interpretation |
-|---|---:|---|
-| Last 24h unique visitors | 343 | Strong launch spike. |
-| Last 30d unique visitors | ~358 | Traffic concentrated in 2–3 days. |
-| Last 24h pageviews | 347 | Mostly single-page usage. |
-| Pages/session | ~1.01 | Expected for one-page portfolio. |
-| Avg session duration | 65.7–69s | Decent for cold Reddit traffic, but likely skim-heavy. |
-| Avg max scroll | 41.8–43.9% | Most visitors do not see lower half. |
-| Avg sections viewed | ~3.8 | Visitors see about half the journey. |
-| Contact section reach | 36.6% 30d / 33.3% 24h recap pool | Too low for a hiring portfolio. |
-| Form starts | 9 users / 2.51% overall | Contact section is not converting enough. |
-| Form submits / leads | 2 users / 0.56% overall | Some conversion exists, but below potential. |
-| Form abandonment | 78% | Major conversion friction. |
-| Form errors | 0 | Backend is healthy; abandonment is behavioral/UX. |
-| Reddit traffic share | ~38% in 24h | Reddit is the main beta acquisition channel. |
-| Google organic | 1 visitor | SEO currently negligible. |
-| `/making-of` visits | 9 in 24h | Secondary page is earning attention. |
-| Sound heard | 309 sessions | Sound is widely experienced. |
-| Sound muted | 16 sessions / 5.2% | Sound is mostly accepted. |
-| Theme switches | 309 events | Theme control is highly discoverable. |
-| Voice switcher opens | 33 | Voice system is under-discovered. |
-| Voice selections | 25 total | Users who find it do interact. |
-| Astrolabe dragged | 97 sessions / 27% | Strong curiosity. |
-| Astrolabe spun | 51 sessions / 14% | Decent engagement, but comments show confusion. |
-| Voice Hall reach | 4 users / 1.12% | Deep feature path is almost invisible. |
-| Atelier funnel reach | 0 | Intended path fails. |
-| Atelier direct visits | 11 | Users find it through non-funnel paths. |
-| Map opened | 55 | Map is the strongest navigation tool. |
-| Map jumps | 23 | Map is used for real navigation. |
-| Rail nav clicks | 14 | Rail is less used. |
-| Project live clicks | 12 total | Visitors prefer live proof over code links. |
-| Gajaakriti clicks | 9 | Highest project interest. |
-| Royal Tiles clicks | 3 | Secondary project interest. |
-| Resume opened | 4 | Resume CTA is underused. |
-| Email copied | 2 | Direct contact exists but low. |
-| GitHub clicks | 5 | Developer proof matters. |
-| LinkedIn clicks | 3 | Professional channel exists but low. |
+| Metric | Current baseline | Target for next beta |
+|---|---:|---:|
+| Last 24h unique visitors | 343 | — |
+| Avg session duration | 65.7–69s | 80–100s |
+| ⚠️ Avg max scroll | 41.8–43.9% | 50–55% |
+| ⚠️ Contact section reach | 36.6% (30d) / 33.3% (24h) | 45–55% |
+| Hero → About retention | 84% | 90%+ |
+| Projects section reach | 50% | 60%+ |
+| ⚠️ Form start rate overall | 2.51% | 5–8% |
+| Form start among contact reachers | 6.9% | 12–20% |
+| ⚠️ Form abandonment | 78% | <40% |
+| Overall lead conversion | 0.56% | 1.0–2.0% |
+| Resume opens | 4 | 15–25 per 350 users |
+| GitHub/LinkedIn clicks | 8 total | 20+ total |
+| Device/browser null rate | ~90% | <5% |
+| Session recap coverage | ~36% | 60%+ |
+| ⚠️ Windows form starts | 0 | >0 |
+| Sound heard / muted | 309 / 16 (5.2%) | Maintain |
+| Theme switches | 309 | Maintain |
+| Voice switcher opens | 33 (9.2%) | 12–18% (P2) |
+| Project clicks | 12 total | 25+ |
 
 ---
 
-## 5. User feedback themes from Reddit beta
+## 5. Combined analytics + feedback diagnosis
 
-The comments were diverse, but the repeated patterns are clear.
+This maps what users said to what users did. **Every row includes the specific implementation target.**
 
-| Feedback theme | Strength of signal | Representative user perception | Product meaning |
-|---|---:|---|---|
-| AI/vibe-coded perception | Very high | “Looks AI-generated”, “vibe-coded slop”, “I smell Claude” | Biggest trust risk. |
-| Too much text/information overload | Very high | “Recruiters are not going to read all of this” | Site is not scan-friendly enough. |
-| Creativity and vibe are liked | High | “Beautiful portfolio”, “whimsical”, “cool site” | The concept has value and should not be deleted. |
-| Scroll feels irritating/buggy | High | “Smooth scrolling feels non-intuitive”, “lags”, “buggy” | Interaction polish is not universally working. |
-| Confusing icons/buttons | High | “What do I do?”, “things look clickable but do nothing” | Affordances are unclear. |
-| Mobile UX confusion | High | “Not user friendly on mobile”, “scary to click” | Mobile needs a simpler path. |
-| Custom cursor distracts | Medium | “Cursor is distracting” | Reduce or disable by default. |
-| Astrolabe/compass confusion | Medium-high | “Compass should point me somewhere, but it just spins” | Make it functional or clearly playful. |
-| Footer/contact ending weak | Medium | “Journey just stops” | Final conversion moment is under-designed. |
-| Missing real visuals/project proof | High | “Zero images whatsoever” | Lack of evidence increases AI/slop perception. |
-| Making-of page risk | High severity | “Making-of page… I have no words” | Rewrite as real build case study. |
-| Security headers | Specific | “Add security headers” | Easy credibility win. |
-
----
-
-## 6. Combined analytics + feedback diagnosis
-
-This is the most important section. It maps what users said to what users did.
-
-| Problem | User feedback evidence | Analytics evidence | Conclusion | Priority |
+| Problem | Feedback evidence | Analytics evidence | Implementation target | Priority |
 |---|---|---|---|---|
-| Site feels AI-generated/vibe-coded | Multiple comments directly call it AI, Claude-like, vibe-coded, slop, scammy/esoteric | Reddit drove ~38% traffic; developer audience was strongly vocal | This is not just aesthetic feedback; it is a trust and hiring-risk issue. | P0 |
-| Too much text | Many users say reduce text, recruiters will not read, overloaded | Avg max scroll ~41.8%; contact only reached by 36.6%; median scroll milestones happen fast | Users are skimming quickly and leaving before conversion sections. | P0 |
-| Contact conversion is weak | Users say footer stops abruptly, site is not direct, confusing UX | 131 reached contact, only 9 started form; 2 submitted; 78% abandonment | The contact section and form are the biggest revenue leak. | P0 |
-| Scroll experience irritates users | Smooth scrolling called laggy/buggy/non-intuitive | Avg scroll only ~42%; biggest section drop is Origin → About | Scroll choreography may be hurting continuation. | P0 |
-| Controls/icons are confusing | Users ask “What do I do?” and say floating icons are scary/confusing | Map opened 55 times, rail only 14; theme 309 vs voice 33 | Some controls work, others are hidden or unclear. Need consistent affordances. | P0/P1 |
-| Astrolabe gets attention but causes confusion | Some users love it; others think it should guide them and does not | Dragged 97, spun 51, but Voice Hall only 4 and Atelier funnel 0 | The astrolabe creates curiosity but fails as a discovery gateway. | P1 |
-| Voice system is underused | Users do not mention it much except hidden/easter egg patterns | Only 33 opened switcher; 95% sessions tried 0 voices; Voice Hall 2–4 users | Voice is not discoverable enough and should not block core portfolio comprehension. | P1/P2 |
-| Making-of page is both opportunity and risk | Some comments specifically attack making-of as AI/slop | `/making-of` got 9 visits in 24h | This page is being seen; it must become proof, not liability. | P1 |
-| Project proof is insufficient | Users request originality, images, concrete evidence | Live links clicked 12; no source/GitHub project links recorded | Users want proof, demos, visuals, and outcomes before reading code. | P1 |
-| Mobile path is not simple | Mobile user says it is beautiful but confusing and scary to click | Android converted 1 user at 2.78%, proving mobile can convert | Mobile is viable; simplify mobile instead of treating it as secondary. | P1 |
-| Windows contact issue | Not directly mentioned, but scroll/form concerns align | Windows reached contact 80.8%, 0 form starts | Likely browser-specific layout/UX bug. | P0 |
-| Device/browser data unreliable | Not user-facing | ~90% null device/browser properties | Must fix instrumentation before next beta. | P0 |
-| Sound is mostly successful | Positive comments mention sound design | 309 heard, only 16 muted | Keep sound, but ensure user control and accessibility. | Keep/improve |
-| Theme switching works | Users like colors/themes | 309 theme switches | Theme UI pattern is discoverable; reuse this pattern for other controls. | Keep/improve |
+| Hero doesn't convert | Sentiment: "better hook/CTA/action path"; positive cluster still flags the hero | 16% Origin→About drop (biggest single leak); CTAs say "Begin the Chronicle" / "Summon me →" | Rewrite hero copy + CTAs in all voice bundles; add proof strip; reduce astrolabe prominence | **P0** |
+| Site feels AI-generated | "vibe coded", "AI slop", "Claude artifact", specific signals named (eyebrows, chips, pills) | Reddit drove 38% traffic; developer audience was intensely vocal | Rewrite copy, remove/redesign `chapter-eyebrow` pattern, vary section density, reduce fantasy vocabulary | **P0** |
+| Too much text | "recruiters won't read", "overloaded", "reduce text" | Avg scroll 41.8%; scroll milestones in 7-11s (skimming fast); contact reach 36.6% | Cut visible copy 50-70% across all bundles; progressive disclosure | **P0** |
+| Contact conversion is broken | "footer stops abruptly", "confusing UX", form language too themed | 131 reached contact → 9 started form → 2 submitted; 78% abandonment | Simplify form copy, add quick-contact alternatives, stronger footer CTA | **P0** |
+| Windows contact bug | Not directly mentioned | Windows: 80.8% contact reach, 0 form starts | Debug contact section on Windows Chrome/Edge | **P0** |
+| Analytics instrumentation gaps | Not user-facing | 90% null device properties; 36% recap coverage | Fix super property registration; add heartbeat events | **P0** |
+| Performance degradation | "Performance issue the longer I stayed" (M1 MacBook Pro, 4K display) | No performance metrics tracked | Audit animation lifecycles; fix memory leaks; cap Canvas DPR | **P0** |
+| Scroll irritation | "laggy", "buggy", "non-intuitive" | Avg scroll only 42%; biggest drop at Origin→About | Reduce Lenis smoothing; disable on mobile; fix horizontal timeline | **P1** |
+| Missing project proof | "Zero images", "make it personalized" | Only 12 project clicks; Gajaakriti 9 vs Royal Tiles 3 | Add screenshots to all featured projects; reorder by interest | **P1** |
+| Icons/controls confusing | "What do I do?", "scary to click" | Map 55 opens vs Rail 14 clicks; Theme 309 vs Voice 33 | Add labels/tooltips; separate decorative from functional | **P1** |
+| Making-of hurts perception | "no words", "refined Claude artifact" | 9 visits in 24h; Atelier funnel 0 | Rewrite as engineering case study | **P1** |
+| Mobile UX confusion | "not user friendly", "scary to click" | Android converted at 2.78% (higher than macOS!) | Build distinct mobile UX; simplify controls; increase tap targets | **P1** |
+| Custom cursor distracts | "distracting", "simplify it" | Not tracked | Simplify or disable by default | **P2** |
+| Astrolabe confuses | "just spins", "should point somewhere" | Dragged 97, spun 51, but Voice Hall 4, Atelier funnel 0 | Make functional or clearly decorative; reduce hero prominence | **P2** |
 
 ---
 
-## 7. Product strategy for the next version
+## 6. Product strategy
 
 ### The wrong response
 
-Do not panic and delete all creativity.
-
-That would turn the site into another generic developer portfolio and lose the strongest differentiator: memorability.
+Do not panic and delete all creativity. That would turn the site into another generic developer portfolio and lose the strongest differentiator: memorability.
 
 ### The right response
 
-Create a **two-layer portfolio experience**:
+Weight feedback by **repetition + behavioral confirmation**, and tilt toward voices closer to the actual target audience (hiring decision-makers) — but let no single comment set direction. Focus changes on what the sentiment clusters AND the analytics agree on:
 
-1. **Default layer: Human-first, recruiter-safe, proof-heavy, fast to scan.**
-2. **Chronicle layer: Interactive, atmospheric, exploratory, optional depth.**
+1. **Hero conversion** — biggest measured funnel leak
+2. **Less text, more proof** (near-unanimous, confirmed by 41.8% avg scroll)
+3. **Clearer interactions** (confirmed by control-usage gaps)
+4. **Fix bugs** (Windows, performance, analytics)
 
-The current site forces everyone into the Chronicle layer. The next version should let visitors understand the professional value first, then explore the world if they want.
+Keep the Chronicle identity as the atmospheric layer. But make the professional message primary.
 
 ### Recommended product positioning
 
-> “A cinematic portfolio with a clear professional spine.”
+> "A cinematic portfolio with a clear professional spine."
 
 Not:
 
-> “A cinematic story that happens to contain a resume.”
+> "A cinematic story that happens to contain a resume."
 
 ---
 
-## 8. North-star metrics for next beta
+## 7. P0 — Must fix before next public beta
 
-These are the target analytics for the next testing round.
-
-| Metric | Current baseline | Next beta target | Why it matters |
-|---|---:|---:|---|
-| Avg max scroll | ~41.8% | 50–55% | More users should reach projects/contact. |
-| Contact section reach | 36.6% | 45–55% | More hiring-intent users must see contact. |
-| Form start rate overall | 2.51% | 5–8% | Contact CTA must become more compelling. |
-| Form start among contact reachers | 6.9% | 12–20% | Contact section must convert warm users. |
-| Form submit among starters | 22% | 50–70% | Form friction must be reduced. |
-| Form abandonment | 78% | <40% | Core conversion health. |
-| Overall lead conversion | 0.56% | 1.0–2.0% | Healthy cold-beta conversion. |
-| Resume opens | 4 sessions | 15–25 sessions per 350 users | Resume CTA must be easier to find. |
-| GitHub/LinkedIn clicks | 8 total | 20+ total | Professional proof links should be discoverable. |
-| `/making-of` CTA clicks | Not tracked | 5–10% of page visitors | Convert high-interest readers. |
-| Device/browser null rate | ~90% | <5% | Analytics must be reliable. |
-| Session recap coverage | ~36% | 60%+ | Better behavioral data. |
-| Windows form starts | 0 | Comparable to macOS/Android | Fix platform UX bug. |
-| Voice switcher opens | 33 / 9.2% | 12–18% only after core fixes | Improve discovery without distracting. |
-| Voice Hall reach | 1.12% | 3–5% | Deep feature path should work for explorers. |
-| User comments mentioning “AI/slop” | Very frequent | Rare/minority | Core perception risk must reduce. |
-| User comments mentioning “confusing” | Frequent | Rare/minority | UX clarity must improve. |
-| User comments mentioning “too much text” | Frequent | Rare/minority | Scanability must improve. |
+These are conversion-critical or trust-critical. Each includes exact implementation details.
 
 ---
 
-## 9. P0 — Must fix before next public beta
+### P0.1 Optimize the hero for conversion
 
-These are conversion-critical or trust-critical.
-
----
-
-### P0.1 Reduce AI/vibe-coded perception
+> Above-the-fold does most of the conversion work — a standard CRO principle, reproduced here: Origin → About is the biggest single funnel leak (~16%). Better hook, better CTA, better action path.
 
 #### Problem
 
-Multiple users interpreted the site as AI-generated, Claude-like, vibe-coded, or “AI slop.” This directly attacks the credibility of a developer portfolio.
+The hero currently shows: name (large), a rotating tagline ("I architect production systems / scalable platforms / resilient APIs / reusable UI systems"), a fantasy hook, and CTAs that don't communicate value ("Begin the Chronicle" / "Summon me →"). The astrolabe takes up ~44vw on desktop.
 
-#### Analytics mapping
+#### Analytics proof
 
-The traffic came heavily from Reddit/developer audience. These users are exactly the kind of technical peers who influence hiring trust. If developers think it is AI slop, hiring managers may also see it as low-authenticity.
+- 16% of visitors leave between hero and About — the single biggest section-to-section loss
+- Hero CTAs: 32 about clicks / 18 contact clicks from 358 visitors = ~14% CTA engagement
+- 10-15 second attention window before most visitors decide to stay or leave
 
-#### Required direction
+#### Files to change
 
-Make the site feel authored by a real senior developer, not generated by a prompt.
-
-#### Solution options
-
-##### Option A — Rewrite copy only
-
-Fastest fix.
-
-Actions:
-
-- Cut grand cinematic language by 50–70%.
-- Remove repetitive “realm / chronicle / journey / craft / tiny details” wording.
-- Use direct language: “I built”, “I shipped”, “I improved”, “I worked on”.
-- Add real constraints and decisions: performance, accessibility, component structure, data, tradeoffs.
-- Use Chronicle vocabulary only for labels and microcopy, not every paragraph.
-
-Example direction:
-
-```md
-Before:
-Five years charting production systems across six realms...
-
-After:
-Full-stack developer with 5+ years building production React, Next.js, and Node.js systems across dashboards, CRMs, workflow tools, and public-facing products.
-```
-
-##### Option B — Add human proof blocks
-
-Actions:
-
-- Add “What I actually built” near the top.
-- Add “Technical decisions behind this site”.
-- Add a small build timeline.
-- Add real screenshots/GIFs of work.
-- Add code snippets only where helpful.
-- Add mistakes/iterations to make the process human.
-
-##### Option C — Create a recruiter-safe default mode
-
-Actions:
-
-- Default page shows direct professional positioning.
-- Add optional “Enter Chronicle mode” or “Explore the interactive version.”
-- Preserve the cinematic experience for users who choose exploration.
-
-#### Recommended implementation
-
-Use **Option A + B immediately**. Consider Option C if the current layout cannot be simplified enough.
-
-#### Acceptance criteria
-
-A tester should not describe the first impression as:
-
-- AI slop.
-- Claude artifact.
-- Vibe-coded template.
-- Scammy esoteric site.
-- Too generated.
-
-Instead, the intended reaction should be:
-
-- Creative but clear.
-- Human-authored.
-- Technically credible.
-- Memorable but professional.
-
----
-
-### P0.2 Cut information overload and make the page scannable
-
-#### Problem
-
-Users repeatedly said the site has too much text and recruiters will not read it.
-
-#### Analytics mapping
-
-- Avg max scroll is only ~41.8%.
-- Contact section reach is only 36.6%.
-- Only 50% reach projects.
-- Median scroll milestones show fast movement: users are moving quickly, not reading deeply.
-
-#### Required direction
-
-The site must support two reading modes:
-
-1. **Skim mode:** recruiter/founder can understand fit in under 30 seconds.
-2. **Deep mode:** interested users can expand into story, details, and case studies.
-
-#### Real working solution
-
-Use progressive disclosure.
-
-##### New visible copy budget
-
-| Section | Max visible content |
+| File | What to change |
 |---|---|
-| Hero | 1 headline, 1 subheadline, 2 CTAs, 3 proof chips |
-| About | 4 short lines or 3 bullets |
-| Experience | 3–4 cards, 2 bullets each |
-| Skills/Arsenal | grouped chips + expandable details |
-| Projects | 3 featured projects, screenshot, 3 proof bullets each |
-| Contact | 1 sentence + simple CTA/form |
-| Chronicle extras | hidden behind “Explore more” |
+| `src/sections/Hero.jsx` | Restructure copy block; reduce astrolabe size; add proof strip; change CTA targets |
+| `src/i18n/bundles/chronicle.js` | `hero.lead`, `hero.hook`, `hero.ctaPrimary`, `hero.ctaSecondary`, `hero.phrases` |
+| `src/i18n/bundles/plain.js` | Same hero.* keys |
+| `src/i18n/bundles/scott.js` | Same hero.* keys (in Michael Scott voice) |
+| `src/i18n/bundles/dwight.js` | Same hero.* keys (in Dwight voice) |
+| `src/i18n/bundles/cow.js` | Same hero.* keys (in cow voice) |
+| `src/constants/index.js` | May need additional `personalInfo` fields for proof strip data |
 
-##### Add a top recruiter strip
+#### Required changes
 
-Place immediately after hero or inside hero:
+**1. Rewrite hero copy (all bundles):**
 
-```md
-5+ years full-stack · React/Next.js/Node.js · Frontend-heavy product engineer · Available for senior roles · Resume / GitHub / LinkedIn
+Current `chronicle.js`:
+```js
+hero: {
+  lead: 'I architect',
+  phrases: ['production systems', 'scalable platforms', 'resilient APIs', 'reusable UI systems'],
+  hook: 'Five years charting production systems where performance, trust, and craft decide the path.',
+  ctaPrimary: 'Begin the Chronicle',
+  ctaSecondary: 'Summon me →',
+}
 ```
 
-##### Replace paragraphs with proof bullets
-
-Bad:
-
-```md
-I craft immersive digital journeys through carefully considered frontend architecture...
+Direction for `chronicle.js` (keep some Chronicle flavor):
+```js
+hero: {
+  lead: 'I build',
+  phrases: ['polished web products', 'production React systems', 'full-stack workflows', 'frontend-heavy applications'],
+  hook: 'Full-stack developer with 5+ years shipping React, Next.js, and Node.js applications across dashboards, CRMs, SaaS, and enterprise products.',
+  ctaPrimary: 'See my work',
+  ctaSecondary: 'Get in touch',
+}
 ```
 
-Better:
-
-```md
-- Built production React/Next.js applications used across CRM, SaaS, finance, logistics, and healthcare workflows.
-- Strong in frontend architecture, animation, UI systems, API integration, and product polish.
-- Comfortable owning features from UX implementation to backend integration and deployment.
+Direction for `plain.js`:
+```js
+hero: {
+  lead: 'I build',
+  phrases: ['production web apps', 'React frontends', 'full-stack systems', 'polished interfaces'],
+  hook: 'Full-stack developer — 5+ years, frontend-heavy. React, Next.js, Node.js, TypeScript. Lead Frontend at Capital Group via Infosys. Open to senior roles.',
+  ctaPrimary: 'See my work',
+  ctaSecondary: 'Contact me',
+}
 ```
+
+**2. Add proof strip to Hero.jsx:**
+
+Below the hook, above the CTAs, add a concise proof line:
+
+```jsx
+<div className="hero-proof mt-4 flex flex-wrap items-center gap-3 text-[13px] font-mono tracking-wide uppercase" style={{ color: 'var(--color-text-muted)' }}>
+  <span>5+ yrs</span>
+  <span className="opacity-40">·</span>
+  <span>React · Next.js · Node.js</span>
+  <span className="opacity-40">·</span>
+  <span>8 shipped products</span>
+  <span className="opacity-40">·</span>
+  <span>Lead Frontend at Capital Group</span>
+</div>
+```
+
+**3. Change CTA targets:**
+
+Current: Primary → scrolls to "about", Secondary → scrolls to "contact"  
+New: Primary → scrolls to "projects" (proof first), Secondary → scrolls to "contact", Tertiary → resume download
+
+**4. Reduce astrolabe visual weight:**
+
+In `Hero.jsx`, reduce the desktop sizing:
+- Current: `md:w-[min(44vw,560px)]`
+- New: `md:w-[min(36vw,440px)]` and reduce opacity slightly
 
 #### Acceptance criteria
 
-- User can understand role and stack without scrolling.
-- Projects appear earlier or are reachable faster.
-- Visible copy is reduced by at least 50%.
-- Avg scroll improves to 50–55%.
-- Comments about “too much text” reduce sharply.
+- A recruiter understands role fit from the hero alone without scrolling.
+- Primary CTA describes what the visitor will see.
+- At least one proof point visible above the fold.
+- Hero → About retention improves from 84% to 90%+.
 
 ---
 
-### P0.3 Fix contact conversion and form abandonment
+### P0.2 Reduce AI/vibe-coded perception
 
 #### Problem
 
-The contact funnel is leaking heavily.
+Many users called the site AI-generated. The most actionable comments in that cluster point at concrete, reproducible visual tells rather than taste: uppercase "eyebrow" headings, chips, pills, and uniform section density.
+
+#### Files to change
+
+| File | What to change |
+|---|---|
+| `src/i18n/bundles/chronicle.js` | Cut fantasy vocabulary by 50%; replace with specific, human language |
+| `src/i18n/bundles/plain.js` | Ensure all keys are direct and professional |
+| `src/i18n/bundles/scott.js`, `dwight.js`, `cow.js` | Update matching keys in each personality |
+| `src/components/ChapterHeading.jsx` | Redesign or remove the `chapter-eyebrow` uppercase pattern |
+| `src/index.css` | Modify `.chapter-eyebrow` styles, reduce pill/chip styling uniformity |
+| `src/sections/Contact.jsx` | Replace themed form language: "Dispatch the Raven" → "Send message" |
+
+#### Specific copy keys to rewrite
+
+| Key path | Current value | Problem | Direction |
+|---|---|---|---|
+| `hero.lead` | "I architect" | Abstract, AI-sounding | "I build" |
+| `hero.hook` | "Five years charting production systems…" | Fantasy language | Direct professional claim |
+| `hero.ctaPrimary` | "Begin the Chronicle" | Zero value communicated | "See my work" |
+| `hero.ctaSecondary` | "Summon me →" | Unclear action | "Get in touch" |
+| `about.pullQuote` | "Every realm below began as an empty repository…" | Pure AI flavor | Cut entirely or replace with concrete claim |
+| `about.intro[0]` | "I build production web platforms the way a storyteller builds worlds…" | AI metaphor | Direct professional intro |
+| `works.intro` | "Each realm is a production world charted end to end…" | Fantasy overload | Professional framing |
+| `contact.submitIdle` | "Dispatch the Raven" | Confusing | "Send message" |
+| `contact.status.idle` | "The raven waits, quill trimmed and ready." | Over-themed | Simplify or remove |
+| `contact.errors.required[*]` | "The raven refuses to fly with an empty scroll…" | Adds cognitive load during frustration | "Please fill in all fields." |
+| `chapters.contact.sub` | "Send a Raven" | Fantasy over function | "Get in Touch" |
+| `experience.intro` | "Every expedition leaves a trail…" | AI-sounding | Direct intro |
+| `arsenal.subtitle` | "The kit I carry into every campaign…" | AI-sounding | "Technologies I work with" |
+
+#### Visual pattern changes
+
+1. **Redesign `chapter-eyebrow`:** The "CHAPTER 01 · THE CRAFT" uppercase label is the #1 vibe-coded visual tell. Options:
+   - Remove chapter numbering
+   - Use normal-case, lighter weight
+   - Make it a subtle inline label instead of a prominent eyebrow
+
+2. **Vary section density:** Currently every section has the same level of polish. Make some sections deliberately simpler — show restraint.
+
+3. **Reduce pill/chip uniformity:** The contact inquiry chips and skill badges look identical to AI-generated UI. Use more distinctive interaction patterns.
+
+#### Acceptance criteria
+
+- No tester describes the first impression as AI slop, Claude artifact, or vibe-coded template.
+- Copy reads as human-authored with occasional Chronicle flavor, not wall-to-wall fantasy.
+
+---
+
+### P0.3 Cut information overload
+
+#### Problem
+
+Users repeatedly said too much text. Analytics confirm: scroll milestones reached in 7-11s (skimming), avg scroll 41.8%, contact reach 36.6%.
+
+#### Files to change
+
+| File | What to change |
+|---|---|
+| All `src/i18n/bundles/*.js` | Cut every section's visible copy by 50-70% |
+| `src/sections/About.jsx` | Show 3-4 lines max; hide principles behind expander |
+| `src/sections/Experience.jsx` | Reduce waypoint bullet points; shorter chapter names |
+| `src/sections/Works.jsx` | Show 3 featured projects by default; "Show all" for the rest |
+| `src/sections/Tech.jsx` | Simplify subtitle; keep grouped chips |
+
+#### Copy budget per section
+
+| Section | Current | Target |
+|---|---|---|
+| Hero | ~50 words + rotating phrases | ~40 words + proof strip + 3 CTAs |
+| About | ~200 words + 4 principle cards + 4 discipline cards | 3-4 lines + expandable depth |
+| Experience | ~350 words across 5 waypoints | 2-3 bullets per waypoint max |
+| Arsenal | Subtitle + ~32 skill badges | Subtitle + grouped chips (OK as-is if subtitle is rewritten) |
+| Works | ~100 word intro + 8 project cards | 3 featured projects with screenshots + "Show more" |
+| Contact | ~200 words + form + recap | 1 sentence + simplified form |
+
+#### Acceptance criteria
+
+- Visible copy reduced by at least 50%.
+- User can understand professional value without scrolling past section 2.
+- Avg scroll improves to 50-55%.
+- "Too much text" comments reduce sharply.
+
+---
+
+### P0.4 Fix contact conversion and form abandonment
+
+#### Problem
+
+The contact funnel is leaking heavily. 78% form abandonment. Themed form language adds friction.
 
 #### Analytics proof
 
@@ -387,191 +366,119 @@ The contact funnel is leaking heavily.
 |---|---:|---:|
 | Landed on site | 358 | 100% |
 | Reached contact | 131 | 36.6% |
-| Started form | 9 | 2.51% overall / 6.9% of contact reachers |
-| Submitted form | 2 | 0.56% overall / 22% of starters |
+| Started form | 9 | 2.51% |
+| Submitted form | 2 | 0.56% |
 | Sent successfully | 2 | 100% of submits |
 
-Form backend is healthy. The problem is behavioral UX.
+#### Files to change
 
-#### User feedback mapping
+| File | What to change |
+|---|---|
+| `src/sections/Contact.jsx` | Simplify form UI; change submit button text; simplify status console; add quick contact alternatives prominently |
+| `src/i18n/bundles/chronicle.js` | `contact.submitIdle`, `contact.status.*`, `contact.errors.*`, `contact.placeholders.*` |
+| `src/i18n/bundles/plain.js` | Same contact.* keys |
+| `src/i18n/bundles/scott.js`, `dwight.js`, `cow.js` | Same contact.* keys in character |
 
-- Footer feels abrupt.
-- Site is not directly to the point.
-- Users feel unsure about what to click.
-- Mobile user said floating icons are scary to click.
+#### Required changes
 
-#### Required direction
+**1. Simplify form copy:**
+- `contact.submitIdle`: "Dispatch the Raven" → "Send message" (for `plain.js`, keep themed version for `chronicle.js`)
+- `contact.status.idle`: "The raven waits, quill trimmed and ready." → Remove or simplify
+- `contact.errors.required`: Use simple "Please fill in all fields." alongside themed variants
+- `contact.placeholders.message`: "Tell me about the realm you want to build…" → "Tell me about the role or project…"
 
-Make contact feel easy, low-pressure, and available before the bottom.
+**2. Add quick contact alternatives:**
+Make email copy, LinkedIn, GitHub, and resume download **more prominent** — they're currently in a separate card. Many warm leads prefer direct contact over a form.
 
-#### Real working solution options
-
-##### Option A — Simplify the form
-
-Reduce fields to the minimum:
-
-- Name.
-- Email.
-- Message.
-- Optional inquiry type.
-
-Remove anything that feels like commitment or qualification too early.
-
-##### Option B — Add “quick contact” alternatives
-
-Add near form:
-
-- Copy email.
-- Open email client.
-- LinkedIn.
-- GitHub.
-- Resume.
-
-Use plain text labels, not only icons.
-
-##### Option C — Add a “Just say hi” micro-form
-
-Use a lower-friction CTA:
-
+**3. Add low-pressure CTA copy:**
 ```md
-Not ready to write a full brief? Just say hi — I’ll reply with context.
+Not ready to write a full message? Just copy my email or connect on LinkedIn.
 ```
 
-Message placeholder:
-
+**4. Add a floating/sticky CTA:**
+After 50-75% scroll or project section view, show a subtle floating CTA:
 ```md
-“Hey Manan, I saw your portfolio and wanted to connect about…”
+Like what you see? Let's talk. [Contact] [Résumé]
 ```
-
-##### Option D — Add sticky/floating CTA after engagement
-
-Trigger after one of these:
-
-- 50% scroll.
-- Project viewed.
-- 75% scroll.
-- 60 seconds on site.
-
-CTA text:
-
-```md
-Like the build? Let’s talk.
-```
-
-or
-
-```md
-Hiring for React/Next.js? Contact Manan.
-```
-
-##### Option E — Rework footer into a final conversion scene
-
-Current issue: journey stops abruptly.
-
-Footer should say:
-
-```md
-The journey does not have to end here.
-If you are hiring for a frontend-heavy full-stack developer, let’s continue the conversation.
-```
-
-Add buttons:
-
-- Send message.
-- Download resume.
-- View GitHub.
-- Connect on LinkedIn.
 
 #### Acceptance criteria
 
-- Form start rate overall: 5–8%.
-- Form submit rate among starters: 50–70%.
-- Form abandonment: below 40%.
-- Contact section reach: 45–55%.
-- Direct email/LinkedIn/GitHub clicks increase.
+- Form start rate: 5-8% overall
+- Form abandonment: <40%
+- Direct email/LinkedIn/GitHub clicks increase
+- Submit copy is clear and action-descriptive
 
 ---
 
-### P0.4 Fix Windows contact-section bug
+### P0.5 Fix Windows contact-section bug
 
 #### Problem
 
-Windows users reached the contact section but did not start the form.
+Windows users reached contact at 80.8% but had ZERO form starts. This is almost certainly a rendering/UX bug.
 
 #### Analytics proof
 
-| OS | Landed | Reached contact | Started form | Sent |
-|---|---:|---:|---:|---:|
-| macOS | 81 | 79 (97.5%) | 8 (9.9%) | 1 |
-| Android | 36 | 28 (77.8%) | 1 (2.78%) | 1 |
-| Windows | 26 | 21 (80.8%) | 0 | 0 |
-| Linux | 4 | 3 (75%) | 0 | 0 |
+| OS | Reached contact | Form starts | Sent |
+|---|---:|---:|---:|
+| macOS | 79 (97.5%) | 8 (9.9%) | 1 |
+| Android | 28 (77.8%) | 1 (2.78%) | 1 |
+| **Windows** | **21 (80.8%)** | **0** | **0** |
+
+#### Files to investigate
+
+| File | What to check |
+|---|---|
+| `src/sections/Contact.jsx` | z-index stacking, pointer-events on form elements |
+| `src/index.css` | `.form-field` styles, any Windows-specific rendering issues |
+| `src/lib/smoothScroll.js` | Lenis scroll container may trap focus or prevent click-through on Windows |
+| `src/components/Layout.jsx` | Global scroll wrapper may interfere with form input on Windows |
+| Custom cursor code | Cursor overlay may block pointer-events on Windows |
 
 #### Likely causes
 
-- Contact form overlay/z-index issue.
-- Input fields not focusable.
-- Button hidden or visually unclear.
-- Scroll container preventing interaction.
-- Browser-specific CSS issue on Chrome/Edge Windows.
-- Custom cursor or pointer-events interfering.
-- Smooth scroll wrapper trapping focus or click.
+1. Contact form overlay/z-index issue
+2. Input fields not focusable (scroll container trapping pointer-events)
+3. Custom cursor interfering with click events on Windows Chrome/Edge
+4. Lenis smooth scroll wrapper preventing native input focus
 
-#### Required solution
+#### Required testing
 
-Test and fix specifically on:
-
-- Windows Chrome.
-- Windows Edge.
-- Desktop Firefox.
-- Android Chrome.
-- iPhone Safari.
-
-#### AI agent task
-
-```md
-Audit the contact section across Windows Chrome and Edge. Check layout, z-index, pointer-events, input focus, submit button visibility, form validation behavior, scroll container interference, and custom cursor interference. Add device/browser-specific QA notes and fix any issue preventing form starts.
-```
+- Windows Chrome (latest)
+- Windows Edge (latest)
+- Test: can you click into the name field? email field? textarea?
+- Test: does the custom cursor overlay block pointer-events?
 
 #### Acceptance criteria
 
-- Form inputs focus correctly on Windows Chrome/Edge.
-- Submit button is visible and clickable.
-- No overlay blocks the form.
-- Windows form start rate becomes comparable to macOS/Android in next beta.
+- Form inputs focus correctly on Windows Chrome/Edge
+- Submit button is visible and clickable
+- Windows form start rate becomes comparable to macOS/Android
 
 ---
 
-### P0.5 Fix analytics instrumentation before next beta
+### P0.6 Fix analytics instrumentation
 
 #### Problem
 
-~90% of device/browser custom properties are null.
+~90% null device/browser properties. 36% session recap coverage. No performance metrics.
 
-#### Analytics proof
+#### Files to change
 
-- ~309/343 sessions show null for custom device/browser properties.
-- Browser breakdown shows 325 “None.”
-- OS breakdown shows 325 “None.”
+| File | What to change |
+|---|---|
+| `src/lib/analytics.js` | Register super properties before first event; add heartbeat events; add tracking version |
+| `src/sections/Atelier.jsx` | Add section_view, scroll_depth, CTA click tracking |
+| `src/pages/MakingOf.jsx` | Add page-level tracking |
 
-#### Required solution
+#### Required implementation
 
-Register super properties before first pageview/event capture.
-
-#### Implementation direction
-
-- Ensure `posthog.register()` runs immediately after PostHog init and before any manual capture.
-- If autocapture/pageview fires before registration, disable automatic pageview and manually capture after registration.
-- Track device/browser using reliable client-side detection or PostHog defaults where possible.
-- Add a `tracking_version` property for future debugging.
-
-#### Add these base properties
-
-```ts
-{
+**1. Fix super property registration:**
+```js
+// Before posthog.init() or before first capture
+posthog.register({
   app_name: 'chronicle_portfolio',
   beta_round: 'beta_2',
-  tracking_version: '2026-07-next-beta',
+  tracking_version: '2026-07-02',
   device_os: resolvedOS,
   device_browser: resolvedBrowser,
   viewport_width: window.innerWidth,
@@ -580,29 +487,89 @@ Register super properties before first pageview/event capture.
   reduced_motion: prefersReducedMotion,
   initial_theme: currentTheme,
   traffic_context: detectedSource
-}
+});
 ```
 
-#### Improve session recap coverage
+**2. Add session heartbeat:**
+```js
+// Fire at 15s, 30s, 60s to capture short-session data
+setTimeout(() => track('session_heartbeat_15s'), 15000);
+setTimeout(() => track('session_heartbeat_30s'), 30000);
+setTimeout(() => track('session_heartbeat_60s'), 60000);
+```
 
-Current `session_recap` coverage is ~36%. Keep page-leave recap, but also add:
-
-- Heartbeat at 15s / 30s / 60s.
-- Visibility change event.
-- Scroll milestone events.
-- Contact section exposure event.
-- Form field focus events.
+**3. Add visibility change tracking:**
+```js
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') {
+    track('session_background');
+  }
+});
+```
 
 #### Acceptance criteria
 
-- Device/browser null rate below 5%.
-- Session recap or equivalent session summary coverage above 60%.
-- Every major CTA has click tracking.
-- `/making-of` has full tracking, not just pageview.
+- Device/browser null rate below 5%
+- Session recap or heartbeat coverage above 60%
+- `/making-of` has full tracking
+- Every major CTA has click tracking
 
 ---
 
-## 10. P1 — Should fix for high impact
+### P0.7 Fix performance degradation
+
+#### Problem
+
+A MacBook Pro M1 user with 4K display reports performance issues the longer they stayed. This suggests memory leaks or unbounded animation/listener accumulation.
+
+#### Files to audit
+
+| File | What to check |
+|---|---|
+| `src/sections/Hero.jsx` | GSAP context cleanup, canvas RAF cleanup |
+| `src/hooks/useAstrolabe.js` | Animation frame lifecycle, DPR handling (4K = 2x+ multiplier on canvas) |
+| `src/lib/smoothScroll.js` | Lenis listener cleanup |
+| `src/sections/Experience.jsx` | ScrollTrigger pin cleanup (pinned horizontal scroll is notorious for leaks) |
+| `src/sections/Tech.jsx` | Orbital animation cleanup |
+| `src/sections/Works.jsx` | Scroll-triggered animations |
+| `src/components/Layout.jsx` | Global listener accumulation |
+| All `src/sections/*.jsx` | Every `useEffect` cleanup function |
+
+#### Required actions
+
+1. **Canvas DPR cap:** In `useAstrolabe.js`, cap DPR at 2:
+```js
+const dpr = Math.min(window.devicePixelRatio, 2);
+```
+
+2. **Verify every GSAP context:** Every component using GSAP must:
+```js
+useEffect(() => {
+  const ctx = gsap.context(() => { /* ... */ }, rootRef);
+  return () => ctx.revert(); // MUST exist and MUST be called
+}, []);
+```
+
+3. **Verify RAF cleanup:** Any `requestAnimationFrame` must be cancelled on unmount.
+
+4. **Verify listener cleanup:** Every `addEventListener` must have a matching `removeEventListener` in cleanup.
+
+5. **Profile in Chrome DevTools:** Run a 3-minute session and check for:
+- Growing JS heap
+- Increasing listener count
+- Detached DOM nodes
+- Layout thrash in scroll handlers
+
+#### Acceptance criteria
+
+- No measurable performance degradation after 3 minutes of browsing
+- Canvas rendering capped at 2x DPR
+- Zero leaked GSAP contexts
+- Zero dangling event listeners
+
+---
+
+## 8. P1 — Should fix for high impact
 
 ---
 
@@ -610,60 +577,51 @@ Current `session_recap` coverage is ~36%. Keep page-leave recap, but also add:
 
 #### Problem
 
-Users felt the site lacked concrete proof and real visuals. One comment specifically called out “zero images whatsoever.” This worsens the AI-generated perception.
+Users felt the site lacked concrete proof and real visuals. "Zero images whatsoever." This worsens the AI-generated perception.
 
 #### Analytics mapping
 
-- Project live links got 12 clicks.
-- Gajaakriti Studio got 9 clicks; Royal Tiles got 3.
-- No source/GitHub project links recorded.
+- Project live links: 12 clicks total (Gajaakriti 9, Royal Tiles 3)
+- No source/GitHub clicks recorded
+- Projects section reach: 50% — half of visitors never see this section
 
-Interpretation: visitors want to see working output first. Code/source can exist, but live proof and visuals should lead.
+#### Files to change
 
-#### Required direction
+| File | What to change |
+|---|---|
+| `src/sections/Works.jsx` | Add image/video slots to project cards; show 3 featured by default |
+| `src/constants/index.js` | Add `image`, `video`, `caseStudyUrl` fields to project data |
+| `src/i18n/bundles/chronicle.js` | Rewrite `works.projects.*.description` and `highlights` to be proof-focused |
+| `public/realms/` | Add project screenshots (must be captured) |
 
-Projects must become the trust anchor of the portfolio.
+#### Required changes
 
-#### Real working solution
+**1. Add screenshots for each featured project:**
+- Gajaakriti Studio: website homepage + admin panel view
+- Royal Tiles Playground: tile designer interface + PDF preview
+- Advisor Portfolio: dashboard view (anonymized/blurred if under NDA)
 
-For each featured project, add:
+**2. Reorder projects:** Put Gajaakriti Studio first (3x more clicked).
 
-- Screenshot or short video/GIF.
-- Problem solved.
-- Your role.
-- Stack used.
-- 2–3 concrete engineering decisions.
-- Live demo CTA.
-- Source/code CTA if public.
-- Business/product outcome if available.
+**3. Show 3 featured projects by default.** The other 5 should be behind "Show more" (currently `chartMore` key).
 
-#### Suggested project card structure
-
-```md
-Project name
-One-line product description.
-
-Proof:
-- Built with Next.js, TypeScript, Node.js, MongoDB/PostgreSQL.
-- Implemented authentication, dashboard workflows, responsive UI, and deployment pipeline.
-- Optimized UX/performance/accessibility for real users.
-
-Buttons:
-Live Demo · Case Study · GitHub
+**4. Project card structure should be:**
 ```
-
-#### Specific recommendation
-
-- Put **Gajaakriti Studio** first because it has 3x more clicks.
-- Add at least 3 strong projects, even if some are private and shown as case studies.
-- Add real screenshots. This is not optional for the next beta.
+[Screenshot/Video]
+Project Name — One line description
+Stack: React, Next.js, Node.js, etc.
+• Proof bullet 1 (what you built, concrete)
+• Proof bullet 2 (measurable outcome)
+• Proof bullet 3 (technical decision)
+[Live Demo] [Case Study] [GitHub]
+```
 
 #### Acceptance criteria
 
-- Project section reach improves above 60%.
-- Project clicks increase from 12 to 25+ per ~350 users.
-- Comments about missing proof/images reduce.
-- Users mention projects, not just visuals.
+- Every featured project has a real screenshot
+- Project clicks increase from 12 to 25+ per 350 users
+- "Zero images" comments eliminated
+- Projects section reach improves to 60%+
 
 ---
 
@@ -671,956 +629,379 @@ Live Demo · Case Study · GitHub
 
 #### Problem
 
-`/making-of` is receiving attention, but at least one strong comment reacted very negatively to it. If it reads like AI-generated self-praise, it hurts credibility.
+`/making-of` gets 9 visits in 24h but reinforces "AI slop" perception.
 
-#### Analytics proof
+#### Files to change
 
-- `/making-of` received 9 visits in 24h.
-- Users voluntarily navigated there.
-- It likely came from Reddit interest.
-
-#### Required direction
-
-Turn it into a real engineering case study, not a cinematic self-narration page.
+| File | What to change |
+|---|---|
+| `src/sections/Atelier.jsx` | Restructure content hierarchy; add real artifacts |
+| `src/i18n/bundles/chronicle.js` | Rewrite `atelier.*` keys — tone down self-narration |
+| `src/pages/MakingOf.jsx` | Add scroll/section tracking |
 
 #### Rewrite direction
 
-Rename or reposition:
-
-- “Build Notes”
-- “Engineering Notes”
-- “How I Built This”
-- “Case Study: Chronicle Portfolio”
-
-Structure:
+Current structure is cinematic self-narration. New structure should be:
 
 ```md
-1. Why I built this
-2. Design goals
-3. Technical architecture
-4. Animation and scroll system
-5. Sound/theme system
-6. Analytics instrumentation
-7. Performance constraints
-8. Accessibility/reduced motion
-9. What beta users disliked
-10. What I changed after feedback
+1. Why I built this (honest, 3 sentences)
+2. Technical architecture (diagram + brief)
+3. Key engineering decisions (3-5 concrete choices with rationale)
+4. What beta users said (honest summary of both positive and negative)
+5. What I changed after feedback (before/after)
+6. Performance + accessibility notes (concrete numbers)
 ```
 
-Add real artifacts:
-
-- Wireframes.
-- Component architecture.
-- Before/after screenshots.
-- Performance screenshots.
-- Code snippets.
-- Analytics screenshots.
-- GitHub commits or changelog.
-
-Add bottom CTA:
-
+Add CTA at bottom:
 ```md
-If you care about this level of product polish, let’s work together.
+If this level of product thinking matters to you, let's talk.
+[Contact] [Résumé]
 ```
-
-#### Add tracking
-
-Track:
-
-- `making_of_view`
-- `making_of_scroll_25/50/75/100`
-- `making_of_cta_click`
-- `making_of_case_study_expand`
-- `making_of_back_to_home`
 
 #### Acceptance criteria
 
-- `/making-of` becomes a credibility page.
-- Users stop calling it AI/slop/self-indulgent.
-- CTA clicks from `/making-of` appear in next analytics.
+- `/making-of` becomes a credibility page
+- "AI slop" comments about making-of reduce
+- CTA clicks from `/making-of` appear in analytics
 
 ---
 
 ### P1.3 Fix confusing navigation and icon affordances
 
-#### Problem
+#### Files to change
 
-Users are confused by floating icons, the logo/map relationship, and interactive objects that look clickable but do not do what users expect.
+| File | What to change |
+|---|---|
+| `src/components/ControlCluster.jsx` | Add visible labels to all controls |
+| `src/components/SkyControl.jsx` | Already works well (309 events) — use as model |
+| `src/components/SideRail.jsx` | Add labels on hover; consider removing if rail stays underused |
+| `src/components/VoiceSwitcher.jsx` | Borrow theme switcher's visual pattern |
 
-#### Analytics proof
+#### Required changes
 
-- Map opened 55 times.
-- Map jumps 23 times.
-- Rail nav only 14 clicks.
-- Theme switcher got 309 interactions.
-- Voice switcher only 33 opens.
-
-Interpretation: users can find and use controls when the affordance is clear. The theme control works. Other controls are less discoverable.
-
-#### Required direction
-
-Every persistent control must answer:
-
-- What is it?
-- What happens if I click it?
-- Is it decorative or functional?
-
-#### Real working solution
-
-##### Add labels/tooltips
-
-Use labels on hover/focus and visible text on mobile:
-
-- Theme.
-- Sound.
-- Map.
-- Voice.
-- Resume.
-- Contact.
-
-##### Separate logo from navigation
-
-If the icon opens a sitemap/map, it should not look like just a logo.
-
-Options:
-
-1. Add wordmark: `Manan Upadhyay`.
-2. Use separate map icon for navigation.
-3. Add label: `Map` or `Journey Map`.
-
-##### Use theme switcher pattern for voice
-
-Theme switcher is discoverable. Voice switcher should borrow the same visual language.
-
-Example:
-
-```md
-Theme: Night / Day / Dusk / Dawn
-Voice: Plain / Chronicle / Scott / Dwight
-```
-
-Keep easter eggs hidden, but make the main voice switcher understandable.
+1. **Add labels/tooltips to every persistent control:** Map, Sound, Voice, Theme
+2. **Separate brand logo from map navigation** (if they share visual language)
+3. **On mobile:** Replace floating icon cluster with a single menu button containing all controls
 
 #### Acceptance criteria
 
-- New users can identify every floating control without guessing.
-- Map open/jump remains strong or improves.
-- Voice switcher open rate improves to 12–18% if voice remains important.
-- Comments about scary/confusing icons reduce.
+- New users can identify every floating control without guessing
+- Voice switcher open rate improves toward theme switcher's level
+- "Scary to click" comments eliminated
 
 ---
 
-### P1.4 Fix scroll feel and horizontal timeline expectation
+### P1.4 Fix scroll feel
 
-#### Problem
+#### Files to change
 
-Smooth scrolling is a repeated irritation. Some users experience lag and non-intuitive motion. The horizontal timeline looks like it should support horizontal scrolling, but currently requires vertical scroll first.
+| File | What to change |
+|---|---|
+| `src/lib/smoothScroll.js` | Reduce Lenis lerp/smoothing; add mobile detection |
+| `src/sections/Experience.jsx` | Fix horizontal timeline to support horizontal gestures + keyboard arrows |
 
-#### Analytics mapping
+#### Required changes
 
-- Avg scroll is only ~42%.
-- Biggest drop is Origin → About.
-- Feedback directly calls scrolling buggy/irritating.
+1. **Reduce smooth scroll intensity on desktop:**
+   - Lower Lenis `lerp` value (make closer to native)
+   - Reduce `wheelMultiplier` if it feels sluggish
 
-#### Required direction
-
-Scrolling must feel native, fast, and predictable. Cinematic motion should never fight user control.
-
-#### Real working solution options
-
-##### Option A — Reduce smooth-scroll intensity
-
-- Lower lerp/smoothing.
-- Reduce scroll hijacking.
-- Avoid delayed motion after wheel input.
-- Make scroll feel closer to native.
-
-##### Option B — Disable smooth scrolling on mobile
-
-On mobile, prefer native scroll.
-
-```ts
+2. **Disable custom smooth scroll on mobile:**
+```js
 const shouldUseSmoothScroll = !isMobile && !prefersReducedMotion;
 ```
 
-##### Option C — Add reduced-motion support
-
-Respect:
-
-```css
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-  }
-}
-```
-
-Also add a visible “Reduce motion” toggle if the site is animation-heavy.
-
-##### Option D — Fix horizontal timeline
-
-If Chapter 2 visually appears horizontal, support:
-
-- Vertical wheel driving horizontal timeline.
-- Horizontal trackpad gestures.
-- Drag gestures.
-- Keyboard arrows.
-- Clear progress indicator.
+3. **Fix horizontal timeline (Chapter 2):**
+   - Support vertical wheel driving horizontal movement
+   - Support horizontal trackpad gestures
+   - Add visible progress indicator
+   - Add keyboard arrow support
 
 #### Acceptance criteria
 
-- No lag on mid-range laptop and Android phone.
-- Smooth scroll can be disabled by reduced motion.
-- Timeline works with horizontal gestures.
-- Comments about buggy scroll reduce sharply.
+- No lag on mid-range laptop
+- Scroll can be disabled by reduced motion
+- Timeline works with horizontal gestures
+- "Buggy scroll" comments reduce
 
 ---
 
 ### P1.5 Simplify mobile experience
 
-#### Problem
+#### Files to change
 
-Mobile users liked the vibe but found it confusing, not direct, and scary to click.
+| File | What to change |
+|---|---|
+| `src/components/ControlCluster.jsx` | Replace floating icons with single menu on mobile |
+| `src/index.css` | Increase mobile tap targets, letter-spacing, line-height |
+| `src/sections/Hero.jsx` | Ensure proof strip and CTAs are prominent on mobile |
+| `src/sections/Contact.jsx` | Optimize form for mobile autofill |
 
-#### Analytics proof
+#### Mobile priority stack
 
-Android converted 1 user at 2.78%, higher than macOS conversion rate in this small sample. Mobile can convert if UX is improved.
-
-#### Required direction
-
-Mobile should be simpler than desktop, not a compressed version of every desktop interaction.
-
-#### Real working solution
-
-Mobile-specific path:
-
-1. Hero with direct role/stack.
-2. Sticky bottom actions: Contact, Resume, Projects.
-3. Simplified theme/sound controls.
-4. No large custom cursor.
-5. No overly complex floating icon cluster.
-6. Native scroll.
-7. Larger tap targets.
-8. Clear labels.
-9. Reduced animation density.
-10. Contact form optimized for autofill.
-
-#### Typography fixes
-
-A user specifically noted readability on iPhone mini 13:
-
-- Increase letter spacing for decorative headings where needed.
-- Avoid cramped hero typography.
-- Ensure lines inside imagery have enough spacing.
-- Test on 375px and smaller widths.
+1. Hero with direct role/stack
+2. Sticky bottom actions: Contact, Resume, Projects
+3. Simplified controls (one menu button)
+4. No custom cursor
+5. Native scroll
+6. Larger tap targets (44px minimum)
+7. Clear labels
+8. Reduced animation density
+9. Contact form optimized for autofill
 
 #### Acceptance criteria
 
-- Mobile tester can find Projects, Resume, and Contact in under 10 seconds.
-- Tap targets are at least 44px.
-- Form fields support autofill and correct keyboard types.
-- Android conversion remains healthy or improves.
+- Mobile tester finds Projects, Resume, and Contact in under 10 seconds
+- Tap targets are at least 44px
+- Form fields support autofill
+- Android conversion rate maintained or improved
 
 ---
 
-## 11. P2 — Can improve after core trust and conversion fixes
-
----
+## 9. P2 — Medium-term improvements
 
 ### P2.1 Simplify custom cursor
 
-#### Problem
+**Solution:** Smaller, one color, no constant animation. Disable on touch devices and reduced-motion. Consider disabling by default.
 
-Custom cursor was called distracting.
+### P2.2 Reposition astrolabe
 
-#### Solution
+**Solution:** Either make it functional navigation (spin reveals sections) or clearly decorative (smaller, with microcopy). Since the hero must do conversion work, don't let the astrolabe compete with the professional content for attention.
 
-Desktop only:
+### P2.3 Improve deep feature discovery
 
-- Smaller cursor.
-- One color.
-- Remove constant animation.
-- Disable over text/input areas.
-- Disable if reduced motion is enabled.
-- Disable on touch devices entirely.
+**Solution:** Don't make deep features louder (increases overload). Instead, add one "Explore hidden details" entry point. Keep easter eggs optional.
 
-#### Acceptance criteria
+### P2.4 Strengthen logo/brand identity
 
-Cursor enhances hover feedback but does not compete with content.
-
----
-
-### P2.2 Reposition astrolabe/compass
-
-#### Problem
-
-Astrolabe gets attention but confuses expectations.
-
-#### Analytics proof
-
-- Dragged by 97 sessions.
-- Spun by 51 sessions.
-- Voice Hall only 4 users.
-- Atelier funnel 0.
-
-#### User feedback
-
-- Some users got stuck spinning it.
-- Some expected it to point/navigation but it only spins.
-- Some found it beautiful but unnecessary.
-
-#### Solution options
-
-##### Option A — Make it functional
-
-Turn it into a real navigation/discovery object:
-
-- Spin to reveal sections.
-- Drag to move through chapters.
-- Pointer lands on suggested destination.
-- It opens the map/voice/hidden features clearly.
-
-##### Option B — Make it clearly decorative/playful
-
-Add microcopy:
-
-```md
-A little interactive artifact. Spin it if you like details.
-```
-
-Do not make it feel required.
-
-##### Option C — Move it lower
-
-Place professional hero content first. Move the astrolabe into an “interactive details” area.
-
-#### Recommendation
-
-Use Option A only if there is time to make it truly useful. Otherwise, use Option B and reduce its dominance.
-
----
-
-### P2.3 Improve deep feature discovery without hurting clarity
-
-#### Problem
-
-Voice Hall, Atelier, persona cards, build reel scrub, and easter eggs are mostly hidden.
-
-#### Analytics proof
-
-- Voice switcher opens: 33.
-- Voice Hall: 2–4 users.
-- Atelier funnel: 0.
-- Build reel scrubbed: 7.
-- Persona card expanded: 3.
-- Easter egg unlocks: 5 total.
-
-#### Solution
-
-Do not make all deep features louder. That would increase overload.
-
-Instead:
-
-- Add one “Explore hidden details” entry point.
-- Add map destinations for deep features.
-- Add subtle hints after user engagement.
-- Keep easter eggs optional.
-- Use labels and previews.
-
-Example:
-
-```md
-For explorers: voices, build notes, hidden modes, and experiments live inside the map.
-```
-
-#### Acceptance criteria
-
-- Voice Hall reach improves to 3–5%.
-- Deep features are found by explorers, not forced on recruiters.
-- No increase in confusion comments.
-
----
-
-### P2.4 Strengthen logo and identity
-
-#### Problem
-
-Users were unsure whether the icon is a logo or map/navigation.
-
-#### Solution
-
-- Add wordmark: `Manan Upadhyay`.
-- Keep icon as brand mark only.
-- Use separate icon for map/navigation.
-- Add nav label on hover/focus.
-
-Optional brand line:
-
-```md
-Manan Upadhyay — Full-stack developer
-```
-
-#### Acceptance criteria
-
-No user should confuse the logo with the sitemap.
-
----
+**Solution:** Add wordmark "Manan Upadhyay" on desktop. Separate brand mark from navigation icon.
 
 ### P2.5 Add security headers
 
-#### Problem
-
-A user scanned the site and suggested security headers. This is an easy developer credibility win.
-
-#### Solution
-
-Add baseline headers:
-
-- `Strict-Transport-Security`
-- `X-Frame-Options` or CSP `frame-ancestors`
-- `X-Content-Type-Options`
-- `Referrer-Policy`
-- `Permissions-Policy`
-- `Content-Security-Policy`
-
-For Next.js, configure in `next.config.js` or middleware depending on deployment.
-
-#### Acceptance criteria
-
-- Security scan improves.
-- No broken assets/scripts due to CSP.
-- Document headers in build notes.
-
----
-
-## 12. Recommended new information architecture
-
-The current journey appears to be:
-
-1. Origin / hero.
-2. About.
-3. Work.
-4. Arsenal.
-5. Projects.
-6. Contact.
-7. Hidden/deep layers.
-
-The next version should prioritize trust and conversion:
-
-### New page hierarchy
-
-#### 1. Hero: professional identity first
-
-Purpose: answer “Who is this and why should I care?”
-
-Include:
-
-- Name.
-- Role.
-- Stack.
-- Availability/intention.
-- 2 CTAs: `View work`, `Contact`.
-- Secondary CTAs: `Resume`, `GitHub`, `LinkedIn`.
-- Optional small Chronicle visual.
-
-#### 2. Quick proof strip
-
-Purpose: trust in 5 seconds.
-
-Example:
-
-```md
-5+ years · React/Next.js/Node.js · Production dashboards & workflow systems · Frontend-heavy full-stack · AI-augmented but human-led
-```
-
-#### 3. Featured projects
-
-Purpose: proof before story.
-
-- Screenshots.
-- Live demos.
-- Case studies.
-- Real technical bullets.
-
-This should move earlier than before, or be accessible directly from hero.
-
-#### 4. Experience / work history
-
-Purpose: professional credibility.
-
-- Timeline, but concise.
-- Company/project context.
-- Outcomes and responsibilities.
-
-#### 5. Skills / Arsenal
-
-Purpose: technical fit.
-
-- Grouped by Frontend, Backend, DevOps, Product/UI, Analytics.
-- Expandable details.
-- Do not overwhelm.
-
-#### 6. Chronicle extras
-
-Purpose: delight and differentiation.
-
-- Astrolabe.
-- Voice modes.
-- Theme modes.
-- Hidden details.
-- Making-of/build notes.
-
-These should reward exploration, not block comprehension.
-
-#### 7. Contact / final CTA
-
-Purpose: conversion.
-
-- Strong closing copy.
-- Simple form.
-- Direct alternatives.
-- Resume/LinkedIn/GitHub.
-
----
-
-## 13. Recommended copy direction
-
-### Tone to avoid
-
-Avoid copy that sounds like generic AI-generated epic branding:
-
-- “Charting realms.”
-- “Crafting immersive digital journeys.”
-- “Where code meets destiny.”
-- “Tiny details and polished storytelling.”
-- Too many fantasy metaphors in one paragraph.
-
-### Desired tone
-
-- Human.
-- Specific.
-- Calm.
-- Confident.
-- Technical when useful.
-- Creative only where it adds flavor.
-
-### Hero copy options
-
-#### Option 1 — Direct and recruiter-safe
-
-```md
-Manan Upadhyay
-Full-stack developer focused on polished React, Next.js, and Node.js products.
-
-I build frontend-heavy production systems with strong UI craft, reliable APIs, and clean user workflows.
-```
-
-#### Option 2 — Balanced Chronicle tone
-
-```md
-Manan Upadhyay
-Full-stack developer building polished product interfaces and reliable web systems.
-
-This portfolio is a small interactive chronicle of my work — but the short version is simple: I ship clean, usable, production-ready web applications.
-```
-
-#### Option 3 — Senior positioning
-
-```md
-Frontend-heavy full-stack developer with 5+ years of production experience.
-
-React, Next.js, Node.js, TypeScript, APIs, dashboards, CRMs, workflow tools, and user-facing product experiences.
-```
-
-### CTA copy options
-
-Primary:
-
-- `View selected work`
-- `Contact me`
-- `Download résumé`
-
-Secondary:
-
-- `Explore the Chronicle`
-- `Read build notes`
-- `Open journey map`
-
-Contact CTA:
-
-```md
-Hiring for a React/Next.js developer who can own polished product experiences? Let’s talk.
+**Solution:** Add to `vercel.json`:
+```json
+{
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" },
+        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" }
+      ]
+    }
+  ]
+}
 ```
 
 ---
 
-## 14. Analytics instrumentation plan for next beta
+## 10. Copy direction reference
 
-The next beta should answer: did the changes actually improve trust, clarity, and conversion?
+### Current copy DNA (the problem)
 
-### Core events to track
+Every line in `chronicle.js` sounds like a first-draft Claude completion. The vocabulary is:
+- "Realm", "chronicle", "charting", "expedition", "quest", "raven", "summon"
+- "Craft", "tiny details", "polished", "immersive", "intentional", "handcrafted"
+- Sentences are uniformly long, uniformly polished, uniformly grandiose
 
-#### Page/session
+### Target copy DNA
 
-- `page_view`
-- `session_start`
-- `session_heartbeat_15s`
-- `session_heartbeat_30s`
-- `session_heartbeat_60s`
-- `session_recap`
-- `rage_click`
-- `dead_click`
-- `scroll_depth_25`
-- `scroll_depth_50`
-- `scroll_depth_75`
-- `scroll_depth_100`
+| Section | Chronicle voice (keep flavor) | Plain voice (recruiter-safe) |
+|---|---|---|
+| Hero lead | "I build" | "I build" |
+| Hero hook | Professional claim with one Chronicle touch | Direct professional claim |
+| About | 3-4 lines, specific, one metaphor max | 3-4 lines, purely professional |
+| Experience | Concise cards with real outcomes | Same (minimal voice difference) |
+| Projects | Proof-focused with real descriptions | Same |
+| Contact | Warm, direct, low-pressure | "Let's connect" |
+| CTA primary | "See my work" | "View projects" |
+| CTA secondary | "Get in touch" | "Contact me" |
 
-#### Section exposure
+### What to keep from Chronicle voice
 
-- `section_view_hero`
-- `section_view_quick_proof`
-- `section_view_projects`
-- `section_view_experience`
-- `section_view_skills`
-- `section_view_chronicle_extras`
-- `section_view_contact`
+- Section labels can retain flavor (The Craft, The Arsenal, etc.) — just don't repeat them in every sentence
+- One metaphor per section maximum
+- Theme/sky names (Dawn, Dusk, Night) are fine
+- Easter egg voices can be as themed as they want
+- Sound and theme UI copy can stay literal
 
-#### CTA and professional intent
+### What to remove from Chronicle voice
 
-- `cta_view_work_click`
-- `cta_contact_click`
-- `resume_open`
-- `github_click`
-- `linkedin_click`
-- `email_copy`
-- `email_open`
-- `project_live_click`
-- `project_case_study_click`
-- `project_github_click`
-
-#### Form funnel
-
-- `contact_form_visible`
-- `contact_form_first_focus`
-- `contact_form_field_completed`
-- `contact_form_started`
-- `contact_form_validation_error`
-- `contact_form_submit_click`
-- `contact_form_submit_success`
-- `contact_form_submit_failure`
-- `contact_form_abandon`
-
-#### Interaction clarity
-
-- `map_open`
-- `map_jump`
-- `rail_nav_click`
-- `theme_switch`
-- `voice_switcher_open`
-- `voice_selected`
-- `voice_hall_enter`
-- `astrolabe_drag`
-- `astrolabe_spin`
-- `astrolabe_destination_click`
-- `reduced_motion_enabled`
-- `sound_played`
-- `sound_muted`
-
-#### Making-of/build notes
-
-- `build_notes_view`
-- `build_notes_scroll_50`
-- `build_notes_cta_click`
-- `build_notes_artifact_expand`
-
-### Properties to attach to all events
-
-- `beta_round`
-- `tracking_version`
-- `device_os`
-- `device_browser`
-- `viewport_width`
-- `viewport_height`
-- `is_mobile`
-- `input_type`
-- `reduced_motion`
-- `theme`
-- `voice`
-- `source`
-- `referrer_domain`
-- `utm_source`
-- `utm_medium`
-- `utm_campaign`
+- Fantasy vocabulary in professional content
+- Stacked metaphors (3+ in one paragraph)
+- "Epic" register for mundane claims
+- Themed error messages that add cognitive load during frustration
+- Self-referential "the cartographer" in copy the visitor sees first
 
 ---
 
-## 15. Experiment plan for next beta
+## 11. Information architecture for next version
 
-Run the next beta as a measurable product iteration, not just a redesign.
+### Current flow
 
-### Experiment 1 — Human-first copy vs Chronicle-heavy copy
+```
+Hero → About → Experience → Arsenal → Projects → Contact → [Expedition Recap]
+```
 
-Hypothesis:
+### Recommended flow
 
-> Human-first copy will reduce AI/vibe-coded perception and increase contact/project clicks.
+```
+Hero (with proof strip + clear CTAs)
+  → Projects (proof first — moved earlier or directly reachable from hero)
+  → About (brief — 3-4 lines)
+  → Experience (concise timeline)
+  → Skills/Arsenal (grouped chips)
+  → Contact (simple form + alternatives)
+  → [Expedition Recap — optional, non-blocking]
+```
 
-Measure:
-
-- User comments.
-- Project click rate.
-- Contact click rate.
-- Resume opens.
-- Time to first CTA click.
-
-### Experiment 2 — Simplified contact form
-
-Hypothesis:
-
-> Reducing form fields and adding low-pressure language will reduce abandonment from 78% to under 40%.
-
-Measure:
-
-- Form starts.
-- Field focus.
-- Submit rate.
-- Abandonment.
-- Direct email clicks.
-
-### Experiment 3 — Native/mobile scroll
-
-Hypothesis:
-
-> Reducing scroll hijacking will improve scroll depth and reduce irritation.
-
-Measure:
-
-- Scroll depth.
-- Section reach.
-- Rage/dead clicks.
-- Qualitative comments.
-- Mobile conversion.
-
-### Experiment 4 — Project visuals earlier
-
-Hypothesis:
-
-> Moving proof earlier will reduce “AI/slop” perception and increase trust.
-
-Measure:
-
-- Project section reach.
-- Project clicks.
-- GitHub/LinkedIn/resume clicks.
-- Comments mentioning real work.
-
-### Experiment 5 — Making-of as engineering notes
-
-Hypothesis:
-
-> Rewriting `/making-of` as factual build notes will turn curiosity into credibility.
-
-Measure:
-
-- Build notes scroll.
-- Build notes CTA clicks.
-- Comments about making-of.
+**Key change:** Projects should be reachable directly from the hero CTA. Whether that means reordering sections or just changing the CTA target depends on implementation feasibility. The simplest fix: change hero primary CTA from "scroll to about" to "scroll to projects."
 
 ---
 
-## 16. AI agent implementation backlog
+## 12. Sprint plan for AI agents
 
-Use this as the actionable task list.
+### Sprint 1 — Hero + trust repair (highest ROI)
 
-### Sprint 1 — Trust and clarity cleanup
+- [ ] Rewrite hero copy in all 5 voice bundles (chronicle, plain, scott, dwight, cow)
+- [ ] Change hero CTA targets: primary → projects, secondary → contact, add tertiary → resume
+- [ ] Add proof strip to Hero.jsx
+- [ ] Reduce astrolabe sizing on desktop
+- [ ] Redesign or remove `chapter-eyebrow` uppercase pattern
+- [ ] Rewrite `about.intro` and `about.pullQuote` in all bundles
+- [ ] Cut visible text across all sections by 50-70%
 
-- [ ] Rewrite hero copy to be direct, human, and professional.
-- [ ] Add recruiter-safe proof strip above the fold.
-- [ ] Reduce visible text across all sections by 50–70%.
-- [ ] Move or link projects earlier from hero.
-- [ ] Add labels/tooltips to all persistent controls.
-- [ ] Separate brand logo from map/navigation control.
-- [ ] Simplify custom cursor or disable by default.
-- [ ] Reduce decorative density in hero.
-- [ ] Add direct Resume / GitHub / LinkedIn / Contact CTAs.
+### Sprint 2 — Contact conversion + bugs
 
-### Sprint 2 — Conversion fixes
+- [ ] Simplify contact form copy in all bundles (`submitIdle`, `status.*`, `errors.*`)
+- [ ] Add quick-contact alternatives prominently (email copy, LinkedIn, GitHub)
+- [ ] Add floating CTA after 50-75% scroll
+- [ ] Debug and fix Windows Chrome/Edge contact form interaction
+- [ ] Fix PostHog super property registration order
+- [ ] Add session heartbeat events (15s, 30s, 60s)
+- [ ] Add tracking version and beta round properties
 
-- [ ] Simplify contact form to minimum fields.
-- [ ] Add quick contact alternatives: email, LinkedIn, GitHub.
-- [ ] Add low-pressure “just say hi” copy.
-- [ ] Add strong final footer CTA.
-- [ ] Add sticky CTA after 50–75% scroll or project engagement.
-- [ ] Fix Windows Chrome/Edge contact-form interaction.
-- [ ] Ensure mobile form autofill and tap targets.
+### Sprint 3 — Project proof + visual evidence
 
-### Sprint 3 — Project proof
+- [ ] Capture real screenshots for Gajaakriti Studio, Royal Tiles, and 1-2 more projects
+- [ ] Add image slots to project cards in Works.jsx
+- [ ] Reorder projects with Gajaakriti Studio first
+- [ ] Show 3 featured projects by default, rest behind "Show more"
+- [ ] Rewrite project descriptions to be proof-focused in all bundles
+- [ ] Add live demo buttons more prominently
 
-- [ ] Add real screenshots/GIFs for each featured project.
-- [ ] Reorder projects with Gajaakriti Studio first.
-- [ ] Add project proof bullets: role, stack, decisions, outcome.
-- [ ] Add live demo buttons prominently.
-- [ ] Add case-study pages or expandable case-study cards.
-- [ ] Add GitHub/code links where public, but do not rely on them as the main proof.
+### Sprint 4 — Scroll + performance + mobile
 
-### Sprint 4 — Scroll and mobile UX
+- [ ] Reduce Lenis smooth-scroll intensity on desktop
+- [ ] Disable custom smooth scroll on mobile
+- [ ] Fix horizontal timeline to support horizontal gestures
+- [ ] Audit all GSAP contexts for proper cleanup
+- [ ] Cap canvas DPR at 2x
+- [ ] Profile for memory leaks in Chrome DevTools
+- [ ] Simplify mobile floating controls to single menu button
+- [ ] Increase mobile tap targets to 44px minimum
 
-- [ ] Reduce smooth-scroll intensity on desktop.
-- [ ] Disable custom smooth scroll on mobile.
-- [ ] Respect `prefers-reduced-motion`.
-- [ ] Add visible reduced-motion option if needed.
-- [ ] Fix horizontal timeline to support horizontal gestures.
-- [ ] Test on iPhone mini viewport and Android Chrome.
-- [ ] Increase mobile typography readability and spacing.
+### Sprint 5 — Making-of + security + polish
 
-### Sprint 5 — Chronicle extras and deep features
-
-- [ ] Decide astrolabe role: functional navigation or optional toy.
-- [ ] Add microcopy explaining astrolabe behavior.
-- [ ] Make Voice switcher discoverable using theme-switcher pattern.
-- [ ] Add explorer-only entry point for Voice Hall/Atelier.
-- [ ] Keep easter eggs subtle; do not make them core UX.
-- [ ] Improve build reel/persona card affordances.
-
-### Sprint 6 — Making-of/build notes
-
-- [ ] Rename/rewrite `/making-of` as engineering/build notes.
-- [ ] Add real artifacts: screenshots, architecture, code snippets, analytics learnings.
-- [ ] Add “what beta users disliked and what changed” section.
-- [ ] Add CTA at bottom of build notes.
-- [ ] Add full analytics tracking to the page.
-
-### Sprint 7 — Technical credibility and analytics
-
-- [ ] Add security headers.
-- [ ] Fix PostHog/Datahog super property registration order.
-- [ ] Add tracking version and beta round properties.
-- [ ] Add full CTA/form/section tracking.
-- [ ] Add rage/dead click tracking if available.
-- [ ] Add session heartbeat and visibility-change events.
-- [ ] Validate analytics in a test session before launch.
+- [ ] Rewrite `/making-of` as engineering case study
+- [ ] Add real artifacts (screenshots, architecture, code snippets)
+- [ ] Add CTA at bottom of making-of page
+- [ ] Add security headers to vercel.json
+- [ ] Label all persistent controls
+- [ ] Simplify custom cursor or disable by default
+- [ ] Add full analytics tracking to `/making-of`
 
 ---
 
-## 17. QA checklist before next beta
+## 13. QA checklist before next beta
 
 ### Desktop QA
 
-- [ ] Chrome macOS.
-- [ ] Firefox macOS.
-- [ ] Safari macOS.
-- [ ] Chrome Windows.
-- [ ] Edge Windows.
-- [ ] 1366px laptop width.
-- [ ] 1440px desktop width.
-- [ ] 1920px desktop width.
+- [ ] Chrome macOS
+- [ ] Firefox macOS
+- [ ] Safari macOS
+- [ ] **Chrome Windows** (critical — form bug)
+- [ ] **Edge Windows** (critical — form bug)
+- [ ] 1366px laptop width
+- [ ] 1440px desktop width
+- [ ] 1920px desktop width
 
 ### Mobile QA
 
-- [ ] iPhone mini / 375px width.
-- [ ] iPhone standard width.
-- [ ] Android Chrome.
-- [ ] Touch scrolling.
-- [ ] Tap target size.
-- [ ] Form autofill.
-- [ ] Sticky CTA does not block content.
+- [ ] iPhone mini / 375px width
+- [ ] iPhone standard width
+- [ ] Android Chrome
+- [ ] Touch scrolling (native, no custom)
+- [ ] Tap target size (44px minimum)
+- [ ] Form autofill
+- [ ] Floating CTA doesn't block content
 
-### Accessibility QA
+### Performance QA
 
-- [ ] Keyboard navigation works.
-- [ ] Focus states visible.
-- [ ] Reduced motion respected.
-- [ ] Custom cursor disabled for keyboard/touch/reduced motion.
-- [ ] Text contrast acceptable.
-- [ ] Buttons have accessible labels.
-- [ ] Icons are not the only source of meaning.
+- [ ] 3-minute session on M1 MacBook — no degradation
+- [ ] 4K display — no excessive GPU load
+- [ ] Canvas DPR capped at 2x
+- [ ] No growing heap in Chrome DevTools
+- [ ] No detached DOM nodes
 
 ### Analytics QA
 
-- [ ] First pageview has device/browser properties.
-- [ ] Section view events fire once per section per session.
-- [ ] CTA clicks are captured.
-- [ ] Form start and submit events are captured.
-- [ ] Contact success is captured.
-- [ ] `/making-of` tracking works.
-- [ ] Test traffic is labeled or filtered.
+- [ ] First pageview has device/browser properties (not null)
+- [ ] Section view events fire once per section per session
+- [ ] CTA clicks are captured
+- [ ] Form start and submit events are captured
+- [ ] Contact success is captured
+- [ ] `/making-of` tracking works
+- [ ] Test traffic is labeled or filtered
 
 ---
 
-## 18. What to preserve
+## 14. What to preserve
 
-Do not throw away everything. The beta proved several strengths.
+The beta proved several strengths. Do NOT remove:
 
-Preserve:
-
-- The Chronicle concept, but reduce its dominance.
-- Atmospheric color palette.
-- Theme switching.
-- Sound design, with accessible controls.
-- Map navigation, because users actually use it.
-- Small intentional details.
-- Whimsical identity.
-- Interactive polish where it supports the product.
-
-Improve:
-
-- Clarity.
-- Proof.
-- Copy.
-- Conversion.
-- Scroll feel.
-- Mobile UX.
-- Analytics quality.
-
-Remove or reduce:
-
-- Excessive fantasy metaphors.
-- Long paragraphs.
-- Controls without labels.
-- Decorative elements that look clickable but do nothing.
-- Heavy smooth scroll on mobile.
-- Distracting cursor animation.
-- Self-indulgent making-of copy.
+| Keep | Why |
+|---|---|
+| Chronicle concept | Memorability — the strongest differentiator |
+| Atmospheric color palette | Users explicitly praised colors |
+| Theme switching | 309 events — most used interactive feature |
+| Sound design | 94.8% acceptance rate |
+| Map navigation | 55 opens, 23 jumps — users prefer it |
+| Small intentional details | "Intentional details" praised by multiple users |
+| Whimsical identity | Distinguishes from generic portfolios |
+| Interactive polish | Praised when it supports content |
 
 ---
 
-## 19. Final product recommendation
+## 15. Final product recommendation
 
 The website should evolve from:
 
-> “A cinematic AI-looking portfolio experience with impressive details but confusing trust signals.”
+> "A cinematic AI-looking portfolio experience with impressive details but confusing trust signals."
 
 To:
 
-> “A clear senior developer portfolio with a memorable cinematic layer, real project proof, low-friction contact, and measurable product thinking.”
+> "A clear senior developer portfolio with a memorable cinematic layer, real project proof, low-friction contact, and measurable product thinking."
 
 The highest-leverage changes are:
 
-1. Rewrite the copy to sound human, direct, and specific.
-2. Cut visible text by 50–70%.
-3. Put proof and projects earlier.
-4. Add real project screenshots and case-study evidence.
-5. Fix the contact form funnel and reduce abandonment.
-6. Fix Windows/mobile UX issues.
-7. Make controls/icons obvious.
-8. Reduce scroll/cursor friction.
-9. Rebuild `/making-of` as credible engineering notes.
-10. Fix analytics instrumentation before the next beta.
+1. **Optimize the hero** (80% of conversion work) — hook, CTA, action path
+2. **Rewrite copy to sound human** — direct, specific, less fantasy
+3. **Cut visible text by 50-70%**
+4. **Add real project screenshots** — the single best anti-"AI-slop" move
+5. **Fix the contact funnel** — simplify form, reduce abandonment
+6. **Fix Windows bug** — recover lost conversions
+7. **Fix performance degradation** — prove engineering craft through working code
+8. **Fix analytics** — measure whether changes work
 
-If these changes work, the next beta should show:
-
-- Better scroll depth.
-- Higher contact reach.
-- Higher form start and submit rates.
-- Lower form abandonment.
-- Fewer “AI/vibe-coded” comments.
-- More comments about real projects and credibility.
-- Cleaner device/browser analytics.
-- More recruiter-safe trust signals.
+> [!TIP]
+> **Weighting rule (the most important process input):** rank a signal by how many independent users repeat it *and* whether behavior confirms it — not by volume or credential. Fix what the sentiment clusters and the analytics agree on (hero, proof, text, bugs), and don't over-correct for the loudest critics at the expense of the site's personality.
 
 ---
 
-## 20. One-line instruction for the AI agent
+## 16. One-line instruction for AI agents
 
-> Rework the Chronicle portfolio into a human-first, proof-heavy, recruiter-safe senior developer portfolio while preserving the cinematic Chronicle identity as an optional interactive layer; fix copy overload, AI-generated perception, confusing controls, scroll friction, contact conversion, mobile/Windows UX, project proof, making-of credibility, security headers, and analytics instrumentation before the next beta.
+> Rework the Chronicle portfolio into a human-first, proof-heavy, conversion-optimized senior developer portfolio — starting with the hero (80% of the work: better hook, better CTA, better action path), then fixing AI-perception signals, text overload, contact conversion, Windows bug, performance degradation, and analytics instrumentation — while preserving the cinematic Chronicle identity as an optional interactive layer.

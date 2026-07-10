@@ -2,6 +2,7 @@ import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { trackOnce } from '../lib/analytics';
 
 // MARGINALIA — flavor meets substance (LEGENDARY-ROADMAP §2).
 //
@@ -28,21 +29,70 @@ const TIP_STYLE = {
   boxShadow: 'var(--shadow-card)',
 };
 
+// Discoverability teach (features value audit 2026-07-08, P2): the dotted
+// underline + dagger is subtle enough that many never learn these phrases are
+// interactive. The FIRST footnote a visitor scrolls to gets a single ember-glow
+// shimmer — then every other one stays quiet, forever. Claimed by the first
+// instance to mount (About, top of the page); persisted once-per-visitor.
+let hintClaimed = false;
+const HINT_KEY = 'marginaliaHinted';
+
 const Marginalia = ({ id, children }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [pos, setPos] = useState(null);
+  const [hinting, setHinting] = useState(false);
   const triggerRef = useRef(null);
+  const ptr = useRef('mouse');
   const tipId = useId();
   const note = t(`marginalia.${id}`);
 
-  // Anchor the portalled note to the trigger (centered above it). Recomputed on
-  // open and kept in sync while open (scroll/resize) so it tracks the phrase.
+  // Claim the one-time hint on mount (if nobody has, it isn't already spent, and
+  // motion is allowed), then fire the shimmer the first time this phrase scrolls
+  // into view — teaching the affordance exactly once, where the eye already is.
+  useEffect(() => {
+    if (hintClaimed) return undefined;
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return undefined;
+    let spent = false;
+    try { spent = localStorage.getItem(HINT_KEY) === '1'; } catch { /* private mode */ }
+    if (spent) return undefined;
+    const el = triggerRef.current;
+    if (!el) return undefined;
+    hintClaimed = true; // this instance is the teacher; no other will shimmer
+    let fired = false;
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      fired = true;
+      io.disconnect();
+      try { localStorage.setItem(HINT_KEY, '1'); } catch { /* private mode */ }
+      setHinting(true);
+      setTimeout(() => setHinting(false), 1500);
+    }, { threshold: 0.9 });
+    io.observe(el);
+    // Release the claim on cleanup if we never fired, so a remount (StrictMode's
+    // dev double-invoke, or this teacher unmounting) can re-claim and re-observe.
+    return () => { io.disconnect(); if (!fired) hintClaimed = false; };
+  }, []);
+
+  // Adoption signal (LEGENDARY-ROADMAP §2): did visitors actually discover the
+  // flavor↔substance footnotes? Fire once per distinct note per session, on any
+  // reveal path (hover / tap / keyboard) — never per-frame.
+  useEffect(() => { if (open) trackOnce(`marginalia:${id}`, 'marginalia_reveal', { id }); }, [open, id]);
+
+  // Anchor the portalled note to the trigger — centered above it, flipping below
+  // near the top edge, and CLAMPED within the viewport so it never runs off-screen
+  // on small screens (Beta 2 mobile bug). Kept in sync while open (scroll/resize).
   const place = useCallback(() => {
     const el = triggerRef.current;
     if (!el) return;
     const r = el.getBoundingClientRect();
-    setPos({ left: r.left + r.width / 2, top: r.top });
+    const margin = 12;
+    const w = Math.min(280, window.innerWidth * 0.78);
+    const half = w / 2;
+    const center = r.left + r.width / 2;
+    const left = Math.max(margin + half, Math.min(window.innerWidth - margin - half, center));
+    const below = r.top < 120;
+    setPos({ left, top: below ? r.bottom : r.top, below });
   }, []);
 
   useLayoutEffect(() => {
@@ -71,7 +121,8 @@ const Marginalia = ({ id, children }) => {
 
   // Self-contained: stop clicks/keys from reaching a parent (e.g. the contact
   // submit button) so revealing the note never also triggers the parent action.
-  const toggle = (e) => { e.stopPropagation(); setOpen((o) => !o); };
+  // Only tap/pen toggle on click (mouse uses hover); we do NOT open on focus, so
+  // a touch tap — which fires focus AND click — opens in a SINGLE tap, not two.
   const onKeyDown = (e) => {
     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); setOpen((o) => !o); }
   };
@@ -79,17 +130,16 @@ const Marginalia = ({ id, children }) => {
   return (
     <span
       ref={triggerRef}
-      className="marginalia"
+      className={`marginalia${hinting ? ' marginalia--hint' : ''}`}
       role="button"
       tabIndex={0}
       data-cursor="hover"
       aria-describedby={open ? tipId : undefined}
       aria-expanded={open}
-      onPointerEnter={(e) => { if (e.pointerType === 'mouse') setOpen(true); }}
+      onPointerEnter={(e) => { ptr.current = e.pointerType; if (e.pointerType === 'mouse') setOpen(true); }}
       onPointerLeave={(e) => { if (e.pointerType === 'mouse') setOpen(false); }}
-      onFocus={() => setOpen(true)}
-      onBlur={() => setOpen(false)}
-      onClick={toggle}
+      onPointerDown={(e) => { ptr.current = e.pointerType; }}
+      onClick={(e) => { e.stopPropagation(); if (ptr.current !== 'mouse') setOpen((o) => !o); }}
       onKeyDown={onKeyDown}
     >
       {children}
@@ -105,7 +155,7 @@ const Marginalia = ({ id, children }) => {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.16 }}
               className="marginalia__note"
-              style={{ ...TIP_STYLE, left: pos.left, top: pos.top }}
+              style={{ ...TIP_STYLE, left: pos.left, top: pos.top, transform: pos.below ? 'translate(-50%, 8px)' : 'translate(-50%, calc(-100% - 8px))' }}
             >
               {note}
             </motion.span>

@@ -4,6 +4,60 @@ The visual & motion language. **Every component must consume these tokens**, not
 raw values. Tokens are defined in [`src/index.css`](../../src/index.css) and
 [`tailwind.config.js`](../../tailwind.config.js).
 
+> [!NOTE]
+> **The tokens and motion language below are stable through v1.1.** What v1.1
+> changes is *how much* of them we deploy at once — a restraint pass. See the
+> addendum immediately below and the [V1.1 Release Plan](V1.1-RELEASE-PLAN.md).
+
+---
+
+## 0. v1.1 addendum — the restraint pass
+
+Beta 1 said the design is memorable but **over-signals AI, overloads the reader,
+and feels congested**. The tokens are not the problem; the *density* is. v1.1
+applies a **premium restraint pass** across the default path. Rationale + evidence:
+[V1.1 Release Plan §2, §4-A](V1.1-RELEASE-PLAN.md) and
+[feedback §5, §10](reports/feedback/2026-07-01-reddit-beta-feedback.md).
+
+**Remove the "vibe-coded" visual tells** (repeatedly named by testers, present in
+the codebase — the highest-value design changes):
+
+- **Uppercase "eyebrow" headings** (`chapter-eyebrow` / `ChapterHeading`, e.g.
+  "CHAPTER 01 · THE CRAFT") are the #1 AI tell. Redesign: drop chapter numbering
+  or move to a quiet normal-case inline label, lighter weight.
+- **Pill / chip uniformity** (contact inquiry chips, Arsenal skill badges, project
+  tags) reads as generated UI. Break the uniformity — don't ship one rounded-pill
+  treatment everywhere.
+- **Uniform section density.** Every section currently carries the same polish
+  level; humans are uneven. Deliberately make some sections calmer/simpler.
+
+**Raise breathing room and hierarchy:**
+
+- Increase whitespace and section margins; fewer cards per view; one strong
+  visual moment per section rather than many competing details.
+- Design layouts for a copy budget **50–70% smaller** (copy lives in i18n
+  bundles; the layout must be built for the shorter budget — release plan §4-A).
+- Add an above-the-fold **proof strip** to the hero (years · stack · shipped ·
+  role) using existing tokens — muted, mono, low-key.
+
+**Input & motion restraint:**
+
+- **Custom cursor** (`Cursor.jsx`): simplify (smaller, one color, animate only on
+  meaningful hover) or default-off; must be disabled on touch / reduced-motion —
+  verify.
+- Trim first-visit decorative motion; keep motion that communicates state or
+  reveals content, cut motion that only impresses.
+- **Mobile:** collapse the floating control cluster into one labelled menu; tap
+  targets ≥ 44px; more letter-spacing/line-height on decorative headings at
+  narrow widths.
+
+**Controls must be legible:** label every persistent control (Map/Theme/Sound/
+Voice). The `SkyControl` theme switcher (309 interactions in Beta 1) is the model
+for discoverability — the Voice control (33) should borrow its affordance.
+
+> Guardrail for the whole pass: **remove 30–50% of default-path decorative
+> detail; keep the secrets for explorers.** Restraint is the senior-taste signal.
+
 ---
 
 ## 1. Color tokens
@@ -167,12 +221,14 @@ The audio counterpart to the motion language. Engine + API: ARCHITECTURE §4b.
    on-palette (rounded shapes, soft filtered noise — never harsh). A master limiter
    glues overlaps. A cue that lands *out of sync* with its visual reads worse than
    none — e.g. the `theme` swoosh is length-matched to the theme wipe.
-3. **Two beds only**, both *spatial* with natural **distance falloff** (level
-   driven by scroll proximity, fading in as the section approaches and out as it
-   leaves): the **Arsenal `hum`** (low spacey drone) and the **Hero `watch`**
-   (slow revolving-gear astrolabe). Each plays an **optional looping mp3** if
-   provided (`CONFIG.beds.*.sample`), else a synthesized fallback; the distance
-   fade works either way. Both tear down fully at zero.
+3. **Five beds**, each *spatial* with natural **distance falloff** (level driven by
+   scroll proximity or interaction focus, fading in/out with the section): the
+   **Hero `watch`** (slow revolving-gear astrolabe), the **Arsenal `hum`** (spacey
+   drone ambience), the **FaceParticles `lens`** (magic-lantern hover buzz), the
+   **Observatory `orbit`** (constellation hover), and the **BuildReel `reel`**
+   (film-transport whir, velocity-driven). Each plays an **optional looping mp3**
+   if provided (`CONFIG.beds.*.sample`), else a synthesized fallback; the distance
+   fade works either way. All tear down fully at zero.
 4. **Default-on, silent until the first gesture** (browser law); **auto-muted
    under `prefers-reduced-motion`**; one master mute+volume control; preference
    persisted. **Sound only plays while the page is in view** — the context
@@ -187,16 +243,27 @@ The audio counterpart to the motion language. Engine + API: ARCHITECTURE §4b.
 | `theme` | DayNightToggle | a single gentle warm "wipe" of air (no chime), length-synced to the reveal |
 | `glitch` | voice change (switcher + easter eggs) | soft "decode" chatter that thins to a resolve tone; pairs with the text scramble |
 | `error` | Contact submit (validation/instant) | short low descending "denied" buzz |
-| `mapOpen`/`mapClose` | App (⌘K map) | gentle rising / falling whoosh (no chime) |
+| `mapOpen`/`mapClose` | Chronicle (⌘K map) | gentle rising / falling whoosh (no chime) |
 | `raven` | Contact send | mp3 sample → else synth wingbeats + caw |
 | `blip` | Tech hover | tiny pluck; pitch steps an arpeggio across the orbit |
-| `confirm` | sound turned on | soft two-note acknowledgement |
+| `chartSwap` | Arsenal orbit⇄inventory toggle | cascading fold/unfurl with a landing thunk |
+| `detent` | BuildReel sprocket | sharp mechanical click per frame crossed |
+| `settle` | BuildReel playhead landing | low thunk when the reel snaps to a frame |
+| `click` | physical prev/next key | bright press + soft release |
+| `hoverNote` | Observatory analytics chip hover | pitched pluck (octave doubling for airiness) |
+| `rewind` | Time Machine era crossing | descending "winding back" motif |
+| `pageflip` | Time Tunnel year/event transition | soft page-turn flutter |
+| `assembleSwell` | FaceParticles portrait assembly | granular rush of ticks converging |
+| `volumeTick` | VolumeDial drag | pitched tick that rises with level |
 | `hum` (bed) | Arsenal | spacey drone — mp3 loop or synth fallback, proximity-faded |
 | `watch` (bed) | Hero | slow revolving-gear astrolabe — mp3 loop or synth fallback, scroll-faded |
+| `lens` (bed) | FaceParticles | magic-lantern hover buzz (synth only) |
+| `orbit` (bed) | Observatory | constellation hover buzz (synth only, soft undertone) |
+| `reel` (bed) | BuildReel | film-transport whir (synth only, velocity-driven) |
 
 ### Voice-change scramble (visual)
 On every voice switch the copy swaps synchronously; `VoiceTransition` (mounted in
-App) then **decodes the new wording in**: every visible text element scrambles
+Layout) then **decodes the new wording in**: every visible text element scrambles
 through random glyphs and resolves to the new voice (the "Scrambled Text" effect),
 paired with the soft `glitch` decode sound. **Content-level, per-text — no
 full-screen overlay.** Implemented in `lib/voiceScramble.js` (a DOM `TreeWalker`
@@ -280,17 +347,28 @@ Keyframes available: `scrollcue`, `herofog`, `aurora`, `sunrise`, `float`,
 ## 7. Component inventory
 
 ### Canonical reusable widgets (`src/components/`, flat, barrel-exported)
-`SideRail` (chapter nav) · `MapOverlay` (⌘K map) · `Cursor` ·
+`SideRail` (desktop chapter/act/era nav) · `MapOverlay` (⌘K map) · `Cursor` ·
 `SkyControl` (top-right 5-mode sky menu) wrapping `DayNightToggle` (the sun/moon
 base toggle) · `CompassRose` (brand SVG) · `ChapterHeading` (the one section header) ·
 `MapDivider` · `CountUp` · `ScrollReveal` · `ErrorBoundary` · `Magnet` ·
+`MobileMenu` (mobile bottom-sheet: nav + voice + sound + sky + clue unlock) ·
+`StickyCta` (scroll-triggered contact CTA) ·
 `Marginalia` + `Annotated` (flavor→substance footnotes; wrap copy with the
 `[[id|phrase]]` marker, render via `<Annotated text={t('…')} />`, facts under
 `marginalia.<id>` in `chronicle`) · `VoiceSwitcher` / `ControlCluster` /
 `EasterEggListener` / `VoiceTransition` (the Voice system; `VoiceTransition` =
-the per-text scramble + sound on voice change) · `SoundControl` (the Sound system,
-audio half of the cluster). Plus `SectionWrapper` (`src/hoc/`). Page chapters live
-in `src/sections/`.
+the per-text scramble + sound on voice change) · `VoiceHall` (⇧⌘V full picker) ·
+`VoicePreviewCard` (voice detail card — Hall + mobile preview: pre-rendered portrait
+plate + identity + sealed clue unlock) · `VoiceRequest` ("Summon a Voice" form —
+posts through the raven endpoint) · `ClueUnlock` (touch-friendly sealed-voice
+clue/answer field) · `Hovercard` (portalled info popover) ·
+`SoundControl` (audio half of the cluster) · `VolumeDial` (Apple-style volume
+slider) · `ThemeWheel` (5-mode sky picker for MobileMenu) ·
+`ExpeditionRecap` / `FaceParticles` / `SunArc` / `PersonaTriptych` (Atelier off-map) ·
+`Observatory` / `Blueprint` / `CodebaseAtlas` / `NdaSchematic` / `CommitGraph` (Atelier
+Act II — the Engine) · `RavenBurst` / `RavenNotice` (Contact success celebration) ·
+`TimeRail` / `TimeTunnel` / `EraExhibit` (Time Machine) · `Fog` (ambient fog layer).
+Plus `SectionWrapper` (`src/hoc/`). Page chapters live in `src/sections/`.
 
 ### Removed (do not reintroduce)
 The react-bits experiments (`SplitText`, `BlurText`, `TiltedCard`,

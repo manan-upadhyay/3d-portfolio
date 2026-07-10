@@ -64,8 +64,22 @@ state). The cover prompt below is for if/when we add bespoke cover art.
 |---|---|---|
 | `realms/<slug>/<screenshot>.png` | as captured | product screenshots (shipped) |
 | `chronicle/realms/<slug>.webp` *(optional)* | 1600×1200 (4:3) | cinematic cover, probed |
+| `voices/<dark\|light>/<id>.webp` *(optional)* | **1440×1440, exactly square (1:1)**, WebP ~85% | Voice Hall / mobile **preview-panel portrait** (V5) — a **pre-rendered plate** (frame + monogram + portrait all baked in), rendered **directly** (no `FaceParticles`, no extra frame); monogram fallback if absent |
 
-Slugs match `constants` projects (e.g. `gajaakriti`, `royal-tiles`, …).
+Slugs match `constants` projects (e.g. `gajaakriti`, `royal-tiles`, …). Voice
+`<id>`s match the registry ([voices.js](../../src/i18n/voices.js)): `scott`,
+`dwight`, `got`, `avengers`, `yoda`, `chandler`, … (open voices `chronicle` /
+`plain` don't need one — the panel shows their monogram; sealed voices keep the
+wax-lock until unlocked). Ship **two theme variants** — `voices/dark/<id>.webp`
+and `voices/light/<id>.webp` — each pre-graded to sit on that theme's panel; the
+preview picks the folder from the resolved theme. The image is the finished art
+(its own ornate frame), so it renders as-is via [VoicePreviewCard](../../src/components/VoicePreviewCard.jsx).
+
+**Dimensions / grading (perfect on all screens):** author at **1440×1440, exactly
+1:1** (min 1024²; ~1180–1460px is the largest real render — a big phone at DPR 3 /
+small tablet at DPR 2 — desktop maxes at only ~276px CSS). Keep the frame/monogram
+a few % inside the edges. **Bake the background to match the panel** so edges blend
+seamlessly: dark → deep near-black/navy; light → the light theme's cream card tone.
 
 **Prompt template** (prepend World Bible):
 > "A cinematic, painterly cover illustration representing **<one-line project
@@ -123,11 +137,27 @@ previous (v1) icon set are archived in **`/branding/`** (not deployed).
 
 ---
 
-## 5. Day / Night variants (optional)
+## 5b. Sound assets (`public/sounds/`)
 
-One art set is enough — light mode is tinted/relit in CSS. Only if a layer
-looks wrong in light, add a `-day` sibling (e.g. `hero-sky-day.webp`) and the
-code will prefer it in light theme.
+| File | Status | Role |
+|---|---|---|
+| `sounds/raven.mp3` | **shipped** | One-shot raven sample (Contact send). Degrades to synth wingbeats if absent. |
+| `sounds/astrolabe.mp3` | **optional** (CONFIG ref, synth fallback in use) | Hero bed loop. Path defined in `CONFIG.beds.hero.sample`. |
+| `sounds/arsenal.mp3` | **optional** (CONFIG ref, synth fallback in use) | Arsenal bed loop. Path defined in `CONFIG.beds.arsenal.sample`. |
+
+The remaining beds (`lens`, `orbit`, `reel`) and all one-shot cues are synthesized
+(0 bytes). Paths are configurable in `lib/sound.js` → `CONFIG`. Never block on an
+absent sample — the synth fallback is production-quality.
+
+---
+
+## 5c. Time Machine archive posters (`public/archive/`)
+
+| File | Dim | Notes |
+|---|---|---|
+| `archive/<id>.webp` (e.g. `2023.webp`, `2019.webp`) | free | Era poster shown while the live iframe loads, or as the primary visual when `framable: false`. Probed; falls back to a typographic era card. |
+
+Slugs match `constants.archive[].id`. Add one poster per archived portfolio.
 
 ---
 
@@ -135,7 +165,7 @@ code will prefer it in light theme.
 
 `public/` ships as-is — keep it to **production assets only** (favicon family,
 `og-image.png`, `logo-{light,dark}.png`, `site.webmanifest`, `robots.txt`,
-`sitemap.xml`, `resume.pdf`, `realms/…`). Move source/archive/experiments to
-`/branding/`; remove generation leftovers (`*-Edited.png`, oversized `*.png`,
-`Gemini_Generated_*`, `* copy`, `.DS_Store`). Every stray file in `public/`
-ships to prod and counts against the perf budget.
+`sitemap.xml`, `resume.pdf`, `realms/…`, `sounds/…`, `archive/…`). Move
+source/archive/experiments to `/branding/`; remove generation leftovers
+(`*-Edited.png`, oversized `*.png`, `Gemini_Generated_*`, `* copy`, `.DS_Store`).
+Every stray file in `public/` ships to prod and counts against the perf budget.

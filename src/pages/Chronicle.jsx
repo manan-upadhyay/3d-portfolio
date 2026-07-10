@@ -1,11 +1,12 @@
 import { lazy, Suspense, useState, useEffect, useRef } from 'react';
-import { useOutletContext } from 'react-router-dom';
-import { Map } from 'lucide-react';
+import { useOutletContext, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Map, Hammer, History } from 'lucide-react';
 import Hero from '../sections/Hero';
-import { ErrorBoundary, SideRail, MapOverlay } from '../components';
+import { ErrorBoundary, SideRail, MapOverlay, StickyCta } from '../components';
+import { chapterList } from '../constants';
 import { useExpedition } from '../hooks/useExpedition';
-import { restoreScroll } from '../lib/smoothScroll';
+import { restoreScroll, consumeSectionRequest, scrollToSection } from '../lib/smoothScroll';
 import { sound } from '../lib/sound';
 import { track, trackOnce } from '../lib/analytics';
 
@@ -28,13 +29,37 @@ const SectionLoader = () => (
  * scroll position the visitor stepped out from.
  */
 const Chronicle = () => {
-  const { t } = useTranslation();
   const { activeId } = useOutletContext();
+  const { t } = useTranslation();
+  const navigate = useNavigate();
   const [mapOpen, setMapOpen] = useState(false);
   useExpedition(); // accumulate session scroll distance → the Phase 5 recap
 
-  // Returning from the Atelier: drop the visitor back at the doorway they left.
-  useEffect(() => restoreScroll(), []);
+  // Rail data: the six chapters, then a Map action + a quiet doorway to the
+  // Atelier (audit — always-available making-of nav, kept subtle: an extra
+  // footer action below the map, never a seventh "chapter").
+  const railItems = chapterList.map((c) => ({
+    id: c.id, no: c.no, label: t(`chapters.${c.id}.label`),
+    onClick: () => { track('rail_nav', { id: c.id }); scrollToSection(c.id); },
+  }));
+  const railActions = [
+    { key: 'map', label: t('nav.map'), ariaLabel: t('nav.openMap'), kbd: '⌘K',
+      glyph: <Map size={17} />, onClick: () => setMapOpen(true) },
+    { key: 'makingOf', label: t('nav.makingOf'), ariaLabel: t('nav.makingOf'), nav: true,
+      glyph: <Hammer size={16} />,
+      onClick: () => { track('making_of_enter', { from: 'rail' }); navigate('/making-of'); } },
+    { key: 'timeMachine', label: t('nav.timeMachine'), ariaLabel: t('nav.timeMachineSub'), nav: true,
+      glyph: <History size={16} />,
+      onClick: () => { track('time_machine_enter', { from: 'rail' }); navigate('/time-machine'); } },
+  ];
+
+  // Returning from the Atelier: an explicit destination (e.g. "Contact" tapped
+  // on /making-of) wins; otherwise drop the visitor back at the doorway they left.
+  useEffect(() => {
+    const cancelRequest = consumeSectionRequest();
+    const cancelRestore = restoreScroll();
+    return () => { cancelRequest(); cancelRestore(); };
+  }, []);
 
   // Map open / close whoosh — fire on transitions only (skip the initial mount).
   const mapWasOpen = useRef(false);
@@ -58,16 +83,19 @@ const Chronicle = () => {
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
+  // The mobile MobileMenu (in Layout) is route-agnostic; it opens the map by
+  // dispatching this event, which only the Chronicle (owner of the map state) hears.
+  useEffect(() => {
+    const openMap = () => setMapOpen(true);
+    window.addEventListener('chronicle:open-map', openMap);
+    return () => window.removeEventListener('chronicle:open-map', openMap);
+  }, []);
+
   return (
     <>
-      <SideRail activeId={activeId} onOpenMap={() => setMapOpen(true)} visible={activeId !== 'origin'} />
-      {/* mobile map button (side-rail is desktop-only) */}
-      <button onClick={() => setMapOpen(true)} aria-label={t('nav.openMap')}
-        className="md:hidden fixed top-5 left-5 z-40 grid place-items-center w-11 h-11 rounded-full"
-        style={{ background: 'var(--color-card-bg)', border: '1px solid var(--color-card-border)', backdropFilter: 'blur(20px)' }}>
-        <Map size={18} style={{ color: 'var(--color-ember)' }} />
-      </button>
+      <SideRail activeId={activeId} items={railItems} actions={railActions} visible={activeId !== 'origin'} />
       <MapOverlay open={mapOpen} onClose={() => setMapOpen(false)} activeId={activeId} />
+      <StickyCta activeId={activeId} />
 
       <Hero />
 

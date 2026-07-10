@@ -46,7 +46,6 @@ export const personalInfo = {
   ],
   // Hero narrative copy (heroLead / heroPhrases / heroHook) now lives in the
   // Voice bundles — src/i18n/bundles/* (key group `hero`).
-  coordinates: '23.02°N 72.57°E',
 };
 
 // The Summon (chapter 05) — contact COPY now lives in the Voice bundles
@@ -57,9 +56,9 @@ export const summon = {
   resumeFileName: 'Manan_Upadhyay_Resume.pdf',
   channels: [
     { key: 'email', value: personalInfo.email, href: `mailto:${personalInfo.email}` },
-    { key: 'linkedin', value: 'in/manan-upadhyay', href: personalInfo.linkedin },
+    { key: 'linkedin', value: 'in/mananupadhyay01', href: personalInfo.linkedin },
     { key: 'github', value: 'manan-upadhyay', href: personalInfo.github },
-    { key: 'location', value: `${personalInfo.location} · 23.02°N 72.57°E`, href: null },
+    { key: 'location', value: personalInfo.location, href: null },
   ],
 };
 
@@ -80,6 +79,106 @@ export const chapters = {
 
 // Ordered array with `id` injected — for iteration (SideRail rows, Map pins).
 export const chapterList = Object.entries(chapters).map(([id, c]) => ({ id, ...c }));
+
+// The Atelier's own "acts" — the structural nav for the /making-of route (its
+// SideRail + the mobile Navigate drawer). `id` matches the section anchors in
+// sections/Atelier.jsx; labels are voiced (labelKey). NOT part of `chapters`
+// (the six-realm journey stays intact); this is the coda's own local map.
+export const atelierActs = [
+  { id: 'build', no: 'I', labelKey: 'atelier.acts.build' },
+  { id: 'engine', no: 'II', labelKey: 'atelier.acts.engine' },
+  { id: 'hidden', no: 'III', labelKey: 'atelier.acts.hidden' },
+  { id: 'offmap', no: '—', labelKey: 'atelier.offmap.title' },
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// The Time Machine (/time-machine) — the STRATA coda. Manan's earlier portfolios,
+// preserved as "ruins" you descend through time to reach. NON-COPY DATA ONLY:
+// urls, posters, era stacks, framability, dates, optional owner-supplied assets.
+// All voiced copy (title, plaques, "the world then" context) lives in the bundles
+// under `timeMachine.*`, keyed by era `id`. See docs/chronicle/sections/11-*.md.
+//
+// SCALABLE: this array IS the descent. Add a future rebuild by prepending one
+// entry (newest first — the descent runs present → past top-to-bottom). Never
+// hard-code "two". `framable` is verified per deploy (drives the live-embed swap;
+// false → poster-only + link-out, no white-screen). `assets` is a slot for
+// owner-supplied period imagery/sound — optional, art never blocks the build.
+export const archive = [
+  {
+    id: '2023',
+    year: 2023,
+    url: 'https://portfolio-c3pvtpl2j-mananupadhyays-projects.vercel.app/',
+    poster: 'archive/2023.webp',          // public/archive/<id>.webp (probed)
+    builtWith: ['React', 'Three.js', 'Framer Motion', 'Tailwind'],
+    framable: true,                       // verified 2026-07-10 (no XFO/CSP)
+    dates: { built: 2023, lastTouched: 2023 },
+    assets: {},                           // owner drop-zone: period imagery/sound
+  },
+  {
+    id: '2019',
+    year: 2019,
+    url: 'https://legacy-portfolio-alpha.vercel.app/',
+    poster: 'archive/2019.webp',
+    builtWith: ['HTML', 'CSS', 'JavaScript', 'jQuery'],
+    framable: true,                       // verified 2026-07-10 (no XFO/CSP)
+    dates: { built: 2019, lastTouched: 2020 },
+    assets: {},
+  },
+];
+
+// The descent spine for the rail + year readout: a THRESHOLD (present), one
+// stratum per archived portfolio, then the FLOOR (before the record begins).
+// Derived so a new `archive` entry joins the rail automatically. Labels voiced
+// via labelKey (t('timeMachine.…')); `year` drives the backward readout.
+export const PRESENT_YEAR = new Date().getFullYear();
+export const eraActs = [
+  { id: 'era-threshold', no: '—', year: PRESENT_YEAR, labelKey: 'timeMachine.threshold.rail' },
+  ...archive.map((e) => ({ id: `era-${e.id}`, no: String(e.year), year: e.year, labelKey: `timeMachine.eras.${e.id}.rail` })),
+  { id: 'era-floor', no: '∅', year: null, labelKey: 'timeMachine.floor.rail' },
+];
+
+// The Time Tunnel (feedback §5) — the "going back in time" news transitions that
+// play in the scroll gaps between strata. NON-COPY DATA ONLY: each event's `id`
+// (keys the voiced text t('timeTunnel.events.<id>')), its `year` (drives the
+// backward run), and `weight` ('major' = bigger + longer scrub dwell, so popular
+// news is readable at speed; 'mid' = a brief flicker that rewards slow scrollers).
+// Ordered present → past (top → bottom), matching the descent. Owner-handpicked
+// from docs/chronicle/TIME-MACHINE-FEEDBACK-PASS.md Appendix A.
+export const timeTunnel = {
+  // Gap 1 — between the Hero (present) and the 2023 card (≈2026 → 2023). Curated
+  // to the highest-recognition beats so the stream finishes before the card
+  // arrives (feedback 2026-07-10); the rest of the authored copy stays in the
+  // bundles, unused, ready to re-add if the timing budget grows.
+  gap1: [
+    { id: 'worldcup26', year: 2026, weight: 'major' },
+    { id: 'iphone17', year: 2025, weight: 'major' },
+    { id: 'lawildfires25', year: 2025, weight: 'major' },
+    { id: 'erastour24', year: 2024, weight: 'major' },
+    { id: 'sora24', year: 2024, weight: 'major' },
+    { id: 'deadpool24', year: 2024, weight: 'mid' },
+    { id: 'chatgpt23', year: 2023, weight: 'major' },
+    { id: 'barbenheimer23', year: 2023, weight: 'major' },
+    { id: 'chandrayaan23', year: 2023, weight: 'major' },
+    { id: 'cricketwc23', year: 2023, weight: 'major' },
+    { id: 'twitterx23', year: 2023, weight: 'mid' },
+    { id: 'gta6_23', year: 2023, weight: 'mid' },
+  ],
+  // Gap 2 — between the 2023 card and the 2019 card (≈2023 → 2019).
+  gap2: [
+    { id: 'worldcup22', year: 2022, weight: 'major' },
+    { id: 'chatgptlaunch22', year: 2022, weight: 'major' },
+    { id: 'oscarslap22', year: 2022, weight: 'mid' },
+    { id: 'webb22', year: 2022, weight: 'major' },
+    { id: 'vaccines21', year: 2021, weight: 'major' },
+    { id: 'squidgame21', year: 2021, weight: 'major' },
+    { id: 'nft21', year: 2021, weight: 'major' },
+    { id: 'covid20', year: 2020, weight: 'major' },
+    { id: 'wfh20', year: 2020, weight: 'major' },
+    { id: 'blackhole19', year: 2019, weight: 'major' },
+    { id: 'endgame19', year: 2019, weight: 'major' },
+    { id: 'covidwuhan19', year: 2019, weight: 'major' }, // the chilling bridge into 2019
+  ],
+};
 
 // Disciplines (chapter 01). `iconKey` maps to a line icon in the component and
 // also keys the copy: t(`about.services.<iconKey>.title` / `.description`).
@@ -192,16 +291,49 @@ const experiences = [
 // Data only (`id`, `year`, `tech`, `kind`, `current`). The voice-bearing copy —
 // `chapter`, `headline`, `role`, `org`, `points` — lives in the Voice bundles,
 // keyed by `id`: t(`experience.journey.<id>.<field>`).
+// Ordered NEWEST → oldest (résumé convention): a hiring manager who never
+// scrolls the strip still lands on the strongest, current role first. The "what's
+// next" CTA closes the row. `secondment` (not `current`) flags an assignment that
+// branches off an employer — rendered with a "via" route link + ribbon so it
+// never reads as a second, simultaneous job. See Experience.jsx.
 export const journey = [
-  { id: 'first-trail', year: '2021', tech: ['React', 'Redux', 'Strapi', 'Prisma', 'PostgreSQL'], kind: 'work' },
-  { id: 'oath', year: '2022', tech: [], kind: 'edu' },
-  { id: 'expedition', year: '2022 — Now', tech: ['Next.js', 'Node.js', 'NestJS', 'PostgreSQL', 'MongoDB', 'Auth'], kind: 'work', current: true },
-  // `secondment` (not `current`) flags an assignment that branches off the
-  // previous waypoint's employer — rendered with a "via" route link + ribbon so
-  // it never reads as a second, simultaneous job. See Experience.jsx.
   { id: 'vanguard', year: 'Jan 2025 — Now', tech: ['Next.js', 'Okta', 'AWS', 'Helm', 'Harness'], kind: 'work', secondment: true, secondedTo: 'Infosys' },
+  { id: 'expedition', year: '2022 — Now', tech: ['Next.js', 'Node.js', 'NestJS', 'PostgreSQL', 'MongoDB', 'Auth'], kind: 'work', current: true },
+  { id: 'oath', year: '2022', tech: [], kind: 'edu' },
+  { id: 'first-trail', year: '2021', tech: ['React', 'Redux', 'Strapi', 'Prisma', 'PostgreSQL'], kind: 'work' },
   { id: 'horizon', year: 'Now', tech: [], kind: 'cta' },
 ];
+
+// Architecture tiers for the NDA plates' system schematic (persona audit
+// 2026-07-05, item 9). Two flavours are permissible: (a) product-agnostic
+// generic tiers (Client / API Gateway / Data Store …) that carry "a real
+// platform lives here" proof without naming anything sealed, and (b) the
+// actual *stack/tooling* tiers (Next.js / Auth.js / Okta SSO / RBAC) — those
+// tools are already public in each project's stack tags, so naming them is
+// safe; the NDA protects the client's product, data and service names, never
+// the off-the-shelf auth vendor. The advisor-portfolio plate uses (b) so its
+// schematic is a truthful Okta OIDC + Auth.js auth flow, not a vague box.
+// EN-only technical labels, exempt from voice like the atlas tags. Keys are
+// referenced by each NDA project's `architecture` (an ordered list of columns;
+// NdaSchematic auto-flows every node in a column to every node in the next —
+// so columns are chosen such that a full connection is always truthful).
+// Drives NdaSchematic.jsx.
+export const ARCH_TIERS = {
+  client: 'Client',
+  web: 'Web App',
+  nextjs: 'Next.js',
+  auth: 'Auth',
+  authjs: 'Auth.js',
+  okta: 'Okta SSO',
+  rbac: 'RBAC',
+  api: 'API Gateway',
+  service: 'Services',
+  worker: 'Workers',
+  store: 'Data Store',
+  cache: 'Cache',
+  realtime: 'Realtime',
+  report: 'Reporting',
+};
 
 // Featured realms — ordered to lead with live, clickable proof, then close on
 // enterprise credibility (Capital Group, NDA). Order here IS the Realm I..IV
@@ -221,6 +353,12 @@ const featuredProjects = [
     source_code_link: '',
     live_demo_link: 'https://gajaakriti.com/',
     isNDA: false,
+    // Proof strip (facts, not copy — labels are voiced via works.proofLabels.*)
+    proof: [
+      { k: 'role', v: 'Full-Stack Developer' },
+      { k: 'outcome', v: 'Film-fast 4K galleries (CDN + R2 streaming)' },
+      { k: 'scale', v: 'Solo — design to deploy · public site + admin CMS' },
+    ],
     // Realm screenshots in display order. Lives under public/realms/<slug>/.
     // `themed: true` swaps to public/realms/<slug>/<light|dark>/ per theme.
     gallery: {
@@ -252,6 +390,11 @@ const featuredProjects = [
     live_demo_link: 'https://florra.tatkrit.com/login',
     live_demo_label: 'Visit platform',
     isNDA: false,
+    proof: [
+      { k: 'role', v: 'Full-Stack Developer' },
+      { k: 'outcome', v: 'PNG → editable SVG in-browser (TensorFlow.js)' },
+      { k: 'scale', v: 'Solo build · live floor preview → order-ready PDF' },
+    ],
     gallery: {
       slug: 'royal-tiles',
       themed: true,
@@ -281,6 +424,19 @@ const featuredProjects = [
     source_code_link: '',
     live_demo_link: '',
     isNDA: true,
+    // The real auth flow (see ARCH_TIERS) — a Next.js advisor app that gates
+    // every request through Auth.js + Okta SSO, then RBAC, before any protected
+    // service or report. Named stack (Okta/Auth.js) is public via the tags; the
+    // client's own services/data stay unnamed. Columns are ordered so the
+    // schematic's full auto-connect is always truthful (RBAC sits alone between
+    // the two-node identity and application tiers, so no false edge is drawn):
+    //   Client → Next.js → [Auth.js + Okta SSO] → RBAC → [Services + Reporting]
+    architecture: [['client'], ['nextjs'], ['authjs', 'okta'], ['rbac'], ['service', 'report']],
+    proof: [
+      { k: 'role', v: 'Lead Frontend Developer' },
+      { k: 'outcome', v: '4 production releases · built from scratch' },
+      { k: 'scale', v: 'Enterprise · Capital Group (USA)' },
+    ],
   },
 ];
 
@@ -290,6 +446,9 @@ const otherProjects = [
     id: 'digital-investor',
     name: 'Digital Investor Portfolio',
     company: 'Capital Group (USA)',
+    // Role is a factual label (like the featured plates' proof.role), rendered on
+    // the secondary card so a skimmer knows what I did, not just what it was.
+    role: 'Full-Stack Developer',
     isFeatured: false,
     tags: [
       { name: 'react' },
@@ -305,6 +464,7 @@ const otherProjects = [
     id: 'srifin',
     name: 'Srifin Credit',
     company: 'Microfinance CRM/ERP',
+    role: 'Full-Stack Developer',
     isFeatured: false,
     tags: [
       { name: 'next.js' },
@@ -320,6 +480,7 @@ const otherProjects = [
     id: 'xipper',
     name: 'Xipper',
     company: 'Hotel Management Platform',
+    role: 'Full-Stack Developer',
     isFeatured: false,
     tags: [
       { name: 'postgresql' },
@@ -335,6 +496,7 @@ const otherProjects = [
     id: 'ai-chatbot',
     name: 'AI Chatbot Platform',
     company: 'Client Project',
+    role: 'Full-Stack Developer',
     isFeatured: false,
     tags: [
       { name: 'next.js' },
@@ -349,12 +511,17 @@ const otherProjects = [
   {
     id: 'fantasy-cricket',
     name: 'Fantasy Cricket Platform',
-    company: 'Personal Project',
+    // Real client work (not a personal project). Deepest backend story in the
+    // set — real-money, live scoring, payments, tax compliance. No live link /
+    // screenshots: the platform is no longer publicly available, so it lives as
+    // a text-rich card in the secondary list rather than an image plate.
+    company: 'Real-Money Fantasy Sports',
+    role: 'Backend Developer',
     isFeatured: false,
     tags: [
-      { name: 'mongodb' },
       { name: 'node.js' },
-      { name: 'express' },
+      { name: 'mongodb' },
+      { name: 'razorpay' },
     ],
     image: '',
     source_code_link: '',
@@ -368,11 +535,14 @@ const projects = [...featuredProjects, ...otherProjects];
 
 // Stats to showcase achievements. `value` is data; the label is voice-bearing —
 // t(`about.stats.<key>`).
+// NB: `years` deliberately omitted here — the hero proof strip ("5+ yrs · React
+// · …") already owns that figure above the fold. Repeating it in About spent the
+// number's impact within the first two screens (homepage value audit 2026-07-08
+// §3.C), so About carries only the *additional* figures.
 export const stats = [
-  { value: '5+', key: 'years' },
   { value: '20+', key: 'projects' },
   { value: '6+', key: 'domains' },
-  { value: '38%', key: 'load' },
+  { value: '100%', key: 'shipped' },
 ];
 
 // The Atelier (coda — LEGENDARY-ROADMAP §7). The "making-of" closing chapter:
@@ -381,18 +551,19 @@ export const stats = [
 // ledger/phase/cut/tech IDs. The voiced labels live in the bundles, keyed by
 // these ids: t('atelier.stats.<key>'), t('atelier.phases.<id>'), etc.
 export const atelier = {
-  // Headline instrument metrics. `value` is data; the label is voiced
-  // (t('atelier.stats.<key>')). `count` cells animate via CountUp; literals
-  // (e.g. "0 KB") render as-is. Sourced from `git log` + the file census:
-  //   commits → `git log --since=2026-06-20 --oneline | wc -l` (the revamp, 63)
-  //   lines   → `wc -l` of hand-written src/ (js/jsx/ts/css ≈ 13K)
-  //   voices  → src/i18n/bundles/* (chronicle, plain, scott, dwight, cow)
+  // The two static figures that survive into the Act I stat cluster — merged into
+  // the CommitGraph's live stat row (via its `extraStats` prop) so Act I reads out
+  // ONE numeric cluster, not two. The standalone Tally, and the vanity "hours
+  // poured" figure with it, were cut (making-of value audit 2026-07-08). `value`
+  // is data; the label is voiced (t('atelier.stats.<key>')); `count` cells animate
+  // via CountUp, literals render as-is. Figures re-verified against the codebase
+  // 2026-07-08 (audit follow-up — the old 13K/5 were stale):
+  //   lines   → `wc -l` of hand-written src/ (js/jsx/ts/css, excl. generated
+  //             commitHistory.js) ≈ 21.8K → "22K"
+  //   voices  → src/i18n/voices.js registry + src/i18n/bundles/* = 10
   stats: [
-    { key: 'hours', value: '200+', count: true },
-    { key: 'commits', value: '63', count: true },
-    { key: 'phases', value: '7', count: true },
-    { key: 'voices', value: '5', count: true },
-    { key: 'lines', value: '13K', count: false },
+    { key: 'lines', value: '22K', count: false },
+    { key: 'voices', value: '10', count: true },
   ],
   // The build timeline — daily commit counts across the "Cartographer revamp"
   // (Jun 20–30 2026, per `git log`). `done` flags the day the site was already a
@@ -403,51 +574,47 @@ export const atelier = {
   // the post-ship hardening: product analytics, structured-data SEO, the bespoke
   // logger + console banner. Drives the Canvas2D `BuildTimeline`; the flag label
   // is voiced.
-  // "The Director's Reel" — the build told as a film in ten scenes, one per day.
-  // Each scene is a day's signature feature. `commits` are presented as a steady
-  // daily cadence (≈6/day, 63 total) rather than the raw lumpy git log. `glyph`
-  // keys a lucide icon in BuildReel.jsx; the act number is the array index + 1.
-  // Voiced copy: t('atelier.reel.scenes.<id>.title' / '.blurb').
-  reel: [
-    { id: 'foundation', day: 'Jun 20', commits: 6, glyph: 'sparkles' },
-    { id: 'canon', day: 'Jun 21', commits: 6, glyph: 'map' },
-    { id: 'realms', day: 'Jun 22', commits: 6, glyph: 'grid' },
-    { id: 'journey', day: 'Jun 23', commits: 6, glyph: 'route' },
-    { id: 'voice', day: 'Jun 24', commits: 7, glyph: 'drama' },
-    { id: 'sky', day: 'Jun 25', commits: 7, glyph: 'sky' },
-    { id: 'recap', day: 'Jun 26', commits: 6, glyph: 'fingerprint' },
-    { id: 'atelier', day: 'Jun 27', commits: 6, glyph: 'feather' },
-    { id: 'polish', day: 'Jun 28', commits: 6, glyph: 'gem' },
-    { id: 'observatory', day: 'Jun 29–30', commits: 7, glyph: 'activity' },
-  ],
+  // The build's commit history is no longer hand-modelled here — the Making-Of
+  // now renders the REAL git log via CommitGraph (src/constants/commitHistory.js,
+  // generated from `git log`). Voiced copy: t('atelier.commits.*').
   // The ledger. `built` = the six shipped "wonder" phases; `cut` = the
   // senior-judgment column — things deliberately removed OR refused outright,
   // each with a real engineering payoff. ids key the voiced copy:
   // t('atelier.phases.<id>.title' / '.why') and t('atelier.cuts.<id>…').
   built: ['voice', 'marginalia', 'sky', 'sound', 'recap', 'eggs', 'telemetry'],
-  // Lead with the architecture refusals (biggest payoff — bundle, perf, privacy),
-  // then the two built-then-removed refinements.
-  cut: ['assets', 'threejs', 'tracking', 'componentLib', 'statusLine', 'battery'],
+  // Lead with the architecture refusals (biggest payoff — bundle, perf, privacy).
+  // v2.0 feedback pass: the two built-then-removed refinements (statusLine,
+  // battery) were cut from the page — low value next to the refusals.
+  cut: ['assets', 'threejs', 'tracking', 'componentLib'],
   // The "field guide" — the deliberately-subtle interactions most visitors never
   // find. `icon` keys a lucide glyph in Atelier.jsx; the name + how-to-trigger
-  // copy is voiced: t('atelier.eggs.<id>.title' / '.how').
+  // copy is voiced: t('atelier.eggs.<id>.title' / '.how'). `act` (optional) wires
+  // the card's "Show me" button to the actual feature — see EGG_ACTIONS.
+  // Curated to the seven strongest, each a DIFFERENT surface, so it reads as a
+  // chosen set rather than a checklist (making-of value audit 2026-07-08). Dropped:
+  // `spin` (a sub-moment of the astrolabe, already represented), `sound` and `map`
+  // (their controls are visible, so less of a hidden discovery). Their voiced copy
+  // was pruned from all bundles in the 2026-07-09 dead-key sweep.
   eggs: [
-    { id: 'astrolabe', icon: 'compass' },
-    { id: 'spin', icon: 'refresh' },
-    { id: 'sound', icon: 'audio' },
-    { id: 'sky', icon: 'sky' },
-    { id: 'voices', icon: 'drama' },
-    { id: 'map', icon: 'map' },
-    { id: 'raven', icon: 'send' },
-    { id: 'recap', icon: 'fingerprint' },
+    { id: 'astrolabe', icon: 'compass', act: 'origin' },
+    { id: 'lens', icon: 'lens', act: 'portrait' },
+    { id: 'sky', icon: 'sky', act: 'sky' },
+    { id: 'voices', icon: 'drama', act: 'voices' },
+    { id: 'raven', icon: 'send', act: 'contact' },
+    { id: 'recap', icon: 'fingerprint', act: 'contact' },
     { id: 'console', icon: 'terminal' },
   ],
   // "Built with" — proper-noun tech names are data, rendered as chips.
+  // `techCore` marks the load-bearing subset, rendered highlighted (v2.0 W10).
   tech: [
     'React 18', 'Vite', 'GSAP · ScrollTrigger', 'Lenis', 'Framer Motion',
     'Zustand', 'i18next', 'Web Audio', 'Canvas2D', 'SunCalc', 'Resend',
     'PostHog', 'Vercel Analytics', 'Speed Insights',
   ],
+  techCore: ['React 18', 'GSAP · ScrollTrigger', 'Web Audio', 'Canvas2D', 'i18next', 'Zustand'],
+  // (The standalone "Gate" CI-pipeline panel was cut — a table-stakes widget every
+  // pro repo has; making-of value audit 2026-07-08. Its one honest signal now
+  // lives as a folded line in the commit-trail caption, t('atelier.commits.caption').)
   // "Off the map" — the three sides of the person behind the build, as an
   // interactive triptych (PersonaTriptych). `glyph` keys a lucide icon; `chips`
   // are proper-noun names (data). Voiced copy: t('atelier.personas.<id>.label'
@@ -461,23 +628,30 @@ export const atelier = {
   // structured-data SEO, and observability, framed as one instrument. This is
   // NON-COPY data only (real event names, counts, capability chips); every label
   // is voiced under t('atelier.observatory.*'). Drives the Observatory component.
-  // Sourced from the live code:
-  //   events     → grep of track()/trackOnce()/capture() across src (33 named
-  //                product events; session_recap is the aggregating hub).
-  //   superProps → registerContext() in components/Layout.jsx (13 properties).
+  // Sourced from the live code (re-counted 2026-07-08, audit follow-up):
+  //   events     → grep of track()/trackOnce()/capture() across src = 50 distinct
+  //                named product events; session_recap is the aggregating hub. The
+  //                constellation below visualises a curated subset of 40; drill-down
+  //                events (atlas_node_open, mobile_menu_view, egg_show,
+  //                ledger_expand ids, portrait_interact, voice_clue_*) fire too
+  //                but are omitted here to keep the map readable.
+  //   superProps → registerContext() in main.jsx + Layout.jsx + the stores
+  //                (23 properties — device/screen/viewport/input, theme, sky,
+  //                voice, sound, returning_visitor…). No longer a displayed metric.
   //   schemas    → JSON-LD @type blocks in index.html (WebSite, ProfilePage,
   //                Person, Organization, PostalAddress).
   //   dashboards → PostHog (funnels, cohorts, retention, weekly alerts).
   observatory: {
     // The instrument readouts — `value` is data; `count` cells animate via CountUp.
+    // Trimmed 5 → 3 credible figures in the making-of value audit (2026-07-08):
+    // the two vanity metrics (21 super-properties, 2 webhook routes) were dropped
+    // to drain the page's "number soup"; events / dashboards / schemas remain.
     metrics: [
-      { key: 'events', value: '33', count: true },
-      { key: 'superProps', value: '13', count: true },
-      { key: 'webhooks', value: '2', count: true },
+      { key: 'events', value: '50', count: true },
       { key: 'dashboards', value: '5', count: true },
       { key: 'schemas', value: '5', count: true },
     ],
-    // The product-event constellation — the 33 named events grouped by the surface
+    // The product-event constellation — the 40 curated events grouped by the surface
     // they instrument, all orbiting the `session_recap` hub. Each event is the real
     // event id + `where` it fires (technical narration, EN-only — exempt from voice
     // translation like the capability `tags`) + `once` (true = trackOnce, i.e. once
@@ -492,14 +666,16 @@ export const atelier = {
           { id: 'hero_cta', where: 'Hero — primary call-to-action' },
           { id: 'section_view', where: 'Each chapter as it enters view' },
           { id: 'scroll_depth', where: 'Scroll-depth milestones (25/50/75/100%)' },
+          { id: 'experience_progress', where: 'Pinned career journey scrubbed (25/50/75/100%)' },
           { id: 'rail_nav', where: 'SideRail chapter jump' },
           { id: 'map_open', where: '⌘K map overlay opened' },
           { id: 'map_travel', where: 'Travel to a realm from the map' },
           { id: 'shortcut_used', where: 'A keyboard shortcut fired' },
+          { id: 'mobile_menu_open', where: 'Mobile bottom-sheet menu opened' },
         ] },
         { id: 'craft', events: [
-          { id: 'astrolabe_spin', where: 'Hero astrolabe nudged' },
-          { id: 'astrolabe_drag', where: 'Hero astrolabe free-spun by drag', once: true },
+          { id: 'astrolabe_spin', where: 'Hero compass nudged' },
+          { id: 'astrolabe_drag', where: 'Hero compass free-spun by drag', once: true },
           { id: 'sound_first_play', where: 'First gesture-unlocked sound cue' },
           { id: 'sound_toggled', where: 'Sound master toggled' },
           { id: 'theme_changed', where: 'Sky / theme mode changed' },
@@ -508,16 +684,21 @@ export const atelier = {
           { id: 'voice_hall_open', where: 'Voice Hall overlay opened' },
           { id: 'voice_unlocked', where: 'A sealed voice unlocked' },
           { id: 'voice_summon_submit', where: '“Summon a voice” request sent' },
-          { id: 'buildreel_scrub', where: 'Build reel scrubbed', once: true },
+          { id: 'marginalia_reveal', where: 'A flavor↔fact footnote revealed', once: true },
+          { id: 'atlas_explore', where: 'Codebase Atlas explored', once: true },
+          { id: 'observatory_explore', where: 'Analytics constellation explored', once: true },
+          { id: 'blueprint_explore', where: 'The system blueprint explored', once: true },
         ] },
         { id: 'realms', events: [
           { id: 'carousel_open', where: 'A realm opened in the carousel', once: true },
           { id: 'works_show_all', where: '“Show all realms” expanded' },
           { id: 'project_link_open', where: 'A project link followed' },
           { id: 'arsenal_tools_hovered', where: 'Arsenal skill orbit explored' },
-          { id: 'atelier_view', where: 'The Atelier (/making-of) reached' },
+          { id: 'atelier_view', where: 'The Workshop (/making-of) reached' },
           { id: 'persona_card_expand', where: 'A persona card opened' },
           { id: 'expedition_view', where: 'Expedition recap revealed', once: true },
+          { id: 'egg_reveal', where: 'A hidden-feature card expanded' },
+          { id: 'ledger_expand', where: 'A built/cut ledger entry opened' },
         ] },
         { id: 'intent', events: [
           { id: 'contact_form_start', where: 'Contact form first focused', once: true },
@@ -531,13 +712,8 @@ export const atelier = {
         ] },
       ],
     },
-    // The alert path — webhook routes that page Manan where he already is. `source`
-    // and `channel` are data (proper nouns); the framing is voiced under
-    // t('atelier.observatory.webhooks.*'). URLs are secrets and never rendered.
-    webhooks: [
-      { id: 'alerts', source: 'PostHog', channel: '#alerts', glyph: 'alert' },
-      { id: 'deploys', source: 'GitHub', channel: '#deploys', glyph: 'git' },
-    ],
+    // (v2.0 W7: the webhook flow diagram was cut from the page; the count lives
+    // on in the metric strip and the observability panel's one-liner.)
     // The three instrument panels beneath the constellation. `glyph` keys a lucide
     // icon in Observatory.jsx; `tags` are proper-noun capability chips (data).
     // Voiced copy: t('atelier.observatory.panels.<id>.title' / '.body').
@@ -548,13 +724,81 @@ export const atelier = {
     ],
   },
   // "The Codebase Atlas" — a curated, annotated subset of the real repo tree (NOT
+  // The Blueprint (Act II) — the runtime system chart: what runs where, and the
+  // only signals that ever leave the visitor's device. NON-COPY data: node ids,
+  // lucide glyph keys, and the desktop chart's layout coordinates on a 1000×560
+  // design grid — the SVG edge layer and the HTML node buttons both read these,
+  // so the drawing and the labels can never drift apart. Gate `sub` captions are
+  // EN-only technical readouts (exempt from voice, like the observatory `where`
+  // strings and the atlas blurbs). All framing copy + every node's name/why is
+  // voiced under t('atelier.blueprint.*') in all ten bundles.
+  // Ground truth (verified 2026-07-09): fonts self-hosted (/fonts), sound
+  // synthesized (0 bytes), raven posts to same-origin /api/send-raven (Resend key
+  // server-side), telemetry = PostHog (cookieless/DNT-off) + Vercel Analytics,
+  // and the recap's ipwho.is lookup is opt-in on /making-of only. Exactly three
+  // outbound signals — the chart claims nothing the network tab won't confirm.
+  blueprint: {
+    traveler: { id: 'traveler', icon: 'user', x: 75, y: 280 },
+    hub: { id: 'shell', icon: 'scroll', x: 330, y: 280 },
+    // Client-realm satellites — a ring around the shell hub.
+    client: [
+      { id: 'motion', icon: 'waves', x: 330, y: 118 },
+      { id: 'narrator', icon: 'mask', x: 198, y: 176 },
+      { id: 'sky', icon: 'cloudsun', x: 462, y: 176 },
+      { id: 'sound', icon: 'audio', x: 462, y: 384 },
+      { id: 'memory', icon: 'fingerprint', x: 198, y: 384 },
+    ],
+    // The wall — the client/network boundary. Gaps open only where a gate edge
+    // crosses; everything else stops here.
+    wall: { x: 640, y1: 48, y2: 512 },
+    // The three gates — the ONLY outbound signals. `sub` = the technical readout
+    // (kept plain — no idioms/abbreviations, readable by non-native speakers);
+    // `subShort` is the compact mobile caption.
+    gates: [
+      { id: 'telemetry', icon: 'radar', x: 845, y: 128, sub: 'no cookies · anonymous · off with Do-Not-Track', subShort: 'no cookies · anonymous' },
+      { id: 'raven', icon: 'send', x: 845, y: 280, sub: 'serverless send · the key never leaves the server', subShort: 'key stays on the server' },
+      { id: 'reading', icon: 'mappin', x: 845, y: 432, sub: 'one lookup, only if you ask · this page only', subShort: 'only if you ask' },
+    ],
+    // The ghost edge — what never crosses; dies at the wall with a cross-mark.
+    ghost: { x: 640, y: 505 },
+    // The MOBILE mini-chart — same topology, rotated: the client realm is a
+    // hub-and-spoke cluster ABOVE a horizontal wall; the three gate edges fan
+    // DOWN from beneath the hub, cross the wall at its only gaps, and land on
+    // the gates below. Its own 390×610 design grid (not a shrunk desktop).
+    mobile: {
+      w: 390, h: 610,
+      traveler: { x: 66, y: 58 },
+      hub: { x: 195, y: 235 },
+      client: {
+        motion: { x: 195, y: 113 },
+        narrator: { x: 94, y: 167 },
+        sky: { x: 296, y: 167 },
+        sound: { x: 296, y: 303 },
+        memory: { x: 94, y: 303 },
+      },
+      // The gate fan leaves from BELOW the hub's label (hub.y + fanDrop) so the
+      // centre edge never strikes the hub's own caption.
+      fanDrop: 55,
+      wall: { y: 420, x1: 14, x2: 376 },
+      gates: {
+        telemetry: { x: 78, y: 512 },
+        raven: { x: 195, y: 512 },
+        reading: { x: 312, y: 512 },
+      },
+      // The ghost leaves from the cluster's right flank (not the hub) so its
+      // dashed line clears "The sound" station's caption on the way down.
+      ghostStart: { x: 330, y: 243 },
+      ghost: { x: 346, y: 420 },
+    },
+  },
+
   // the filesystem; depth/breadth chosen for story). Drives CodebaseAtlas.jsx.
   // `blurb`/`signal` are technical narration (EN-only, exempt from voice like the
   // capability `tags`); the framing copy is voiced under t('atelier.atlas.*').
   // `glyph` keys a lucide icon map in the component; `hotspot: true` surfaces a node
   // in the curated rail (its order is `hotspots` below). `repo` is the public source.
   atlas: {
-    repo: 'https://github.com/manan-upadhyay/3d-portfolio',
+    repo: 'https://github.com/manan-upadhyay/portfolio',
     hotspots: ['constants', 'i18n', 'analytics', 'sound', 'smoothScroll', 'vite', 'hoc'],
     tree: [
       { id: 'src', name: 'src/', type: 'dir', glyph: 'folder', children: [
@@ -568,11 +812,11 @@ export const atelier = {
           blurb: 'Every non-copy value — links, icons, map coordinates, chapter ids, project facts, skill names, stat values.',
           signal: 'One source of truth for data. No magic numbers or stray literals scattered through components — change a fact once and the whole site follows.' },
         { id: 'i18n', name: 'i18n/', type: 'dir', glyph: 'globe', hotspot: true,
-          blurb: 'Every visible string, in five switchable voices. chronicle is the complete base; the rest override only the keys that change.',
+          blurb: 'Every visible string, in ten switchable voices. chronicle is the complete base; the rest override only the keys that change.',
           signal: 'All copy lives behind t(), so the entire site re-voices in one click — personality and translation are a data concern, never a code change.',
           children: [
             { id: 'bundles', name: 'bundles/', type: 'dir', glyph: 'globe',
-              blurb: 'chronicle · plain · scott · dwight · cow — one file per voice. Core voices bundle eagerly; egg voices are code-split and loaded on demand.',
+              blurb: 'chronicle · plain · scott · dwight · cow · got · yoda · avengers · chandler · deadpool — one file per voice. Core voices bundle eagerly; egg voices are code-split and loaded on demand.',
               signal: 'Adding a personality is adding a bundle; components are never touched, and the easter-egg voices cost nothing until summoned.' },
             { id: 'voices', name: 'voices.js', type: 'file', glyph: 'filecode',
               blurb: 'The voice registry — categories, glyphs, and the unlock triggers for sealed voices.',
@@ -622,7 +866,7 @@ export const atelier = {
           blurb: 'The standard section shell — padding, the anchor id, the stagger container, and the lazy + Suspense + ErrorBoundary wrapping.',
           signal: 'Every section is resilient through one HOC: a failing section degrades to a fallback instead of white-screening the whole page.' },
         { id: 'components', name: 'components/', type: 'dir', glyph: 'component',
-          blurb: 'Reusable widgets, flat, barrel-exported. The Atelier’s instruments live here.',
+          blurb: 'Reusable widgets, flat, barrel-exported. The workshop’s instruments live here.',
           signal: 'Shared visuals are components, never copy-paste — the DRY line held in practice.',
           children: [
             { id: 'observatoryCmp', name: 'Observatory.jsx', type: 'file', glyph: 'component',
@@ -636,7 +880,7 @@ export const atelier = {
               signal: 'Canvas2D, not WebGL: depth and “wonder” without shipping a 3D engine.' },
           ] },
         { id: 'sections', name: 'sections/', type: 'dir', glyph: 'folder',
-          blurb: 'The six chapters plus this Atelier coda — one file each.',
+          blurb: 'The six chapters plus this making-of coda — one file each.',
           signal: 'One section = one file, default-exported, wrapped by SectionWrapper.' },
         { id: 'pages', name: 'pages/', type: 'dir', glyph: 'route',
           blurb: 'Chronicle (/) and MakingOf (/making-of) — the two routes.',

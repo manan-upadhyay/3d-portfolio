@@ -16,6 +16,11 @@ let lenisInstance = null;
 export const useSmoothScroll = () => {
   useEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Touch / coarse-pointer devices scroll NATIVELY — no Lenis, no rAF loop.
+    // Beta 1 flagged smooth-scroll as "laggy/non-intuitive", and mobile users are
+    // the most sensitive to it; native scroll is the expected feel and one less
+    // per-frame cost on the phones. (Lenis only ever smoothed the wheel anyway.)
+    const coarse = window.matchMedia('(pointer: coarse)').matches;
 
     // Own scroll restoration: the browser's native restore fights GSAP's pinned
     // horizontal Experience (its scroll-distance changes the page height as pins
@@ -24,8 +29,14 @@ export const useSmoothScroll = () => {
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     window.scrollTo(0, 0);
 
+    if (coarse) return undefined; // native scroll; ScrollTrigger runs on real scroll
+
     const lenis = new Lenis({
-      duration: 1.1,
+      // Snappier than the old 1.1 — Beta 1 called the smoothing "floaty/laggy".
+      // Lower duration + a small wheel boost keeps the choreography but lands the
+      // scroll closer to native responsiveness.
+      duration: 0.9,
+      wheelMultiplier: 1.1,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: !reduce,
       syncTouch: false,
@@ -81,6 +92,30 @@ export const rememberScroll = () => { rememberedY = window.scrollY; };
  * scroll is actually applied, so React StrictMode's double-invoked mount effect
  * (dev) can't swallow it on the first pass.
  */
+// Cross-route section handoff (v2.0 C5): "Contact" tapped on /making-of must
+// land on the Chronicle's contact section — but that section is lazy-loaded, so
+// the caller can't scroll right after navigate(). Request it here; the
+// Chronicle consumes it on mount and polls until the anchor exists.
+let requestedSection = null;
+export const requestSection = (id) => { requestedSection = id; };
+
+export const consumeSectionRequest = () => {
+  if (!requestedSection) return () => {};
+  const id = requestedSection;
+  requestedSection = null;
+  rememberedY = null; // the explicit destination beats the remembered position
+  let raf = 0;
+  let tries = 0;
+  const step = () => {
+    const el = document.getElementById(id);
+    if (el) { scrollToSection(id); return; }
+    if (tries++ > 80) return; // ~1.3s of frames — give up quietly
+    raf = requestAnimationFrame(step);
+  };
+  raf = requestAnimationFrame(step);
+  return () => cancelAnimationFrame(raf);
+};
+
 export const restoreScroll = () => {
   if (rememberedY == null) return () => {};
   const y = rememberedY;

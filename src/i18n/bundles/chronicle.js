@@ -13,69 +13,82 @@ export default {
   common: {
     // Rendered as "Chapter 01" in section eyebrows.
     chapterLabel: 'Chapter',
+    optional: '(optional)',
   },
 
   nav: {
     toTop: 'To top',
     map: 'Map',
     openMap: 'Open the map',
+    makingOf: 'Making-of',
+    timeMachine: 'Time Machine',
+    timeMachineSub: 'Travel back through my older portfolios',
+    navigate: 'Navigate',
+    navigateSub: 'Jump to any chapter',
+    menu: 'Menu',
+    close: 'Close menu',
+    theme: 'Theme',
+    sound: 'Sound',
+    voice: 'Narrator',
+    voiceSub: 'Change who narrates the site',
+    makingOfSub: 'How this site was built',
+    menuCoach: 'Sound, themes & narrators live in here — tap to explore.',
+    contact: 'Contact',
   },
 
   // Chapter label (nav/eyebrow) + sub (the large serif section title). Keyed by
   // section id; `no`/`x`/`y`/`kw` stay in constants.
   chapters: {
     origin: { label: 'Origin', sub: 'Origin' },
-    about: { label: 'The Craft', sub: 'Origin' },
+    about: { label: 'The Maker', sub: 'Who I Am' },
     work: { label: 'The Journey', sub: 'The Path So Far' },
     arsenal: { label: 'The Arsenal', sub: 'Tools of the Trade' },
     projects: { label: 'The Realms', sub: "Worlds I've Shipped" },
-    contact: { label: 'Summon', sub: 'Send a Raven' },
+    contact: { label: 'Summon', sub: 'Get in Touch' },
   },
 
   hero: {
-    lead: 'I architect',
-    phrases: ['production systems', 'scalable platforms', 'resilient APIs', 'reusable UI systems'],
-    hook: 'Five years charting production systems where performance, trust, and craft decide the path.',
-    ctaPrimary: 'Begin the Chronicle',
-    ctaSecondary: 'Summon me →',
+    lead: 'I build',
+    phrases: ['production React systems', 'full-stack web apps', 'dashboards & CRMs', 'interfaces that hold up'],
+    proof: ['5+ yrs · React · Next.js · Node.js'],
+    ctaPrimary: 'See my work',
+    ctaSecondary: 'Get in touch',
+    ctaResume: 'Résumé',
     scroll: 'Scroll',
-    spin: 'Spin the alidade',
+    spin: 'Spin the needle',
+    spinShort: 'Spin',
+    spinHint: 'Tap to spin',
   },
 
   about: {
-    pullQuote: '“Every realm below began as an empty repository and a blinking cursor.”',
+    pullQuote: 'Five years, twenty-plus releases, six industries — every one shipped to production.',
     intro: [
-      'I build production web platforms the way a storyteller builds worlds — structure beneath the surface, and an obsessive eye on the details a user feels but never sees.',
-      'Five years and twenty-plus releases across six industries. I carry features from an empty repository [[endToEnd|all the way to production monitoring]], and I do my sharpest work where the problem is tangled and the path isn’t obvious.',
-    ],
-    scribeNote: "The Scribe's Note",
-    principles: [
-      { title: 'End-to-end ownership', body: 'From requirement grooming and system design to release validation and production monitoring.' },
-      { title: 'Detail as discipline', body: 'Reusable UI systems, edge cases, and accessibility — the unglamorous craft that makes products feel solid.' },
-      { title: 'Performance as a habit', body: 'Code-splitting, caching, CDN, and media optimization — [[measured|measured, not guessed]].' },
-      { title: 'Secure by default', body: 'JWT/OAuth, Okta, RBAC and middleware access control across enterprise apps.' },
+      'I’m a full-stack developer focused on production web platforms — solid architecture underneath, and an obsessive eye on the details users feel but never see.',
+      'Five years and twenty-plus releases across six industries. I own features [[endToEnd|from an empty repo to production monitoring]], and do my sharpest work where the problem is tangled and the path isn’t obvious.',
     ],
     disciplines: 'Disciplines',
     // Discipline cards (keyed by the service `iconKey` in constants).
     services: {
-      frontend: { title: 'Frontend Architecture', description: 'Production-grade UIs with React.js, Next.js, TypeScript, and reusable component systems.' },
-      backend: { title: 'Backend Development', description: 'Scalable APIs with Node.js, Express.js, NestJS, REST, JWT/OAuth, and RBAC.' },
-      performance: { title: 'Performance & Discoverability', description: 'Code-splitting, caching, CDN strategies, lazy loading, Core Web Vitals tuning, and structured-data SEO that machines and humans both read.' },
-      fullstack: { title: 'Full Stack Delivery', description: 'End-to-end ownership from requirement grooming to production monitoring.' },
+      frontend: { title: 'Frontend Architecture', description: 'React, Next.js, TypeScript, and reusable component systems.' },
+      backend: { title: 'Backend Development', description: 'Node.js, Express, NestJS, REST APIs, JWT/OAuth, RBAC.' },
+      performance: { title: 'Performance & SEO', description: 'Code-splitting, caching, CDN, Core Web Vitals, structured data.' },
+      fullstack: { title: 'Full-Stack Delivery', description: 'End-to-end, from requirement grooming to production monitoring.' },
     },
     // Stat-band labels (keyed by the stat `key` in constants; values are data).
     stats: {
-      years: 'Years Experience',
       projects: 'Projects Delivered',
       domains: 'Industry Domains',
-      load: 'Faster Load Times',
+      shipped: 'Shipped to Production',
     },
   },
 
   experience: {
     intro:
-      'Every expedition leaves a trail. Keep scrolling to travel mine — from the first commit to the present campaign.',
+      'Where I’ve worked and what I shipped — from the first commit to the present campaign.',
     travelTrail: 'Travel the trail',
+    prev: 'Previous waypoint',
+    next: 'Next waypoint',
+    hint: 'Swipe, or use the arrows',
     present: 'Present',
     onAssignment: 'On assignment',
     via: 'via Infosys',
@@ -94,13 +107,14 @@ export default {
       },
       oath: {
         chapter: 'The Oath',
-        headline: 'Forged the foundations · CGPA 8.36 / 10.',
+        // Study → duration → grade, in that order, so it reads at a glance for
+        // someone who doesn't know me (R1). The law degree is a quiet second
+        // credential, not buried in prose.
+        headline: 'CGPA 8.36 / 10',
         role: 'B.E. Information Technology',
-        org: 'Gujarat Technological University',
-        points: [
-          'Engineering degree in Information Technology.',
-          'And a three-year LL.B. from Hemchandracharya North Gujarat University — earned alongside the work, with the bar cleared (AIBE) in 2026.',
-        ],
+        org: 'Gujarat Technological University · 2018 – 2022',
+        credential: 'Plus an LL.B. (Laws), HNGU — bar cleared (AIBE) 2026',
+        points: [],
       },
       expedition: {
         chapter: 'The Long Expedition',
@@ -108,17 +122,17 @@ export default {
         role: 'Full Stack Developer',
         org: 'Inexture Solutions',
         points: [
-          'First-ever Employee of the Month — claimed in month one, among 30.',
           'Delivered apps across finance, health, logistics, CRM, SaaS & media.',
           'Owned features end to end — grooming to production monitoring.',
+          'Named Employee of the Month in my first month, among a team of 30.',
         ],
       },
       vanguard: {
-        chapter: 'The Vanguard',
+        chapter: 'The Front Line',
         headline: 'Leading the front line of the Capital Group fleet.',
         role: 'Lead Frontend Developer',
-        org: 'Infosys · embedded with Capital Group',
-        via: 'Flying Inexture’s colours — sub-contracted through Infosys, embedded with the Capital Group fleet.',
+        org: 'Infosys · on the Capital Group team (USA)',
+        via: 'On assignment — placed through Infosys, working on-site with the Capital Group team.',
         points: [
           'Lead frontend across multiple products on the Capital Group network.',
           'Shipped 4 production releases — features charted from scratch.',
@@ -137,28 +151,47 @@ export default {
   },
 
   arsenal: {
-    subtitle: 'The kit I carry into every campaign — hover a star to trace its constellation.',
+    subtitle: 'The tools I reach for across the stack.',
     coreLabel: 'The Arsenal',
+    // The orbit view no longer needs a legend — the larger core discs say it. The
+    // inventory keeps a one-line key for its ✦ mark.
+    inventoryLegend: 'marks the core stack — the tools reached for first',
+    // The one-time nudge toward the fast-skim list view (Inventory).
+    skimCoach: 'Prefer a quick list? Read the stack as an inventory',
+    viewChart: 'Sky-chart',
+    viewInventory: 'Inventory',
+    // Load-bearing control copy — kept plain and inherited by every voice.
+    viewToggle: 'Switch between the sky-chart and inventory views',
+    coreSr: 'core stack',
   },
 
   works: {
     intro:
-      "Each realm is a production world charted end to end — across finance, healthcare, logistics, media and visualization. Some lie under NDA; what's shared is what's permissible.",
+      'Production work across finance, healthcare, logistics, media, and visualization.',
     realm: 'Realm',
     featured: 'Featured',
     nda: 'NDA',
     enterRealm: 'Enter the realm',
     source: 'Source',
+    // The proof strip's tiny labels — the facts read cryptically without them
+    // ("Solo, end-to-end" of WHAT?). Generic; every voice inherits.
+    proofLabels: { role: 'My role', outcome: 'Outcome', scale: 'Scope' },
     ndaSealed: "[[nda|Sealed under NDA]] — details limited to what's permissible.",
-    chartMore: 'Chart {{count}} more realms',
-    furl: 'Furl the map',
+    ndaArch: 'System architecture — sealed under NDA',
+    // Load-bearing controls stay plain even in the themed default voice — a
+    // skimmer shouldn't have to decode a verb to expand the list (persona audit
+    // 2026-07-05, item 10; the Contact de-theming precedent from v1.1).
+    chartMore: 'Show {{count}} more projects',
+    furl: 'Show fewer',
+    fullStory: 'The full story',
     // The nod to the unnumbered seventh realm — this very site (see the Atelier).
     nod: 'Six realms charted. The seventh is the one you are standing in.',
-    nodCta: 'Step into the Atelier',
+    nodCta: 'See how this site was built',
     // Per-project copy, keyed by the project `id` in constants. `name`,
     // `company`, `tags`, links and gallery stay data in constants.
     projects: {
       gajaakriti: {
+        lead: 'A luxury wedding studio’s galleries, made to load like a film — not a folder.',
         description: 'Dynamic media-heavy website and admin panel for a premium Ahmedabad-based wedding photography and films studio with optimized media delivery.',
         highlights: [
           'Built a modern Next.js website with dynamic landing pages, portfolio, blogs, testimonials, and admin panel',
@@ -168,6 +201,7 @@ export default {
         ],
       },
       'royal-tiles': {
+        lead: 'Design a floor in the browser, watch it render live, walk out with an order-ready PDF.',
         description: 'Interactive tile design and ordering tool where users select layouts, tile designs, fills, preview results live, and download order-ready PDF templates.',
         highlights: [
           'Built a custom floor visualization tool with live preview and downloadable PDF templates',
@@ -178,6 +212,7 @@ export default {
         ],
       },
       'advisor-portfolio': {
+        lead: 'An enterprise portfolio-analysis platform, architected from the first commit.',
         description: 'Advisor-facing portfolio analysis platform built from scratch with Next.js, Okta authentication, Highcharts data visualization, and enterprise deployment tooling.',
         highlights: [
           'Built the frontend application from scratch — system design, reusable UI, route protection, API integration, sprint-wise delivery',
@@ -188,11 +223,11 @@ export default {
         ],
       },
       'digital-investor': {
-        description: 'Digital investment platform with rich user interactions, analytics tracking, and feature modules across frontend and backend.',
+        description: 'An investor-facing investment platform with rich interactions, analytics, and feature modules across frontend and backend.',
         highlights: [
-          'Delivered React/Next.js feature modules and integrated Adobe Analytics tracking',
-          'Supported Node/Express REST API integrations, error handling, and performance improvements',
-          'Implemented React Query for server-state management, reducing redundant API calls',
+          'Built React/Next.js feature modules with Adobe Analytics tracking for user-interaction visibility',
+          'Integrated Node/Express REST APIs with error handling and performance tuning',
+          'Added React Query server-state caching — fewer redundant calls, snappier UI',
         ],
       },
       srifin: {
@@ -220,67 +255,55 @@ export default {
         ],
       },
       'fantasy-cricket': {
-        description: 'Real-money fantasy platform with live match syncing, secure payouts, and admin back-office operations.',
+        // The secondary card shows a short voiced lead + these factual bullets.
+        description: 'A Dream11-style real-money fantasy cricket platform I built end to end — mobile app, admin panel, and the complex Node.js backend. No longer publicly available.',
         highlights: [
-          'Built cron pipelines for live match states',
-          'Reduced admin intervention by 1.5-2 hours per match',
-          'Achieved 99% transaction reliability',
+          'Owned the Node.js backend — MongoDB schema design, REST APIs, and cron pipelines syncing live ball-by-ball data from a third-party sports API in real time',
+          'Real-time points engine — Dream11-style teams with captain/vice-captain multipliers, scored live off every match event',
+          'Back-traceable wallet ledger with automatic payouts, custom winning logic, and Razorpay payments',
+          'Configurable contests and prize pools per match, plus GST/TDS tax reports with rich filters in the React admin panel',
+          'Supported the React Native app — team building and live contest/match tracking',
         ],
       },
     },
   },
 
   contact: {
-    availability:
-      'Open to senior full-stack roles & collaborations — usually replies within a day.',
+    availability: 'Open to senior full-stack roles & collaborations.',
     theMessage: 'The Message',
     correspondence: 'Correspondence',
-    inquiries: ['Senior role', 'Contract', 'Collaboration', 'Just saying hi'],
     placeholders: {
       name: 'Your name',
       email: 'Your email',
-      message: 'Tell me about the realm you want to build…',
+      message: 'Tell me about the role, the project — or just say hi…',
     },
-    messagePlaceholders: {
-      'Senior role': 'Tell me about the team, the role, and the realms you’re building…',
-      Contract: 'Share the scope, timeline, and what you need shipped…',
-      Collaboration: 'What should we build together? Pitch me the idea…',
-      'Just saying hi': 'Say hello — what brought you to this corner of the map?',
-    },
-    submitIdle: 'Dispatch the Raven',
-    submitLoading: 'Sending the raven…',
+    submitIdle: 'Send message',
+    submitLoading: 'Sending…',
     resumeCta: 'Download CV',
     status: {
-      idle: 'The raven waits, quill trimmed and ready.',
-      sending: 'Wings unfurl — the raven takes the sky…',
+      idle: 'I read every message myself.',
+      sending: 'Sending your message…',
     },
-    success: 'Your raven has taken flight — I’ll reply as soon as it lands.',
+    success: 'Message sent — I’ll reply as soon as I can.',
     errors: {
       required: [
-        'The raven refuses to fly with an empty scroll — fill in every field.',
-        'No words, no flight. This raven has standards; fill it all in.',
-        'A blank parchment? The raven just blinked at me. Every field, please.',
-        'Even the swiftest raven needs something to carry. Mind the blanks.',
+        'Please fill in every field.',
+        'Looks like a field or two is still empty.',
       ],
       email: [
-        'That email reads like Elvish — and not the legible kind. Mind checking it?',
-        'The raven scoured every map and found no such address. Recheck the email?',
-        'Hmm, that email looks a touch cursed. Give it another glance.',
-        'No realm answers to that address. Double-check the email?',
+        'That email doesn’t look right — mind checking it?',
+        'Please enter a valid email address.',
       ],
       failed: [
-        'The raven hit a storm mid-flight and limped back. Try again?',
-        'A mischievous goblin snatched the raven. Send another?',
-        'The raven vanished into the mist. One more attempt?',
-        'Something spooked the poor bird. Give it another go.',
+        'That didn’t go through — try again?',
+        'Something went wrong sending that. One more try?',
       ],
       notConfigured: [
-        'The rookery isn’t built yet — no ravens to dispatch. Reach me directly at {{email}}.',
-        'These ravens are still in training. For now, send word to {{email}}.',
-        'This aviary is under construction. Best write to me at {{email}}.',
+        'The form isn’t wired up yet — reach me directly at {{email}}.',
+        'Messaging is still being set up. For now, email me at {{email}}.',
       ],
     },
-    quote: '“Every great quest begins with a single message.”',
+    quote: 'Prefer email? Copy my address or say hi on LinkedIn — no form required.',
     channels: {
       email: 'Email',
       linkedin: 'LinkedIn',
@@ -290,11 +313,12 @@ export default {
   },
 
   map: {
-    searchPlaceholder: 'Search the map…  try “skills”, “projects”, “contact”',
-    noResult: 'No chapter found — try “skills”, “experience”, or “contact”.',
-    footerHint: 'travel · esc to close',
+    title: 'The Realm Map',
+    close: 'Close the map',
+    hint: 'Tap a realm to travel',
     actions: {
-      voices: 'Change voice',
+      makingOf: 'The Making-of',
+      voices: 'Change narrator',
       resume: 'Read the Scroll (Resume)',
       github: 'GitHub',
       linkedin: 'LinkedIn',
@@ -305,28 +329,36 @@ export default {
 
   // The Voice Hall — the command-palette voice picker (scales past the popover).
   voiceHall: {
-    title: 'The Voice Hall',
-    subtitle: 'Choose who narrates the chronicle — or summon a voice not yet among us.',
-    searchPlaceholder: 'Search voices…  try “office”, “boss”, “moo”',
+    title: 'The Hall of Narrators',
+    // Plain, non-technical explainer shown at the top of the roster.
+    explainer: 'Pick who narrates this site. The words change to match the narrator — everything else stays the same. Just for fun.',
+    subtitle: 'Choose who narrates the chronicle — or request a narrator not yet among us.',
     nowNarrating: 'Now narrating',
-    tryHint: 'Tap a voice — the whole chronicle, this hall included, re-tells itself in their words.',
+    // Desktop preview panel (V5) — the framed portrait + details on the right.
+    preview: {
+      eyebrow: 'Now previewing',
+      sealed: 'Sealed',
+      apply: 'Speak in this voice',
+      active: 'Now narrating the chronicle',
+      clue: 'Clue',
+    },
+    tryHint: 'Tap a narrator — the whole chronicle, this hall included, re-tells itself in their words.',
     close: 'Close',
-    noResult: 'No voice answers to that name — yet.',
-    sealedHint: 'Tap a sealed voice and answer its clue to wake it — or type the secret word anywhere on the page.',
+    sealedHint: 'Tap a sealed narrator and answer its clue to wake it — or type the secret word anywhere on the page.',
     found: '{{count}}/{{total}} sealed found',
+    foundShort: '{{count}}/{{total}} found',
     footerHint: 'enter to speak · esc to close',
     categories: {
-      core: 'The Voices',
-      office: 'The Office',
-      bestiary: 'The Bestiary',
+      core: 'The Narrators',
+      sealed: 'Sealed',
     },
-    // The gamified "summon a new voice" tile.
+    // The gamified "summon a new narrator" tile.
     request: {
       section: 'Summon',
-      cta: 'Summon a new voice',
+      cta: 'Summon a new narrator',
       ctaSub: 'A character you’d love to hear narrate this? Send word to the cartographer.',
       back: 'Back',
-      persona: 'Whose voice?',
+      persona: 'Which narrator?',
       personaPlaceholder: 'Gandalf · a dread pirate · your favourite villain…',
       email: 'Your email',
       emailPlaceholder: 'your email — so I can tell you when it lands',
@@ -336,19 +368,151 @@ export default {
       sending: 'Summoning…',
       done: 'Your request takes flight',
       doneSub: 'The cartographer will weigh “{{persona}}.” Thank you, traveler.',
-      error: 'The raven balked — check the name and a valid email, then try again.',
+      errors: {
+        persona: 'Name a narrator or character to summon.',
+        email: 'That email doesn’t look right — fix it, or leave it blank.',
+        failed: 'The raven balked — mind trying again?',
+      },
     },
   },
 
   footer: {
     quote: '“The journey is the reward.”',
     credit: '© {{year}} Manan Upadhyay · Crafted with React, GSAP & far too much chai.',
-    atelierLink: 'The Atelier — how this was made',
+    atelierLink: 'The Making-Of — how this site was built',
+    timeMachineLink: 'The Time Machine — my portfolios, 2019 → now',
+    closeHead: 'Let’s build something.',
+    closeSub: 'Open to senior full-stack roles and collaborations.',
+    getInTouch: 'Get in touch',
+    resume: 'Résumé',
+  },
+  stickyCta: {
+    text: 'Seen enough?',
+    cta: 'Get in touch',
+    resume: 'Download résumé',
+    dismiss: 'Dismiss',
   },
 
   // The Atelier's own route (/making-of) chrome — the doorway back home.
   makingOf: {
     back: 'Return to the Chronicle',
+  },
+
+  // The Time Machine (/time-machine) — the STRATA coda. You descend through time
+  // to Manan's earlier portfolios, preserved as "ruins". Framing copy is voiced;
+  // the per-era `context` (factual "world then" markers) stays literal across
+  // voices (like `marginalia`) — sealed voices override only the framing keys.
+  // See docs/chronicle/sections/11-the-time-machine.md.
+  timeMachine: {
+    eyebrow: 'An artifact, not an exhibit',
+    title: 'The Time Machine',
+    intro:
+      'Every mapmaker leaves earlier drafts behind. These are mine — the portfolios I built on the way here, preserved exactly as they were. Descend, and the years fall away with you.',
+    readoutLabel: 'Descending',
+    booting: 'Waking the ruin…',
+    wake: 'Wake the ruin',
+    wakeHint: 'Wake it to walk the live site here — or open it in its own tab.',
+    enter: 'Enter the ruin',
+    archived: 'Archived',
+    // {{built}}/{{touched}}/{{preserved}} are years.
+    gravestone: 'Built {{built}} · last touched {{touched}} · preserved {{preserved}}',
+    back: 'Return to the Chronicle',
+    threshold: {
+      rail: 'The present',
+      cue: 'Descend to travel back',
+    },
+    floor: {
+      rail: 'Before the map',
+      title: 'Before the map',
+      body: 'The record ends here. Everything earlier was practice — sketches with no URL to preserve. The climb from this floor to the present is the whole point.',
+    },
+    eras: {
+      2023: {
+        rail: '2023',
+        posterAlt: 'Manan’s {{year}} portfolio, preserved as it shipped',
+        plaque: 'The first one that moved — where I started treating a portfolio like a scene, not a page.',
+        note: 'A React + Three.js portfolio. Rougher than what you’re standing in, and unmaintained since — some animations no longer breathe. That’s the point: it’s a marker of the distance travelled, kept exactly as it was.',
+        context: [
+          { k: 'In the world', v: 'ChatGPT went mainstream and the AI gold rush began.' },
+          { k: 'On the web', v: 'React Server Components and the Next.js app-router era arrived.' },
+          { k: 'The craft', v: 'WebGL portfolios everywhere — depth, scroll and 3D as table stakes.' },
+          { k: 'Where I was', v: 'Deep in client React/Three.js builds, sharpening motion for a living.' },
+        ],
+      },
+      2019: {
+        rail: '2019',
+        posterAlt: 'Manan’s {{year}} portfolio, preserved as it shipped',
+        plaque: 'The very first map — hand-cut, earnest, and completely of its time.',
+        note: 'Plain HTML, CSS and a little jQuery, from before I knew what a build step was. It creaks, and it’s meant to — this is where the whole journey started.',
+        context: [
+          { k: 'In the world', v: 'React Hooks had just landed (16.8); class components were on their way out.' },
+          { k: 'On the web', v: 'jQuery was still everywhere; the Jamstack was just catching on.' },
+          { k: 'The craft', v: 'Bootstrap grids, scroll-reveal libraries and hero sliders ruled.' },
+          { k: 'Where I was', v: 'A final-year student shipping his first real site — learning by building.' },
+        ],
+      },
+    },
+  },
+
+  // The Time Tunnel (feedback §5) — the "going back in time" news that streams
+  // past in the scroll gaps between strata. Keyed by event id (constants.timeTunnel).
+  // Written to trigger the "wow, I remember this" jolt: second person, present
+  // tense, concrete — and legible to a non-native reader. Voices override in
+  // character; factual anchors stay recognizable.
+  timeTunnel: {
+    hint: 'Slow down — you’re falling back through the years.',
+    events: {
+      // — Gap 1 (2026 → 2023) —
+      worldcup26: 'The FIFA World Cup returns — hosted by the USA, Canada and Mexico together.',
+      aiagents26: 'AI “agents” start doing real work for people, not just answering questions.',
+      foldiphone26: 'The first folding iPhone is finally on the way.',
+      iphone17: 'Apple releases the iPhone 17 Pro.',
+      lawildfires25: 'Huge wildfires sweep through Los Angeles.',
+      nvidia25: 'Nvidia becomes the most valuable company in the world.',
+      ghibli25: 'Everyone turns their photos into Studio-Ghibli-style art with AI.',
+      minecraft25: 'A Minecraft Movie smashes box-office records.',
+      erastour24: 'Taylor Swift’s Eras Tour becomes the biggest concert tour in history.',
+      sora24: 'OpenAI reveals Sora — an AI that turns a sentence into video.',
+      deadpool24: 'Deadpool & Wolverine finally team up on the big screen.',
+      trumpshot24: 'A shot is fired at a Trump rally, and the world holds its breath.',
+      chatgpt23: 'ChatGPT arrives, and suddenly the whole world is talking to AI.',
+      barbenheimer23: 'Barbie and Oppenheimer open the same day — the summer of “Barbenheimer.”',
+      chandrayaan23: 'India’s Chandrayaan-3 lands near the Moon’s south pole — a world first.',
+      cricketwc23: 'India hosts the Cricket World Cup, and a billion fans tune in.',
+      israelhamas23: 'War breaks out between Israel and Hamas.',
+      twitterx23: 'Twitter is renamed “X.”',
+      threads23: 'Threads launches and hits a hundred million users in five days.',
+      gta6_23: 'The first Grand Theft Auto VI trailer breaks the internet.',
+      barbiepink23: 'Suddenly the whole world is dressed in pink.',
+      aichatbots23: 'For the first time, talking to a machine starts to feel… normal.',
+      evcars23: 'Electric cars slip quietly from novelty to everywhere.',
+      applewatch23: 'Your watch starts scoring your sleep, your rings, your every step.',
+      // — Gap 2 (2023 → 2019) —
+      worldcup22: 'Messi and Argentina win the FIFA World Cup in Qatar.',
+      chatgptlaunch22: 'ChatGPT launches — and the AI era begins.',
+      webb22: 'The James Webb Space Telescope sends back its first images of deep space.',
+      ukraine22: 'Russia invades Ukraine.',
+      musktwitter22: 'Elon Musk buys Twitter.',
+      oscarslap22: 'Will Smith slaps Chris Rock live on stage at the Oscars.',
+      vaccines21: 'COVID vaccines roll out across the world.',
+      squidgame21: 'Squid Game becomes the biggest show in Netflix history.',
+      nft21: 'The NFT craze takes off — digital art sells for millions.',
+      suez21: 'A giant ship blocks the Suez Canal for a week.',
+      meta21: 'Facebook renames itself “Meta.”',
+      taliban21: 'The Taliban retake control of Afghanistan.',
+      covid20: 'COVID-19 becomes a pandemic and shuts down the world.',
+      wfh20: 'The world starts working from home, and Zoom becomes daily life.',
+      amongus20: 'Everyone plays “Among Us,” hunting the impostor.',
+      masks20: 'Face masks become part of everyday life.',
+      blackhole19: 'Scientists capture the first-ever photo of a black hole.',
+      endgame19: 'Avengers: Endgame becomes the biggest movie of all time.',
+      got19: 'Game of Thrones airs its final season.',
+      area51_19: 'The viral “Storm Area 51” meme takes over the internet.',
+      babyshark19: '“Baby Shark” becomes the most-watched video on YouTube.',
+      foldables19: 'The first foldable phones arrive.',
+      fiveg19: 'The first 5G phones launch.',
+      covidwuhan19: 'The first cases of a mysterious new virus appear in Wuhan, China.',
+    },
   },
 
   // Marginalia footnotes (LEGENDARY-ROADMAP §2). Keyed by the `[[id|…]]` marker
@@ -395,17 +559,17 @@ export default {
       visit: 'Voyage no.',
     },
     voices: {
-      title: 'Sealed Voices',
+      title: 'Sealed Narrators',
       unlocked: '{{count}} / {{total}} found',
       sealed: 'Sealed',
       explore: 'Explore all',
       switchTo: 'Speak as {{voice}}',
-      locked: 'A sealed voice, yet undiscovered',
+      locked: 'A sealed narrator, yet undiscovered',
     },
     sealed: {
-      none: 'Three voices still lie sealed — listen for the words that wake them.',
-      some: '{{count}} of {{total}} voices still lie sealed — keep listening.',
-      all: 'Every voice discovered. A keen ear, traveler.',
+      none: 'Three narrators still lie sealed — listen for the words that wake them.',
+      some: '{{count}} of {{total}} narrators still lie sealed — keep listening.',
+      all: 'Every narrator discovered. A keen ear, traveler.',
     },
   },
 
@@ -414,80 +578,75 @@ export default {
   // the human core; the ledger pairs every shipped phase with what was cut. Metric
   // values + ids are data in constants.atelier; these are the voiced labels.
   atelier: {
-    eyebrow: 'The Atelier',
+    eyebrow: 'The Making-Of',
     title: 'How the map was drawn',
-    confession: 'It cleared every bar but mine.',
+    confession: 'Behind the map — how it was really made.',
     confessionSub:
-      'The map was a finished, presentable build some forty commits ago — it cleared every bar a portfolio is meant to clear. I hold my work to a harder one. I have never been able to leave a detail half-right, so I poured another 200-odd hours into the things only I would notice — the easing on a single curve, the way a cue lands, the telemetry that proves the moments are touched, the frame you feel but cannot name. "Good enough" has never been the brief; out-doing my last pass is.',
+      'How this site is built, what was cut, and what hides in plain sight — all of it the real thing, not screenshots of a process.',
     acts: { build: 'The Build', engine: 'The Engine Room', hidden: 'The Hidden Layer' },
-    reel: {
-      title: 'The Director’s Reel',
-      range: 'Jun 20 – 30 · 10 scenes',
+    // The voice-aware portrait's touch affordances (functional micro-labels —
+    // chronicle carries them, all voices inherit). `tilt` says TAP because iOS
+    // gates the motion sensor behind that first tap (R6).
+    portrait: { drag: 'drag to reveal', tilt: 'tap to tilt' },
+    // The commit trail — a GitHub-style heatmap drawn from this repo's real git
+    // history (CommitGraph + src/constants/commitHistory.js). All figures are data.
+    // The Act II breather — one line bridging the Observatory (how the site
+    // watches itself) to the Codebase Atlas (how it is built).
+    engineBridge: 'So much for how the site watches itself. Here is how it is built to be understood.',
+    commits: {
+      title: 'The Commit Trail',
+      range: 'The build window, straight from this repo’s git log',
       caption:
-        'Drag the playhead, click a frame, or use the arrow keys to move through the build one scene at a time.',
-      scene: 'Scene',
-      commits: 'commits',
-      hint: 'move across to scrub · click a frame · ← → to step',
-      aria: 'The build, scene by scene',
-      prev: 'Previous scene',
-      next: 'Next scene',
-      scenes: {
-        foundation: { title: 'First Light', blurb: 'A pure-CSS starfield and a hand-drawn Canvas2D astrolabe — the hero, conjured without a single image.' },
-        canon: { title: 'The Chronicle Takes Shape', blurb: 'The chapter system, the side-rail nav, and the scroll choreography that carries the whole journey.' },
-        realms: { title: 'The Realms', blurb: 'Editorial, cinematic project plates — and the searchable ⌘K map that charts every chapter of the journey.' },
-        journey: { title: 'The Journey & the Arsenal', blurb: 'A pinned, horizontally-scrubbed timeline of the path so far, and an interactive orbital field of skills.' },
-        voice: { title: 'The Voice System', blurb: 'A full i18next layer — the entire site re-skins through five distinct writing voices, architected to scale to fifteen.' },
-        sky: { title: 'Sky & Sound', blurb: 'Five time-aware themes resolved from your local time via SunCalc, and a Web Audio score of synthesized cues — zero bytes shipped.' },
-        recap: { title: 'The Traveler’s Read', blurb: 'A client-side instrument that reads your device and connection and pins you on a live map — nothing stored, nothing sent.' },
-        atelier: { title: 'The Atelier & the Raven', blurb: 'The making-of route, the Voice Hall, the free-spin astrolabe, and a flock of ravens that bursts across the screen on send.' },
-        polish: { title: 'The Finishing Pass', blurb: 'Accessibility, reduced-motion fallbacks, a performance sweep, and the live, server-side contact backend.' },
-        observatory: { title: 'The Observatory', blurb: 'After the map was drawn, I instrumented it — privacy-first product analytics, structured-data SEO, and a bespoke logger with a console banner for the curious.' },
+        'A focused three-week sprint — the 2026 rebuild of a repo I first pushed back in 2023. Real git history, no touch-ups: every commit crossed the same gate first — lint, types, a clean build on every push and pull request — or it never merged.',
+      less: 'Less',
+      more: 'More',
+      tip_one: '{{count}} commit',
+      tip_other: '{{count}} commits',
+      share: '{{pct}}% of the whole build',
+      peak: 'The peak — my busiest day',
+      streakUnit: '{{count}} days',
+      aria: 'A calendar heatmap of daily commits to this repository',
+      stats: {
+        commits: 'Commits',
+        streak: 'Longest streak',
       },
     },
     stats: {
-      hours: 'Hours poured',
-      commits: 'Revamp commits',
-      phases: 'Wonder phases',
       voices: 'Site voices',
       lines: 'Lines of craft',
     },
     ledger: {
       intro:
-        'The senior part of the work was not adding things — it was knowing what to leave out. Here is what shipped, and what I cut or refused to add on purpose.',
+        'The hard part was not adding things — it was knowing what to leave out. Here is what shipped, and what I cut or chose not to add on purpose.',
       built: 'What I shipped',
       cut: 'What I cut, and why',
     },
     phases: {
-      voice: { title: 'The Voice switcher', why: 'A full i18next layer — the whole site re-skins through five personalities, scalable to fifteen, with easter-egg voices unlocked by discovery.' },
-      marginalia: { title: 'Marginalia', why: 'Hover a flavor phrase and the real engineering fact unfolds in the margin — the fantasy made to earn its keep.' },
+      voice: { title: 'The Voice switcher', why: 'A full i18next layer — the whole site re-skins through ten personalities, built to scale further, with easter-egg voices unlocked by discovery.' },
+      marginalia: { title: 'Footnotes', why: 'Hover a flavor phrase and the real engineering fact unfolds in a footnote — the fantasy made to earn its keep.' },
       sky: { title: 'Time-aware sky', why: 'Five theme modes that resolve from your real local time via SunCalc — no geolocation prompt, pure math from your timezone.' },
-      sound: { title: 'Interactive sound', why: 'A Web Audio system of synthesized cues (zero bytes) that reward intent, never motion — default-on, silenced under reduced-motion.' },
+      sound: { title: 'Interactive sound', why: 'A Web Audio system of synthesized cues (almost zero bytes — only the raven’s caw ships as a file) that reward intent, never motion — default-on, silenced under reduced-motion.' },
       recap: { title: 'The Expedition recap', why: 'A cinematic instrument that reads your device and connection client-side and pins you on a live polar map — nothing stored, nothing sent.' },
       eggs: { title: 'Voice easter eggs', why: 'Type a secret word anywhere and a sealed personality wakes — Scott, Dwight, a cow — each authored in full character.' },
-      telemetry: { title: 'Telemetry & discoverability', why: 'Thirty-three product events folding into one per-visit session recap, thirteen super-properties, and five PostHog dashboards — all cookieless, anonymous, and silenced under Do-Not-Track. Beside it, structured-data SEO and a bespoke logger. The instrument answers "are the moments touched?" without harvesting a thing about who touches them.' },
+      telemetry: { title: 'Telemetry & discoverability', why: 'Fifty product events folding into one per-visit session recap, twenty-three super-properties, and five PostHog dashboards — all cookieless, anonymous, and silenced under Do-Not-Track. Beside it, structured-data SEO and a bespoke logger. The instrument answers "are the moments touched?" without harvesting a thing about who touches them.' },
     },
     cuts: {
-      assets: { title: 'A folder of images, GIFs & audio files', why: 'Almost none of this site is shipped media. The hero astrolabe is drawn in Canvas2D, the starfield is pure CSS, and every interface sound is synthesised live through the Web Audio API. The whole feedback layer ships as code, not megabytes — a smaller bundle, fewer network round-trips, and a faster first paint.' },
-      threejs: { title: 'Three.js & the whole WebGL layer', why: 'An early build leaned on a 3D library for depth. I tore it out and rebuilt the same sense of space with layered CSS, parallax, and a hand-drawn Canvas2D astrolabe — dropping a heavy dependency and keeping the initial JS well under budget. Depth, without the download.' },
+      assets: { title: 'A folder of images, GIFs & audio files', why: 'Almost none of this site is shipped media. The hero compass is drawn in Canvas2D, the starfield is pure CSS, and every interface sound is synthesised live through the Web Audio API. The whole feedback layer ships as code, not megabytes — a smaller bundle, fewer network round-trips, and a faster first paint.' },
+      threejs: { title: 'Three.js & the whole WebGL layer', why: 'An early build leaned on a 3D library for depth. I tore it out and rebuilt the same sense of space with layered CSS, parallax, and a hand-drawn Canvas2D compass — dropping a heavy dependency and keeping the initial JS well under budget. Depth, without the download.' },
       tracking: { title: 'Cookie banners, cross-session tracking & surveillance analytics', why: 'The site does measure itself — but the senior call was how. PostHog runs cookieless (memory-only persistence), fully anonymous (no accounts, no identify(), no cross-session identity), and hard-disabled the instant Do-Not-Track is set. No consent banner, because there is nothing to consent to: nothing is sold, nothing follows you off the page. The analytics serve the craft — which moments get touched — not the surveillance.' },
       componentLib: { title: 'A pre-built UI kit or paid template', why: 'Every component here is bespoke — Tailwind for layout, CSS variables for theme, nothing lifted from a library. More work, but full pixel control and none of the bloat or that unmistakable look-alike-template feel.' },
-      statusLine: { title: 'The “how did he know?” status line', why: 'Region + moon phase near the hero. Built, reviewed, cut — it edged from wonder toward creepy, and the time-driven palette already carried the magic.' },
-      battery: { title: 'The battery readout', why: 'Removed: the Battery Status API lies on some platforms (macOS Chrome reports 100% while charging). A card that “reads you” must never show data it cannot trust.' },
     },
     eggs: {
       title: 'The Field Guide',
-      intro: 'Most of the craft here is quiet on purpose — it answers only when you reach for it. Here is where to find what hides in plain sight.',
+      intro: 'The quiet craft — tap any entry to learn where it hides, then jump straight to it.',
+      showMe: 'Show me',
       astrolabe: {
         title: 'The living needle',
-        how: 'Sweep your cursor across the hero astrolabe — the alidade follows your hand, and a gear-mechanism sound turns at exactly the speed you move it.',
+        how: 'Sweep your cursor across the hero compass — the needle follows your hand, and a gear-mechanism sound turns at exactly the speed you move it.',
       },
-      spin: {
-        title: 'Spin the alidade',
-        how: 'Press the spin button on the instrument’s rim to flick the needle into a free spin — real flywheel physics wind it up and let it coast to rest.',
-      },
-      sound: {
-        title: 'A synthesised score',
-        how: 'Every cue on the page is generated live by Web Audio — zero bytes shipped. Toggle it from the speaker control, bottom-right, then listen on a theme change, a send, a map open.',
+      lens: {
+        title: 'The living portrait',
+        how: 'On a computer, sweep your cursor over my photo — a lens reveals the real image beneath the particles. On a phone, drag the lens across it, or tilt and shake the device: it moves with real physics.',
       },
       sky: {
         title: 'Five skies',
@@ -495,11 +654,7 @@ export default {
       },
       voices: {
         title: 'Hidden voices',
-        how: 'The whole site can be re-voiced. Open the Voice Hall (⇧⌘V) — sealed personalities unlock when you type their secret word anywhere on the page. (Try “boss”.)',
-      },
-      map: {
-        title: 'The chart',
-        how: 'Press ⌘K (Ctrl K) to summon the realm map — a searchable chart of every chapter of the journey.',
+        how: 'The whole site can be re-voiced. Open the Hall of Narrators (⇧⌘V) — sealed personalities unlock when you type their secret word anywhere on the page. (Try “boss”.)',
       },
       raven: {
         title: 'The raven',
@@ -507,7 +662,7 @@ export default {
       },
       recap: {
         title: 'The traveller’s read',
-        how: 'At the foot of Summon, an instrument panel reads your own device, screen, and connection — and, with your blessing, your city — then mints a one-of-a-kind sigil from it.',
+        how: 'At the close of this page, an instrument panel reads your own device, screen, and connection — and, with your blessing, your city — then mints a one-of-a-kind sigil from it.',
       },
       console: {
         title: 'The cartographer’s ledger',
@@ -521,11 +676,10 @@ export default {
       hub: 'session recap',
       hubNote: 'Every named event folds into one tidy per-visit summary, flushed as you leave — the whole journey in a single row.',
       indexHint: 'Every star is a real event. Sweep the field — or choose one from the ledger — and the instrument names it and where it fires.',
+      tapHint: 'One real event at a time — tap the card to read the next.',
       cadence: { once: 'Once per visit', repeat: 'Every time' },
       metrics: {
         events: 'Product events',
-        superProps: 'Super-properties',
-        webhooks: 'Webhook routes',
         dashboards: 'Live dashboards',
         schemas: 'Structured schemas',
       },
@@ -538,29 +692,52 @@ export default {
       panels: {
         privacy: {
           title: 'Privacy-first by design',
-          body: 'PostHog runs cookieless and fully anonymous — no accounts, no identify(), memory-only persistence — and hard-disables the moment Do-Not-Track is set. No consent banner, because there is nothing to consent to.',
+          body: 'No cookies, no accounts, nothing kept between visits — and it switches off completely if your browser asks not to be tracked.',
         },
         discoverability: {
           title: 'Built to be found',
-          body: 'Five JSON-LD schemas (Person, WebSite, ProfilePage, Organization, address), Open Graph and Twitter cards, canonical URLs, and an application-name that claims the Google Knowledge Panel — so machines and humans read it the same way.',
+          body: 'Five JSON-LD schemas, Open Graph cards, canonical URLs — machines and humans read it the same way.',
         },
         observability: {
-          title: 'Watched, so it never breaks quietly',
-          body: 'A zero-dependency structured logger with scoped tags and a production debug key, exceptions caught from the error boundary and relayed to a Discord channel the instant they occur, and Vercel Speed Insights tracking Core Web Vitals from real visits.',
+          title: 'Never breaks quietly',
+          body: 'A structured logger, exceptions relayed to Discord the instant they occur, Core Web Vitals from real visits.',
         },
       },
-      webhooks: {
-        title: 'The alert path',
-        caption: 'Two webhooks carry word the instant it matters — a thrown exception, a fresh deploy — straight to where I already keep watch. No dashboard to babysit; the news finds me.',
-        hop: 'webhook',
-      },
-      footnote: 'Thirty-three events, thirteen super-properties, five dashboards, five schemas — and not a single cookie. Senior work is not just shipping the moment; it is proving the moment lands.',
     },
+    // The Blueprint — the runtime system chart (Act II). Node ids + geometry are
+    // data in constants.atelier.blueprint; gate captions stay EN-technical there.
+    blueprint: {
+      eyebrow: 'The Blueprint',
+      title: 'One device. Three signals out.',
+      intro: 'The runtime, drawn as a chart: everything here happens on your own device, and exactly three signals ever leave it — each one named at the wall. Open the network tab and count.',
+      clientZone: 'The client realm',
+      clientZoneSub: 'everything here runs on your device',
+      beyondZone: 'Beyond the wall',
+      beyondZoneSub: 'the only signals that ever leave',
+      wall: 'The Wall',
+      sealedNote: 'Nothing else crosses — no cookies, no identity, no media files. Even the fonts live on this side.',
+      hint: 'Touch a station',
+      readoutRest: 'Every station holds a decision. Touch one, and it explains itself.',
+      nodes: {
+        traveler: { name: 'You, the traveler', why: 'One request, one page. You arrive once and the whole Chronicle unfolds from here — no redirects, no gatekeeping, no account.' },
+        shell: { name: 'The page', why: 'A single HTML file with the styles inlined at build — the realm paints before any script wakes. Two routes share one Layout; everything below the fold loads lazily.' },
+        motion: { name: 'The scroll', why: 'Lenis and GSAP share one ticker — a single clock drives every scroll scene, so motion never fights itself. On touch it steps aside entirely for native scroll.' },
+        narrator: { name: 'The narrators', why: 'Ten personalities over one i18next layer. The sealed ones ship as separate chunks and cost nothing until someone speaks the word that wakes them.' },
+        sky: { name: 'The sky', why: 'SunCalc reads your local clock — never your location — and sets dawn, day, dusk, or night to match the sky outside your window.' },
+        sound: { name: 'The sound', why: 'Nearly every cue is synthesised live in the Web Audio API — the lone shipped file is the raven’s caw. Unlocked by your first gesture, silent under reduced motion.' },
+        memory: { name: 'The memory', why: 'Your expedition log lives for one session and dies with the tab; the visit counter stays in your own browser. Neither is ever sent anywhere.' },
+        telemetry: { name: 'The analytics', why: 'PostHog and Vercel count moments, not people — cookieless, anonymous, no cross-session identity. Set Do-Not-Track and this gate seals entirely.' },
+        raven: { name: 'Your message', why: 'Your message flies to a serverless function and on to the courier — the API key never enters the browser. This is the one crossing you create yourself.' },
+        reading: { name: 'Your city', why: 'One IP lookup names your city for the Expedition Recap below — only after you ask, shown to you in full, and kept nowhere.' },
+      },
+    },
+
     atlas: {
       eyebrow: 'The Codebase',
       title: 'How the map is built',
       intro: 'Open the structure itself — a hand-drawn chart of the repository. Walk it like a map; each file tells you not what it does, but why it sits where it does.',
       hotspots: 'Start here',
+      browseAll: 'Walk the full tree',
       prompt: 'Open a folder, or pick a landmark — every file carries the reasoning behind it.',
       why: 'Why it’s built this way',
       repoCta: 'See the originals',
@@ -590,40 +767,42 @@ export default {
     },
     builtWith: 'Built with',
     manifesto: [
-      'Let me be honest about why this exists. Not to impress a hiring manager — that is a side effect. I built it because I have a restless need to go past the normal version of a thing: to test an idea I have not tried, to reach for technology I have not yet bent to my will. This site was my excuse.',
-      'I love this work in a way that is hard to fake — the code, the problem, the moment a tangled system finally clicks. I chase the problems big enough to scare me, the ones that push me to the edge of what I know, because that edge is the only place the work gets genuinely interesting.',
-      'And underneath the obsession sits a short, non-negotiable list: accountability, a client who is truly glad they trusted me, work that holds up under load, and an eye for the details everyone else lets slide. Everything above is just me holding myself to that — out loud, where you can see it.',
+      'I built this because I get restless with the normal version of a thing. What I actually care about is smaller than a hero shot: work that holds up under load, and the details most people let slide.',
     ],
-    sign: '— Manan, who could not leave it alone.',
+    sign: '— Manan',
   },
 
   voice: {
-    menuTitle: 'Voice',
-    menuSub: 'Who narrates this chronicle? Choose a teller.',
-    pinned: 'Marked Voices',
-    sealed: 'Sealed Voices',
-    sealedHint: 'Tap a sealed voice and',
+    menuTitle: 'Narrator',
+    menuSub: 'Who narrates this chronicle? Pick a narrator.',
+    pinned: 'Marked Narrators',
+    sealed: 'Sealed Narrators',
+    sealedHint: 'Tap a sealed narrator and',
     sealedTypeHint: 'answer its clue to wake it.',
     cluePlaceholder: 'Answer the clue…',
     clueSubmit: 'Speak the word',
     clueAria: 'Answer the clue: {{hint}}',
     clueWrong: 'Not the word. Read the clue and try again.',
-    more: '{{count}} more in the Voice Hall',
-    openHall: 'Enter the Voice Hall',
-    hallTeaserSome: '{{count}} sealed voices await discovery',
-    hallTeaserAll: 'Every voice discovered — wander them all',
+    clueCloser: 'Closer — {{hint}}',
+    clueGiveaway: 'The word is',
+    clueTapUnlock: 'tap to speak it',
+    openHall: 'Enter the Hall of Narrators',
+    hallTeaserSome: '{{count}} sealed narrators await discovery',
+    hallTeaserAll: 'Every narrator discovered — wander them all',
     // The one-time entice note above the quill (replaces the old static ring).
-    note: 'Psst — this whole tale can be told in other voices. Care to meet them?',
+    note: 'Psst — this whole tale can be told by other narrators. Care to meet them?',
     locked: 'Locked',
-    ariaOpen: 'Choose a voice',
+    ariaOpen: 'Choose a narrator',
   },
 
   // Interactive sound design (LEGENDARY-ROADMAP §4). UI copy for the bottom-right
   // sound control; cues themselves are audio, not copy. Literal across voices.
   sound: {
-    enableHint: 'This chronicle has a voice — click below to hear it.',
+    enableHint: 'This site has a soundtrack — tap below to hear it.',
     on: 'Sound',
-    off: 'Muted',
+    off: 'muted',
+    live: 'on',
+    lockedHint: 'tap to start',
     ready: 'Ready',
     toggleOn: 'Turn sound on',
     toggleOff: 'Turn sound off',
@@ -644,5 +823,18 @@ export default {
       dusk: 'Dusk',
       night: 'Night',
     },
+  },
+
+  // The cinematic 404 — "Off the Map" (spec 09). Function first: it must read
+  // instantly as a not-found page (the "404" tag + a clear eyebrow) with an
+  // obvious way home; the cartographer flavour frames that, never replaces it.
+  // `{{path}}` = the bad pathname.
+  void: {
+    eyebrow: 'page not found',
+    title: 'You’ve sailed off the map.',
+    body: 'This route was never charted — there’s nothing here. Let’s set a course back to solid ground.',
+    position: 'last known position: {{path}}',
+    cta: 'Find your bearing',
+    home: 'Back to the homepage',
   },
 };

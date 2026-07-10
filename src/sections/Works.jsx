@@ -3,10 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Github, ArrowUpRight, Lock, Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Github, ArrowUpRight, Lock, Star, ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 import { SectionWrapper } from '../hoc';
 import { projects, chapters } from '../constants';
-import { ChapterHeading, ScrollReveal, Annotated } from '../components';
+import { ChapterHeading, ScrollReveal, Annotated, NdaSchematic } from '../components';
 import { useThemeStore } from '../store/useThemeStore';
 import { rememberScroll } from '../lib/smoothScroll';
 import { track, trackOnce } from '../lib/analytics';
@@ -57,7 +57,7 @@ const Cover = ({ project, parallaxRef }) => {
   }, [project.name, count]);
 
   return (
-    <div className="group relative w-full h-full min-h-[320px] lg:min-h-[440px] overflow-hidden rounded-3xl realm-card" data-cursor="hover">
+    <div className="group relative w-full h-full min-h-[320px] lg:min-h-[440px] overflow-hidden rounded-3xl realm-card">
       {/* parallax layer — carousel image stack lives here so it drifts on scroll */}
       <div ref={parallaxRef} className="absolute inset-0 will-change-transform" style={{ top: '-8%', bottom: '-8%', height: '116%' }}>
         {count > 0 ? (
@@ -69,13 +69,22 @@ const Cover = ({ project, parallaxRef }) => {
               loading={i === 0 ? 'eager' : 'lazy'}
               decoding="async"
               aria-hidden={i !== safe}
-              className="absolute inset-0 w-full h-full object-contain transition-all duration-700 group-hover:scale-105"
+              className="absolute inset-0 w-full h-full object-contain transition-all duration-[900ms] ease-out group-hover:scale-[1.03]"
               style={{ opacity: i === safe ? 1 : 0 }}
             />
           ))
         ) : hasArt ? (
           <img src={coverSrc(project.name)} alt={project.name}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            className="w-full h-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.03]" />
+        ) : project.isNDA && project.architecture ? (
+          // NDA realms have no screenshot — carry an ABSTRACT system schematic
+          // (generic tiers, no real data) instead of a blank monogram so the
+          // plate still proves a real platform exists (persona audit item 9).
+          <div className="nda-schem-wrap w-full h-full grid place-items-center"
+            style={{ background: 'radial-gradient(120% 120% at 70% 20%, rgba(var(--color-ember-rgb),0.12), transparent 55%), var(--gradient-card)' }}>
+            <NdaSchematic architecture={project.architecture} label={t('works.ndaArch')} />
+            <span className="nda-schem-wrap__note exp-mono">{t('works.ndaArch')}</span>
+          </div>
         ) : (
           <div className="w-full h-full grid place-items-center"
             style={{ background: 'radial-gradient(120% 120% at 70% 20%, rgba(var(--color-ember-rgb),0.12), transparent 55%), var(--gradient-card)' }}>
@@ -140,6 +149,11 @@ const RealmPlate = ({ project, index }) => {
 
   const links = [project.live_demo_link, project.source_code_link].filter(Boolean);
   const highlights = t(`works.projects.${project.id}.highlights`, { returnObjects: true });
+  // Proof-first plate (v2.0 A6): the visible layer reads in ~5 seconds — one
+  // lead outcome line + a 3-cell proof strip + the stack pills. The prose
+  // description and the full highlight list live behind "The full story".
+  const [storyOpen, setStoryOpen] = useState(false);
+  const lead = t(`works.projects.${project.id}.lead`, { defaultValue: '' });
 
   return (
     <div ref={rootRef} className="grid lg:grid-cols-2 gap-8 lg:gap-14 items-stretch min-h-[60vh] py-10">
@@ -154,25 +168,64 @@ const RealmPlate = ({ project, index }) => {
         <h3 className="font-chronicle font-semibold leading-[0.95] text-[clamp(34px,4.5vw,56px)]" style={{ color: 'var(--color-text)' }}>
           {project.name}
         </h3>
-        <p className="mt-5 max-w-xl text-[16px] leading-[28px]" style={{ color: 'var(--color-text-muted)' }}>
-          {t(`works.projects.${project.id}.description`)}
-        </p>
-
-        {highlights?.length > 0 && (
-          <ul className="mt-5 space-y-2.5 max-w-xl">
-            {highlights.slice(0, 3).map((hgl, i) => (
-              <li key={i} className="flex gap-3 text-[14px] leading-[21px]" style={{ color: 'var(--color-text-muted)' }}>
-                <span className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: 'var(--color-gold)' }} />
-                <span><Annotated text={hgl} /></span>
-              </li>
-            ))}
-          </ul>
+        {lead && (
+          <p className="mt-4 max-w-xl font-chronicle italic text-[clamp(17px,2vw,21px)] leading-snug" style={{ color: 'var(--color-ember)' }}>
+            {lead}
+          </p>
         )}
 
+        {/* the proof — a labelled 3-fact strip (owner follow-up: the label-less
+            dashes read cryptically — "Solo, end-to-end" of what?). Each fact now
+            carries a tiny muted label above the value, laid out as a scannable
+            grid with a hairline top rule — reference info that recedes so the
+            eye still lands on the name → lead → CTA, not a wall of accents. */}
+        {project.proof?.length > 0 && (
+          <dl className="works-proof mt-7">
+            {project.proof.map((cell) => (
+              <div key={cell.k} className="works-proof__cell">
+                <dt className="works-proof__label">{t(`works.proofLabels.${cell.k}`, { defaultValue: cell.k })}</dt>
+                <dd className="works-proof__val">{cell.v}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
+
+        {/* the stack — themed pills (owner request: the mono dot-line read as
+            prose; pills make the stack scannable while staying quiet). */}
         <div className="mt-6 flex flex-wrap gap-2">
           {project.tags.map((tag) => (
-            <span key={tag.name} className="tag-rune">#{tag.name}</span>
+            <span key={tag.name} className="tech-pill">{tag.name}</span>
           ))}
+        </div>
+
+        {/* depth on demand — the prose + every highlight, one tap away */}
+        <div className="mt-5 max-w-xl">
+          <button type="button" data-cursor="hover" className="works-story__toggle"
+            aria-expanded={storyOpen}
+            onClick={() => { if (!storyOpen) track('project_story_open', { project: project.name }); setStoryOpen((o) => !o); }}>
+            <ChevronDown size={14} className="works-story__caret" data-open={storyOpen || undefined} />
+            {t('works.fullStory')}
+          </button>
+          <AnimatePresence initial={false}>
+            {storyOpen && (
+              <motion.div key="story" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
+                transition={{ type: 'spring', stiffness: 320, damping: 34 }} style={{ overflow: 'hidden' }}>
+                <p className="pt-3 text-[15px] leading-[26px]" style={{ color: 'var(--color-text-muted)' }}>
+                  {t(`works.projects.${project.id}.description`)}
+                </p>
+                {highlights?.length > 0 && (
+                  <ul className="mt-4 space-y-2.5">
+                    {highlights.map((hgl, i) => (
+                      <li key={i} className="flex gap-3 text-[14px] leading-[21px]" style={{ color: 'var(--color-text-muted)' }}>
+                        <span className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: 'var(--color-gold)' }} />
+                        <span><Annotated text={hgl} /></span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {(links.length > 0 || project.isNDA) && (
@@ -180,7 +233,11 @@ const RealmPlate = ({ project, index }) => {
             {links.length > 0 ? (
               <>
                 {project.live_demo_link && (
-                  <Magnet strength={0.25}>
+                  /* Tight activation halo (padding) + gentle pull so the magnet
+                     only wakes when the cursor is over the button itself — a wide
+                     halo let it lurch up to the "full story" toggle above it,
+                     colliding two CTAs (owner report 2026-07). */
+                  <Magnet padding={24} magnetStrength={4}>
                     <a href={project.live_demo_link} target="_blank" rel="noopener noreferrer" data-cursor="hover"
                       onClick={() => track('project_link_open', { project: project.name, kind: 'live' })}
                       className="btn-primary">
@@ -209,11 +266,16 @@ const RealmPlate = ({ project, index }) => {
 };
 
 /* ---------- Secondary compact card ---------- */
+// A short voiced lead + a scannable list of what I actually built (owner request
+// 2026-07: the old single prose block buried the real work). `role` reads at a
+// glance; `highlights` are factual substance shared across voices (like the
+// marginalia) — each personality still colours the one-line `description` lead.
 const RealmCard = ({ project }) => {
   const { t } = useTranslation();
+  const highlights = t(`works.projects.${project.id}.highlights`, { returnObjects: true });
   return (
   <ScrollReveal direction="up" className="w-full">
-    <div className="realm-card h-full p-6 flex flex-col" data-cursor="hover">
+    <div className="realm-card h-full p-6 flex flex-col">
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="chapter-eyebrow !text-[10px] mb-1">{project.company}</p>
@@ -221,11 +283,34 @@ const RealmCard = ({ project }) => {
         </div>
         {project.isNDA && <span className="wax-seal wax-seal--nda flex-shrink-0"><Lock size={10} /> {t('works.nda')}</span>}
       </div>
-      <p className="mt-3 text-[13.5px] leading-[21px] flex-1" style={{ color: 'var(--color-text-muted)' }}>{t(`works.projects.${project.id}.description`)}</p>
-      <div className="mt-4 pt-4 flex flex-wrap gap-2 border-t" style={{ borderColor: 'var(--color-card-border)' }}>
-        {project.tags.map((tag) => (
-          <span key={tag.name} className="tag-rune tag-rune--sm">#{tag.name}</span>
-        ))}
+      {project.role && (
+        <p className="mt-2.5 font-mono text-[10.5px] uppercase tracking-[0.09em] inline-flex items-center gap-2" style={{ color: 'var(--color-ember)' }}>
+          <span className="w-3 h-px" style={{ background: 'var(--color-ember)', opacity: 0.6 }} aria-hidden="true" />
+          {project.role}
+        </p>
+      )}
+      <p className="mt-3 text-[13px] leading-[20px]" style={{ color: 'var(--color-text-muted)' }}>{t(`works.projects.${project.id}.description`)}</p>
+      {Array.isArray(highlights) && highlights.length > 0 && (
+        <ul className="mt-4 space-y-2 flex-1">
+          {highlights.map((hgl, i) => (
+            <li key={i} className="flex gap-2.5 text-[12.5px] leading-[18px]" style={{ color: 'var(--color-text-muted)' }}>
+              <span className="mt-[6px] w-1 h-1 rounded-full flex-shrink-0" style={{ background: 'var(--color-gold)' }} aria-hidden="true" />
+              <span><Annotated text={hgl} /></span>
+            </li>
+          ))}
+        </ul>
+      )}
+      {project.isNDA && project.architecture && (
+        <div className="nda-schem-mini mt-4" title={t('works.ndaArch')}>
+          <NdaSchematic architecture={project.architecture} label={t('works.ndaArch')} />
+        </div>
+      )}
+      <div className="mt-5 pt-5 border-t" style={{ borderColor: 'var(--color-card-border)' }}>
+        <div className="flex flex-wrap gap-2">
+          {project.tags.map((tag) => (
+            <span key={tag.name} className="tech-pill">{tag.name}</span>
+          ))}
+        </div>
       </div>
     </div>
   </ScrollReveal>
@@ -274,15 +359,16 @@ const Works = () => {
         </div>
       )}
 
-      {/* The subtle nod: the portfolio itself as the unnumbered seventh realm —
-          no card (you're already standing in it), just a quiet doorway into the
-          Atelier (its own /making-of route). We remember the scroll position so
+      {/* The seventh realm — this very site. A prominent doorway into the
+          Making-Of (its own /making-of route), so it's actually discovered (beta
+          analytics showed ~1% found it). We remember the scroll position so
           returning lands the visitor right back here. */}
-      <ScrollReveal direction="up" className="works-nod mt-16">
-        <button type="button" data-cursor="hover" className="works-nod__btn"
-          onClick={() => { rememberScroll(); navigate('/making-of'); }}>
+      <ScrollReveal direction="up" className="works-nod mt-20">
+        <button type="button" data-cursor="hover" className="works-nod__card"
+          onClick={() => { track('making_of_enter', { from: 'works' }); rememberScroll(); navigate('/making-of'); }}>
+          <span className="works-nod__eyebrow font-mono">{t('atelier.eyebrow')}</span>
           <span className="works-nod__line font-chronicle">{t('works.nod')}</span>
-          <span className="works-nod__cta">{t('works.nodCta')} <ArrowUpRight size={15} /></span>
+          <span className="works-nod__cta">{t('works.nodCta')} <ArrowUpRight size={16} /></span>
         </button>
       </ScrollReveal>
     </>

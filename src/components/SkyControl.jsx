@@ -26,6 +26,13 @@ const SkyControl = () => {
   const [open, setOpen] = useState(false);
   const rootRef = useRef(null);
 
+  // The Atelier field guide ("Five skies") can pop this menu open from afar.
+  useEffect(() => {
+    const openSky = () => setOpen(true);
+    window.addEventListener('ui:open-sky', openSky);
+    return () => window.removeEventListener('ui:open-sky', openSky);
+  }, []);
+
   useEffect(() => {
     if (!open) return;
     pushOverlay(); // while the sky menu is open, hush the hero astrolabe behind it

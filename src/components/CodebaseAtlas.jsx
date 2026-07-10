@@ -1,13 +1,14 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, useReducedMotion } from 'framer-motion';
 import {
   Folder, FolderOpen, FileCode, Braces, Globe, BarChart3, AudioLines, Waypoints,
   Boxes, Layers, Component as ComponentIcon, Route, Palette, Server, FileText,
-  Image as ImageIcon, Settings, Github, ChevronRight,
+  Image as ImageIcon, Settings, Github, ChevronRight, ChevronDown, Plus,
 } from 'lucide-react';
 import { atelier } from '../constants';
 import { playCue } from '../lib/sound';
+import { track, trackOnce } from '../lib/analytics';
 
 /**
  * CodebaseAtlas — a cinematic, collapsible, VS-Code-flavoured tree over a curated,
@@ -45,12 +46,41 @@ const CodebaseAtlas = () => {
   const { tree, hotspots, repo } = atelier.atlas;
   const { byId, parents } = useMemo(() => buildIndex(tree), [tree]);
 
-  // src/ (and its engine room) start open — the tree should land full, not as a
-  // single collapsed folder over a sea of empty space.
-  const [expanded, setExpanded] = useState(() => new Set(['src', 'lib']));
+  // Only src/ starts open (v2.0 W2) — one committed doorway, not a pre-unpacked
+  // tree; lib/ and the rest reveal on intent.
+  const [expanded, setExpanded] = useState(() => new Set(['src']));
   const [selected, setSelected] = useState(null);
   const rowRefs = useRef(new Map());
   const treeRef = useRef(null);
+  const detailRef = useRef(null);
+
+  // Mobile is its OWN mode (v2.0 W8): hotspots-first cards + the full tree
+  // behind one disclosure. Matches the CSS breakpoint (860px).
+  const [wide, setWide] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(min-width: 860px)').matches,
+  );
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 860px)');
+    const update = () => setWide(mq.matches);
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+  const [treeOpen, setTreeOpen] = useState(false); // mobile "browse the full tree"
+  const [spotOpen, setSpotOpen] = useState(null);  // mobile hotspot accordion
+
+  /* Touch: the "why" renders INLINE under the tapped row (see below). Land the
+     row just above the viewport's center (v2.0 W8 — 'nearest' used to leave it
+     pinned under the fixed back button at the very top of the screen). */
+  const isTouch = () => !!window.matchMedia?.('(hover: none)').matches;
+  const revealRow = (id) => {
+    if (!isTouch()) return;
+    requestAnimationFrame(() => {
+      const el = rowRefs.current.get(id);
+      if (!el) return;
+      const y = el.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.42;
+      window.scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' });
+    });
+  };
 
   /* Boundary-aware scroll chaining — keep the wheel inside the tree while it can
      still scroll that way; once it hits the top/bottom edge, hand the wheel back
@@ -88,9 +118,12 @@ const CodebaseAtlas = () => {
   const focusRow = (id) => rowRefs.current.get(id)?.focus();
 
   const activate = (node) => {
+    trackOnce('atlas_explore', 'atlas_explore'); // did anyone open the codebase atlas at all?
+    track('atlas_node_open', { id: node.id });   // which files/dirs draw interest
     setSelected(node.id);
     if (node.children) toggle(node.id);
     playCue('blip');
+    revealRow(node.id); // touch: keep the row + its inline reasoning in view
   };
 
   const jumpTo = (id) => {
@@ -139,12 +172,12 @@ const CodebaseAtlas = () => {
 
   const activeNode = selected ? byId[selected] : null;
 
-  return (
-    <div className="atlas">
-      {/* the tree — curated, annotated, src/ open by default. data-lenis-prevent
-          lets this nested column scroll natively (Lenis owns the page wheel); it's
-          toggled off at the top/bottom edge (onTreeWheel) so the page chains on. */}
-      <div ref={treeRef} onWheel={onTreeWheel} className="atlas__tree exp-mono" role="tree" aria-label={t('atelier.atlas.title')} data-lenis-prevent>
+  /* the tree — curated, annotated, src/ open by default. data-lenis-prevent
+     lets this nested column scroll natively (Lenis owns the page wheel); it's
+     toggled off at the top/bottom edge (onTreeWheel) so the page chains on.
+     Shared verbatim by desktop and the mobile disclosure. */
+  const treeView = (
+    <div ref={treeRef} onWheel={onTreeWheel} className="atlas__tree exp-mono" role="tree" aria-label={t('atelier.atlas.title')} data-lenis-prevent>
         {rows.map((row, i) => {
           const { node, depth } = row;
           const isDir = !!node.children;
@@ -152,38 +185,103 @@ const CodebaseAtlas = () => {
           const isSel = selected === node.id;
           const Glyph = isDir ? (isOpen ? FolderOpen : Folder) : (GLYPHS[node.glyph] || FileCode);
           return (
-            <motion.button
-              key={node.id}
-              ref={(el) => { if (el) rowRefs.current.set(node.id, el); else rowRefs.current.delete(node.id); }}
-              type="button"
-              role="treeitem"
-              aria-level={depth + 1}
-              aria-expanded={isDir ? isOpen : undefined}
-              aria-selected={isSel}
-              tabIndex={i === 0 ? 0 : -1}
-              data-cursor="hover"
-              className={`atlas__row${isSel ? ' is-selected' : ''}${node.hotspot ? ' is-hotspot' : ''}`}
-              style={{ paddingLeft: `${10 + depth * 18}px` }}
-              onClick={() => activate(node)}
-              onKeyDown={(e) => onKeyDown(e, row, i)}
-              initial={reduce ? false : { opacity: 0, x: -6 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.22, ease: 'easeOut' }}
-            >
-              <span className="atlas__chevron" aria-hidden="true">
-                {isDir ? <ChevronRight size={13} className={isOpen ? 'is-open' : ''} /> : null}
-              </span>
-              <Glyph size={14} strokeWidth={1.6} className="atlas__glyph" aria-hidden="true" />
-              <span className="atlas__name">{node.name}</span>
-              {node.hotspot ? <span className="atlas__star" aria-hidden="true" /> : null}
-            </motion.button>
+            <Fragment key={node.id}>
+              <motion.button
+                ref={(el) => { if (el) rowRefs.current.set(node.id, el); else rowRefs.current.delete(node.id); }}
+                type="button"
+                role="treeitem"
+                aria-level={depth + 1}
+                aria-expanded={isDir ? isOpen : undefined}
+                aria-selected={isSel}
+                tabIndex={i === 0 ? 0 : -1}
+                data-cursor="hover"
+                className={`atlas__row${isSel ? ' is-selected' : ''}${node.hotspot ? ' is-hotspot' : ''}`}
+                style={{ paddingLeft: `${10 + depth * 18}px` }}
+                onClick={() => activate(node)}
+                onKeyDown={(e) => onKeyDown(e, row, i)}
+                initial={reduce ? false : { opacity: 0, x: -6 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.22, ease: 'easeOut' }}
+              >
+                <span className="atlas__chevron" aria-hidden="true">
+                  {isDir ? <ChevronRight size={13} className={isOpen ? 'is-open' : ''} /> : null}
+                </span>
+                <Glyph size={14} strokeWidth={1.6} className="atlas__glyph" aria-hidden="true" />
+                <span className="atlas__name">{node.name}</span>
+                {node.hotspot ? <span className="atlas__star" aria-hidden="true" /> : null}
+              </motion.button>
+              {/* Mobile-only: the node's reasoning INLINE right under its own row (the
+                  desktop side panel scrolls off a phone). Hidden on desktop via CSS. */}
+              {isSel && (node.blurb || node.signal) && (
+                <div className="atlas__inline" style={{ marginLeft: `${10 + depth * 18}px` }}>
+                  {node.blurb ? <p className="atlas__detail-blurb">{node.blurb}</p> : null}
+                  {node.signal ? (
+                    <div className="atlas__signal">
+                      <span className="atlas__signal-label">{t('atelier.atlas.why')}</span>
+                      <p className="atlas__signal-text">{node.signal}</p>
+                    </div>
+                  ) : null}
+                </div>
+              )}
+            </Fragment>
           );
         })}
       </div>
+  );
+
+  /* ── Mobile: hotspots-first (the 7 landmarks as tap-to-read cards), the full
+     tree behind one disclosure, the repo link closing. ── */
+  if (!wide) {
+    return (
+      <div className="atlas__mobile">
+        {hotspots.map((id) => {
+          const node = byId[id];
+          if (!node) return null;
+          const Glyph = GLYPHS[node.glyph] || FileCode;
+          const open = spotOpen === id;
+          return (
+            <button key={id} type="button" className="atlas__spot" aria-expanded={open}
+              onClick={() => { playCue('blip'); setSpotOpen(open ? null : id); }}>
+              <span className="atlas__spot-glyph"><Glyph size={15} strokeWidth={1.7} aria-hidden="true" /></span>
+              <span className="atlas__spot-name exp-mono">{node.name}</span>
+              <Plus size={14} className="atlas__spot-plus" data-open={open || undefined} aria-hidden="true" />
+              {open && (
+                <span className="atlas__spot-why block">
+                  <span className="atlas__detail-blurb block">{node.blurb}</span>
+                  {node.signal ? (
+                    <span className="atlas__signal block">
+                      <span className="atlas__signal-label block">{t('atelier.atlas.why')}</span>
+                      <span className="atlas__signal-text block">{node.signal}</span>
+                    </span>
+                  ) : null}
+                </span>
+              )}
+            </button>
+          );
+        })}
+
+        <button type="button" className="atlas__browse" aria-expanded={treeOpen}
+          onClick={() => setTreeOpen((o) => !o)}>
+          {t('atelier.atlas.browseAll')}
+          <ChevronDown size={15} className="atlas__browse-caret" data-open={treeOpen || undefined} aria-hidden="true" />
+        </button>
+        {treeOpen && treeView}
+
+        <a className="atlas__repo" href={repo} target="_blank" rel="noopener noreferrer" data-cursor="hover">
+          <Github size={15} strokeWidth={1.7} aria-hidden="true" />
+          <span>{t('atelier.atlas.repoCta')}</span>
+        </a>
+      </div>
+    );
+  }
+
+  return (
+    <div className="atlas">
+      {treeView}
 
       {/* the side column — the live detail + the hotspots rail + the repo link */}
       <aside className="atlas__side">
-        <div className="atlas__detail" aria-live="polite">
+        <div ref={detailRef} className="atlas__detail" aria-live="polite">
           {activeNode ? (
             <>
               <span className="atlas__detail-path exp-mono">{activeNode.name}</span>

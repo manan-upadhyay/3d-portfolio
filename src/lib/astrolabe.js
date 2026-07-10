@@ -27,12 +27,15 @@ const seg = (el, s, d) => Math.max(0, Math.min((el - s) / d, 1)); // staged sub-
 /**
  * @param {HTMLCanvasElement} canvas
  * @param {HTMLElement} wrap  square wrapper that sizes the canvas
- * @param {{ bearingEl?: HTMLElement|null, onSpeed?: (radPerSec: number) => void }} [opts]
+ * @param {{ bearingEl?: HTMLElement|null, onSpeed?: (radPerSec: number) => void, distressed?: boolean, onLock?: () => void }} [opts]
  *        optional live bearing readout + a per-frame needle angular-speed report
  *        (rad/s, smoothed) — used to drive the gear sound in sync with the needle.
- * @returns {() => void} cleanup
+ *        `distressed` = the 404 mode: the needle wanders nervously (can't hold a
+ *        heading), a faint serpent constellation is drawn, and `findBearing()` spins
+ *        the needle to lock at N (calling `onLock` when it settles). Hero untouched.
+ * @returns {{ destroy: () => void, spin: () => void, findBearing: () => void }} controls
  */
-export function mountAstrolabe(canvas, wrap, { bearingEl, onSpeed } = {}) {
+export function mountAstrolabe(canvas, wrap, { bearingEl, onSpeed, distressed = false, onLock } = {}) {
   const c = canvas.getContext('2d');
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const coarse = window.matchMedia('(hover: none)').matches;
@@ -56,6 +59,33 @@ export function mountAstrolabe(canvas, wrap, { bearingEl, onSpeed } = {}) {
   let needleSpeed = 0;    // smoothed |dθ/dt| in rad/s (drives the gear sound)
   let lastDeg = -1;
   let raf;
+
+  // Distressed mode state (404 page): the needle wanders nervously until
+  // `findBearing()` is called, which spins it then decelerates to lock at N.
+  let locked = false;     // true once findBearing() has settled
+  let finding = false;    // true while the findBearing spin is in progress
+  let findVel = 0;        // angular velocity during the findBearing spin
+  let findUp = 0;         // 0..1 wind-up phase
+  const FIND_PEAK = 22;   // peak rad/s for the bearing-find spin
+  const FIND_UP_DUR = 0.3;         // seconds to reach peak
+  const FIND_FRICTION = 0.12;      // tighter friction → faster deceleration
+  const FIND_LOCK_THRESHOLD = 0.4; // rad/s below which it locks to N
+
+  // The serpent constellation — a faint custom polyline + ~10 brighter stars,
+  // the old cartographers' warning literalized. Only drawn when distressed.
+  const serpentRng = makeRng(404);
+  const serpentStars = distressed ? [
+    { a: -0.9, r: 0.62 }, // head
+    { a: -0.7, r: 0.56 },
+    { a: -0.45, r: 0.48 },
+    { a: -0.2, r: 0.44 },
+    { a: 0.05, r: 0.46 },
+    { a: 0.3, r: 0.52 },  // body curve
+    { a: 0.55, r: 0.58 },
+    { a: 0.8, r: 0.54 },
+    { a: 1.05, r: 0.46 }, // tail curl
+    { a: 1.2, r: 0.38 },
+  ].map(s => ({ ...s, tw: serpentRng() * TWO_PI, sz: 0.8 + serpentRng() * 1.4 })) : [];
 
   // Free-spin physics (the "spin the wheel" flick): a flick winds the alidade up
   // to a peak velocity, then friction bleeds it off so it coasts to a natural stop.
@@ -160,6 +190,39 @@ export function mountAstrolabe(canvas, wrap, { bearingEl, onSpeed } = {}) {
     });
     c.restore();
 
+    // Serpent constellation — distressed mode only. A faint sea-serpent polyline
+    // with brighter twinkling stars, drawn over the inner disc. The old
+    // cartographers' warning, literalized as a quiet Easter egg.
+    if (distressed && serpentStars.length > 0) {
+      c.save();
+      c.rotate(-ambient * 0.4);
+      const pSerpent = easeOut(seg(el, 1.0, 0.8));
+      if (pSerpent > 0) {
+        // Polyline connecting the serpent body
+        c.beginPath();
+        c.strokeStyle = `rgba(${emberRgb}, ${0.18 * pSerpent})`;
+        c.lineWidth = 0.7;
+        c.globalAlpha = 1;
+        serpentStars.forEach((s, i) => {
+          const x = Math.cos(s.a) * s.r * R;
+          const y = Math.sin(s.a) * s.r * R;
+          if (i === 0) c.moveTo(x, y); else c.lineTo(x, y);
+        });
+        c.stroke();
+        // Stars — slightly brighter than the main field, with a stronger twinkle
+        serpentStars.forEach((s) => {
+          const tw = introDone ? 0.5 + 0.5 * Math.sin(ts / 500 + s.tw) : 1;
+          c.beginPath();
+          c.arc(Math.cos(s.a) * s.r * R, Math.sin(s.a) * s.r * R,
+            Math.max(s.sz * (0.3 + 0.7 * easeOutBack(pSerpent)), 0.3), 0, TWO_PI);
+          c.fillStyle = ember;
+          c.globalAlpha = 0.8 * pSerpent * tw;
+          c.fill();
+        });
+      }
+      c.restore();
+    }
+
     // Cardinal letters (N stays "up" = Origin).
     const pC = easeOut(seg(el, 1.15, 0.45));
     if (pC > 0) {
@@ -214,12 +277,44 @@ export function mountAstrolabe(canvas, wrap, { bearingEl, onSpeed } = {}) {
     let frameSpeed = null; // explicit rad/s for the gear sound (free spin path)
     if (reduce) {
       cur = -Math.PI / 2;
-    } else if (introDone && isOverlayOpen()) {
+    } else if (isOverlayOpen()) {
       // A menu/modal is in front (the instrument is blurred behind and no longer
-      // the focus). Go dormant: hold the needle still and report zero motion so
-      // the gear sound falls silent — cursor moves inside the overlay must not
-      // swing the alidade or make a sound.
+      // the focus). Go dormant REGARDLESS of intro state: hold the needle still and
+      // report zero motion so no gear sound plays behind the overlay — a theme
+      // change re-mounts the instrument (re-running its intro), and taps inside the
+      // menu must never swing the alidade or make a sound.
       frameSpeed = 0;
+    } else if (distressed && locked) {
+      // findBearing() has completed — hold the needle at N.
+      cur = -Math.PI / 2;
+      frameSpeed = 0;
+    } else if (distressed && finding) {
+      // findBearing() spin → decelerate → lock at N.
+      if (findUp < 1) {
+        findUp = Math.min(1, findUp + (dt > 0 ? dt : 0.016) / FIND_UP_DUR);
+        findVel = FIND_PEAK * easeOut(findUp);
+      } else {
+        findVel *= Math.pow(FIND_FRICTION, dt);
+      }
+      cur += findVel * dt;
+      frameSpeed = Math.abs(findVel);
+      if (findUp >= 1 && Math.abs(findVel) < FIND_LOCK_THRESHOLD) {
+        // Settle to N and lock.
+        finding = false;
+        locked = true;
+        findVel = 0;
+        cur = -Math.PI / 2;
+        if (onLock) onLock();
+      }
+    } else if (distressed && !locked) {
+      // Nervous wander: the needle keeps reaching for north (-π/2) but can never
+      // hold it — a sum of incommensurate sinusoids swings it past, over-corrects,
+      // and drifts back. Centered on N so it reads as a compass fighting to settle,
+      // not one idly pointing elsewhere.
+      const wander = Math.sin(ts / 1800) * 0.9
+        + Math.sin(ts / 700 + 1.3) * 0.4
+        + Math.sin(ts / 380 + 2.7) * 0.16;
+      cur += ((-Math.PI / 2 + wander) - cur) * 0.035;
     } else if (!introDone) {
       // Dramatic multi-turn spin that decelerates into "up" (Origin).
       const pA = easeOut(seg(el, 0.95, 1.45));
@@ -267,12 +362,22 @@ export function mountAstrolabe(canvas, wrap, { bearingEl, onSpeed } = {}) {
     prevTs = ts;
 
     if (bearingEl) {
-      const deg = Math.round((((cur + Math.PI / 2) * 180) / Math.PI % 360 + 360) % 360);
-      if (deg !== lastDeg) {
-        lastDeg = deg;
-        const charting = introDone && !reduce && !coarse && mouse.x !== null;
-        const state = spinning ? 'spinning' : charting ? 'charting' : 'origin';
-        bearingEl.textContent = `bearing ${String(deg).padStart(3, '0')}° · ${state}`;
+      if (distressed) {
+        // Distressed readout: `--- · lost` while wandering, `000° · home` once locked.
+        const text = locked
+          ? 'bearing 000° · home'
+          : finding
+            ? `bearing ${String(Math.round((((cur + Math.PI / 2) * 180) / Math.PI % 360 + 360) % 360)).padStart(3, '0')}° · seeking`
+            : 'bearing ---° · lost';
+        if (bearingEl.textContent !== text) bearingEl.textContent = text;
+      } else {
+        const deg = Math.round((((cur + Math.PI / 2) * 180) / Math.PI % 360 + 360) % 360);
+        if (deg !== lastDeg) {
+          lastDeg = deg;
+          const charting = introDone && !reduce && !coarse && mouse.x !== null;
+          const state = spinning ? 'spinning' : charting ? 'charting' : 'origin';
+          bearingEl.textContent = `bearing ${String(deg).padStart(3, '0')}° · ${state}`;
+        }
       }
     }
     if (!reduce) raf = requestAnimationFrame(loop);
@@ -282,12 +387,11 @@ export function mountAstrolabe(canvas, wrap, { bearingEl, onSpeed } = {}) {
   const ro = new ResizeObserver(setSize);
   ro.observe(wrap);
   const onMove = (e) => { mouse.x = e.clientX; mouse.y = e.clientY; };
-  // A tap aims the needle too — the key path on touch, where `pointermove` may
-  // never fire. The needle swings to wherever the visitor tapped (and the swing
-  // sounds the gear), giving mobile its own version of the cursor-tracking feel.
-  const onTap = (e) => { mouse.x = e.clientX; mouse.y = e.clientY; updateRect(); };
-  window.addEventListener('pointermove', onMove);
-  window.addEventListener('pointerdown', onTap, { passive: true });
+  // Cursor-tracking is a FINE-POINTER pleasure only. On touch, swinging the
+  // needle toward every stray tap read as a glitch, not an instrument (v2.0 M1)
+  // — so coarse pointers keep the gentle idle drift, and the explicit tap on the
+  // instrument itself (Hero's spin control) remains the one way to move it.
+  if (!coarse) window.addEventListener('pointermove', onMove);
   window.addEventListener('scroll', updateRect, { passive: true });
   window.addEventListener('resize', updateRect);
   raf = requestAnimationFrame(loop); // runs once under reduced-motion (no reschedule)
@@ -304,14 +408,28 @@ export function mountAstrolabe(canvas, wrap, { bearingEl, onSpeed } = {}) {
     spinning = true;
   };
 
+  // Find-bearing ceremony (distressed mode only): spins the needle 2–3 turns then
+  // decelerates to lock at N. The `onLock` callback fires when it settles — the
+  // Void page uses it to ignite the home link. No-op if already locked or not
+  // distressed, and harmless under reduced motion (the needle is already at N).
+  const findBearing = () => {
+    if (!distressed || locked || reduce) {
+      // Under reduced-motion or already locked, fire the callback immediately.
+      if (distressed && !locked) { locked = true; if (onLock) onLock(); }
+      return;
+    }
+    finding = true;
+    findUp = 0;
+    findVel = 0;
+  };
+
   const destroy = () => {
     cancelAnimationFrame(raf);
     ro.disconnect();
     window.removeEventListener('pointermove', onMove);
-    window.removeEventListener('pointerdown', onTap);
     window.removeEventListener('scroll', updateRect);
     window.removeEventListener('resize', updateRect);
   };
 
-  return { destroy, spin };
+  return { destroy, spin, findBearing };
 }

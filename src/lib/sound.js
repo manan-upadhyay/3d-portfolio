@@ -32,11 +32,16 @@ export const CONFIG = {
   theme: { peak: 0.10, dur: 0.62 }, // theme-toggle swoosh (length-synced to the wipe)
   mapOpen: { peak: 0.09 },          // map-open swoosh
   mapClose: { peak: 0.08 },         // map-close swoosh
+  chartSwap: { peak: 0.1 },         // arsenal orbit⇄inventory fold/unfurl
   error: { peak: 0.16 },            // contact-form error tone (sleek two-note)
   glitch: { peak: 0.10 },           // voice-change decode
   blip: { peak: 0.11 },             // arsenal hover pluck
   detent: { peak: 0.085 },          // build-reel sprocket tick (per frame crossed)
+  rewind: { peak: 0.12 },           // time-machine "wind back" — waking a ruin / crossing an era
+  pageflip: { peak: 0.05 },         // time-tunnel — one soft page turn per year/event crossed
   settle: { peak: 0.12 },           // build-reel playhead landing thunk
+  click: { peak: 0.14 },            // physical prev/next key — press (bright) + release (soft)
+  volumeTick: { peak: 0.05 },       // apple-slider drag tick — pitch rises with the level
   hoverNote: { peak: 0.085 },       // observatory analytics-chip hover note (pitched)
   // ── Face-particle "gathering" — the grains rushing into the portrait. TWEAK ME:
   //    • grains  = how many ticks (more = busier/faster-feeling)
@@ -45,11 +50,15 @@ export const CONFIG = {
   //    • peak    = loudness 0..1
   assembleSwell: { peak: 0.07, grains: 34, spread: 0.95, freqMin: 1500, freqMax: 3800 },
   beds: {
-    hero: { peak: 0.5, sample: '/sounds/astrolabe.mp3' },   // Hero astrolabe loop
-    arsenal: { peak: 0.12, sample: '/sounds/arsenal.mp3' },  // Arsenal ambience loop
+    // Sound audit (owner: the continuous beds were fatiguing in earbuds). The
+    // orbit drone was 0.45 — ~12× the sibling lens buzz — and read as an
+    // irritating buzz; pulled in line with the lens so it's a soft undertone.
+    // The hero astrolabe loop was also eased down a touch.
+    hero: { peak: 0.34, sample: '/sounds/astrolabe.mp3' },   // Hero astrolabe loop
+    arsenal: { peak: 0.11, sample: '/sounds/arsenal.mp3' },  // Arsenal ambience loop
     lens: { peak: 0.035 },    // face-particle magic-lantern hover buzz
-    orbit: { peak: 0.45 },   // observatory constellation hover buzz (sibling, not same)
-    reel: { peak: 0.16 },     // director's-reel film-transport whir (velocity-driven)
+    orbit: { peak: 0.06 },    // observatory constellation hover buzz (soft undertone)
+    reel: { peak: 0.14 },     // director's-reel film-transport whir (velocity-driven)
   },
   raven: '/sounds/raven.mp3',       // Contact-send raven (one-shot sample)
 };
@@ -195,6 +204,47 @@ const CUES = {
     swoosh(t0, { dur: 0.38, peak: CONFIG.mapClose.peak, from: 1400, to: 260, q: 0.6 });
   },
 
+  // Arsenal view swap, orbit → inventory — NOT one whoosh but a shower of the
+  // many bodies themselves leaving their orbits and docking into rows, timed to
+  // the actual GSAP flight (Tech.jsx): the first ~0.3s is the orbit's rings/core
+  // collapsing (the pause — silent), then the Flip carries ~20 glyphs to their
+  // rows staggered (each 0.03, dur 0.95) so items keep arriving until ~1.4s. Each
+  // grain is one item ticking as it docks — pitch descends as the field folds
+  // down into a list — and a weighted "settle" lands with the last row.
+  chartFold(t0) {
+    const n = 20;
+    const start = 0.3;   // items only start crossing once the rings/core clear
+    const span = 1.06;   // through the staggered Flip arrivals
+    for (let i = 0; i < n; i++) {
+      const p = i / (n - 1);
+      const dt = start + p * span + (Math.random() - 0.5) * 0.05;
+      const f = Math.max(150, 820 - p * 520 + (Math.random() - 0.5) * 130); // falling into rows
+      blip(t0 + dt, { freq: f, type: 'sine', dur: 0.05, peak: CONFIG.chartSwap.peak * (0.26 + 0.2 * (1 - p)), attack: 0.002 });
+    }
+    const land = start + span + 0.05; // ~1.41 — the last row docks
+    blip(t0 + land, { freq: 150, glideTo: 100, type: 'triangle', dur: 0.16, peak: CONFIG.chartSwap.peak * 0.7, attack: 0.004 });
+    swoosh(t0 + land, { dur: 0.1, peak: CONFIG.chartSwap.peak * 0.28, type: 'lowpass', from: 640, to: 190, q: 0.7 });
+  },
+
+  // Arsenal view swap, inventory → orbit — the reverse flight (Tech.jsx): rows
+  // fade for ~0.3s, then the rings redraw and the Flip scatters the glyphs back
+  // out into orbit through ~1.4s. Same grains, now rising in pitch and spreading,
+  // blooming into a soft high resolve as the rings finish redrawing.
+  chartUnfurl(t0) {
+    const n = 20;
+    const start = 0.32;  // rows clear first, then the sky redraws
+    const span = 1.04;
+    for (let i = 0; i < n; i++) {
+      const p = i / (n - 1);
+      const dt = start + p * span + (Math.random() - 0.5) * 0.05;
+      const f = 360 + p * 640 + (Math.random() - 0.5) * 150;     // spreading up into rings
+      blip(t0 + dt, { freq: f, type: 'sine', dur: 0.05, peak: CONFIG.chartSwap.peak * (0.22 + 0.2 * p), attack: 0.002 });
+    }
+    const bloom = start + span + 0.03; // ~1.39 — rings settled
+    blip(t0 + bloom, { freq: 659.25, type: 'sine', dur: 0.22, peak: CONFIG.chartSwap.peak * 0.5, attack: 0.006 });
+    blip(t0 + bloom, { freq: 1318.5, type: 'sine', dur: 0.12, peak: CONFIG.chartSwap.peak * 0.16, attack: 0.004 });
+  },
+
   // Arsenal hover — a tiny pluck; pitch varies per node so a sweep across the
   // orbit reads as a little arpeggio rather than a repeated beep.
   blip(t0, { step = 0 } = {}) {
@@ -222,6 +272,15 @@ const CUES = {
     swoosh(t0, { dur: 0.09, peak: CONFIG.settle.peak * 0.4, type: 'lowpass', from: 760, to: 200, q: 0.7 });
   },
 
+  // A physical button — a sharp contact transient + a low body "thock". `up:true`
+  // is the softer, lower release, so a full press+release reads as a real key
+  // bottoming out then springing back (the addictive two-stage click).
+  click(t0, { up = false } = {}) {
+    const pk = CONFIG.click.peak * (up ? 0.5 : 1);
+    swoosh(t0, { dur: up ? 0.016 : 0.022, peak: pk, type: 'bandpass', from: up ? 2400 : 3200, to: up ? 1400 : 1900, q: 8 });
+    blip(t0, { freq: up ? 120 : 160, glideTo: up ? 78 : 96, type: 'triangle', dur: up ? 0.05 : 0.07, peak: pk * 0.7, attack: 0.001 });
+  },
+
   // Observatory analytics hover — a soft glassy bell, pitched by the chip's index
   // in its group across a pentatonic scale, so sweeping the field fast resolves to
   // music (no two adjacent semitones, so it can never sound like noise). The
@@ -231,6 +290,31 @@ const CUES = {
     const f = scale[((step % scale.length) + scale.length) % scale.length];
     blip(t0, { freq: f, type: 'sine', dur: 0.2, peak: CONFIG.hoverNote.peak, attack: 0.004 });
     blip(t0, { freq: f * 2, type: 'sine', dur: 0.1, peak: CONFIG.hoverNote.peak * 0.22, attack: 0.003 }); // airy octave
+  },
+
+  // Time-machine "wind back" — the mechanical rewind that rewards *intent* (waking
+  // a preserved ruin, or crossing an era boundary). A ratcheting run of ticks that
+  // accelerates then settles, under a falling pitch sweep — a tape/clock spun
+  // backwards, resolving on a soft low landing. Never fires on passive scroll.
+  rewind(t0) {
+    const pk = CONFIG.rewind.peak;
+    const n = 14;
+    for (let i = 0; i < n; i++) {
+      const p = i / (n - 1);
+      const dt = p * p * 0.5;                       // ticks bunch up as it winds
+      swoosh(t0 + dt, { dur: 0.03, peak: pk * (0.5 + 0.5 * p), type: 'bandpass', from: 2600, to: 1400, q: 8 });
+    }
+    blip(t0, { freq: 760, glideTo: 150, type: 'sawtooth', dur: 0.52, peak: pk * 0.4, attack: 0.01 }); // falling sweep
+    blip(t0 + 0.5, { freq: 120, glideTo: 84, type: 'triangle', dur: 0.16, peak: pk * 0.7, attack: 0.006 }); // landing
+  },
+
+  // Time-tunnel "page turn" — one soft paper flip per year/event crossed. A brief
+  // high-passed noise swish + a faint low tap. The CALLER fires it once per event
+  // boundary, so a fast scroll naturally becomes a flurry of flips and a slow
+  // scroll a single turn — velocity for free, and always quiet (never a loud rush).
+  pageflip(t0) {
+    swoosh(t0, { dur: 0.085, peak: CONFIG.pageflip.peak, type: 'highpass', from: 1900, to: 700, q: 0.6 });
+    blip(t0, { freq: 210, type: 'triangle', dur: 0.03, peak: CONFIG.pageflip.peak * 0.5, attack: 0.001 });
   },
 
   // Face-particle assembly — the gathering: a granular shower of tiny pitched ticks
@@ -244,6 +328,15 @@ const CUES = {
       const f = c.freqMin + Math.random() * (c.freqMax - c.freqMin);
       blip(t0 + dt, { freq: f, type: 'sine', dur: 0.045, peak: c.peak * (0.35 + 0.65 * p), attack: 0.002 });
     }
+  },
+
+  // Apple-volume drag tick — a tiny, dry pitched blip whose frequency rises with
+  // the level (0..1), so sliding up sounds like it's "filling". Time-gated by the
+  // caller so a fast drag ratchets softly instead of buzzing.
+  volumeTick(t0, { level = 0.5 } = {}) {
+    const f = 320 + level * 900; // ~320Hz at silent → ~1220Hz at full
+    blip(t0, { freq: f, type: 'sine', dur: 0.045, peak: CONFIG.volumeTick.peak, attack: 0.002 });
+    blip(t0, { freq: f * 2, type: 'sine', dur: 0.025, peak: CONFIG.volumeTick.peak * 0.3, attack: 0.001 });
   },
 
   // Sound just turned on — a soft confirmation so the toggle is audible.
@@ -397,8 +490,15 @@ const TWO_PI = Math.PI * 2;
 const GEAR_TEETH = 26;        // teeth per full needle revolution → click rate
 const GEAR_MAX_HZ = 38;       // ceiling on the tooth-click rate (rad/s can spike)
 const GEAR_FULL_SPEED = 6;    // needle rad/s at which the gear reaches full volume
+// Phone speakers sit closer to the ear and compress harder than laptop drivers
+// — the same gear level that reads subtle on a MacBook ran hot on an iPhone
+// (v2.0 M1). No web API calibrates output per device, so coarse-pointer
+// hardware gets a fixed attenuation of this one bed.
+const COARSE_GEAR_TRIM = 0.55;
+const isCoarsePointer = () =>
+  typeof window !== 'undefined' && window.matchMedia?.('(pointer: coarse)').matches;
 const watch = makeBed({
-  peak: CONFIG.beds.hero.peak,
+  peak: CONFIG.beds.hero.peak * (isCoarsePointer() ? COARSE_GEAR_TRIM : 1),
   sampleUrl: CONFIG.beds.hero.sample,
   build: () => {
     const g = ctx.createGain(); g.gain.value = 0.0001;
@@ -570,7 +670,12 @@ function loadBeds() {
 /** Resume the context (must be called from inside a user gesture). */
 function unlock() {
   if (!ensureContext()) return;
-  if (pageActive && ctx.state === 'suspended') ctx.resume().catch(() => {});
+  // A user gesture is itself proof the page is active — resume UNCONDITIONALLY.
+  // (Previously this was gated on `pageActive`, which relied on
+  // `document.hasFocus()`; that returns false on many mobile browsers, so the
+  // context never resumed on phones and no sound ever played after the tap.)
+  pageActive = true;
+  if (ctx.state === 'suspended') ctx.resume().catch(() => {});
   const wasLocked = !unlocked;
   unlocked = true;
   applyMaster();
@@ -615,10 +720,12 @@ function arm() {
   window.addEventListener('keydown', onGesture, { once: true });
   window.addEventListener('touchstart', onGesture, { once: true, passive: true });
 
-  pageActive = document.visibilityState !== 'hidden' && document.hasFocus();
-  const sync = () => setPageActive(document.visibilityState !== 'hidden' && document.hasFocus());
+  // Gate on document VISIBILITY only. `document.hasFocus()` is unreliable on
+  // mobile (the URL bar / soft keyboard steal focus, and Safari often reports
+  // false), which used to keep the page "inactive" and suspend audio on phones.
+  pageActive = document.visibilityState !== 'hidden';
+  const sync = () => setPageActive(document.visibilityState !== 'hidden');
   document.addEventListener('visibilitychange', sync);
-  window.addEventListener('blur', () => setPageActive(false));
   window.addEventListener('focus', sync);
 }
 
@@ -654,11 +761,22 @@ function isUnlocked() {
   return unlocked;
 }
 
+// When the FIRST unlock is triggered by a control the visitor is *looking at*
+// somewhere other than the hero (the mobile menu, the volume dial), the hero's
+// one-shot "reward" (auto-spinning the astrolabe with a synced sound) fires
+// off-screen — a phantom noise from nowhere. A menu/control calls suppressReward()
+// right before it unlocks; the hero's reward callback consumes the flag and skips.
+let rewardSuppressed = false;
+function suppressReward() { rewardSuppressed = true; }
+function consumeRewardSuppressed() { const v = rewardSuppressed; rewardSuppressed = false; return v; }
+
 export const sound = {
   arm,
   unlock,
   onUnlock,
   isUnlocked,
+  suppressReward,
+  consumeRewardSuppressed,
   setEnabled,
   setVolume,
   playCue,

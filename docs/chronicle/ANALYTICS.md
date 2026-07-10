@@ -4,6 +4,16 @@
 voices, the Voice Hall, the Atelier reel…). This telemetry answers one question:
 **are they actually touched, or ignored?** — so UX changes are evidence-led.
 
+> [!IMPORTANT]
+> **v1.1 instrumentation fixes (P0).** Beta 1 exposed two gaps that must be fixed
+> before Beta 2, or the release is unmeasured: (1) **~90% null device/browser**
+> super-properties — register them *before* the first capture, not after; and
+> (2) **~36% `session_recap` coverage** — add heartbeats (15/30/60s) and
+> visibility-change capture. Also add `beta_round` / `tracking_version`
+> properties, fully instrument `/making-of`, and adopt the v1.1 event catalog.
+> Full catalog + rationale: [combined action plan §7 P0.6 + §14](reports/synthesis/2026-07-01-combined-beta-action-plan.md);
+> release context: [V1.1 Release Plan §4-C](V1.1-RELEASE-PLAN.md).
+
 ## Stack
 
 - **PostHog**. Initialized **once, eagerly** in [`src/main.jsx`](../../src/main.jsx)
@@ -53,19 +63,26 @@ via autocapture — the list below is our *intentional* product events.)
 | `voice_switcher_open` | `VoiceSwitcher` | — | used the voice menu? |
 | `voice_hall_open` | `useVoiceStore.openHall` | — | opened the Hall? |
 | `voice_selected` | `useVoiceStore.setVoice` | `voice` | **# voices tried / favourite** |
+| `voice_previewed` | `VoiceHall` panel / mobile preview | `voice`, `locked`, `source:'hall'\|'mobile'` | **previewed-most** (once/session/voice) — browsed without applying |
+| `voice_applied` | `VoiceHall` panel / mobile preview | `voice`, `source:'hall'\|'mobile'` | **applied-most** (once/session/voice) — the Apply button; compare directly to `voice_previewed`, sliceable by `source` |
 | `voice_unlocked` | `useVoiceStore.unlockVoice` | `voice` | discovered an easter-egg voice? |
 | `voice_summon_submit` / `_success` / `_error` | `VoiceHall` summon form | `persona` | requested a brand-new voice |
 | `theme_changed` | `useThemeStore` | `mode`, `sky` | toggled the sky? |
 | `map_open` / `map_travel` | `Chronicle` / `MapOverlay` | (`id`) | opened the map / jumped a realm? |
 | `rail_nav` | `SideRail` | `id` | navigate via the rail vs free scroll? |
 | `arsenal_tools_hovered` | `Tech` (on scroll-away) | `count` (unique) | explored tools? how many? |
+| `arsenal_view_switched` | `Tech` view toggle | `view: 'orbit'\|'inventory'` | wanted the readable manifest? do people come back to the orbit? |
 | `project_link_open` | `Works` | `project`, `kind` | which project links opened? |
 | `carousel_open` | `Works` Cover | `project` | browsed screenshots? |
 | `works_show_all` | `Works` | — | wanted to see the minor realms? |
 | `expedition_view` | `ExpeditionRecap` (in-view) | — | reached the recap? |
 | `atelier_view` | `MakingOf` route | — | went behind the curtain? |
+| `void_view` | `Void` (404) | `path` | **broken inbound links** — which dead URLs get hit |
+| `void_bearing` | `Void` (404) | — | played with the "find your bearing" delight? |
+| `void_home` | `Void` (404) | — | took the way home from the 404 |
 | `buildreel_scrub` | `BuildReel` | — | directed the reel? |
 | `persona_card_expand` | `PersonaTriptych` | `persona` | expanded a persona? |
+| `hero_cta` | `Hero` | `target` | hero CTA clicks (projects / contact / resume) |
 | `inquiry_selected` | `Contact` | `inquiry` | what kind of work do they come for? |
 | `email_copied` | `Contact` (CopyButton) | — | quiet but strong contact intent |
 | **`contact_form_start`** | `Contact` (first focus) | `inquiry` | **started the form** |
@@ -76,6 +93,41 @@ via autocapture — the list below is our *intentional* product events.)
 | `channel_open` | `Contact` / `MapOverlay` | `channel`, `from` | clicked email/GitHub/LinkedIn |
 | `shortcut_used` | `Layout` / `Chronicle` | `combo` | ⌘K / ⇧⌘V → **keyboard power-user** (likely a dev) |
 | `session_recap` | `analytics.js` (on page-leave) | see below | **one summary row per visit** |
+
+**Post-v1 features — coverage added / documented in the 2026-07-06 audit**
+([reports/audit/2026-07-06-post-v1-analytics-coverage-audit.md](reports/audit/2026-07-06-post-v1-analytics-coverage-audit.md)):
+
+| Event | Fired from | Props | Answers |
+|---|---|---|---|
+| `mobile_menu_open` | `MobileMenu` | — | **do mobile users open the sheet?** (controls live only here) |
+| `mobile_menu_view` | `MobileMenu` | `view` nav/voice/summon | which in-sheet drawer they enter |
+| `mobile_menu_cta` | `MobileMenu` | `target` | mobile CTA (contact/resume/home) |
+| `marginalia_reveal` | `Marginalia` | `id` (once/note) | **discovered a flavor↔fact footnote?** |
+| `atlas_explore` / `atlas_node_open` | `CodebaseAtlas` | (`id`) | explored the codebase map / which files draw interest |
+| `observatory_explore` | `Observatory` | — | explored the analytics constellation |
+| `blueprint_explore` / `blueprint_node_open` | `Blueprint` | (`id`) | explored the runtime system chart / which stations draw interest (open = deliberate click/tap; hover is a preview and never fires) |
+| `making_of_enter` / `making_of_exit` | rail / works / map / mobile / **footer** | `from` | how they reach & leave the Atelier |
+| `experience_progress` | `Experience` | `pct` 25/50/75/100 | **how far through the horizontal career journey** (desktop scrub) |
+| `experience_cta` | `Experience` | `target` | clicked the final career-journey CTA card |
+| `egg_reveal` / `egg_show` | `Atelier` egg cards | `id` | which hidden features they're curious about vs. actually jump to try |
+| `ledger_expand` | `Atelier` ledger | `id`, `kind` built/cut | which shipped/cut decisions they read |
+| `portrait_interact` | `FaceParticles` | `mode` drag/gyro | did the mobile portrait toy get used (drag / tilt) — deduped once |
+| `atelier_scroll_depth` | `MakingOf` | `pct` | how far down the making-of route they read |
+| `project_story_open` | `Works` | `project` | opened a realm's full story |
+| `sticky_cta_shown` / `_click` / `_dismiss` | `StickyCta` | (`target`) | scroll-triggered CTA funnel |
+| `footer_cta` | `Layout` (footer) | `target` | footer CTA clicks |
+| `voice_clue_solved` / `_revealed` / `_miss` | `ClueUnlock` | `voice` | **sealed-voice unlock funnel** (mobile path) |
+| `session_heartbeat` | `Layout` | `seconds` 15/30/60 | short-session depth (recap-miss backfill) |
+| `time_machine_view` | `TimeMachine` page (on mount) | — | **reached the Time Machine?** |
+| `time_machine_enter` | SideRail / footer / MakingOf rail | `from` | how they enter the STRATA coda |
+| `time_machine_exit` | TimeMachine rail (home action) | `from` | did they return from the Time Machine? |
+| `era_wake` | `EraExhibit` | `era` | **woke an old portfolio deploy iframe inside the card** |
+| `era_open` | `EraExhibit` | `era` | **opened an old portfolio deploy link in a new tab** |
+
+> **Voices note.** All 10 voices (2 open + 8 sealed) are covered generically:
+> `voice_selected {voice}` and `voice_unlocked {voice}` carry the voice id, so
+> per-voice adoption/discovery needs no per-voice instrumentation. The pinned
+> trio (Scott / GoT / Avengers) is measurable via `voice_selected` breakdown.
 
 ### `session_recap` — the ExpeditionRecap, as data
 
@@ -93,9 +145,16 @@ the stores) so **every** chart/funnel can be sliced without extra work. Uses onl
 the **synchronous** device snapshot (`readVisitor` — no IP/geo call; PostHog
 derives country server-side):
 
-`device_os`, `device_browser`, `device_gpu`, `device_cores`, `device_touch`,
-`screen_w/h`, `language`, `returning_visitor`, `reduced_motion`, `sound_enabled`,
-`theme`, `sky_mode`, `voice`.
+`app_name`, `beta_round`, `tracking_version`, `device_os`, `device_browser`,
+`device_gpu`, `device_cores`, `device_touch`, `screen_w/h`, `viewport_w/h`,
+`language`, **`input_type`** (coarse/fine), `reduced_motion`, `initial_theme`,
+`returning_visitor`, `sound_enabled`, `theme`, `sky_mode`, `voice` (**21 total**).
+
+> **Mobile without extra work.** Because `input_type` (coarse/fine) and
+> `device_touch` ride on *every* event and pageview, **all analytics are already
+> sliceable by mobile vs desktop** — no mobile-specific duplication needed. The
+> few genuinely mobile-only interactions (the bottom-sheet menu) get their own
+> events (`mobile_menu_*`) so the mobile experience is measurable end to end.
 
 ## Viewing the data (build once in PostHog)
 

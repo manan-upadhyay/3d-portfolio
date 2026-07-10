@@ -13,6 +13,7 @@ arrive over time — never overwrite an old one; add a new dated file alongside 
 | `analytics/exports/` | Raw source exports the reports were built from (PostHog `.ph-notebook.json`, CSVs). Kept out of `public/` so they are never deployed/served. |
 | `feedback/` | Qualitative reports — beta-tester feedback, survey/comment syntheses |
 | `synthesis/` | Combined, decision-oriented docs that merge analytics **and** feedback into a truth document / action plan. The actionable layer above the raw inputs. |
+| `audit/` | Dated coverage/quality audits — section-by-section UX, persona walkthroughs, and analytics-instrumentation coverage. |
 
 ## Naming convention
 
@@ -40,6 +41,12 @@ range inside the document header.
 ### Synthesis
 - [2026-07-01 — Combined beta action plan](synthesis/2026-07-01-combined-beta-action-plan.md)
   · merges the analytics report + Reddit feedback into a prioritized roadmap
+
+### Audit
+- [2026-07-03 — Section-by-section UX audit](audit/2026-07-03-section-by-section-ux-audit.md)
+- [2026-07-05 — Persona walkthrough audit](audit/2026-07-05-persona-walkthrough-audit.md)
+- [2026-07-06 — Post-v1 analytics coverage audit](audit/2026-07-06-post-v1-analytics-coverage-audit.md)
+  · every post-v1 feature/voice/interaction/mobile surface vs its telemetry; 6 gaps fixed
 
 ## Adding a report
 
