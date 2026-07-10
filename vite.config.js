@@ -59,9 +59,10 @@ export default defineConfig(({ mode }) => {
       ravenApiDev(),
       {
         // Inline the built CSS into <head> to remove the render-blocking
-        // stylesheet request (LCP win). ASSUMPTION: this SPA emits a single CSS
-        // chunk — we concatenate any CSS assets by emit order, so if you ever
-        // code-split CSS (per-route lazy CSS), revisit cascade ordering here.
+        // stylesheet request (LCP win). Keep the emitted CSS assets too: Vite
+        // still references them from lazy-route preload metadata, and deleting
+        // them makes production route chunks fail when the SPA fallback returns
+        // index.html for the missing CSS path.
         name: 'inline-css',
         enforce: 'post',
         generateBundle(opts, bundle) {
@@ -71,7 +72,6 @@ export default defineConfig(({ mode }) => {
             this.warn(`inline-css: ${cssKeys.length} CSS chunks found; concatenation order is not guaranteed.`);
           }
           const cssCode = cssKeys.map((k) => bundle[k].source).join('');
-          for (const k of cssKeys) delete bundle[k];
           for (const key in bundle) {
             if (bundle[key].fileName.endsWith('.html')) {
               bundle[key].source = bundle[key].source
