@@ -49,7 +49,7 @@ export default {
     stats: {
       projects: 'Releases Shipped',
       domains: 'Kingdoms Served',
-      load: 'Swifter Than Before',
+      shipped: 'Delivered to the Realm',
     },
   },
 
@@ -83,9 +83,9 @@ export default {
         headline: 'Six kingdoms. Production-grade. And the bugs? Valar morghulis.',
         role: 'Full Stack Developer',
         points: [
-          'Named the first-ever Employee of the Month — over nine-and-twenty rivals. “The King in the North,” they might have cried. He tries not to gloat. He fails.',
           'Delivered applications across finance, health, logistics, CRM, SaaS and media. Different courts, one competence.',
           'Owned features end to end — from the first council to production monitoring. He swings his own sword; he leaves no debt for another to pay.',
+          'And, in his first moon, named the first-ever Employee of the Month — over nine-and-twenty rivals. He tries not to gloat. He fails.',
         ],
       },
       vanguard: {
@@ -111,10 +111,10 @@ export default {
   },
 
   arsenal: {
-    subtitle: 'Words are wind; steel is not. A mind is a weapon, and these are his — every blade blooded in production, never in a tourney. Hover one and it names the house it rides with.',
+    subtitle: 'Words are wind; steel is not. A mind is a weapon, and these are his — every blade blooded in production, never in a tourney.',
     coreLabel: 'The Arsenal',
-    coreLegend: 'the ringed ones are the swords he draws first',
     inventoryLegend: 'marks a sword he draws first',
+    skimCoach: 'Rather read a plain list? Turn to the ledger.',
     viewChart: 'The Stars',
     viewInventory: 'The Ledger',
   },
@@ -166,11 +166,33 @@ export default {
           'Lent a hand on a Spring Boot backend for PDF reports.',
         ],
       },
-      'digital-investor': { description: 'An investment platform, rich with interaction and analytics. Gold wins wars, but only in the hands of one who understands it. This puts it in those hands.' },
-      srifin: { description: 'A full-stack CRM/ERP for a microfinance house — data, workflows, identity checks, sealed tight. The Iron Bank always collects; so does this.' },
-      xipper: { description: 'A multi-tenant hotel platform — bookings, billing, eKYC. Guest right, enforced in code: eat at a man’s table, and you are under his protection.' },
-      'ai-chatbot': { description: 'A context-aware chatbot with real-time conversation and rigorous testing. It knows things — fewer than a maester, but it never sleeps.' },
-      'fantasy-cricket': { description: 'A real-money fantasy cricket platform — live scores, secure payouts, administration. Men will wager on anything. When you play, you win or you pay out — and it pays out, securely.' },
+      'digital-investor': { description: 'An investment platform, rich with interaction and analytics. Gold wins wars, but only in the hands of one who understands it. This puts it in those hands.', highlights: [
+        'Built React/Next.js feature modules, with Adobe Analytics to mark every move made.',
+        'Wove in Node/Express REST APIs — errors caught, performance sharpened.',
+        'Added React Query caching, so the server is not asked the same question twice. A steward wastes nothing.',
+      ] },
+      srifin: { description: 'A full-stack CRM/ERP for a microfinance house — data, workflows, identity checks, sealed tight. The Iron Bank always collects; so does this.', highlights: [
+        'Forged RBAC and audit logs — none pass who should not, and all is written down.',
+        'Quickened onboarding by a fifth with verification APIs.',
+        'Sharpened the images; the Core Web Vitals stood green.',
+      ] },
+      xipper: { description: 'A multi-tenant hotel platform — bookings, billing, eKYC. Guest right, enforced in code: eat at a man’s table, and you are under his protection.', highlights: [
+        'Drew multi-tenant PostgreSQL models and REST APIs — many houses under one roof, none crossing.',
+        'Cut manual billing by a third.',
+        'Hastened checkout by a fifth. No guest waits at the gate.',
+      ] },
+      'ai-chatbot': { description: 'A context-aware chatbot with real-time conversation and rigorous testing. It knows things — fewer than a maester, but it never sleeps.', highlights: [
+        'Led the UI — Next.js, Redux, WebSocket — words arriving as they are spoken.',
+        'Set Storybook and Cypress to guard against regressions.',
+        'Cut regressions by near a third.',
+      ] },
+      'fantasy-cricket': { description: 'A real-money fantasy cricket platform — live scores, secure payouts, administration. Men will wager on anything. When you play, you win or you pay out — and it pays out, securely.', highlights: [
+        'Held the Node.js backend — MongoDB schema, REST APIs, and cron riders bringing live ball-by-ball word in real time.',
+        'Built a points engine — captains and vice-captains counted, scored anew with every turn of the match.',
+        'A wallet ledger that remembers all — payouts automatic, winnings just, Razorpay at the gate. The Iron Bank always collects.',
+        'Contests and prize pools set per match, and GST/TDS tax rolls with rich filters in the admin hall.',
+        'Aided the React Native app — hosts assembled, matches watched as they unfold.',
+      ] },
     },
   },
 
@@ -316,7 +338,7 @@ export default {
       },
       recap: {
         title: 'The Reading',
-        how: 'At the foot of the contact hall, the keep reads your device, your screen, even your city. I read ravens; it reads machines. Neither of us keeps a ledger.',
+        how: 'At the close of this page, the keep reads your device, your screen, even your city. I read ravens; it reads machines. Neither of us keeps a ledger.',
       },
       console: {
         title: 'The Whispered Word',
@@ -377,7 +399,7 @@ export default {
         motion: { name: 'The river', why: 'One current moves everything — Lenis and GSAP row to a single drum, so the water never fights itself. On touch, the river yields to your own hands.' },
         narrator: { name: 'The faceless ones', why: 'Ten faces, one truth beneath. The sealed ones sleep across the narrow sea and cross only when their word is spoken. Valar morghulis.' },
         sky: { name: 'The maesters', why: 'They read your own clock — never your whereabouts — and call the hour: dawn, day, dusk, or night. The Citadel needs no spies for this.' },
-        sound: { name: 'The bells', why: 'Every toll is cast fresh in the moment — no bells shipped, no wagons of sound. The music is conjured, not carried.' },
+        sound: { name: 'The bells', why: 'Nearly every toll is cast fresh in the moment — only the raven’s caw rides in as a file. The music is conjured, not carried.' },
         memory: { name: 'The archives', why: 'The record of your journey burns with the session; the count of your visits stays in your own vault. No ledger leaves the realm.' },
         telemetry: { name: 'The small council', why: 'It counts deeds, never names — no seals on your person, no little birds following you home. Whisper “do not track” and the council disbands.' },
         raven: { name: 'The raven', why: 'Your words fly to a roost beyond — a serverless keep — and the key to it never leaves that tower. A Lannister pays his debts; this raven always flies.' },

@@ -182,6 +182,29 @@ const Experience = () => {
     stripRef.current?.toggleAttribute('data-lenis-prevent', Math.abs(e.deltaX) > Math.abs(e.deltaY));
   }, []);
 
+  // Let people select & copy card text. A drag-select inside a horizontally
+  // scrollable, snapping strip makes the browser auto-scroll the strip sideways
+  // the moment the pointer nears an edge — the selection runs away (owner report
+  // 2026-07). While a selection drag is live we freeze the strip (overflow-x:
+  // hidden + snap off via `.is-selecting`); the scrollbar is already hidden, so
+  // there's no layout shift, and the freeze lifts on pointer-up. Swipe/wheel
+  // scrolling is untouched — this only engages during an actual text selection.
+  useEffect(() => {
+    const el = stripRef.current;
+    if (!el) return undefined;
+    let selecting = false;
+    const onSelectStart = () => { selecting = true; el.classList.add('is-selecting'); };
+    const onUp = () => { if (!selecting) return; selecting = false; el.classList.remove('is-selecting'); };
+    el.addEventListener('selectstart', onSelectStart);
+    window.addEventListener('pointerup', onUp);
+    window.addEventListener('pointercancel', onUp);
+    return () => {
+      el.removeEventListener('selectstart', onSelectStart);
+      window.removeEventListener('pointerup', onUp);
+      window.removeEventListener('pointercancel', onUp);
+    };
+  }, []);
+
   // Velocity-driven pendulum sway on the hanging cards (a spring chasing a target
   // set by scroll velocity; settles with overshoot when the strip comes to rest).
   // The rAF loop runs ONLY while the section is on screen, and skips the style

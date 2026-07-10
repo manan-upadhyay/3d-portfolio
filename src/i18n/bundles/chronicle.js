@@ -38,7 +38,7 @@ export default {
   // section id; `no`/`x`/`y`/`kw` stay in constants.
   chapters: {
     origin: { label: 'Origin', sub: 'Origin' },
-    about: { label: 'The Craft', sub: 'The Craft' },
+    about: { label: 'The Maker', sub: 'Who I Am' },
     work: { label: 'The Journey', sub: 'The Path So Far' },
     arsenal: { label: 'The Arsenal', sub: 'Tools of the Trade' },
     projects: { label: 'The Realms', sub: "Worlds I've Shipped" },
@@ -76,7 +76,7 @@ export default {
     stats: {
       projects: 'Projects Delivered',
       domains: 'Industry Domains',
-      load: 'Faster Load Times',
+      shipped: 'Shipped to Production',
     },
   },
 
@@ -120,17 +120,17 @@ export default {
         role: 'Full Stack Developer',
         org: 'Inexture Solutions',
         points: [
-          'First-ever Employee of the Month — claimed in month one, among 30.',
           'Delivered apps across finance, health, logistics, CRM, SaaS & media.',
           'Owned features end to end — grooming to production monitoring.',
+          'Named Employee of the Month in my first month, among a team of 30.',
         ],
       },
       vanguard: {
-        chapter: 'The Vanguard',
+        chapter: 'The Front Line',
         headline: 'Leading the front line of the Capital Group fleet.',
         role: 'Lead Frontend Developer',
-        org: 'Infosys · embedded with Capital Group',
-        via: 'Flying Inexture’s colours — sub-contracted through Infosys, embedded with the Capital Group fleet.',
+        org: 'Infosys · on the Capital Group team (USA)',
+        via: 'On assignment — placed through Infosys, working on-site with the Capital Group team.',
         points: [
           'Lead frontend across multiple products on the Capital Group network.',
           'Shipped 4 production releases — features charted from scratch.',
@@ -149,10 +149,13 @@ export default {
   },
 
   arsenal: {
-    subtitle: 'The tools I reach for across the stack — hover a skill to trace its constellation.',
+    subtitle: 'The tools I reach for across the stack.',
     coreLabel: 'The Arsenal',
-    coreLegend: 'the ringed bodies are the core stack — the tools reached for first',
+    // The orbit view no longer needs a legend — the larger core discs say it. The
+    // inventory keeps a one-line key for its ✦ mark.
     inventoryLegend: 'marks the core stack — the tools reached for first',
+    // The one-time nudge toward the fast-skim list view (Inventory).
+    skimCoach: 'Prefer a quick list? Read the stack as an inventory',
     viewChart: 'Sky-chart',
     viewInventory: 'Inventory',
     // Load-bearing control copy — kept plain and inherited by every voice.
@@ -162,7 +165,7 @@ export default {
 
   works: {
     intro:
-      "Production work across finance, healthcare, logistics, media, and visualization. Some sits under NDA — what's shared is what's permissible.",
+      'Production work across finance, healthcare, logistics, media, and visualization.',
     realm: 'Realm',
     featured: 'Featured',
     nda: 'NDA',
@@ -218,11 +221,11 @@ export default {
         ],
       },
       'digital-investor': {
-        description: 'Digital investment platform with rich user interactions, analytics tracking, and feature modules across frontend and backend.',
+        description: 'An investor-facing investment platform with rich interactions, analytics, and feature modules across frontend and backend.',
         highlights: [
-          'Delivered React/Next.js feature modules and integrated Adobe Analytics tracking',
-          'Supported Node/Express REST API integrations, error handling, and performance improvements',
-          'Implemented React Query for server-state management, reducing redundant API calls',
+          'Built React/Next.js feature modules with Adobe Analytics tracking for user-interaction visibility',
+          'Integrated Node/Express REST APIs with error handling and performance tuning',
+          'Added React Query server-state caching — fewer redundant calls, snappier UI',
         ],
       },
       srifin: {
@@ -250,11 +253,14 @@ export default {
         ],
       },
       'fantasy-cricket': {
-        description: 'Real-money fantasy platform with live match syncing, secure payouts, and admin back-office operations.',
+        // The secondary card shows a short voiced lead + these factual bullets.
+        description: 'A Dream11-style real-money fantasy cricket platform I built end to end — mobile app, admin panel, and the complex Node.js backend. No longer publicly available.',
         highlights: [
-          'Built cron pipelines for live match states',
-          'Reduced admin intervention by 1.5-2 hours per match',
-          'Achieved 99% transaction reliability',
+          'Owned the Node.js backend — MongoDB schema design, REST APIs, and cron pipelines syncing live ball-by-ball data from a third-party sports API in real time',
+          'Real-time points engine — Dream11-style teams with captain/vice-captain multipliers, scored live off every match event',
+          'Back-traceable wallet ledger with automatic payouts, custom winning logic, and Razorpay payments',
+          'Configurable contests and prize pools per match, plus GST/TDS tax reports with rich filters in the React admin panel',
+          'Supported the React Native app — team building and live contest/match tracking',
         ],
       },
     },
@@ -454,7 +460,7 @@ export default {
   atelier: {
     eyebrow: 'The Making-Of',
     title: 'How the map was drawn',
-    confession: 'The making-of, minus the mystique.',
+    confession: 'Behind the map — how it was really made.',
     confessionSub:
       'How this site is built, what was cut, and what hides in plain sight — all of it the real thing, not screenshots of a process.',
     acts: { build: 'The Build', engine: 'The Engine Room', hidden: 'The Hidden Layer' },
@@ -491,7 +497,7 @@ export default {
     },
     ledger: {
       intro:
-        'The senior part of the work was not adding things — it was knowing what to leave out. Here is what shipped, and what I cut or refused to add on purpose.',
+        'The hard part was not adding things — it was knowing what to leave out. Here is what shipped, and what I cut or chose not to add on purpose.',
       built: 'What I shipped',
       cut: 'What I cut, and why',
     },
@@ -499,7 +505,7 @@ export default {
       voice: { title: 'The Voice switcher', why: 'A full i18next layer — the whole site re-skins through ten personalities, built to scale further, with easter-egg voices unlocked by discovery.' },
       marginalia: { title: 'Footnotes', why: 'Hover a flavor phrase and the real engineering fact unfolds in a footnote — the fantasy made to earn its keep.' },
       sky: { title: 'Time-aware sky', why: 'Five theme modes that resolve from your real local time via SunCalc — no geolocation prompt, pure math from your timezone.' },
-      sound: { title: 'Interactive sound', why: 'A Web Audio system of synthesized cues (zero bytes) that reward intent, never motion — default-on, silenced under reduced-motion.' },
+      sound: { title: 'Interactive sound', why: 'A Web Audio system of synthesized cues (almost zero bytes — only the raven’s caw ships as a file) that reward intent, never motion — default-on, silenced under reduced-motion.' },
       recap: { title: 'The Expedition recap', why: 'A cinematic instrument that reads your device and connection client-side and pins you on a live polar map — nothing stored, nothing sent.' },
       eggs: { title: 'Voice easter eggs', why: 'Type a secret word anywhere and a sealed personality wakes — Scott, Dwight, a cow — each authored in full character.' },
       telemetry: { title: 'Telemetry & discoverability', why: 'Fifty product events folding into one per-visit session recap, twenty-three super-properties, and five PostHog dashboards — all cookieless, anonymous, and silenced under Do-Not-Track. Beside it, structured-data SEO and a bespoke logger. The instrument answers "are the moments touched?" without harvesting a thing about who touches them.' },
@@ -536,7 +542,7 @@ export default {
       },
       recap: {
         title: 'The traveller’s read',
-        how: 'At the foot of Summon, an instrument panel reads your own device, screen, and connection — and, with your blessing, your city — then mints a one-of-a-kind sigil from it.',
+        how: 'At the close of this page, an instrument panel reads your own device, screen, and connection — and, with your blessing, your city — then mints a one-of-a-kind sigil from it.',
       },
       console: {
         title: 'The cartographer’s ledger',
@@ -566,7 +572,7 @@ export default {
       panels: {
         privacy: {
           title: 'Privacy-first by design',
-          body: 'Cookieless, anonymous, memory-only — and hard-disabled the moment Do-Not-Track is set.',
+          body: 'No cookies, no accounts, nothing kept between visits — and it switches off completely if your browser asks not to be tracked.',
         },
         discoverability: {
           title: 'Built to be found',
@@ -582,7 +588,7 @@ export default {
     // data in constants.atelier.blueprint; gate captions stay EN-technical there.
     blueprint: {
       eyebrow: 'The Blueprint',
-      title: 'One realm, three signals',
+      title: 'One device. Three signals out.',
       intro: 'The runtime, drawn as a chart: everything here happens on your own device, and exactly three signals ever leave it — each one named at the wall. Open the network tab and count.',
       clientZone: 'The client realm',
       clientZoneSub: 'everything here runs on your device',
@@ -598,7 +604,7 @@ export default {
         motion: { name: 'The scroll', why: 'Lenis and GSAP share one ticker — a single clock drives every scroll scene, so motion never fights itself. On touch it steps aside entirely for native scroll.' },
         narrator: { name: 'The narrators', why: 'Ten personalities over one i18next layer. The sealed ones ship as separate chunks and cost nothing until someone speaks the word that wakes them.' },
         sky: { name: 'The sky', why: 'SunCalc reads your local clock — never your location — and sets dawn, day, dusk, or night to match the sky outside your window.' },
-        sound: { name: 'The sound', why: 'Every cue is synthesised live in the Web Audio API — zero audio bytes shipped, unlocked by your first gesture, silent under reduced motion.' },
+        sound: { name: 'The sound', why: 'Nearly every cue is synthesised live in the Web Audio API — the lone shipped file is the raven’s caw. Unlocked by your first gesture, silent under reduced motion.' },
         memory: { name: 'The memory', why: 'Your expedition log lives for one session and dies with the tab; the visit counter stays in your own browser. Neither is ever sent anywhere.' },
         telemetry: { name: 'The analytics', why: 'PostHog and Vercel count moments, not people — cookieless, anonymous, no cross-session identity. Set Do-Not-Track and this gate seals entirely.' },
         raven: { name: 'Your message', why: 'Your message flies to a serverless function and on to the courier — the API key never enters the browser. This is the one crossing you create yourself.' },

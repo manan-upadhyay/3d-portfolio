@@ -50,7 +50,7 @@ export default {
     stats: {
       projects: 'Missions Shipped',
       domains: 'Sectors Defended',
-      load: 'Faster Than Before',
+      shipped: 'Made It to Production',
     },
   },
 
@@ -84,9 +84,9 @@ export default {
         headline: 'Six industries. Production-grade. The bugs? Dusted. Every last one.',
         role: 'Full Stack Developer',
         points: [
-          'First-ever Employee of the Month. Month one. Beat twenty-nine others. I don’t like to brag — I love to brag.',
           'Shipped across finance, health, logistics, CRM, SaaS and media. Different battlefield, same standard.',
           'Owned features end to end — first spec to production monitoring. If my name’s on it, it’s mine to answer for. All of it.',
+          'And, month one, first-ever Employee of the Month — beat twenty-nine others. I don’t like to brag — I love to brag.',
         ],
       },
       vanguard: {
@@ -112,10 +112,10 @@ export default {
   },
 
   arsenal: {
-    subtitle: 'My armory — every tool here is combat-tested, not tutorial-grade. But the tools aren’t the hero: if I were nothing without the suit, I shouldn’t have it. The hands matter more. Hover one and I’ll show you the squad it runs with. Puny bugs. (And yes, I speak Groot: I am Groot — rough translation, full-stack.)',
+    subtitle: 'My armory — every tool here is combat-tested, not tutorial-grade. But the tools aren’t the hero: if I were nothing without the suit, I shouldn’t have it. The hands matter more. (And yes, I speak Groot: I am Groot — rough translation, full-stack.)',
     coreLabel: 'The Armory',
-    coreLegend: 'the ringed ones are my heavy hitters — bring me the hard problems',
     inventoryLegend: 'marks a heavy hitter — bring me the hard problems',
+    skimCoach: 'Rather scan a list? Pull up the debrief.',
     viewChart: 'Holotable',
     viewInventory: 'Debrief',
   },
@@ -167,11 +167,33 @@ export default {
           'Contributed to a Spring Boot backend for PDF reporting.',
         ],
       },
-      'digital-investor': { description: 'An investment platform, rich with interactions and analytics. I follow the money — and I make it make sense to the humans moving it.' },
-      srifin: { description: 'A full-stack CRM/ERP for a microfinance firm — data, workflows, identity verification, locked down. Nobody gets in who shouldn’t. I ran the perimeter myself.' },
-      xipper: { description: 'A multi-tenant hotel platform — bookings, billing, eKYC, the full front desk. Multi-tenant done right is a genuinely hard problem. Consider it solved.' },
-      'ai-chatbot': { description: 'A context-aware chatbot with real-time conversation and serious test coverage. I built an AI — dude, you’re embarrassing me in front of the wizard. We’re basically everywhere now. You’re welcome. Probably.' },
-      'fantasy-cricket': { description: 'A real-money fantasy cricket platform — live scoring, secure payouts, admin tools. When actual money moves, the margin for error is zero. I built it like lives depended on it.' },
+      'digital-investor': { description: 'An investment platform, rich with interactions and analytics. I follow the money — and I make it make sense to the humans moving it.', highlights: [
+        'Built React/Next.js feature modules, wired with Adobe Analytics so every move gets tracked.',
+        'Integrated Node/Express REST APIs — error handling tight, performance tuned.',
+        'Added React Query caching, so it stops asking the server the same question twice. Efficient.',
+      ] },
+      srifin: { description: 'A full-stack CRM/ERP for a microfinance firm — data, workflows, identity verification, locked down. Nobody gets in who shouldn’t. I ran the perimeter myself.', highlights: [
+        'Engineered RBAC and audit logs — compliance, handled.',
+        'Cut onboarding time 20–25% with verification APIs.',
+        'Optimized the images and hit the Core Web Vitals. Green across the board.',
+      ] },
+      xipper: { description: 'A multi-tenant hotel platform — bookings, billing, eKYC, the full front desk. Multi-tenant done right is a genuinely hard problem. Consider it solved.', highlights: [
+        'Designed multi-tenant PostgreSQL models and REST APIs — one system, many hotels, zero leaks.',
+        'Cut manual billing adjustments 30–35%.',
+        'Sped up checkout 15–20%. Nobody likes waiting at a front desk.',
+      ] },
+      'ai-chatbot': { description: 'A context-aware chatbot with real-time conversation and serious test coverage. I built an AI — dude, you’re embarrassing me in front of the wizard. We’re basically everywhere now. You’re welcome. Probably.', highlights: [
+        'Led the UI architecture — Next.js, Redux, WebSocket, real-time.',
+        'Brought in Storybook and Cypress so nothing ships untested.',
+        'Dropped regressions 25–30%. Puny bugs.',
+      ] },
+      'fantasy-cricket': { description: 'A real-money fantasy cricket platform — live scoring, secure payouts, admin tools. When actual money moves, the margin for error is zero. I built it like lives depended on it.', highlights: [
+        'Owned the Node.js backend — MongoDB schema, REST APIs, and cron pipelines pulling live ball-by-ball data in real time.',
+        'Built a real-time points engine — Dream11-style teams, captain/vice-captain multipliers, scored off every event.',
+        'Back-traceable wallet ledger — auto payouts, custom winning logic, Razorpay wired in. Real money, zero slips.',
+        'Configurable contests and prize pools per match, plus GST/TDS tax reports in the React admin panel.',
+        'Backed up the React Native app — team building, live contest tracking. I am Groot.',
+      ] },
     },
   },
 
@@ -378,7 +400,7 @@ export default {
         motion: { name: 'Thrusters', why: 'One clock drives all flight systems — scroll and animation never fight for control. On touch: manual override, native scroll.' },
         narrator: { name: 'The comms array', why: 'Ten voice channels on one protocol. The classified ones stay encrypted until someone speaks the passphrase. They assemble on demand.' },
         sky: { name: 'Environmental systems', why: 'Reads your local clock — never your coordinates — and matches the lighting to your actual sky. JARVIS-grade courtesy.' },
-        sound: { name: 'The arc reactor (audio)', why: 'Self-sustaining: every cue synthesized on-device, zero bytes shipped. Clean energy, for the ears.' },
+        sound: { name: 'The arc reactor (audio)', why: 'Self-sustaining: nearly every cue synthesized on-device — only the raven’s caw ships as a file. Clean energy, for the ears.' },
         memory: { name: 'Mission logs', why: 'Session telemetry self-destructs with the tab; your visit count stays in your own systems. Nothing phones home.' },
         telemetry: { name: 'Mission control', why: 'Counts engagements, not identities — cookieless, anonymous. Do-Not-Track engages full radio silence.' },
         raven: { name: 'The courier drone', why: 'Your message uplinks to a serverless relay; the launch codes never touch the browser. Secure channel — whatever it takes.' },

@@ -266,9 +266,9 @@ const featuredProjects = [
     isNDA: false,
     // Proof strip (facts, not copy — labels are voiced via works.proofLabels.*)
     proof: [
-      { k: 'role', v: 'Solo — design to deploy' },
+      { k: 'role', v: 'Full-Stack Developer' },
       { k: 'outcome', v: 'Film-fast 4K galleries (CDN + R2 streaming)' },
-      { k: 'scale', v: 'Public site + admin CMS, in production' },
+      { k: 'scale', v: 'Solo — design to deploy · public site + admin CMS' },
     ],
     // Realm screenshots in display order. Lives under public/realms/<slug>/.
     // `themed: true` swaps to public/realms/<slug>/<light|dark>/ per theme.
@@ -302,9 +302,9 @@ const featuredProjects = [
     live_demo_label: 'Visit platform',
     isNDA: false,
     proof: [
-      { k: 'role', v: 'Solo build' },
+      { k: 'role', v: 'Full-Stack Developer' },
       { k: 'outcome', v: 'PNG → editable SVG in-browser (TensorFlow.js)' },
-      { k: 'scale', v: 'Live floor preview → order-ready PDF' },
+      { k: 'scale', v: 'Solo build · live floor preview → order-ready PDF' },
     ],
     gallery: {
       slug: 'royal-tiles',
@@ -344,8 +344,8 @@ const featuredProjects = [
     //   Client → Next.js → [Auth.js + Okta SSO] → RBAC → [Services + Reporting]
     architecture: [['client'], ['nextjs'], ['authjs', 'okta'], ['rbac'], ['service', 'report']],
     proof: [
-      { k: 'role', v: 'Lead frontend — built from scratch' },
-      { k: 'outcome', v: '4 production releases · Okta SSO + RBAC' },
+      { k: 'role', v: 'Lead Frontend Developer' },
+      { k: 'outcome', v: '4 production releases · built from scratch' },
       { k: 'scale', v: 'Enterprise · Capital Group (USA)' },
     ],
   },
@@ -357,6 +357,9 @@ const otherProjects = [
     id: 'digital-investor',
     name: 'Digital Investor Portfolio',
     company: 'Capital Group (USA)',
+    // Role is a factual label (like the featured plates' proof.role), rendered on
+    // the secondary card so a skimmer knows what I did, not just what it was.
+    role: 'Full-Stack Developer',
     isFeatured: false,
     tags: [
       { name: 'react' },
@@ -367,12 +370,12 @@ const otherProjects = [
     source_code_link: '',
     live_demo_link: '',
     isNDA: true,
-    architecture: [['client'], ['web'], ['api'], ['service', 'store']],
   },
   {
     id: 'srifin',
     name: 'Srifin Credit',
     company: 'Microfinance CRM/ERP',
+    role: 'Full-Stack Developer',
     isFeatured: false,
     tags: [
       { name: 'next.js' },
@@ -388,6 +391,7 @@ const otherProjects = [
     id: 'xipper',
     name: 'Xipper',
     company: 'Hotel Management Platform',
+    role: 'Full-Stack Developer',
     isFeatured: false,
     tags: [
       { name: 'postgresql' },
@@ -403,6 +407,7 @@ const otherProjects = [
     id: 'ai-chatbot',
     name: 'AI Chatbot Platform',
     company: 'Client Project',
+    role: 'Full-Stack Developer',
     isFeatured: false,
     tags: [
       { name: 'next.js' },
@@ -413,17 +418,21 @@ const otherProjects = [
     source_code_link: '',
     live_demo_link: '',
     isNDA: true,
-    architecture: [['client'], ['web', 'realtime'], ['api'], ['service', 'store']],
   },
   {
     id: 'fantasy-cricket',
     name: 'Fantasy Cricket Platform',
-    company: 'Personal Project',
+    // Real client work (not a personal project). Deepest backend story in the
+    // set — real-money, live scoring, payments, tax compliance. No live link /
+    // screenshots: the platform is no longer publicly available, so it lives as
+    // a text-rich card in the secondary list rather than an image plate.
+    company: 'Real-Money Fantasy Sports',
+    role: 'Backend Developer',
     isFeatured: false,
     tags: [
-      { name: 'mongodb' },
       { name: 'node.js' },
-      { name: 'express' },
+      { name: 'mongodb' },
+      { name: 'razorpay' },
     ],
     image: '',
     source_code_link: '',
@@ -444,7 +453,7 @@ const projects = [...featuredProjects, ...otherProjects];
 export const stats = [
   { value: '20+', key: 'projects' },
   { value: '6+', key: 'domains' },
-  { value: '38%', key: 'load' },
+  { value: '100%', key: 'shipped' },
 ];
 
 // The Atelier (coda — LEGENDARY-ROADMAP §7). The "making-of" closing chapter:

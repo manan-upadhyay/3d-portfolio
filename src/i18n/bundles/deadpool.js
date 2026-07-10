@@ -48,7 +48,7 @@ export default {
     stats: {
       projects: 'Things Shipped',
       domains: 'Industries Hit',
-      load: 'Faster Now',
+      shipped: 'Shipped. Every One.',
     },
   },
 
@@ -82,9 +82,9 @@ export default {
         headline: 'Six industries. Production-grade. Bugs got bodied.',
         role: 'Full Stack Developer',
         points: [
-          'Won the first-ever Employee of the Month. Month one. Beat 29 people. Undefeated. Somebody get this man a belt.',
           'Shipped apps across finance, health, logistics, CRM, SaaS and media. That’s basically the whole cinematic universe of industries.',
           'Owned features end to end — meeting to monitoring, no hand-holding. He’s a big boy.',
+          'Also, month one: won the first-ever Employee of the Month. Beat 29 people. Undefeated. Somebody get this man a belt.',
         ],
       },
       vanguard: {
@@ -110,10 +110,10 @@ export default {
   },
 
   arsenal: {
-    subtitle: 'The utility belt. Every tool here has been used in an actual fight — I mean project. Hover one and it’ll rat out its friends. Snitches, all of them.',
+    subtitle: 'The utility belt. Every tool here has been used in an actual fight — I mean project.',
     coreLabel: 'The Utility Belt',
-    coreLegend: 'the ringed ones are the mains. everything else is a very confident side quest.',
     inventoryLegend: 'marks a main. everything else: confident side quests.',
+    skimCoach: 'Rather skim a list? Flip to spreadsheet mode. No judgment.',
     viewChart: 'Fancy Mode',
     viewInventory: 'Spreadsheet Mode',
   },
@@ -165,11 +165,33 @@ export default {
           'Pitched in on a Spring Boot backend for PDF reports. Java. Brave.',
         ],
       },
-      'digital-investor': { description: 'An investment platform with rich interactions and analytics. Money stuff. I’m a spender, not a saver, but I respect the craft.' },
-      srifin: { description: 'A full-stack CRM/ERP for a microfinance company — data, workflows, ID checks, locked down tight. Boring? To you. Beautiful? To the accountants.' },
-      xipper: { description: 'A multi-tenant hotel platform — bookings, billing, eKYC, the whole front desk. I’ve been thrown out of nicer places. And worse ones.' },
-      'ai-chatbot': { description: 'A context-aware chatbot with real-time chat and serious testing. It talks back. It’s also a better listener than most people I’ve shot at.' },
-      'fantasy-cricket': { description: 'A real-money fantasy cricket platform — live scores, secure payouts, admin tools. People bet real money on this. On CRICKET. Legends.' },
+      'digital-investor': { description: 'An investment platform with rich interactions and analytics. Money stuff. I’m a spender, not a saver, but I respect the craft.', highlights: [
+        'Built React/Next.js feature modules with Adobe Analytics tracking. Every click, logged. Big Brother, but polite.',
+        'Integrated Node/Express REST APIs — error handling, performance tuning.',
+        'Added React Query caching so it stops nagging the server. Boundaries. Healthy.',
+      ] },
+      srifin: { description: 'A full-stack CRM/ERP for a microfinance company — data, workflows, ID checks, locked down tight. Boring? To you. Beautiful? To the accountants.', highlights: [
+        'Engineered RBAC and audit logs. Compliance. Nobody gets in who shouldn’t. Rude, but necessary.',
+        'Sped up onboarding 20–25% with verification APIs.',
+        'Optimized images, aced the Core Web Vitals.',
+      ] },
+      xipper: { description: 'A multi-tenant hotel platform — bookings, billing, eKYC, the whole front desk. I’ve been thrown out of nicer places. And worse ones.', highlights: [
+        'Designed multi-tenant PostgreSQL models and REST APIs. Many hotels, one brain, no crossed wires.',
+        'Cut manual billing adjustments 30–35%.',
+        'Sped up checkout 15–20%. Faster than housekeeping.',
+      ] },
+      'ai-chatbot': { description: 'A context-aware chatbot with real-time chat and serious testing. It talks back. It’s also a better listener than most people I’ve shot at.', highlights: [
+        'Led UI architecture — Next.js, Redux, WebSocket, real-time chatter.',
+        'Added Storybook and Cypress so nothing ships broken.',
+        'Cut regressions 25–30%. Chef’s kiss.',
+      ] },
+      'fantasy-cricket': { description: 'A real-money fantasy cricket platform — live scores, secure payouts, admin tools. People bet real money on this. On CRICKET. Legends.', highlights: [
+        'Owned the Node.js backend — MongoDB schema, REST APIs, cron pipelines syncing live ball-by-ball data in real time.',
+        'Built a real-time points engine — Dream11 teams, captain/vice-captain multipliers, scored off every event.',
+        'Back-traceable wallet ledger — auto payouts, winning logic, Razorpay. Real money means zero “oops.”',
+        'Configurable contests and prize pools per match, plus GST/TDS tax reports in the React admin panel. Yes, taxes. Even chaos pays taxes.',
+        'Backed the React Native app — team building, live tracking.',
+      ] },
     },
   },
 
@@ -376,7 +398,7 @@ export default {
         motion: { name: 'Stunt coordination', why: 'One clock choreographs every scroll stunt so nobody collides mid-air. On phones we use your native scroll — practical effects, baby.' },
         narrator: { name: 'The voice cast', why: 'Ten voices, including yours truly — best casting decision of this production. The locked ones don’t exist until you say the magic word. Union rules.' },
         sky: { name: 'Lighting department', why: 'Checks your clock — NOT your GPS — and lights the set to match. Dawn, day, dusk, night. Zero creep factor.' },
-        sound: { name: 'Foley artist', why: 'Every sound effect is improvised live by the browser. Zero audio files shipped. The foley guy is literally math, and he works for free.' },
+        sound: { name: 'Foley artist', why: 'Almost every sound effect is improvised live by the browser — the one file we ship is the raven’s caw. The foley guy is mostly math, and he works for free.' },
         memory: { name: 'Continuity notes', why: 'Your session notes die when the tab does; the visit count stays in your browser. Nothing leaks to the tabloids.' },
         telemetry: { name: 'Box office numbers', why: 'Counts the moments, not the audience members. No cookies, no names. Do-Not-Track on? The studio gets nothing. Nada.' },
         raven: { name: 'The courier', why: 'Your message goes to a serverless back office holding the only key. The browser never touches it. Even I can’t steal it, and I steal everything.' },

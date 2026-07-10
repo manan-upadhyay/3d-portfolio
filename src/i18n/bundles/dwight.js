@@ -44,7 +44,7 @@ export default {
     stats: {
       projects: 'Missions Completed',
       domains: 'Sectors Dominated',
-      load: 'Speed Increase',
+      shipped: 'Deployed. Fact.',
     },
   },
 
@@ -78,9 +78,9 @@ export default {
         headline: 'Six industries. Production-grade. No survivors — among the bugs.',
         role: 'Full Stack Developer',
         points: [
-          'Awarded the first-ever Employee of the Month. Month one. Bested 29 rivals. Dominance.',
           'Deployed applications across six sectors: finance, health, logistics, CRM, SaaS, media.',
           'Maintained total ownership — requisition through production surveillance.',
+          'Also awarded the first-ever Employee of the Month. Month one. Bested 29 rivals. Dominance.',
         ],
       },
       vanguard: {
@@ -106,10 +106,10 @@ export default {
   },
 
   arsenal: {
-    subtitle: 'These are not skills. These are survival competencies. Each one field-tested in combat. Hover one to identify its known associates.',
+    subtitle: 'These are not skills. These are survival competencies. Each one field-tested in combat.',
     coreLabel: 'The Arsenal',
-    coreLegend: 'the ringed ones are my primary weapons. fact.',
     inventoryLegend: 'marks a primary weapon. fact.',
+    skimCoach: 'Prefer a list? Consult the manifest. Efficient.',
     viewChart: 'Radar',
     viewInventory: 'Manifest',
   },
@@ -161,11 +161,33 @@ export default {
           'Contributed to a Spring Boot backend for PDF generation.',
         ],
       },
-      'digital-investor': { description: 'An investment platform with rich interactions and analytics tracking. Capital demands precision. I delivered.' },
-      srifin: { description: 'A full-stack microfinance CRM/ERP — financial data, workflows, identity verification, RBAC. Compliance is law.' },
-      xipper: { description: 'A multi-tenant hotel management platform — operations, eKYC, booking, billing. Total operational control.' },
-      'ai-chatbot': { description: 'A context-aware chatbot interface with real-time messaging and comprehensive testing. It does not malfunction.' },
-      'fantasy-cricket': { description: 'A real-money fantasy sports platform — live syncing, secure payouts, back-office command. Zero tolerance for error.' },
+      'digital-investor': { description: 'An investment platform with rich interactions and analytics tracking. Capital demands precision. I delivered.', highlights: [
+        'Constructed React/Next.js feature modules with Adobe Analytics tracking. Every action, observed.',
+        'Integrated Node/Express REST APIs. Error handling: comprehensive. Performance: superior.',
+        'Added React Query caching. Redundant requests: eliminated.',
+      ] },
+      srifin: { description: 'A full-stack microfinance CRM/ERP — financial data, workflows, identity verification, RBAC. Compliance is law.', highlights: [
+        'Engineered RBAC and audit logs. Compliance is law. Fact.',
+        'Accelerated onboarding 20–25% with verification APIs.',
+        'Optimized images. Core Web Vitals: satisfied.',
+      ] },
+      xipper: { description: 'A multi-tenant hotel management platform — operations, eKYC, booking, billing. Total operational control.', highlights: [
+        'Designed multi-tenant PostgreSQL models and REST APIs. One system, many tenants, total control.',
+        'Reduced manual billing adjustments 30–35%.',
+        'Accelerated checkout 15–20%. Efficiency.',
+      ] },
+      'ai-chatbot': { description: 'A context-aware chatbot interface with real-time messaging and comprehensive testing. It does not malfunction.', highlights: [
+        'Led UI architecture — Next.js, Redux, WebSocket. Real-time.',
+        'Adopted Storybook and Cypress. Untested code does not ship.',
+        'Reduced regressions 25–30%. Discipline.',
+      ] },
+      'fantasy-cricket': { description: 'A real-money fantasy sports platform — live syncing, secure payouts, back-office command. Zero tolerance for error.', highlights: [
+        'Owned the Node.js backend — MongoDB schema, REST APIs, cron pipelines syncing live ball-by-ball data in real time.',
+        'Built a real-time points engine — teams, captain/vice-captain multipliers, scored off every match event.',
+        'Engineered a back-traceable wallet ledger — automatic payouts, winning logic, Razorpay. Money is not lost. Fact.',
+        'Configurable contests and prize pools per match, plus GST/TDS tax reports in the React admin panel.',
+        'Supported the React Native app — team building, live tracking.',
+      ] },
     },
   },
 
@@ -372,7 +394,7 @@ export default {
         motion: { name: 'Locomotion', why: 'One clock commands all movement. Two clocks would be chaos. On touch devices: native scroll. Use what the land gives you.' },
         narrator: { name: 'Identity roster', why: 'Ten approved identities. The sealed ones stay dark until the code word is spoken. I respect that protocol deeply.' },
         sky: { name: 'Weather station', why: 'Reads your clock, never your coordinates. It could find your coordinates. It chooses not to. Discipline.' },
-        sound: { name: 'Alarm systems', why: 'All audio synthesized on-site. Zero bytes shipped. An armory that manufactures its own ammunition. Ideal.' },
+        sound: { name: 'Alarm systems', why: 'Nearly all audio synthesized on-site. One file shipped: the raven’s caw. An armory that manufactures its own ammunition. Ideal.' },
         memory: { name: 'The files', why: 'The session log dies with the tab. The visit count stays in YOUR browser. Nothing leaves. Identity theft is not a joke.' },
         telemetry: { name: 'Surveillance (ethical)', why: 'Counts events, not people. Cookieless. Anonymous. Do-Not-Track shuts it down instantly. I wish Jim had that setting.' },
         raven: { name: 'The messenger', why: 'Your message routes through a serverless post. The key never enters the browser. I would trust it with the farm.' },

@@ -73,7 +73,10 @@ const OrbitalField = ({ frozen = false, ignite = false, onSeen }) => {
           logo: s.icon || null,
           logoDark: s.iconDark || null, // theme variant for monochrome wordmarks
           cat: cat.category,
-          size: s.tier === 'primary' ? 58 : 42,
+          // Core (primary) discs run markedly larger than the rest so the core
+          // stack reads at a glance — the visual encoding IS the legend now (the
+          // old "ringed bodies are the core" caption was retired, 2026-07 pass).
+          size: s.tier === 'primary' ? 64 : 42,
           rx: Math.cos(a) * r,
           ry: Math.sin(a) * r,
         };
@@ -362,6 +365,32 @@ const ArsenalField = ({ view, onViewChange }) => {
   const [ignite, setIgnite] = useState(false);
   const igniteUsed = useRef(false);
   const igniteTimer = useRef(null);
+  // One-time "skim as a list" nudge — the Inventory view is the fast-skim value,
+  // but under-discovered. It's triggered when the orbit is actually SCROLLED INTO
+  // VIEW (not at mount — the field mounts at page load, so a mount timer expired
+  // long before anyone reached the section). Shows once (persisted), only in the
+  // orbit view, then retires for good so a returning visitor is never nagged.
+  const [showCoach, setShowCoach] = useState(false);
+  const coachSeen = useRef(false);
+  const coachFired = useRef(false);
+  const coachTimers = useRef([]);
+  useEffect(() => {
+    try { coachSeen.current = window.localStorage.getItem('arsenal-skim-coach') === 'seen'; } catch { /* private mode */ }
+    return () => coachTimers.current.forEach(clearTimeout);
+  }, []);
+  const dismissCoach = useCallback(() => {
+    setShowCoach(false);
+    coachTimers.current.forEach(clearTimeout);
+    if (coachSeen.current) return;
+    coachSeen.current = true;
+    try { window.localStorage.setItem('arsenal-skim-coach', 'seen'); } catch { /* private mode */ }
+  }, []);
+  const maybeCoach = useCallback(() => {
+    if (coachFired.current || coachSeen.current) return;
+    coachFired.current = true;
+    coachTimers.current.push(setTimeout(() => setShowCoach(true), 1200));
+    coachTimers.current.push(setTimeout(() => dismissCoach(), 9600));
+  }, [dismissCoach]);
   const orbitSeen = useRef(false);
   const orbitWrapRef = useRef(null);
   const invRef = useRef(null);
@@ -377,7 +406,7 @@ const ArsenalField = ({ view, onViewChange }) => {
     // the orbit (view swap) doesn't replay the one-time moment.
     igniteTimer.current = setTimeout(() => setIgnite(false), 3400);
   }, []);
-  const handleOrbitSeen = useCallback(() => { orbitSeen.current = true; maybeIgnite(); }, [maybeIgnite]);
+  const handleOrbitSeen = useCallback(() => { orbitSeen.current = true; maybeIgnite(); maybeCoach(); }, [maybeIgnite, maybeCoach]);
   useEffect(() => () => { clearTimeout(igniteTimer.current); tlRef.current?.kill(); }, []);
 
   const handleView = (next) => {
@@ -392,6 +421,7 @@ const ArsenalField = ({ view, onViewChange }) => {
       transRef.current = true;
       setTransitioning(true);
     }
+    if (next === 'inventory') dismissCoach(); // acted on the nudge — retire it
     try { window.localStorage.setItem(VIEW_KEY, next); } catch { /* private mode */ }
     track('arsenal_view_switched', { view: next });
     onViewChange(next);
@@ -465,6 +495,20 @@ const ArsenalField = ({ view, onViewChange }) => {
     <div className="mt-6">
       <div className="relative mx-auto max-w-full" style={{ width: W }}>
         <ViewToggle view={view} onChange={handleView} />
+        {/* One-time skim nudge — sits just under the toggle it points to. */}
+        <AnimatePresence>
+          {showCoach && view === 'orbit' && (
+            <motion.button key="coach" type="button" data-cursor="hover"
+              className="arsenal-skim-coach"
+              onClick={() => handleView('inventory')}
+              initial={{ opacity: 0, y: -6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.35 }}>
+              {t('arsenal.skimCoach')}
+            </motion.button>
+          )}
+        </AnimatePresence>
         <div className="relative" style={{ height: H }}>
           {showOrbit && (
             <div ref={orbitWrapRef} className="absolute inset-0">
@@ -474,16 +518,17 @@ const ArsenalField = ({ view, onViewChange }) => {
           {showInv && <InventoryView invRef={invRef} withEntrance={view === 'inventory' && !transitioning} />}
         </div>
       </div>
-      {/* The one line that decodes the field — swaps meaning with the view. */}
+      {/* The decode-line slot. Orbit needs no legend now — the larger core discs
+          say it themselves. Inventory keeps its ✦ key. */}
       <AnimatePresence mode="wait" initial={false}>
-        <motion.p key={view} className="orbit-legend" aria-hidden="true"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1, transition: { duration: 0.4, delay: 0.6 } }}
-          exit={{ opacity: 0, transition: { duration: 0.18 } }}>
-          {view === 'orbit'
-            ? <><span className="orbit-legend__sun" /> {t('arsenal.coreLegend')}</>
-            : <><span className="orbit-legend__star">✦</span> {t('arsenal.inventoryLegend')}</>}
-        </motion.p>
+        {view === 'inventory' && (
+          <motion.p key="inv" className="orbit-legend" aria-hidden="true"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, transition: { duration: 0.4, delay: 0.6 } }}
+            exit={{ opacity: 0, transition: { duration: 0.18 } }}>
+            <span className="orbit-legend__star">✦</span> {t('arsenal.inventoryLegend')}
+          </motion.p>
+        )}
       </AnimatePresence>
     </div>
   );

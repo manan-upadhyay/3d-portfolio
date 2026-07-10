@@ -47,7 +47,7 @@ export default {
     stats: {
       projects: 'Hits Delivered',
       domains: 'Industries Conquered',
-      load: 'Faster Than Before',
+      shipped: 'Actually Shipped. Boom.',
     },
   },
 
@@ -81,9 +81,9 @@ export default {
         headline: 'Six industries. Production-grade. End to end. Boom — roasted.',
         role: 'Full Stack Developer',
         points: [
-          'Won the first-ever Employee of the Month. Month one. Out of 30 people. Undefeated.',
           'Delivered apps across finance, health, logistics, CRM, SaaS and media.',
           'Owned features end to end — meeting to monitoring, no babysitting required.',
+          'Also? Won the first-ever Employee of the Month. Month one. Out of 30 people. Undefeated.',
         ],
       },
       vanguard: {
@@ -109,10 +109,10 @@ export default {
   },
 
   arsenal: {
-    subtitle: 'These are my many talents. Hover one — go ahead, I’ll wait. I’m great at waiting, too. That’s another one.',
+    subtitle: 'These are my many talents. There are a lot of them. That’s kind of my whole thing.',
     coreLabel: 'My Skillset',
-    coreLegend: 'the ones with the ring around them? REALLY good at those. boom.',
     inventoryLegend: 'star = one of my very best things. boom.',
+    skimCoach: 'Just want the list? Switch to serious mode. Boom.',
     viewChart: 'Fun Mode',
     viewInventory: 'Serious Mode',
   },
@@ -164,11 +164,33 @@ export default {
           'Pitched in on a Spring Boot backend for PDF reports.',
         ],
       },
-      'digital-investor': { description: 'An investment platform with rich interactions and analytics. Money stuff. I’m good with money. Mostly.' },
-      srifin: { description: 'A full-stack CRM/ERP for a microfinance company — data, workflows, ID checks, locked down tight.' },
-      xipper: { description: 'A multi-tenant hotel platform — bookings, billing, eKYC, the whole front desk. Concierge not included.' },
-      'ai-chatbot': { description: 'A context-aware chatbot UI with real-time chat and serious testing. It talks back. Politely.' },
-      'fantasy-cricket': { description: 'A real-money fantasy cricket platform — live scores, secure payouts, admin tools. Sports! I’m great at sports.' },
+      'digital-investor': { description: 'An investment platform with rich interactions and analytics. Money stuff. I’m good with money. Mostly.', highlights: [
+        'Built React/Next.js feature modules with Adobe Analytics tracking. It tracks stuff! I love stuff.',
+        'Integrated Node/Express REST APIs — error handling, performance, all of it.',
+        'Added React Query caching so it stops bugging the server. Boom.',
+      ] },
+      srifin: { description: 'A full-stack CRM/ERP for a microfinance company — data, workflows, ID checks, locked down tight.', highlights: [
+        'Engineered RBAC and audit logs. Locked down. Very secure.',
+        'Sped up onboarding 20–25% with verification APIs.',
+        'Optimized the images and nailed the Core Web Vitals.',
+      ] },
+      xipper: { description: 'A multi-tenant hotel platform — bookings, billing, eKYC, the whole front desk. Concierge not included.', highlights: [
+        'Designed multi-tenant PostgreSQL models and REST APIs. Lots of hotels, one system. Boom.',
+        'Cut manual billing adjustments 30–35%.',
+        'Sped up checkout 15–20%. Fast!',
+      ] },
+      'ai-chatbot': { description: 'A context-aware chatbot UI with real-time chat and serious testing. It talks back. Politely.', highlights: [
+        'Led the UI architecture — Next.js, Redux, WebSocket, real-time.',
+        'Added Storybook and Cypress for testing. Responsible! That’s me.',
+        'Cut regressions 25–30%. Boom. Roasted.',
+      ] },
+      'fantasy-cricket': { description: 'A real-money fantasy cricket platform — live scores, secure payouts, admin tools. Sports! I’m great at sports.', highlights: [
+        'Owned the Node.js backend — MongoDB schema, REST APIs, and cron pipelines pulling live ball-by-ball data in real time.',
+        'Built a real-time points engine — Dream11-style teams, captain/vice-captain multipliers, scored off every match event.',
+        'Back-traceable wallet ledger — auto payouts, winning logic, Razorpay. Real money! No pressure. Okay, some pressure.',
+        'Configurable contests and prize pools per match, plus GST/TDS tax reports in the React admin panel.',
+        'Backed up the React Native app — team building, live tracking. Boom.',
+      ] },
     },
   },
 
@@ -375,7 +397,7 @@ export default {
         motion: { name: 'Party planning (scrolling)', why: 'One clock runs all the movement so nothing bumps into anything. On phones we let the phone do it — delegation. I invented that.' },
         narrator: { name: 'The improv troupe', why: 'Ten voices, one of them literally me. The secret ones don’t even show up until you say the magic word. Very exclusive club.' },
         sky: { name: 'Facilities (lighting)', why: 'The site checks YOUR clock and sets the lighting — dawn, day, dusk, night. Not your location. We are not creeps.' },
-        sound: { name: 'The office band', why: 'Every sound is made up on the spot by the browser. We ship zero audio files. The band never gets paid, because the band is math.' },
+        sound: { name: 'The office band', why: 'Nearly every sound is made up on the spot by the browser — the one file we ship is the raven’s caw. The band never gets paid, because the band is mostly math.' },
         memory: { name: 'HR files', why: 'Your visit record stays in your own browser. HR here actually protects your information. Take notes, Toby.' },
         telemetry: { name: 'Accounting', why: 'They count what happens, not who you are. No cookies, no names. If you say Do-Not-Track, accounting goes home early.' },
         raven: { name: 'The mailroom', why: 'Your message goes to a back office that holds the only key — the browser never sees it. Security level: Threat Level Midnight.' },

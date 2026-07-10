@@ -5,11 +5,12 @@
 // frames the graph to the dense build burst; the earlier days stay recorded for
 // truth but sit outside the "how this site was built" window.
 export const commitHistory = {
-  "total": 127,
+  "total": 131,
   "first": "2023-07-30",
-  "last": "2026-07-09",
+  "last": "2026-07-10",
   "windowStart": "2026-06-20",
   "days": {
+    "2026-07-10": 4,
     "2026-07-09": 2,
     "2026-07-08": 10,
     "2026-07-07": 2,

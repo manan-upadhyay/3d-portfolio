@@ -233,7 +233,11 @@ const RealmPlate = ({ project, index }) => {
             {links.length > 0 ? (
               <>
                 {project.live_demo_link && (
-                  <Magnet strength={0.25}>
+                  /* Tight activation halo (padding) + gentle pull so the magnet
+                     only wakes when the cursor is over the button itself — a wide
+                     halo let it lurch up to the "full story" toggle above it,
+                     colliding two CTAs (owner report 2026-07). */
+                  <Magnet padding={24} magnetStrength={4}>
                     <a href={project.live_demo_link} target="_blank" rel="noopener noreferrer" data-cursor="hover"
                       onClick={() => track('project_link_open', { project: project.name, kind: 'live' })}
                       className="btn-primary">
@@ -262,8 +266,13 @@ const RealmPlate = ({ project, index }) => {
 };
 
 /* ---------- Secondary compact card ---------- */
+// A short voiced lead + a scannable list of what I actually built (owner request
+// 2026-07: the old single prose block buried the real work). `role` reads at a
+// glance; `highlights` are factual substance shared across voices (like the
+// marginalia) — each personality still colours the one-line `description` lead.
 const RealmCard = ({ project }) => {
   const { t } = useTranslation();
+  const highlights = t(`works.projects.${project.id}.highlights`, { returnObjects: true });
   return (
   <ScrollReveal direction="up" className="w-full">
     <div className="realm-card h-full p-6 flex flex-col">
@@ -274,7 +283,23 @@ const RealmCard = ({ project }) => {
         </div>
         {project.isNDA && <span className="wax-seal wax-seal--nda flex-shrink-0"><Lock size={10} /> {t('works.nda')}</span>}
       </div>
-      <p className="mt-3 text-[13.5px] leading-[21px] flex-1" style={{ color: 'var(--color-text-muted)' }}>{t(`works.projects.${project.id}.description`)}</p>
+      {project.role && (
+        <p className="mt-2.5 font-mono text-[10.5px] uppercase tracking-[0.09em] inline-flex items-center gap-2" style={{ color: 'var(--color-ember)' }}>
+          <span className="w-3 h-px" style={{ background: 'var(--color-ember)', opacity: 0.6 }} aria-hidden="true" />
+          {project.role}
+        </p>
+      )}
+      <p className="mt-3 text-[13px] leading-[20px]" style={{ color: 'var(--color-text-muted)' }}>{t(`works.projects.${project.id}.description`)}</p>
+      {Array.isArray(highlights) && highlights.length > 0 && (
+        <ul className="mt-4 space-y-2 flex-1">
+          {highlights.map((hgl, i) => (
+            <li key={i} className="flex gap-2.5 text-[12.5px] leading-[18px]" style={{ color: 'var(--color-text-muted)' }}>
+              <span className="mt-[6px] w-1 h-1 rounded-full flex-shrink-0" style={{ background: 'var(--color-gold)' }} aria-hidden="true" />
+              <span><Annotated text={hgl} /></span>
+            </li>
+          ))}
+        </ul>
+      )}
       {project.isNDA && project.architecture && (
         <div className="nda-schem-mini mt-4" title={t('works.ndaArch')}>
           <NdaSchematic architecture={project.architecture} label={t('works.ndaArch')} />

@@ -48,7 +48,7 @@ export default {
     stats: {
       projects: 'Releases Shipped',
       domains: 'Industries Served',
-      load: 'Swifter Than Before',
+      shipped: 'To Production, Delivered',
     },
   },
 
@@ -82,9 +82,9 @@ export default {
         headline: 'Six industries. Production-grade. Survive, the bugs did not.',
         role: 'Full Stack Developer',
         points: [
-          'The first-ever Employee of the Month, named he was — over nine-and-twenty others, chosen. Proud, but humble, he tries to be. Tries.',
           'Across finance, health, logistics, CRM, SaaS and media, applications he delivered.',
           'End to end, features he owned — from the first meeting to production monitoring. Left behind, nothing was.',
+          'And in his first month, the first-ever Employee of the Month, named he was — over nine-and-twenty others, chosen. Proud, but humble, he tries to be. Tries.',
         ],
       },
       vanguard: {
@@ -110,10 +110,10 @@ export default {
   },
 
   arsenal: {
-    subtitle: 'His tools, these are. Field-tested in production, every one — not in a tutorial. Hover one, and its allies name it will. Much it keeps, hmm.',
+    subtitle: 'His tools, these are. Field-tested in production, every one — not in a tutorial.',
     coreLabel: 'The Tools',
-    coreLegend: 'the ringed ones, reach for them first he does',
     inventoryLegend: 'marked so, the tools he reaches for first are',
+    skimCoach: 'A plain list, prefer you? To the archives, turn.',
     viewChart: 'The Galaxy',
     viewInventory: 'The Archives',
   },
@@ -165,11 +165,33 @@ export default {
           'A Spring Boot backend for PDF reports, a hand he lent.',
         ],
       },
-      'digital-investor': { description: 'An investment platform, rich with interaction and analytics. Power, coin is — only to the one who understands it.' },
-      srifin: { description: 'A full-stack CRM/ERP for a microfinance house — data, workflows, identity checks, sealed tight they are.' },
-      xipper: { description: 'A multi-tenant hotel platform — bookings, billing, eKYC. What a good inn owes its guests, know he does.' },
-      'ai-chatbot': { description: 'A context-aware chatbot with real-time conversation and rigorous testing. Know things it does — fewer than a Jedi, but well it tries.' },
-      'fantasy-cricket': { description: 'A real-money fantasy cricket platform — live scores, secure payouts, administration. Wager on anything, people will. The table, built it he did.' },
+      'digital-investor': { description: 'An investment platform, rich with interaction and analytics. Power, coin is — only to the one who understands it.', highlights: [
+        'React/Next.js feature modules, built he did — with Adobe Analytics, every move it marks.',
+        'Node/Express REST APIs, wove he did — errors caught, performance sharpened.',
+        'React Query caching, added he did — twice the server it asks not.',
+      ] },
+      srifin: { description: 'A full-stack CRM/ERP for a microfinance house — data, workflows, identity checks, sealed tight they are.', highlights: [
+        'RBAC and audit logs, forged he did — pass none who should not, and written all is.',
+        'Onboarding, quickened a fifth he did — with verification APIs.',
+        'Images optimized — green the Core Web Vitals stood.',
+      ] },
+      xipper: { description: 'A multi-tenant hotel platform — bookings, billing, eKYC. What a good inn owes its guests, know he does.', highlights: [
+        'Multi-tenant PostgreSQL models and REST APIs, drew he did — many under one roof, cross they do not.',
+        'Manual billing, cut a third he did.',
+        'Checkout, hastened a fifth he did. Wait, no guest does.',
+      ] },
+      'ai-chatbot': { description: 'A context-aware chatbot with real-time conversation and rigorous testing. Know things it does — fewer than a Jedi, but well it tries.', highlights: [
+        'The UI, led he did — Next.js, Redux, WebSocket. Real-time, the words arrive.',
+        'Storybook and Cypress, set he did — against regressions, guard they do.',
+        'Regressions, near a third he cut.',
+      ] },
+      'fantasy-cricket': { description: 'A real-money fantasy cricket platform — live scores, secure payouts, administration. Wager on anything, people will. The table, built it he did.', highlights: [
+        'The Node.js backend, held he did — MongoDB schema, REST APIs, and cron riders bringing live ball-by-ball word, in real time.',
+        'A points engine, built he did — captains and vice-captains counted, scored anew each turn of the match.',
+        'A wallet ledger that forgets nothing — payouts automatic, winnings just, Razorpay at the gate. Collect, it always does.',
+        'Contests and prize pools per match, set he did — and GST/TDS tax rolls, filtered richly in the admin hall.',
+        'The React Native app, aided he did — teams assembled, matches watched as unfold they do.',
+      ] },
     },
   },
 
@@ -315,7 +337,7 @@ export default {
       },
       recap: {
         title: 'The Reading',
-        how: 'At the foot of the contact chamber, your device it reads, your screen, even your city. Kept, nothing is. Reads machines, it does — as read rooms, a Jedi does.',
+        how: 'At the close of this page, your device it reads, your screen, even your city. Kept, nothing is. Reads machines, it does — as read rooms, a Jedi does.',
       },
       console: {
         title: 'The Whispered Word',
@@ -376,7 +398,7 @@ export default {
         motion: { name: 'The current', why: 'One clock, all movement obeys. Fight itself, the motion does not. On touch — flow natively, it must.' },
         narrator: { name: 'The voices', why: 'Ten voices, one truth. Sleep, the sealed ones do, until spoken their word is. Do, or do not narrate — there is no try.' },
         sky: { name: 'The suns', why: 'Your clock it reads — your location, never. Dawn or night it chooses, as your own sky stands. Spy, it need not.' },
-        sound: { name: 'The hum', why: 'Conjured in the moment, every sound is. Shipped, zero bytes are. Luminous math — not crude recordings.' },
+        sound: { name: 'The hum', why: 'Conjured in the moment, nearly every sound is. Ship as a file, only the raven’s caw does. Luminous math — not crude recordings.' },
         memory: { name: 'The holocron', why: 'With the session, your log dies. In your own browser, the visit count stays. Sent, nothing is.' },
         telemetry: { name: 'The council', why: 'Moments it counts, not beings. Nameless, you remain. Say “track me not,” and silent the council goes.' },
         raven: { name: 'The messenger', why: 'To a serverless temple, your words fly. The key — board the browser, it never does. Strong, this security is.' },

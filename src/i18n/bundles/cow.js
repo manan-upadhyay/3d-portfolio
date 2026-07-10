@@ -43,7 +43,7 @@ export default {
     stats: {
       projects: 'Moo Moo',
       domains: 'Moo Moo Moo',
-      load: 'Mooooo',
+      shipped: 'Mooooo',
     },
   },
 
@@ -83,8 +83,8 @@ export default {
   arsenal: {
     subtitle: 'Moo moo moo moo moo moo moo — moo moo moo moo moo moo moo.',
     coreLabel: 'Moo',
-    coreLegend: 'moo moo moo, moo moo MOO',
     inventoryLegend: 'moo moo MOO',
+    skimCoach: 'Moo moo moo? Moo moo moo moo.',
     viewChart: 'Moo',
     viewInventory: 'Moo Moo',
   },
@@ -107,11 +107,11 @@ export default {
       gajaakriti: { lead: 'Moo moo moo moo moo — moo moo moo.', description: 'Moo moo moo moo moo moo moo moo moo moo moo.', highlights: ['Moo moo moo moo moo moo moo.', 'Moo moo moo moo moo moo.', 'Moo moo moo moo moo.', 'Moo moo moo moo moo moo moo.'] },
       'royal-tiles': { lead: 'Moo moo moo, moo moo moo — moo PDF moo.', description: 'Moo moo moo moo moo — moo moo moo, moo moo moo moo.', highlights: ['Moo moo moo moo moo moo.', 'Moo moo moo moo moo.', 'Moo moo moo moo moo moo moo.', 'Moo moo moo moo.', 'Moo moo moo moo moo.'] },
       'advisor-portfolio': { lead: 'Moo moo moo moo moo, moo moo moo. Moo.', description: 'Moo moo moo moo moo moo moo — moo, moo, moo moo moo.', highlights: ['Moo moo moo moo moo moo moo.', 'Moo moo moo moo moo.', 'Moo moo moo moo moo moo.', 'Moo moo moo moo.', 'Moo moo moo moo moo.'] },
-      'digital-investor': { description: 'Moo moo moo moo moo moo moo moo moo.' },
-      srifin: { description: 'Moo moo moo moo moo moo moo moo moo.' },
-      xipper: { description: 'Moo moo moo moo moo moo moo moo moo moo.' },
-      'ai-chatbot': { description: 'Moo moo moo moo moo moo moo moo moo.' },
-      'fantasy-cricket': { description: 'Moo moo moo moo moo moo moo moo moo moo.' },
+      'digital-investor': { description: 'Moo moo moo moo moo moo moo moo moo.', highlights: ['Moo moo moo moo moo moo.', 'Moo moo moo moo moo.', 'Moo moo moo moo moo moo moo.'] },
+      srifin: { description: 'Moo moo moo moo moo moo moo moo moo.', highlights: ['Moo moo moo moo moo.', 'Moo moo moo moo moo moo.', 'Moo moo moo moo moo.'] },
+      xipper: { description: 'Moo moo moo moo moo moo moo moo moo moo.', highlights: ['Moo moo moo moo moo moo.', 'Moo moo moo moo moo.', 'Moo moo moo moo moo moo.'] },
+      'ai-chatbot': { description: 'Moo moo moo moo moo moo moo moo moo.', highlights: ['Moo moo moo moo moo moo.', 'Moo moo moo moo moo.', 'Moo moo moo moo.'] },
+      'fantasy-cricket': { description: 'Moo moo moo moo moo moo moo moo moo moo.', highlights: ['Moo moo moo moo moo moo moo.', 'Moo moo moo moo moo moo.', 'Moo moo moo moo moo.', 'Moo moo moo moo moo moo.', 'Moo moo moo moo moo.'] },
     },
   },
 

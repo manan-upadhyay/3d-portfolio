@@ -50,8 +50,8 @@ export default {
       vanguard: {
         chapter: 'Lead Role',
         headline: 'Leading frontend across the Capital Group product network.',
-        org: 'Infosys · embedded with Capital Group',
-        via: 'Employed by Inexture, sub-contracted through Infosys, embedded with Capital Group.',
+        org: 'Infosys · on the Capital Group team (USA)',
+        via: 'Employed by Inexture, placed through Infosys, working on-site with the Capital Group team.',
       },
       horizon: { chapter: "What's Next", headline: 'Open to teams who value craft and ownership.' },
     },
@@ -59,10 +59,10 @@ export default {
   },
 
   arsenal: {
-    subtitle: 'The tools I use across the stack — hover a skill to see how it connects.',
+    subtitle: 'The tools I use across the stack.',
     coreLabel: 'Skills',
-    coreLegend: 'the ringed, larger tools are my core stack',
     inventoryLegend: 'marks my core stack',
+    skimCoach: 'Prefer a quick list? Switch to the list view.',
     viewChart: 'Orbit',
     viewInventory: 'List',
   },
@@ -218,7 +218,7 @@ export default {
   atelier: {
     eyebrow: 'Making-Of',
     title: 'How this site was built',
-    confession: 'The making-of, minus the mystique.',
+    confession: 'Behind the scenes — how this was really made.',
     confessionSub:
       'How this site is built, what was cut, and the details you might miss — all real, not screenshots of a process.',
     acts: { build: 'The Build', engine: 'Infrastructure', hidden: 'Details & extras' },
@@ -255,7 +255,7 @@ export default {
       voice: { title: 'Multi-voice system', why: 'A full i18next layer; the entire site re-skins through ten writing voices, architected to scale further.' },
       marginalia: { title: 'Footnotes', why: 'Hover a phrase to reveal the underlying engineering fact in a footnote.' },
       sky: { title: 'Time-aware theme', why: 'Five theme modes resolved from your local time via SunCalc — no geolocation permission required.' },
-      sound: { title: 'Sound design', why: 'A Web Audio cue system (synthesized, zero asset weight); default-on, muted under reduced-motion.' },
+      sound: { title: 'Sound design', why: 'A Web Audio cue system (synthesized — only the raven’s caw ships as a file); default-on, muted under reduced-motion.' },
       recap: { title: 'Session recap', why: 'A client-side panel that reads device + connection details and maps your location — nothing stored or sent.' },
       eggs: { title: 'Hidden voices', why: 'Type a trigger word to unlock additional personality voices, each fully written.' },
       telemetry: { title: 'Analytics & SEO', why: 'Fifty product events feeding a single per-visit session recap, twenty-three super-properties, and five PostHog dashboards — all cookieless, anonymous, and disabled under Do-Not-Track. Plus structured-data SEO and a custom logger. It answers "are these features actually used?" without tracking who uses them.' },
@@ -316,7 +316,7 @@ export default {
       panels: {
         privacy: {
           title: 'Privacy-first by design',
-          body: 'Cookieless, anonymous, memory-only — and fully disabled when Do-Not-Track is set.',
+          body: 'No cookies, no accounts, nothing kept between visits — and it turns off completely if your browser asks not to be tracked.',
         },
         discoverability: {
           title: 'Built to be found',
@@ -348,7 +348,7 @@ export default {
         motion: { name: 'The scroll', why: 'Lenis and GSAP run on one shared ticker, so scrolling and animation never compete. Touch devices get native scroll.' },
         narrator: { name: 'The narrators', why: 'Ten narration styles over one i18next layer; the hidden ones are code-split and load only when unlocked.' },
         sky: { name: 'The theme', why: 'SunCalc derives the theme from your local time — no geolocation involved.' },
-        sound: { name: 'The sound', why: 'All interface sound is synthesized with the Web Audio API — zero audio files shipped; muted when reduced motion is set.' },
+        sound: { name: 'The sound', why: 'Nearly all interface sound is synthesized with the Web Audio API — only the raven’s caw ships as a file; muted when reduced motion is set.' },
         memory: { name: 'The memory', why: 'Session-only visit data plus a local visit counter — stored in your browser, never transmitted.' },
         telemetry: { name: 'Analytics', why: 'PostHog and Vercel Analytics, cookieless and anonymous — fully disabled when Do-Not-Track is on.' },
         raven: { name: 'Contact form', why: 'Messages post to a serverless function which calls Resend — the API key stays server-side.' },

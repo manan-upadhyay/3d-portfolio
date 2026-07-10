@@ -48,7 +48,7 @@ export default {
     stats: {
       projects: 'Things Shipped',
       domains: 'Industries Survived',
-      load: 'Faster Now',
+      shipped: 'Actually Shipped',
     },
   },
 
@@ -82,9 +82,9 @@ export default {
         headline: 'Six industries. Production-grade. The bugs did not make it. RIP the bugs.',
         role: 'Full Stack Developer',
         points: [
-          'Won the first-ever Employee of the Month. Month one. Out of 30 people. Could I BE any more employee-of-the-month? No. Literally no, I checked.',
           'Shipped apps across finance, health, logistics, CRM, SaaS and media. That’s basically all the industries. I ran out of industries.',
           'Owned features end to end — meeting to monitoring, no babysitting. I am, unnervingly, a responsible adult now.',
+          'Oh, and month one? Won the first-ever Employee of the Month. Out of 30 people. Could I BE any more employee-of-the-month? No. Literally no, I checked.',
         ],
       },
       vanguard: {
@@ -110,10 +110,10 @@ export default {
   },
 
   arsenal: {
-    subtitle: 'My skills. Could there BE any more of them? Hover one — it’ll tell you which tools it hangs out with. They’re a very codependent group. I relate to them deeply.',
+    subtitle: 'My skills. Could there BE any more of them? They’re a very codependent group. I relate to them deeply.',
     coreLabel: 'The Skills',
-    coreLegend: 'the ringed ones are the mains — the rest are, and I cannot stress this enough, also good',
     inventoryLegend: 'marks a main. the rest? also good. I cannot stress this enough.',
+    skimCoach: 'Rather just read a list? Switch to readable mode.',
     viewChart: 'Spinny Mode',
     viewInventory: 'Readable Mode',
   },
@@ -165,11 +165,33 @@ export default {
           'Pitched in on a Spring Boot backend for PDF reports. Java. I did Java. I’d like that noted.',
         ],
       },
-      'digital-investor': { description: 'An investment platform with rich interactions and analytics. Money stuff. I understand it professionally and fear it personally.' },
-      srifin: { description: 'A full-stack CRM/ERP for a microfinance company — data, workflows, ID checks, locked down tight. Riveting to build. Genuinely. I don’t even mean that sarcastically, which is rare.' },
-      xipper: { description: 'A multi-tenant hotel platform — bookings, billing, eKYC, the whole front desk. Could a check-in flow BE any more thoroughly handled? It could not.' },
-      'ai-chatbot': { description: 'A context-aware chatbot with real-time chat and serious testing. It talks back — and honestly it’s a better conversationalist than I am at parties.' },
-      'fantasy-cricket': { description: 'A real-money fantasy cricket platform — live scores, secure payouts, admin tools. People bet actual money on it. On CRICKET. Could that BE any more of a responsibility? Built it anyway.' },
+      'digital-investor': { description: 'An investment platform with rich interactions and analytics. Money stuff. I understand it professionally and fear it personally.', highlights: [
+        'Built React/Next.js feature modules with Adobe Analytics tracking. Could I BE any more data-aware?',
+        'Integrated Node/Express REST APIs — error handling, performance tuning, the whole thing.',
+        'Added React Query caching so it stops asking the server the same question. Relatable.',
+      ] },
+      srifin: { description: 'A full-stack CRM/ERP for a microfinance company — data, workflows, ID checks, locked down tight. Riveting to build. Genuinely. I don’t even mean that sarcastically, which is rare.', highlights: [
+        'Engineered RBAC and audit logs for compliance. Locked down. Unlike my life.',
+        'Sped up onboarding 20–25% with verification APIs.',
+        'Optimized images and fixed the Core Web Vitals. Green. Finally, something is.',
+      ] },
+      xipper: { description: 'A multi-tenant hotel platform — bookings, billing, eKYC, the whole front desk. Could a check-in flow BE any more thoroughly handled? It could not.', highlights: [
+        'Designed multi-tenant PostgreSQL models and REST APIs. Many hotels, one system, no chaos.',
+        'Cut manual billing adjustments 30–35%.',
+        'Sped up checkout 15–20%. Could a front desk BE any faster?',
+      ] },
+      'ai-chatbot': { description: 'A context-aware chatbot with real-time chat and serious testing. It talks back — and honestly it’s a better conversationalist than I am at parties.', highlights: [
+        'Led UI architecture — Next.js, Redux, WebSocket, real-time.',
+        'Added Storybook and Cypress for testing. Very responsible. I barely recognize me.',
+        'Cut regressions 25–30%.',
+      ] },
+      'fantasy-cricket': { description: 'A real-money fantasy cricket platform — live scores, secure payouts, admin tools. People bet actual money on it. On CRICKET. Could that BE any more of a responsibility? Built it anyway.', highlights: [
+        'Owned the Node.js backend — MongoDB schema, REST APIs, cron pipelines syncing live ball-by-ball data. In real time.',
+        'Built a real-time points engine — Dream11 teams, captain/vice-captain multipliers, scored off every match event.',
+        'Back-traceable wallet ledger — auto payouts, winning logic, Razorpay. Real money. Could that BE more stressful?',
+        'Configurable contests and prize pools per match, plus GST/TDS tax reports in the React admin panel.',
+        'Supported the React Native app — team building, live contest tracking.',
+      ] },
     },
   },
 
@@ -376,7 +398,7 @@ export default {
         motion: { name: 'The recliner mechanism', why: 'One clock runs all the moving parts, so the scrolling never does that jerky thing. On phones it’s your native scroll. We know our limits.' },
         narrator: { name: 'The roommates', why: 'Ten voices in one apartment, and the hidden ones only come out when you say the secret word. It’s like Joey behind the door, but with better vocabulary.' },
         sky: { name: 'The window', why: 'It checks your clock — not where you live — and matches the light outside. Dawn, day, dusk, night. Zero stalking. We had a meeting about it.' },
-        sound: { name: 'The keyboard in the corner', why: 'Every sound is made up live by the browser. Zero audio files shipped. It plays better than Ross. Low bar, granted.' },
+        sound: { name: 'The keyboard in the corner', why: 'Nearly every sound is made up live by the browser — the one file we ship is the raven’s caw. It plays better than Ross. Low bar, granted.' },
         memory: { name: 'The junk drawer', why: 'Your session stuff dies with the tab; the visit count stays in your browser. Nothing leaves the drawer. Ever. Like Monica would allow that.' },
         telemetry: { name: 'The building ledger', why: 'Counts what happens, not who you are — no cookies, no names. Do-Not-Track? The ledger closes. Treeger never knows.' },
         raven: { name: 'The mail slot', why: 'Your message goes to a serverless mailroom holding the only key — the browser never sees it. Could the delivery BE any more secure?' },

@@ -202,19 +202,45 @@ const CUES = {
     swoosh(t0, { dur: 0.38, peak: CONFIG.mapClose.peak, from: 1400, to: 260, q: 0.6 });
   },
 
-  // Arsenal view swap, orbit → inventory — the sky committed to paper: a soft
-  // downward fold that lands on a low "settle" as the last row docks.
+  // Arsenal view swap, orbit → inventory — NOT one whoosh but a shower of the
+  // many bodies themselves leaving their orbits and docking into rows, timed to
+  // the actual GSAP flight (Tech.jsx): the first ~0.3s is the orbit's rings/core
+  // collapsing (the pause — silent), then the Flip carries ~20 glyphs to their
+  // rows staggered (each 0.03, dur 0.95) so items keep arriving until ~1.4s. Each
+  // grain is one item ticking as it docks — pitch descends as the field folds
+  // down into a list — and a weighted "settle" lands with the last row.
   chartFold(t0) {
-    swoosh(t0, { dur: 0.55, peak: CONFIG.chartSwap.peak, from: 1300, to: 240, q: 0.7 });
-    blip(t0 + 0.45, { freq: 150, glideTo: 100, type: 'triangle', dur: 0.16, peak: CONFIG.chartSwap.peak * 0.8, attack: 0.004 });
+    const n = 20;
+    const start = 0.3;   // items only start crossing once the rings/core clear
+    const span = 1.06;   // through the staggered Flip arrivals
+    for (let i = 0; i < n; i++) {
+      const p = i / (n - 1);
+      const dt = start + p * span + (Math.random() - 0.5) * 0.05;
+      const f = Math.max(150, 820 - p * 520 + (Math.random() - 0.5) * 130); // falling into rows
+      blip(t0 + dt, { freq: f, type: 'sine', dur: 0.05, peak: CONFIG.chartSwap.peak * (0.26 + 0.2 * (1 - p)), attack: 0.002 });
+    }
+    const land = start + span + 0.05; // ~1.41 — the last row docks
+    blip(t0 + land, { freq: 150, glideTo: 100, type: 'triangle', dur: 0.16, peak: CONFIG.chartSwap.peak * 0.7, attack: 0.004 });
+    swoosh(t0 + land, { dur: 0.1, peak: CONFIG.chartSwap.peak * 0.28, type: 'lowpass', from: 640, to: 190, q: 0.7 });
   },
 
-  // Arsenal view swap, inventory → orbit — the page unfurls back into sky: an
-  // upward swell that blooms into a soft high resolve as the rings redraw.
+  // Arsenal view swap, inventory → orbit — the reverse flight (Tech.jsx): rows
+  // fade for ~0.3s, then the rings redraw and the Flip scatters the glyphs back
+  // out into orbit through ~1.4s. Same grains, now rising in pitch and spreading,
+  // blooming into a soft high resolve as the rings finish redrawing.
   chartUnfurl(t0) {
-    swoosh(t0, { dur: 0.6, peak: CONFIG.chartSwap.peak, from: 240, to: 1500, q: 0.7 });
-    blip(t0 + 0.45, { freq: 659.25, type: 'sine', dur: 0.22, peak: CONFIG.chartSwap.peak * 0.55, attack: 0.006 });
-    blip(t0 + 0.45, { freq: 1318.5, type: 'sine', dur: 0.12, peak: CONFIG.chartSwap.peak * 0.18, attack: 0.004 });
+    const n = 20;
+    const start = 0.32;  // rows clear first, then the sky redraws
+    const span = 1.04;
+    for (let i = 0; i < n; i++) {
+      const p = i / (n - 1);
+      const dt = start + p * span + (Math.random() - 0.5) * 0.05;
+      const f = 360 + p * 640 + (Math.random() - 0.5) * 150;     // spreading up into rings
+      blip(t0 + dt, { freq: f, type: 'sine', dur: 0.05, peak: CONFIG.chartSwap.peak * (0.22 + 0.2 * p), attack: 0.002 });
+    }
+    const bloom = start + span + 0.03; // ~1.39 — rings settled
+    blip(t0 + bloom, { freq: 659.25, type: 'sine', dur: 0.22, peak: CONFIG.chartSwap.peak * 0.5, attack: 0.006 });
+    blip(t0 + bloom, { freq: 1318.5, type: 'sine', dur: 0.12, peak: CONFIG.chartSwap.peak * 0.16, attack: 0.004 });
   },
 
   // Arsenal hover — a tiny pluck; pitch varies per node so a sweep across the

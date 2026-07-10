@@ -39,7 +39,7 @@ Section components live in `src/sections/`; reusable widgets in `src/components/
 | # | Chapter label | Component | `id` | Concept |
 |---|---|---|---|---|
 | 00 | Origin | `sections/Hero.jsx` | `origin` | Pure-CSS starfield + **Canvas2D astrolabe** (no bg image) |
-| 01 | The Craft | `sections/About.jsx` | `about` | Who he is + disciplines |
+| 01 | The Maker | `sections/About.jsx` | `about` | Who he is + disciplines |
 | 02 | The Journey | `sections/Experience.jsx` | `work` | **Pinned horizontal** scrubbed path |
 | 03 | The Arsenal | `sections/Tech.jsx` | `arsenal` | **Interactive orbital** skill field |
 | 04 | The Realms | `sections/Works.jsx` | `projects` | **Editorial cinematic** project plates |
