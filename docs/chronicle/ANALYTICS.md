@@ -116,6 +116,9 @@ via autocapture — the list below is our *intentional* product events.)
 | `footer_cta` | `Layout` (footer) | `target` | footer CTA clicks |
 | `voice_clue_solved` / `_revealed` / `_miss` | `ClueUnlock` | `voice` | **sealed-voice unlock funnel** (mobile path) |
 | `session_heartbeat` | `Layout` | `seconds` 15/30/60 | short-session depth (recap-miss backfill) |
+| `time_machine_view` | `TimeMachine` page (on mount) | — | **reached the Time Machine?** |
+| `time_machine_enter` | SideRail / footer / MakingOf rail | `from` | how they enter the STRATA coda |
+| `time_machine_exit` | TimeMachine rail (home action) | `from` | did they return from the Time Machine? |
 
 > **Voices note.** All 10 voices (2 open + 8 sealed) are covered generically:
 > `voice_selected {voice}` and `voice_unlocked {voice}` carry the voice id, so

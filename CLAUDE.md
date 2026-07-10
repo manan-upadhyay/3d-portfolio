@@ -74,7 +74,9 @@ the mobile map button, the ⌘K handler) lives in `pages/Chronicle.jsx`; the
 `SideRail` is shared (a presentational component fed route-specific `items` +
 footer `actions` by each page). The Atelier's chrome is its acts `SideRail`
 (desktop) + a mobile return doorway. `vercel.json` rewrites client
-routes to `index.html` (excluding `/api`) so `/making-of` is directly shareable.
+routes to `index.html` (excluding `/api`) so `/making-of` and `/time-machine`
+are directly shareable. The catch-all `*` renders the cinematic 404 ("Off the
+Map" — `pages/Void.jsx`, lazy-loaded, self-contained one-viewport scene).
 
 Chapters are defined **once** in `src/constants/index.js` — `chapters` (keyed by
 section `id`: structural **data** only now — `no`, map `x`/`y`, search `kw`) plus
@@ -109,9 +111,12 @@ All color via CSS variables in `src/index.css`. See
 
 - **React 18 + Vite 4**, JSX function components + hooks only (one exception:
   `ErrorBoundary` class). **Node 24** (pinned via `engines` + `.nvmrc`).
-- **react-router-dom** → the two-route SPA: `/` (Chronicle) + `/making-of`
-  (Atelier), sharing `components/Layout.jsx` (see §2 "Routing"). `vercel.json`
-  provides the SPA rewrite (excluding `/api`).
+- **react-router-dom** → the SPA routes: `/` (Chronicle), `/making-of` (Atelier),
+  and `/time-machine` (the Time Machine — STRATA coda, see
+  [sections/11](docs/chronicle/sections/11-the-time-machine.md)), all sharing
+  `components/Layout.jsx` (see §2 "Routing"). Each coda route is off the
+  six-chapter spine, reached by quiet doorways (rails + footer), never a seventh
+  chapter. `vercel.json` provides the SPA rewrite (excluding `/api`).
 - **Tailwind** for layout/spacing + **CSS variables** for all theme color.
 - **Framer Motion** → component enter/hover/exit + small interactions.
 - **GSAP + ScrollTrigger** → scroll choreography (pin, scrub, parallax-out).
@@ -119,8 +124,10 @@ All color via CSS variables in `src/index.css`. See
   Framer motion variants live in `src/lib/motion.js`.
 - **Zustand** → theme/sky store (`src/store/useThemeStore.ts`) + voice store
   (`src/store/useVoiceStore.ts`) + sound store (`src/store/useSoundStore.ts`) +
-  the **session-only** expedition store (`src/hooks/useExpedition.js`, *not*
-  persisted — powers the Phase 5 recap). See [LEGENDARY-ROADMAP](docs/chronicle/LEGENDARY-ROADMAP.md) §5.
+  coachmark coordinator (`src/store/useCoachmark.ts` — ensures only one onboarding
+  hint shows at a time) + the **session-only** expedition store
+  (`src/hooks/useExpedition.js`, *not* persisted — powers the Phase 5 recap).
+  See [LEGENDARY-ROADMAP](docs/chronicle/LEGENDARY-ROADMAP.md) §5.
 - **Phase 5 recap** → `ExpeditionRecap` (a cinematic instrument panel that closes
   the **Atelier** (`/making-of`), as the send-off below the manifesto — moved off
   the homepage's Contact foot per the 2026-07-08 homepage value audit: it's a
@@ -145,7 +152,8 @@ All color via CSS variables in `src/index.css`. See
 - **i18next + react-i18next** → the **Voice switcher** (multi-personality copy).
   Each voice = an i18next language; `chronicle` is the complete base/fallback,
   other voices override only changed keys. Core voices (`chronicle`, `plain`)
-  bundle eagerly; easter-egg personalities are code-split via `loadVoice`
+  bundle eagerly; Easter-egg personalities (scott / dwight / cow / got / deadpool / avengers /
+  yoda / chandler) are code-split via `loadVoice`
   (`src/i18n/index.js`). The `voices.js` registry carries `category` + `glyph`
   (serif monogram) per voice so the feature scales: a **Voice Hall** overlay
   (`VoiceHall`, ⇧⌘V / the cluster popover's CTA / the ⌘K palette) is the
@@ -254,6 +262,7 @@ clean, and it looks like a *moment* — not a list.
 | [sections/08-codebase-atlas.md](docs/chronicle/sections/08-codebase-atlas.md) | Cinematic codebase explorer (new) |
 | [sections/09-off-the-map-404.md](docs/chronicle/sections/09-off-the-map-404.md) | The cinematic 404 — "Off the Map" (specced, pending greenlight) |
 | [sections/10-the-threshold-loading.md](docs/chronicle/sections/10-the-threshold-loading.md) | Loading states — the fog Threshold loader (specced, pending greenlight) |
+| [TIME-MACHINE-PROPOSAL.md](docs/chronicle/TIME-MACHINE-PROPOSAL.md) + [sections/11-the-time-machine.md](docs/chronicle/sections/11-the-time-machine.md) + [TIME-MACHINE-FEEDBACK-PASS.md](docs/chronicle/TIME-MACHINE-FEEDBACK-PASS.md) | The Time Machine (`/time-machine`) — STRATA descent through Manan's earlier portfolios (2019/2023) as preserved "ruins"; proposal (should-we + options) + build spec + **Feedback Pass 1** (UFO companion, "Time Tunnel" news transitions, iframe/year-lock fixes — deciding) |
 
 ---
 
