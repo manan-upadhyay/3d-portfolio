@@ -82,6 +82,7 @@ via autocapture — the list below is our *intentional* product events.)
 | `void_home` | `Void` (404) | — | took the way home from the 404 |
 | `buildreel_scrub` | `BuildReel` | — | directed the reel? |
 | `persona_card_expand` | `PersonaTriptych` | `persona` | expanded a persona? |
+| `hero_cta` | `Hero` | `target` | hero CTA clicks (projects / contact / resume) |
 | `inquiry_selected` | `Contact` | `inquiry` | what kind of work do they come for? |
 | `email_copied` | `Contact` (CopyButton) | — | quiet but strong contact intent |
 | **`contact_form_start`** | `Contact` (first focus) | `inquiry` | **started the form** |
@@ -107,6 +108,7 @@ via autocapture — the list below is our *intentional* product events.)
 | `blueprint_explore` / `blueprint_node_open` | `Blueprint` | (`id`) | explored the runtime system chart / which stations draw interest (open = deliberate click/tap; hover is a preview and never fires) |
 | `making_of_enter` / `making_of_exit` | rail / works / map / mobile / **footer** | `from` | how they reach & leave the Atelier |
 | `experience_progress` | `Experience` | `pct` 25/50/75/100 | **how far through the horizontal career journey** (desktop scrub) |
+| `experience_cta` | `Experience` | `target` | clicked the final career-journey CTA card |
 | `egg_reveal` / `egg_show` | `Atelier` egg cards | `id` | which hidden features they're curious about vs. actually jump to try |
 | `ledger_expand` | `Atelier` ledger | `id`, `kind` built/cut | which shipped/cut decisions they read |
 | `portrait_interact` | `FaceParticles` | `mode` drag/gyro | did the mobile portrait toy get used (drag / tilt) — deduped once |
@@ -119,6 +121,8 @@ via autocapture — the list below is our *intentional* product events.)
 | `time_machine_view` | `TimeMachine` page (on mount) | — | **reached the Time Machine?** |
 | `time_machine_enter` | SideRail / footer / MakingOf rail | `from` | how they enter the STRATA coda |
 | `time_machine_exit` | TimeMachine rail (home action) | `from` | did they return from the Time Machine? |
+| `era_wake` | `EraExhibit` | `era` | **woke an old portfolio deploy iframe inside the card** |
+| `era_open` | `EraExhibit` | `era` | **opened an old portfolio deploy link in a new tab** |
 
 > **Voices note.** All 10 voices (2 open + 8 sealed) are covered generically:
 > `voice_selected {voice}` and `voice_unlocked {voice}` carry the voice id, so

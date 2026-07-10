@@ -6,6 +6,7 @@ import Chronicle from './pages/Chronicle';
 import MakingOf from './pages/MakingOf';
 
 const Void = lazy(() => import('./pages/Void'));
+const TimeMachine = lazy(() => import('./pages/TimeMachine'));
 
 // Quiet, full-height fallback for the lazy 404 chunk — centered on the page so
 // there's no layout jump before the scene paints (the chunk is a few KB, so this
@@ -30,6 +31,13 @@ const App = () => (
       <Route element={<Layout />}>
         <Route index element={<Chronicle />} />
         <Route path="making-of" element={<MakingOf />} />
+        <Route path="time-machine" element={
+          <ErrorBoundary>
+            <Suspense fallback={<VoidFallback />}>
+              <TimeMachine />
+            </Suspense>
+          </ErrorBoundary>
+        } />
         <Route path="*" element={
           <ErrorBoundary>
             <Suspense fallback={<VoidFallback />}>

@@ -421,6 +421,7 @@ export default {
   footer: {
     quote: '“The journey is the reward.”',
     atelierLink: 'The making-of — how this site was built',
+    timeMachineLink: 'Older portfolios — my work from 2019 and 2023',
     closeHead: 'Let’s work together.',
     closeSub: 'Open to senior full-stack roles and collaborations.',
     getInTouch: 'Contact me',
@@ -435,6 +436,104 @@ export default {
 
   makingOf: {
     back: 'Back to the portfolio',
+  },
+
+  // Older portfolios (/time-machine) — straight, professional register. Factual
+  // per-era `context` is inherited from chronicle (it's the same real history).
+  timeMachine: {
+    eyebrow: 'Older work',
+    title: 'Earlier portfolios',
+    intro:
+      'The portfolios I built before this one — from 2019 and 2023 — kept online exactly as they shipped. They’re older and no longer maintained, so a few things may be broken. They’re here to show how the work has grown. Scroll down to go back in time.',
+    readoutLabel: 'Year',
+    booting: 'Loading the live site…',
+    wake: 'Load the live site',
+    wakeHint: 'Load it to preview it here, or open it in a new tab.',
+    enter: 'Open the site',
+    archived: 'Archived',
+    gravestone: 'Built {{built}} · last updated {{touched}} · archived {{preserved}}',
+    back: 'Back to the portfolio',
+    threshold: {
+      rail: 'Now',
+      cue: 'Scroll down to go back',
+    },
+    floor: {
+      rail: 'Earlier',
+      title: 'Before these',
+      body: 'Nothing earlier is preserved — just practice projects with no live URL. The point is the progression from here to now.',
+    },
+    eras: {
+      2023: {
+        rail: '2023',
+        posterAlt: 'Manan’s {{year}} portfolio',
+        plaque: 'My 2023 portfolio — the first animation-heavy one.',
+        note: 'Built with React and Three.js. Rougher than this site and unmaintained since, so some animations may not work. Kept as a reference point for how the work has progressed.',
+      },
+      2019: {
+        rail: '2019',
+        posterAlt: 'Manan’s {{year}} portfolio',
+        plaque: 'My first portfolio, from 2019.',
+        note: 'Plain HTML, CSS and a little jQuery, before I used a build step. Dated by design — this is where it started.',
+      },
+    },
+  },
+
+  // The Time Tunnel (feedback §5) — plain, clean register. Factual + recognizable,
+  // no flourish, easy to read at a glance for any reader.
+  timeTunnel: {
+    hint: 'Slow down to read the years as they pass.',
+    events: {
+      // — Gap 1 (2026 → 2023) —
+      worldcup26: 'The World Cup returns — hosted by three countries at once for the first time.',
+      aiagents26: 'AI “agents” start doing real tasks for people, not just answering questions.',
+      foldiphone26: 'Everyone is talking about a folding iPhone.',
+      iphone17: 'The iPhone 17 Pro is released.',
+      lawildfires25: 'Major wildfires hit Los Angeles.',
+      nvidia25: 'Nvidia becomes the most valuable company in the world.',
+      ghibli25: 'AI turns everyone’s photos into Studio-Ghibli-style art.',
+      minecraft25: 'A Minecraft Movie breaks box-office records.',
+      erastour24: 'Taylor Swift’s Eras Tour becomes the highest-grossing tour ever.',
+      sora24: 'OpenAI shows Sora — AI that makes video from text.',
+      deadpool24: 'Deadpool & Wolverine hits cinemas.',
+      trumpshot24: 'An attempt is made on Donald Trump’s life at a rally.',
+      chatgpt23: 'ChatGPT and GPT-4 put AI in everyone’s hands.',
+      barbenheimer23: '“Barbenheimer” — Barbie and Oppenheimer open on the same day.',
+      chandrayaan23: 'India lands near the Moon’s south pole — a first for any country.',
+      cricketwc23: 'India hosts the Cricket World Cup.',
+      israelhamas23: 'War breaks out between Israel and Hamas.',
+      twitterx23: 'Twitter is renamed “X”.',
+      threads23: 'Threads launches and reaches 100 million users in days.',
+      gta6_23: 'The first GTA VI trailer breaks view records.',
+      barbiepink23: 'The Barbie movie makes pink sell out everywhere.',
+      aichatbots23: 'Talking to AI chatbots becomes an everyday thing.',
+      evcars23: 'Electric cars go mainstream.',
+      applewatch23: 'Smartwatches and rings start tracking everyone’s sleep and health.',
+      // — Gap 2 (2023 → 2019) —
+      worldcup22: 'Argentina and Messi win the World Cup in Qatar.',
+      chatgptlaunch22: 'ChatGPT launches and quickly changes everything.',
+      webb22: 'The James Webb telescope sends back its first images.',
+      ukraine22: 'Russia invades Ukraine.',
+      musktwitter22: 'Elon Musk buys Twitter.',
+      oscarslap22: 'The Will Smith slap at the Oscars.',
+      vaccines21: 'COVID vaccines roll out around the world.',
+      squidgame21: 'Squid Game becomes Netflix’s biggest show ever.',
+      nft21: 'The NFT boom — digital art sells for millions.',
+      suez21: 'A giant ship blocks the Suez Canal for days.',
+      meta21: 'Facebook renames itself “Meta”.',
+      taliban21: 'The Taliban retake Afghanistan.',
+      covid20: 'COVID-19 shuts down the whole world.',
+      wfh20: 'Working from home and Zoom calls become normal.',
+      amongus20: 'Among Us becomes the game of the year.',
+      masks20: 'Face masks become part of daily life.',
+      blackhole19: 'The world sees the first-ever photo of a black hole.',
+      endgame19: 'Avengers: Endgame becomes the biggest movie ever.',
+      got19: 'Game of Thrones airs its final season.',
+      area51_19: 'The “storm Area 51” meme goes viral.',
+      babyshark19: '“Baby Shark” becomes the most-watched video online.',
+      foldables19: 'The first foldable phones appear.',
+      fiveg19: 'The first 5G phones arrive.',
+      covidwuhan19: 'The first COVID cases quietly appear in Wuhan.',
+    },
   },
 
   void: {

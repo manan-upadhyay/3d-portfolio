@@ -37,6 +37,8 @@ export const CONFIG = {
   glitch: { peak: 0.10 },           // voice-change decode
   blip: { peak: 0.11 },             // arsenal hover pluck
   detent: { peak: 0.085 },          // build-reel sprocket tick (per frame crossed)
+  rewind: { peak: 0.12 },           // time-machine "wind back" — waking a ruin / crossing an era
+  pageflip: { peak: 0.05 },         // time-tunnel — one soft page turn per year/event crossed
   settle: { peak: 0.12 },           // build-reel playhead landing thunk
   click: { peak: 0.14 },            // physical prev/next key — press (bright) + release (soft)
   volumeTick: { peak: 0.05 },       // apple-slider drag tick — pitch rises with the level
@@ -288,6 +290,31 @@ const CUES = {
     const f = scale[((step % scale.length) + scale.length) % scale.length];
     blip(t0, { freq: f, type: 'sine', dur: 0.2, peak: CONFIG.hoverNote.peak, attack: 0.004 });
     blip(t0, { freq: f * 2, type: 'sine', dur: 0.1, peak: CONFIG.hoverNote.peak * 0.22, attack: 0.003 }); // airy octave
+  },
+
+  // Time-machine "wind back" — the mechanical rewind that rewards *intent* (waking
+  // a preserved ruin, or crossing an era boundary). A ratcheting run of ticks that
+  // accelerates then settles, under a falling pitch sweep — a tape/clock spun
+  // backwards, resolving on a soft low landing. Never fires on passive scroll.
+  rewind(t0) {
+    const pk = CONFIG.rewind.peak;
+    const n = 14;
+    for (let i = 0; i < n; i++) {
+      const p = i / (n - 1);
+      const dt = p * p * 0.5;                       // ticks bunch up as it winds
+      swoosh(t0 + dt, { dur: 0.03, peak: pk * (0.5 + 0.5 * p), type: 'bandpass', from: 2600, to: 1400, q: 8 });
+    }
+    blip(t0, { freq: 760, glideTo: 150, type: 'sawtooth', dur: 0.52, peak: pk * 0.4, attack: 0.01 }); // falling sweep
+    blip(t0 + 0.5, { freq: 120, glideTo: 84, type: 'triangle', dur: 0.16, peak: pk * 0.7, attack: 0.006 }); // landing
+  },
+
+  // Time-tunnel "page turn" — one soft paper flip per year/event crossed. A brief
+  // high-passed noise swish + a faint low tap. The CALLER fires it once per event
+  // boundary, so a fast scroll naturally becomes a flurry of flips and a slow
+  // scroll a single turn — velocity for free, and always quiet (never a loud rush).
+  pageflip(t0) {
+    swoosh(t0, { dur: 0.085, peak: CONFIG.pageflip.peak, type: 'highpass', from: 1900, to: 700, q: 0.6 });
+    blip(t0, { freq: 210, type: 'triangle', dur: 0.03, peak: CONFIG.pageflip.peak * 0.5, attack: 0.001 });
   },
 
   // Face-particle assembly — the gathering: a granular shower of tiny pitched ticks

@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, History } from 'lucide-react';
 import { ErrorBoundary, SideRail } from '../components';
 import { atelierActs } from '../constants';
 import { useActiveSection } from '../hooks/useActiveSection';
@@ -38,6 +38,9 @@ const MakingOf = () => {
     onClick: () => { track('rail_nav', { id: a.id, where: 'making-of' }); scrollToSection(a.id); },
   }));
   const railActions = [
+    { key: 'timeMachine', label: t('nav.timeMachine'), ariaLabel: t('nav.timeMachineSub'), nav: true,
+      glyph: <History size={16} />,
+      onClick: () => { track('time_machine_enter', { from: 'making-of' }); navigate('/time-machine'); } },
     { key: 'home', label: t('makingOf.back'), ariaLabel: t('makingOf.back'),
       glyph: <ArrowLeft size={16} />,
       onClick: () => { track('making_of_exit', { from: 'rail' }); navigate('/'); } },

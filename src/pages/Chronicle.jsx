@@ -1,7 +1,7 @@
 import { lazy, Suspense, useState, useEffect, useRef } from 'react';
 import { useOutletContext, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Map, Hammer } from 'lucide-react';
+import { Map, Hammer, History } from 'lucide-react';
 import Hero from '../sections/Hero';
 import { ErrorBoundary, SideRail, MapOverlay, StickyCta } from '../components';
 import { chapterList } from '../constants';
@@ -48,6 +48,9 @@ const Chronicle = () => {
     { key: 'makingOf', label: t('nav.makingOf'), ariaLabel: t('nav.makingOf'), nav: true,
       glyph: <Hammer size={16} />,
       onClick: () => { track('making_of_enter', { from: 'rail' }); navigate('/making-of'); } },
+    { key: 'timeMachine', label: t('nav.timeMachine'), ariaLabel: t('nav.timeMachineSub'), nav: true,
+      glyph: <History size={16} />,
+      onClick: () => { track('time_machine_enter', { from: 'rail' }); navigate('/time-machine'); } },
   ];
 
   // Returning from the Atelier: an explicit destination (e.g. "Contact" tapped

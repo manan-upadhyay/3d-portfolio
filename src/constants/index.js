@@ -91,6 +91,95 @@ export const atelierActs = [
   { id: 'offmap', no: '—', labelKey: 'atelier.offmap.title' },
 ];
 
+// ─────────────────────────────────────────────────────────────────────────────
+// The Time Machine (/time-machine) — the STRATA coda. Manan's earlier portfolios,
+// preserved as "ruins" you descend through time to reach. NON-COPY DATA ONLY:
+// urls, posters, era stacks, framability, dates, optional owner-supplied assets.
+// All voiced copy (title, plaques, "the world then" context) lives in the bundles
+// under `timeMachine.*`, keyed by era `id`. See docs/chronicle/sections/11-*.md.
+//
+// SCALABLE: this array IS the descent. Add a future rebuild by prepending one
+// entry (newest first — the descent runs present → past top-to-bottom). Never
+// hard-code "two". `framable` is verified per deploy (drives the live-embed swap;
+// false → poster-only + link-out, no white-screen). `assets` is a slot for
+// owner-supplied period imagery/sound — optional, art never blocks the build.
+export const archive = [
+  {
+    id: '2023',
+    year: 2023,
+    url: 'https://portfolio-c3pvtpl2j-mananupadhyays-projects.vercel.app/',
+    poster: 'archive/2023.webp',          // public/archive/<id>.webp (probed)
+    builtWith: ['React', 'Three.js', 'Framer Motion', 'Tailwind'],
+    framable: true,                       // verified 2026-07-10 (no XFO/CSP)
+    dates: { built: 2023, lastTouched: 2023 },
+    assets: {},                           // owner drop-zone: period imagery/sound
+  },
+  {
+    id: '2019',
+    year: 2019,
+    url: 'https://legacy-portfolio-alpha.vercel.app/',
+    poster: 'archive/2019.webp',
+    builtWith: ['HTML', 'CSS', 'JavaScript', 'jQuery'],
+    framable: true,                       // verified 2026-07-10 (no XFO/CSP)
+    dates: { built: 2019, lastTouched: 2020 },
+    assets: {},
+  },
+];
+
+// The descent spine for the rail + year readout: a THRESHOLD (present), one
+// stratum per archived portfolio, then the FLOOR (before the record begins).
+// Derived so a new `archive` entry joins the rail automatically. Labels voiced
+// via labelKey (t('timeMachine.…')); `year` drives the backward readout.
+export const PRESENT_YEAR = new Date().getFullYear();
+export const eraActs = [
+  { id: 'era-threshold', no: '—', year: PRESENT_YEAR, labelKey: 'timeMachine.threshold.rail' },
+  ...archive.map((e) => ({ id: `era-${e.id}`, no: String(e.year), year: e.year, labelKey: `timeMachine.eras.${e.id}.rail` })),
+  { id: 'era-floor', no: '∅', year: null, labelKey: 'timeMachine.floor.rail' },
+];
+
+// The Time Tunnel (feedback §5) — the "going back in time" news transitions that
+// play in the scroll gaps between strata. NON-COPY DATA ONLY: each event's `id`
+// (keys the voiced text t('timeTunnel.events.<id>')), its `year` (drives the
+// backward run), and `weight` ('major' = bigger + longer scrub dwell, so popular
+// news is readable at speed; 'mid' = a brief flicker that rewards slow scrollers).
+// Ordered present → past (top → bottom), matching the descent. Owner-handpicked
+// from docs/chronicle/TIME-MACHINE-FEEDBACK-PASS.md Appendix A.
+export const timeTunnel = {
+  // Gap 1 — between the Hero (present) and the 2023 card (≈2026 → 2023). Curated
+  // to the highest-recognition beats so the stream finishes before the card
+  // arrives (feedback 2026-07-10); the rest of the authored copy stays in the
+  // bundles, unused, ready to re-add if the timing budget grows.
+  gap1: [
+    { id: 'worldcup26', year: 2026, weight: 'major' },
+    { id: 'iphone17', year: 2025, weight: 'major' },
+    { id: 'lawildfires25', year: 2025, weight: 'major' },
+    { id: 'erastour24', year: 2024, weight: 'major' },
+    { id: 'sora24', year: 2024, weight: 'major' },
+    { id: 'deadpool24', year: 2024, weight: 'mid' },
+    { id: 'chatgpt23', year: 2023, weight: 'major' },
+    { id: 'barbenheimer23', year: 2023, weight: 'major' },
+    { id: 'chandrayaan23', year: 2023, weight: 'major' },
+    { id: 'cricketwc23', year: 2023, weight: 'major' },
+    { id: 'twitterx23', year: 2023, weight: 'mid' },
+    { id: 'gta6_23', year: 2023, weight: 'mid' },
+  ],
+  // Gap 2 — between the 2023 card and the 2019 card (≈2023 → 2019).
+  gap2: [
+    { id: 'worldcup22', year: 2022, weight: 'major' },
+    { id: 'chatgptlaunch22', year: 2022, weight: 'major' },
+    { id: 'oscarslap22', year: 2022, weight: 'mid' },
+    { id: 'webb22', year: 2022, weight: 'major' },
+    { id: 'vaccines21', year: 2021, weight: 'major' },
+    { id: 'squidgame21', year: 2021, weight: 'major' },
+    { id: 'nft21', year: 2021, weight: 'major' },
+    { id: 'covid20', year: 2020, weight: 'major' },
+    { id: 'wfh20', year: 2020, weight: 'major' },
+    { id: 'blackhole19', year: 2019, weight: 'major' },
+    { id: 'endgame19', year: 2019, weight: 'major' },
+    { id: 'covidwuhan19', year: 2019, weight: 'major' }, // the chilling bridge into 2019
+  ],
+};
+
 // Disciplines (chapter 01). `iconKey` maps to a line icon in the component and
 // also keys the copy: t(`about.services.<iconKey>.title` / `.description`).
 const services = [

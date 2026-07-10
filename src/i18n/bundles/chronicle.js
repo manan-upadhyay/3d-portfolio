@@ -21,6 +21,8 @@ export default {
     map: 'Map',
     openMap: 'Open the map',
     makingOf: 'Making-of',
+    timeMachine: 'Time Machine',
+    timeMachineSub: 'Travel back through my older portfolios',
     navigate: 'Navigate',
     navigateSub: 'Jump to any chapter',
     menu: 'Menu',
@@ -378,6 +380,7 @@ export default {
     quote: '“The journey is the reward.”',
     credit: '© {{year}} Manan Upadhyay · Crafted with React, GSAP & far too much chai.',
     atelierLink: 'The Making-Of — how this site was built',
+    timeMachineLink: 'The Time Machine — my portfolios, 2019 → now',
     closeHead: 'Let’s build something.',
     closeSub: 'Open to senior full-stack roles and collaborations.',
     getInTouch: 'Get in touch',
@@ -393,6 +396,123 @@ export default {
   // The Atelier's own route (/making-of) chrome — the doorway back home.
   makingOf: {
     back: 'Return to the Chronicle',
+  },
+
+  // The Time Machine (/time-machine) — the STRATA coda. You descend through time
+  // to Manan's earlier portfolios, preserved as "ruins". Framing copy is voiced;
+  // the per-era `context` (factual "world then" markers) stays literal across
+  // voices (like `marginalia`) — sealed voices override only the framing keys.
+  // See docs/chronicle/sections/11-the-time-machine.md.
+  timeMachine: {
+    eyebrow: 'An artifact, not an exhibit',
+    title: 'The Time Machine',
+    intro:
+      'Every mapmaker leaves earlier drafts behind. These are mine — the portfolios I built on the way here, preserved exactly as they were. Descend, and the years fall away with you.',
+    readoutLabel: 'Descending',
+    booting: 'Waking the ruin…',
+    wake: 'Wake the ruin',
+    wakeHint: 'Wake it to walk the live site here — or open it in its own tab.',
+    enter: 'Enter the ruin',
+    archived: 'Archived',
+    // {{built}}/{{touched}}/{{preserved}} are years.
+    gravestone: 'Built {{built}} · last touched {{touched}} · preserved {{preserved}}',
+    back: 'Return to the Chronicle',
+    threshold: {
+      rail: 'The present',
+      cue: 'Descend to travel back',
+    },
+    floor: {
+      rail: 'Before the map',
+      title: 'Before the map',
+      body: 'The record ends here. Everything earlier was practice — sketches with no URL to preserve. The climb from this floor to the present is the whole point.',
+    },
+    eras: {
+      2023: {
+        rail: '2023',
+        posterAlt: 'Manan’s {{year}} portfolio, preserved as it shipped',
+        plaque: 'The first one that moved — where I started treating a portfolio like a scene, not a page.',
+        note: 'A React + Three.js portfolio. Rougher than what you’re standing in, and unmaintained since — some animations no longer breathe. That’s the point: it’s a marker of the distance travelled, kept exactly as it was.',
+        context: [
+          { k: 'In the world', v: 'ChatGPT went mainstream and the AI gold rush began.' },
+          { k: 'On the web', v: 'React Server Components and the Next.js app-router era arrived.' },
+          { k: 'The craft', v: 'WebGL portfolios everywhere — depth, scroll and 3D as table stakes.' },
+          { k: 'Where I was', v: 'Deep in client React/Three.js builds, sharpening motion for a living.' },
+        ],
+      },
+      2019: {
+        rail: '2019',
+        posterAlt: 'Manan’s {{year}} portfolio, preserved as it shipped',
+        plaque: 'The very first map — hand-cut, earnest, and completely of its time.',
+        note: 'Plain HTML, CSS and a little jQuery, from before I knew what a build step was. It creaks, and it’s meant to — this is where the whole journey started.',
+        context: [
+          { k: 'In the world', v: 'React Hooks had just landed (16.8); class components were on their way out.' },
+          { k: 'On the web', v: 'jQuery was still everywhere; the Jamstack was just catching on.' },
+          { k: 'The craft', v: 'Bootstrap grids, scroll-reveal libraries and hero sliders ruled.' },
+          { k: 'Where I was', v: 'A final-year student shipping his first real site — learning by building.' },
+        ],
+      },
+    },
+  },
+
+  // The Time Tunnel (feedback §5) — the "going back in time" news that streams
+  // past in the scroll gaps between strata. Keyed by event id (constants.timeTunnel).
+  // Written to trigger the "wow, I remember this" jolt: second person, present
+  // tense, concrete — and legible to a non-native reader. Voices override in
+  // character; factual anchors stay recognizable.
+  timeTunnel: {
+    hint: 'Slow down — you’re falling back through the years.',
+    events: {
+      // — Gap 1 (2026 → 2023) —
+      worldcup26: 'The FIFA World Cup returns — hosted by the USA, Canada and Mexico together.',
+      aiagents26: 'AI “agents” start doing real work for people, not just answering questions.',
+      foldiphone26: 'The first folding iPhone is finally on the way.',
+      iphone17: 'Apple releases the iPhone 17 Pro.',
+      lawildfires25: 'Huge wildfires sweep through Los Angeles.',
+      nvidia25: 'Nvidia becomes the most valuable company in the world.',
+      ghibli25: 'Everyone turns their photos into Studio-Ghibli-style art with AI.',
+      minecraft25: 'A Minecraft Movie smashes box-office records.',
+      erastour24: 'Taylor Swift’s Eras Tour becomes the biggest concert tour in history.',
+      sora24: 'OpenAI reveals Sora — an AI that turns a sentence into video.',
+      deadpool24: 'Deadpool & Wolverine finally team up on the big screen.',
+      trumpshot24: 'A shot is fired at a Trump rally, and the world holds its breath.',
+      chatgpt23: 'ChatGPT arrives, and suddenly the whole world is talking to AI.',
+      barbenheimer23: 'Barbie and Oppenheimer open the same day — the summer of “Barbenheimer.”',
+      chandrayaan23: 'India’s Chandrayaan-3 lands near the Moon’s south pole — a world first.',
+      cricketwc23: 'India hosts the Cricket World Cup, and a billion fans tune in.',
+      israelhamas23: 'War breaks out between Israel and Hamas.',
+      twitterx23: 'Twitter is renamed “X.”',
+      threads23: 'Threads launches and hits a hundred million users in five days.',
+      gta6_23: 'The first Grand Theft Auto VI trailer breaks the internet.',
+      barbiepink23: 'Suddenly the whole world is dressed in pink.',
+      aichatbots23: 'For the first time, talking to a machine starts to feel… normal.',
+      evcars23: 'Electric cars slip quietly from novelty to everywhere.',
+      applewatch23: 'Your watch starts scoring your sleep, your rings, your every step.',
+      // — Gap 2 (2023 → 2019) —
+      worldcup22: 'Messi and Argentina win the FIFA World Cup in Qatar.',
+      chatgptlaunch22: 'ChatGPT launches — and the AI era begins.',
+      webb22: 'The James Webb Space Telescope sends back its first images of deep space.',
+      ukraine22: 'Russia invades Ukraine.',
+      musktwitter22: 'Elon Musk buys Twitter.',
+      oscarslap22: 'Will Smith slaps Chris Rock live on stage at the Oscars.',
+      vaccines21: 'COVID vaccines roll out across the world.',
+      squidgame21: 'Squid Game becomes the biggest show in Netflix history.',
+      nft21: 'The NFT craze takes off — digital art sells for millions.',
+      suez21: 'A giant ship blocks the Suez Canal for a week.',
+      meta21: 'Facebook renames itself “Meta.”',
+      taliban21: 'The Taliban retake control of Afghanistan.',
+      covid20: 'COVID-19 becomes a pandemic and shuts down the world.',
+      wfh20: 'The world starts working from home, and Zoom becomes daily life.',
+      amongus20: 'Everyone plays “Among Us,” hunting the impostor.',
+      masks20: 'Face masks become part of everyday life.',
+      blackhole19: 'Scientists capture the first-ever photo of a black hole.',
+      endgame19: 'Avengers: Endgame becomes the biggest movie of all time.',
+      got19: 'Game of Thrones airs its final season.',
+      area51_19: 'The viral “Storm Area 51” meme takes over the internet.',
+      babyshark19: '“Baby Shark” becomes the most-watched video on YouTube.',
+      foldables19: 'The first foldable phones arrive.',
+      fiveg19: 'The first 5G phones launch.',
+      covidwuhan19: 'The first cases of a mysterious new virus appear in Wuhan, China.',
+    },
   },
 
   // Marginalia footnotes (LEGENDARY-ROADMAP §2). Keyed by the `[[id|…]]` marker

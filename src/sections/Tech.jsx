@@ -375,8 +375,9 @@ const ArsenalField = ({ view, onViewChange }) => {
   const coachFired = useRef(false);
   const coachTimers = useRef([]);
   useEffect(() => {
+    const timers = coachTimers.current;
     try { coachSeen.current = window.localStorage.getItem('arsenal-skim-coach') === 'seen'; } catch { /* private mode */ }
-    return () => coachTimers.current.forEach(clearTimeout);
+    return () => timers.forEach(clearTimeout);
   }, []);
   const dismissCoach = useCallback(() => {
     setShowCoach(false);

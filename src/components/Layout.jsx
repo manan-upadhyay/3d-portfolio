@@ -54,7 +54,7 @@ const Layout = () => {
   // The catch-all 404 ("Off the Map") is a self-contained full-viewport scene
   // with its own way home — so it drops the global conversion footer (a footer
   // under a not-found page is noise, and it would force a scroll past the fold).
-  const is404 = pathname !== '/' && pathname !== '/making-of';
+  const is404 = pathname !== '/' && pathname !== '/making-of' && pathname !== '/time-machine';
   useSmoothScroll();
   const activeId = useActiveSection();
   useEngagementAnalytics(activeId, pathname); // section_view + scroll_depth
@@ -172,15 +172,26 @@ const Layout = () => {
             </div>
           </div>
 
-          {/* The quiet, always-reachable doorway to the Atelier (hidden while there). */}
-          {pathname !== '/making-of' && (
-            <Link to="/making-of" data-cursor="hover"
-              onClick={() => track('making_of_enter', { from: 'footer' })}
-              className="atelier-footer-link font-chronicle italic text-[14px] inline-flex items-center gap-1.5 mt-12 transition-colors"
-              style={{ color: 'var(--color-text-muted)' }}>
-              {t('footer.atelierLink')} <ArrowUpRight size={13} />
-            </Link>
-          )}
+          {/* The quiet, always-reachable doorways — to the Atelier and the Time
+              Machine (each hidden while you're on that route). */}
+          <div className="flex flex-col items-center gap-2 mt-12">
+            {pathname !== '/making-of' && (
+              <Link to="/making-of" data-cursor="hover"
+                onClick={() => track('making_of_enter', { from: 'footer' })}
+                className="atelier-footer-link font-chronicle italic text-[14px] inline-flex items-center gap-1.5 transition-colors"
+                style={{ color: 'var(--color-text-muted)' }}>
+                {t('footer.atelierLink')} <ArrowUpRight size={13} />
+              </Link>
+            )}
+            {pathname !== '/time-machine' && (
+              <Link to="/time-machine" data-cursor="hover"
+                onClick={() => track('time_machine_enter', { from: 'footer' })}
+                className="atelier-footer-link font-chronicle italic text-[14px] inline-flex items-center gap-1.5 transition-colors"
+                style={{ color: 'var(--color-text-muted)' }}>
+                {t('footer.timeMachineLink')} <ArrowUpRight size={13} />
+              </Link>
+            )}
+          </div>
           <p className="text-xs mt-6" style={{ color: 'var(--color-text-muted)' }}>
             {t('footer.credit', { year: new Date().getFullYear() })}
           </p>

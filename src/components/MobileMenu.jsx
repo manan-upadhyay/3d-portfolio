@@ -5,13 +5,13 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   Menu, X, Compass, Mail, Download, ChevronLeft, ChevronRight,
-  VenetianMask, Check, Lock, Plus, Clapperboard, ArrowUpRight, ArrowLeft,
+  VenetianMask, Check, Lock, Plus, Clapperboard, ArrowUpRight, ArrowLeft, History,
 } from 'lucide-react';
 import { useVoiceStore } from '../store/useVoiceStore';
 import { useSoundStore } from '../store/useSoundStore';
 import { sound } from '../lib/sound';
 import { pushOverlay, popOverlay, lockBodyScroll, unlockBodyScroll } from '../lib/uiOverlay';
-import { personalInfo, chapterList, atelierActs } from '../constants';
+import { personalInfo, chapterList, atelierActs, eraActs } from '../constants';
 import { voicesByCategory, SEALED_VOICES, voiceById } from '../i18n/voices';
 import { scrollToSection, requestSection, getLenis } from '../lib/smoothScroll';
 import { track, trackOnce } from '../lib/analytics';
@@ -54,29 +54,35 @@ const ExploreRow = ({ icon: Icon, label, onClick }) => (
   </button>
 );
 
-// The Atelier's own nav sections (v2.0 C5) — the making-of page gets a Navigate
-// drawer too, listing its acts (shared `atelierActs`, also drives the /making-of
-// SideRail) instead of the Chronicle chapters.
-
-// ── Navigate drawer — a scannable numbered chapter list (faster than a map plate
-// on a phone, and it never clips). On /making-of it lists the Atelier's acts. ──
-const NavDrawer = ({ activeId, onTravel, isChronicle }) => {
+// ── Navigate drawer — a scannable numbered list (faster than a map plate on a
+// phone, and it never clips). The Chronicle lists its chapters; each coda route
+// (/making-of, /time-machine) lists ITS OWN sections via the `acts` it's given —
+// so the nav items always match the sections that actually exist on the page. ──
+const NavDrawer = ({ activeId, onTravel, isChronicle, acts }) => {
   const { t } = useTranslation();
   if (!isChronicle) {
     return (
       <div className="flex flex-col gap-2 pb-1">
-        {atelierActs.map((p) => (
-          <button key={p.id} type="button" onClick={() => onTravel(p.id)}
-            className="sheet-card flex items-center gap-3.5 h-14 px-3 text-left">
-            <span className="grid place-items-center w-8 h-8 rounded-full font-chronicle text-[13px] font-semibold flex-shrink-0"
-              style={{ color: 'var(--color-text-muted)', border: '1px solid color-mix(in srgb, var(--color-text) 18%, transparent)' }}>
-              {p.no}
-            </span>
-            <span className="block text-[14px] font-medium leading-tight" style={{ color: 'var(--color-text)' }}>
-              {t(p.labelKey)}
-            </span>
-          </button>
-        ))}
+        {acts.map((p) => {
+          const label = t(p.labelKey);
+          const dup = label === p.no; // eras: the pill IS the year — don't repeat it
+          return (
+            <button key={p.id} type="button" onClick={() => onTravel(p.id)}
+              className="sheet-card flex items-center gap-3.5 h-14 px-3 text-left">
+              {dup ? (
+                <span className="w-8 flex-shrink-0" aria-hidden="true" />
+              ) : (
+                <span className="grid place-items-center w-8 h-8 rounded-full font-chronicle text-[13px] font-semibold flex-shrink-0"
+                  style={{ color: 'var(--color-text-muted)', border: '1px solid color-mix(in srgb, var(--color-text) 18%, transparent)' }}>
+                  {p.no}
+                </span>
+              )}
+              <span className="block text-[14px] font-medium leading-tight" style={{ color: 'var(--color-text)' }}>
+                {label}
+              </span>
+            </button>
+          );
+        })}
       </div>
     );
   }
@@ -265,6 +271,10 @@ const MobileMenu = ({ activeId }) => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const isChronicle = pathname === '/';
+  const isMakingOf = pathname === '/making-of';
+  // Each coda route lists its OWN sections in the Navigate drawer (so items match
+  // real sections, and tapping them scrolls to something that exists).
+  const routeActs = pathname === '/time-machine' ? eraActs : atelierActs;
   const [open, setOpen] = useState(false);
   const [view, setView] = useState('main'); // main | nav | voice | preview | summon
   const [previewId, setPreviewId] = useState(null); // voice shown in the preview view
@@ -362,6 +372,7 @@ const MobileMenu = ({ activeId }) => {
   };
   const onTravel = (id) => { track('map_travel', { id, from: 'mobile' }); close(); setTimeout(() => scrollToSection(id), 140); };
   const onMakingOf = () => { track('making_of_enter', { from: 'mobile' }); close(); navigate('/making-of'); };
+  const onTimeMachine = () => { track('time_machine_enter', { from: 'mobile' }); close(); navigate('/time-machine'); };
   const onBackHome = () => { track('mobile_menu_cta', { target: 'home' }); close(); navigate('/'); };
 
   const inSub = view !== 'main';
@@ -490,16 +501,25 @@ const MobileMenu = ({ activeId }) => {
                       <ExploreRow icon={VenetianMask} label={t('nav.voice')} onClick={() => setView('voice')} />
                     </div>
 
-                    {/* 4 · The other route — a quiet footnote (not a peer of the
-                        above): the making-of doorway on the Chronicle, the way home
-                        on /making-of. */}
-                    {isChronicle ? (
+                    {/* 4 · The other routes — quiet footnotes (not peers of the
+                        above), mirroring the desktop SideRail doorways: the Chronicle
+                        surfaces both codas (Making-of + Time Machine); each coda
+                        surfaces the other reachable route + the way home. */}
+                    {isChronicle && (
                       <button type="button" onClick={onMakingOf} className="menu-footlink">
                         <Clapperboard size={13} strokeWidth={1.7} aria-hidden="true" />
                         {t('atelier.eyebrow')}
                         <ArrowUpRight size={13} aria-hidden="true" />
                       </button>
-                    ) : (
+                    )}
+                    {(isChronicle || isMakingOf) && (
+                      <button type="button" onClick={onTimeMachine} className="menu-footlink">
+                        <History size={13} strokeWidth={1.7} aria-hidden="true" />
+                        {t('nav.timeMachine')}
+                        <ArrowUpRight size={13} aria-hidden="true" />
+                      </button>
+                    )}
+                    {!isChronicle && (
                       <button type="button" onClick={onBackHome} className="menu-footlink">
                         <ArrowLeft size={13} strokeWidth={1.7} aria-hidden="true" />
                         {t('makingOf.back')}
@@ -511,7 +531,7 @@ const MobileMenu = ({ activeId }) => {
                 {view === 'nav' && (
                   <motion.div key="nav" initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 16 }} transition={SLIDE}
                     className="overflow-y-auto overscroll-contain" data-lenis-prevent style={{ maxHeight: '72vh' }}>
-                    <NavDrawer activeId={activeId} onTravel={onTravel} isChronicle={isChronicle} />
+                    <NavDrawer activeId={activeId} onTravel={onTravel} isChronicle={isChronicle} acts={routeActs} />
                   </motion.div>
                 )}
 

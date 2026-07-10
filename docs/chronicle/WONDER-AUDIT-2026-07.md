@@ -57,6 +57,7 @@
 | P1 | Sub-pages — **narrowed to the cinematic 404** ([spec](sections/09-off-the-map-404.md)); other 5 routes closed | Sub-pages | ✅ | 8 | 5 | low |
 | L1 | **Loading states** — the fog-threshold loader ([spec](sections/10-the-threshold-loading.md)); owner-added 2026-07-09 | Cinematics | 🟡 | 6 | 3 | low |
 | A1 | **Analytics coverage** for every post-v1 wonder feature (adoption data → V3 keep/cut) | Instrumentation | ✅ | 8 | 3 | low |
+| TM | **The Time Machine** (`/time-machine`) — STRATA descent through the 2019/2023 portfolios as preserved "ruins"; own route + spec ([sections/11](sections/11-the-time-machine.md), [proposal](TIME-MACHINE-PROPOSAL.md)) | Sub-pages | 🟢 | 8 | 6 | med |
 
 > Impact/Effort/Risk are 1–10 gut estimates to help sequencing, matched to the
 > LEGENDARY-ROADMAP scale. Re-score when a task is picked up.

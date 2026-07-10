@@ -1396,10 +1396,11 @@ h1, h2, h3, h4, h5, h6 {
   transition: opacity 0.5s ease;
 }
 
-/* Hide native cursor only where we render the custom one */
-@media (hover: hover) and (pointer: fine) {
-  html.has-custom-cursor,
-  html.has-custom-cursor * { cursor: none !important; }
+/* Hide the native cursor only after JS proves the custom cursor is visible.
+   Reduced-motion users always keep the OS cursor. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html.has-custom-cursor.custom-cursor-active,
+  html.has-custom-cursor.custom-cursor-active * { cursor: none !important; }
 }
 @media (hover: none), (prefers-reduced-motion: reduce) {
   .cursor-dot, .cursor-ring, .cursor-backlight { display: none; }
@@ -4717,4 +4718,393 @@ h1, h2, h3, h4, h5, h6 {
   .bp-arrow { opacity: 1; transition: none; }
   .blueprint__readout-dot { animation: none; }
   .bp-node__disc { transition: none; }
+}
+
+/* ===========================================================================
+   THE TIME MACHINE (/time-machine) — the STRATA descent.
+   `--age` (0 = present → 1 = deepest past) drives only the *page atmosphere*
+   (fog + vignette + grain), which sits BEHIND the cards so the live portfolio
+   frames stay clean windows (feedback §3a). Each card ages itself via a fixed
+   per-era `--era-age` (feedback §3b/§8) — never the live scroll — so the year the
+   visitor reads never drifts mid-card. Content animates transform/opacity only.
+   =========================================================================== */
+.time-machine {
+  --age: 0;                        /* live scroll-progress, written from JS */
+  position: relative;
+  isolation: isolate;
+}
+
+/* Ambient atmosphere — all BEHIND the strata (z 0). */
+/* Drifting fog (reuses the 404's `fog-drift` keyframes + `--color-fog-rgb`);
+   density rides `--age` so the past sinks into thicker mist. */
+.tm-fog {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: calc(0.28 + 0.6 * var(--fog-density, 0.4));
+}
+.tm-fog__bank { position: absolute; left: -12%; right: -12%; will-change: transform, opacity; }
+.tm-fog__bank--back {
+  bottom: -6%; height: 60%;
+  background: radial-gradient(ellipse 90% 100% at 50% 118%,
+    rgba(var(--color-fog-rgb), 0.28) 0%, rgba(var(--color-fog-rgb), 0.10) 45%, transparent 74%);
+  animation: fog-drift 20s ease-in-out infinite;
+}
+.tm-fog__bank--front {
+  bottom: -4%; height: 42%;
+  background: radial-gradient(ellipse 70% 100% at 56% 122%,
+    rgba(var(--color-fog-rgb), 0.30) 0%, rgba(var(--color-fog-rgb), 0.09) 50%, transparent 68%);
+  animation: fog-drift-reverse 26s ease-in-out infinite;
+}
+.tm-fog--static .tm-fog__bank { animation: none; }
+
+/* Vignette that deepens with age (over the page background, behind cards). */
+.tm-grade {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(120% 100% at 50% 0%,
+    transparent 40%, color-mix(in srgb, #1a1206 calc(52% * var(--age)), transparent) 100%);
+}
+/* Film grain over the page, intensifying with age (behind cards). */
+.tm-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: calc(0.05 * var(--age));
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+
+/* One stratum band — above the ambient (z 1). */
+.tm-stratum {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(64px, 12vh, 140px) clamp(20px, 6vw, 96px);
+}
+/* Mobile: don't force every section to a full screen (feedback 2026-07-11) — size
+   to content with tight padding, so cards sit close together, not vh apart. */
+@media (max-width: 767px) {
+  .tm-stratum { min-height: auto; padding: clamp(36px, 7vh, 60px) 20px; }
+}
+
+/* An era exhibit card. Chrome tokens age from the card's OWN fixed --era-age
+   (locked), so older cards are flatter/heavier/warmer — but the frame is clean. */
+.tm-exhibit {
+  --a: var(--era-age, 0.5);
+  --tm-radius: calc(20px - 15px * var(--a));
+  --tm-border: color-mix(in srgb, var(--color-card-border) calc(100% - 35% * var(--a)), #7c6a4e calc(35% * var(--a)));
+  --tm-border-w: calc(1px + 1.5px * var(--a));
+  position: relative;
+  border-radius: var(--tm-radius);
+  border: var(--tm-border-w) solid var(--tm-border);
+  background: color-mix(in srgb, var(--color-card-bg) 92%, #0000);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, calc(0.3 - 0.16 * var(--a)));
+  overflow: hidden;
+}
+/* The frame is a CLEAN window — sits above the card patina, never graded. */
+.tm-exhibit__frame {
+  position: relative;
+  z-index: 2;
+  aspect-ratio: 16 / 10;
+  background: color-mix(in srgb, var(--color-primary) 70%, #000);
+  overflow: hidden;
+}
+.tm-exhibit__poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+/* The live frame renders at 1440px and is scaled to fit by JS (top-left origin),
+   so the whole desktop layout shows without clipped edges (feedback §3d). */
+.tm-exhibit__frame iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 0;
+  transform-origin: top left;
+  background: #fff;
+}
+.tm-exhibit__booting {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--color-primary) 62%, #000);
+}
+/* Dim scrim under the wake button so the sleeping poster recedes (feedback §7). */
+.tm-exhibit__wake { position: absolute; inset: 0; display: grid; place-items: center; }
+.tm-exhibit__scrim {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(60% 60% at 50% 50%, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0.42) 68%, rgba(0, 0, 0, 0.6) 100%);
+}
+.tm-exhibit__wakebtn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text);
+  background: color-mix(in srgb, var(--color-card-bg) 90%, transparent);
+  border: 1px solid var(--color-card-border);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 0 4px rgba(var(--color-ember-rgb), 0.14), 0 10px 34px rgba(0, 0, 0, 0.42);
+  transition: transform 0.2s ease;
+}
+.tm-exhibit__wake:hover .tm-exhibit__wakebtn { transform: scale(1.05); }
+
+/* Card chrome (below the frame) — this is what ages: a per-era sepia + a faint
+   grain patina. The frame above is untouched. */
+.tm-exhibit__body {
+  position: relative;
+  z-index: 1;
+  padding: clamp(20px, 4vw, 34px);
+  filter: sepia(calc(0.5 * var(--era-age, 0.5))) saturate(calc(1 - 0.3 * var(--era-age, 0.5)));
+}
+.tm-exhibit__patina {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  opacity: calc(0.34 * var(--era-age, 0.5));
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n2'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n2)'/%3E%3C/svg%3E");
+}
+
+/* The brass plaque — museum placard, not a legal footer. */
+.tm-plaque {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 5px 12px; border-radius: 6px;
+  font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: #f3e3c2;
+  background: linear-gradient(180deg, #7c6a4e, #5c4f3a);
+  border: 1px solid #8f7d5c;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+.tm-gravestone { font-size: 12px; letter-spacing: 0.04em; color: var(--color-text-muted); font-variant-numeric: tabular-nums; }
+
+/* "The world then" period markers. */
+.tm-context { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+.tm-context__item {
+  padding: 12px 14px;
+  border-radius: calc(var(--tm-radius) * 0.6);
+  border: 1px solid var(--tm-border);
+  background: color-mix(in srgb, var(--color-card-bg) 60%, transparent);
+}
+.tm-context__k { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-ember); opacity: 0.85; }
+.tm-context__v { margin-top: 4px; font-size: 13.5px; line-height: 1.4; color: var(--color-text); }
+
+/* The floor — a lone compass with no further bearing, dissolving into the mist. */
+.tm-floor__rose {
+  width: clamp(110px, 18vw, 190px);
+  aspect-ratio: 1;
+  margin: 0 auto clamp(1rem, 3vh, 2rem);
+  opacity: 0.4;
+  color: var(--color-ember);
+  -webkit-mask-image: radial-gradient(circle at 50% 40%, #000 45%, transparent 78%);
+  mask-image: radial-gradient(circle at 50% 40%, #000 45%, transparent 78%);
+}
+
+/* ── The Time Tunnel (feedback §5, revised) — the "back in time" RIGHT-EDGE
+   timeline. The gap is a short fog breather (this section just provides the scroll
+   room); the news lives entirely in a fixed odometer in the right margin, so it
+   never covers the centred content and never pins/locks the scroll. */
+.tm-tunnel { position: relative; z-index: 1; }
+
+/* A quiet dashed meridian down the centre of the gap — a map-line "thread" that
+   connects the era above to the era below so the breather never reads as empty.
+   Scrolls with the gap; a small ember lozenge marks its middle. */
+.tm-gap-thread {
+  position: absolute;
+  left: 50%;
+  top: 6%;
+  bottom: 6%;
+  width: 1px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  background: repeating-linear-gradient(180deg,
+    color-mix(in srgb, var(--color-ember) 42%, transparent) 0 3px,
+    transparent 3px 11px);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 24%, #000 76%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 24%, #000 76%, transparent 100%);
+  opacity: 0.55;
+}
+.tm-gap-thread::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  background: color-mix(in srgb, var(--color-ember) 72%, transparent);
+  box-shadow: 0 0 10px 1px rgba(var(--color-ember-rgb), 0.35);
+}
+
+/* The fixed odometer — a focus label (year + line) beside a scrolling dot track.
+   Faded in only through the middle of the gap (JS), so it never sits over a card. */
+.tm-rail {
+  position: fixed;
+  right: clamp(16px, 3vw, 48px);
+  top: 50%;
+  transform: translateY(-50%);
+  height: min(62vh, 520px);
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 2vw, 26px);
+  z-index: 25;
+  opacity: 0; /* JS fades it in through the gap */
+  pointer-events: none;
+}
+.tm-rail__focus { max-width: min(46vw, 460px); text-align: right; }
+.tm-rail__year {
+  display: block;
+  font-family: var(--font-mono, monospace);
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(28px, 4vw, 52px);
+  font-weight: 300;
+  line-height: 1;
+  color: color-mix(in srgb, var(--color-ember) 78%, transparent);
+}
+.tm-rail__text {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--font-chronicle, Georgia, serif);
+  font-size: clamp(15px, 1.6vw, 21px);
+  line-height: 1.3;
+  color: var(--color-text);
+}
+/* The dot track scrolls inside this masked window; the centred dot is "active". */
+.tm-rail__dots {
+  position: relative;
+  height: 100%;
+  width: 12px;
+  flex: 0 0 auto;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 16%, #000 84%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 16%, #000 84%, transparent 100%);
+}
+.tm-rail__track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  will-change: transform;
+}
+.tm-rail__dot {
+  flex: 0 0 auto;
+  width: 5px;
+  height: 5px;
+  margin: 7.5px 0; /* → a 20px slot per dot (matches SLOT in the component) */
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-text) 20%, transparent);
+  transition: width 0.25s ease, height 0.25s ease, margin 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+}
+.tm-rail__dot[data-state='past'] { background: color-mix(in srgb, var(--color-ember) 55%, transparent); }
+.tm-rail__dot[data-state='active'] {
+  width: 9px;
+  height: 9px;
+  margin: 5.5px 0; /* keep the 20px slot as it grows */
+  background: var(--color-ember);
+  box-shadow: 0 0 0 4px rgba(var(--color-ember-rgb), 0.16);
+}
+@media (max-width: 767px) { .tm-rail { display: none; } }
+
+/* The unified right-edge timeline (feedback §5, final). Years live in a vertical
+   dotted line (small at rest); a focal point at viewport centre magnifies whatever
+   passes it (dock effect), and fact dots open into their text there. All node
+   styling (size/opacity/position) is written per-frame from the scroll handler;
+   these are just the base looks. */
+.tm-gap { position: relative; z-index: 1; }
+
+.tm-rail2 {
+  position: fixed;
+  right: clamp(16px, 3vw, 44px);
+  top: 0;
+  height: 100vh;
+  width: min(46vw, 460px);
+  z-index: 25;
+  opacity: 0;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 86%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 86%, transparent 100%);
+}
+.tm-rail2__node {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  will-change: transform, opacity;
+}
+.tm-rail2__text {
+  display: inline-block;
+  text-align: right;
+  line-height: 1.25;
+  font-family: var(--font-chronicle, Georgia, serif);
+  font-size: 20px; /* FIXED — magnification is transform:scale, never font-size */
+  color: var(--color-text);
+  max-width: calc(100% - 22px);
+}
+.tm-rail2__node[data-type='year'] .tm-rail2__text {
+  font-family: var(--font-mono, monospace);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  font-size: 13px; /* FIXED base; scales up via transform at the focal point */
+  transform-origin: 100% 50%;
+  will-change: transform, opacity;
+}
+.tm-rail2__dot {
+  flex: 0 0 auto;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-ember) 60%, transparent);
+}
+@media (max-width: 767px) { .tm-rail2 { display: none; } }
+
+/* Static fallback (reduced-motion / touch): a clean year-grouped list. */
+.tm-tunnel--static { padding: clamp(48px, 10vh, 120px) clamp(20px, 6vw, 96px); display: grid; gap: clamp(28px, 5vh, 56px); }
+.tm-tunnel__group { display: grid; grid-template-columns: minmax(90px, 0.4fr) 1fr; gap: clamp(16px, 4vw, 48px); align-items: start; }
+.tm-tunnel__gyear {
+  font-family: var(--font-mono, monospace);
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(34px, 6vw, 68px);
+  font-weight: 300;
+  line-height: 1;
+  color: color-mix(in srgb, var(--color-text) 30%, transparent);
+}
+.tm-tunnel__glist { display: grid; gap: 12px; }
+.tm-tunnel__scap { font-family: var(--font-chronicle, Georgia, serif); color: var(--color-text-muted); line-height: 1.3; font-size: 16px; }
+.tm-tunnel__scap[data-weight='major'] { color: var(--color-text); font-weight: 600; font-size: clamp(18px, 2.4vw, 24px); }
+@media (max-width: 640px) { .tm-tunnel__group { grid-template-columns: 1fr; gap: 8px; } }
+
+/* Reduced motion / no-scrub: freeze at a gentle patina, drop the grain. */
+@media (prefers-reduced-motion: reduce) {
+  .time-machine { --age: 0.4 !important; }
+  .tm-grain { display: none; }
 }

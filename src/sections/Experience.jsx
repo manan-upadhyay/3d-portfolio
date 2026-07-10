@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { trackOnce } from '../lib/analytics';
+import { track, trackOnce } from '../lib/analytics';
 import { Briefcase, GraduationCap, Compass, ArrowRight, GitBranch, ChevronLeft, ChevronRight, Scale } from 'lucide-react';
 import { journey, chapters } from '../constants';
 import { ChapterHeading } from '../components';
@@ -90,7 +90,7 @@ const WaypointBody = ({ w }) => {
 
       {isCta && (
         <button
-          onClick={() => scrollToSection('contact')}
+          onClick={() => { track('experience_cta', { target: 'contact' }); scrollToSection('contact'); }}
           data-cursor="hover"
           className="btn-primary inline-flex items-center gap-2 mt-7 self-start"
         >
