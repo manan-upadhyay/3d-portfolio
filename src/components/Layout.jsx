@@ -135,7 +135,7 @@ const Layout = () => {
           end (v1.1 Workstream B). Doubles as the /making-of closing CTA. Hidden
           on the 404, which owns its whole viewport. */}
       {!is404 && (
-      <footer className="border-t" style={{ borderColor: 'var(--color-card-border)' }}>
+      <footer className="border-t" style={{ borderColor: 'var(--color-card-border)', background: 'var(--gradient-card)' }}>
         <div className="max-w-3xl mx-auto px-6 py-20 text-center">
           <h2 className="font-chronicle font-semibold leading-[1.05] text-[clamp(32px,5vw,54px)]" style={{ color: 'var(--color-text)' }}>
             {t('footer.closeHead')}

@@ -4908,7 +4908,7 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid var(--tm-border);
   background: color-mix(in srgb, var(--color-card-bg) 60%, transparent);
 }
-.tm-context__k { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-ember); opacity: 0.85; }
+.tm-context__k { font-size: 10px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-ember); opacity: 0.85; }
 .tm-context__v { margin-top: 4px; font-size: 13.5px; line-height: 1.4; color: var(--color-text); }
 
 /* The floor — a lone compass with no further bearing, dissolving into the mist. */
