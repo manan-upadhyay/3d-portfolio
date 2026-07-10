@@ -10,7 +10,6 @@
     "dev": "vite",
     "prebuild": "node scripts/gen-commit-history.mjs",
     "build": "vite build",
-    "gen:commits": "node scripts/gen-commit-history.mjs",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "typecheck": "tsc --noEmit",
     "preview": "vite preview"
