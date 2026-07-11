@@ -600,7 +600,6 @@ const TemporalProbe = () => {
       window.removeEventListener('pointerup', onUp);
       rects.forEach((r) => r.el.classList.remove('tm-scanned', 'tm-scanned--fail'));
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reduce, coarse, dismissed, t]);
 
   // No probe at all on touch / reduced motion (and no recall — there's nothing to
