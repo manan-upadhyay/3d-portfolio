@@ -34,6 +34,7 @@ export { default as SkyControl } from './SkyControl';
 export { default as SoundControl } from './SoundControl';
 export { default as StickyCta } from './StickyCta';
 export { default as SunArc } from './SunArc';
+export { default as TemporalProbe } from './TemporalProbe';
 export { default as ThemeWheel } from './ThemeWheel';
 export { default as VoiceHall } from './VoiceHall';
 export { default as VolumeDial } from './VolumeDial';

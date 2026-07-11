@@ -39,6 +39,10 @@ export const CONFIG = {
   detent: { peak: 0.085 },          // build-reel sprocket tick (per frame crossed)
   rewind: { peak: 0.12 },           // time-machine "wind back" — waking a ruin / crossing an era
   pageflip: { peak: 0.05 },         // time-tunnel — one soft page turn per year/event crossed
+  probeAppear: { peak: 0.10 },      // temporal-probe arrives — a rising warp shimmer
+  probeScan: { peak: 0.05 },        // temporal-probe scan sweep — dark + very subtle (plays often)
+  probeHit: { peak: 0.15 },         // temporal-probe poked — a hollow metallic bonk
+  probeEscape: { peak: 0.13 },      // temporal-probe breaks free of a drag — a rising whoosh
   settle: { peak: 0.12 },           // build-reel playhead landing thunk
   click: { peak: 0.14 },            // physical prev/next key — press (bright) + release (soft)
   volumeTick: { peak: 0.05 },       // apple-slider drag tick — pitch rises with the level
@@ -315,6 +319,43 @@ const CUES = {
   pageflip(t0) {
     swoosh(t0, { dur: 0.085, peak: CONFIG.pageflip.peak, type: 'highpass', from: 1900, to: 700, q: 0.6 });
     blip(t0, { freq: 210, type: 'triangle', dur: 0.03, peak: CONFIG.pageflip.peak * 0.5, attack: 0.001 });
+  },
+
+  // Temporal-probe arrival — a short rising "warp in": a sine glide up under a
+  // brightening filtered-noise shimmer. Fires once when the drone flies in.
+  probeAppear(t0) {
+    const pk = CONFIG.probeAppear.peak;
+    blip(t0, { freq: 180, glideTo: 720, type: 'sine', dur: 0.42, peak: pk * 0.7, attack: 0.02 });
+    swoosh(t0, { dur: 0.4, peak: pk, type: 'highpass', from: 500, to: 3200, q: 0.5 });
+    blip(t0 + 0.32, { freq: 1046.5, type: 'sine', dur: 0.16, peak: pk * 0.4, attack: 0.006 }); // arrival chime
+  },
+
+  // Temporal-probe scan — a DARK, subtle sensor sweep (deliberately NOT a pitched
+  // "pew"): a low sine body that dips, under a soft lowpassed wash that fades down,
+  // with only a whisper of high shimmer so it reads as "reading the surface". It
+  // plays on almost every scan, so it's kept very quiet — an undertone, never a nag.
+  probeScan(t0) {
+    const pk = CONFIG.probeScan.peak;
+    blip(t0, { freq: 138, glideTo: 84, type: 'sine', dur: 0.62, peak: pk, attack: 0.06 });         // dark low body
+    swoosh(t0, { dur: 0.58, peak: pk * 0.5, type: 'lowpass', from: 760, to: 190, q: 0.55 });        // airy downward wash
+    blip(t0 + 0.05, { freq: 470, glideTo: 300, type: 'triangle', dur: 0.42, peak: pk * 0.13, attack: 0.04 }); // faint shimmer
+  },
+
+  // Temporal-probe poked — a hollow metallic "bonk": a low detuned triangle body
+  // with a bright contact tick, so poking the drone feels physical (a struck hull).
+  probeHit(t0) {
+    const pk = CONFIG.probeHit.peak;
+    swoosh(t0, { dur: 0.03, peak: pk * 0.8, type: 'bandpass', from: 3000, to: 1600, q: 9 }); // contact
+    blip(t0, { freq: 196, glideTo: 120, type: 'triangle', dur: 0.22, peak: pk, attack: 0.002 });
+    blip(t0, { freq: 293, type: 'sine', dur: 0.14, peak: pk * 0.3, attack: 0.002, detune: 12 }); // ring
+  },
+
+  // Temporal-probe escape — a rising whoosh as it strains free of your grip and
+  // bolts away; a quick filtered-noise sweep up + a darting pitch glide.
+  probeEscape(t0) {
+    const pk = CONFIG.probeEscape.peak;
+    swoosh(t0, { dur: 0.34, peak: pk, type: 'bandpass', from: 500, to: 3400, q: 0.7 });
+    blip(t0, { freq: 300, glideTo: 1400, type: 'sawtooth', dur: 0.3, peak: pk * 0.5, attack: 0.006 });
   },
 
   // Face-particle assembly — the gathering: a granular shower of tiny pitched ticks

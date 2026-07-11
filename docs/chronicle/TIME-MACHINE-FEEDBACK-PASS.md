@@ -551,6 +551,139 @@ The "back in time" news went through several owner-driven reworks; final state:
     directly. **Reduced-motion desktop:** a static, year-grouped list.
   - Verified via headless: the rail advances (dots → active year+line), stays in
     the right margin over the entering card, and fades past the gap; build clean.
-- **Still queued (pick up next):** §2 temporal-echo motion language, §4 UFO Phase 1
-  (temporal-probe, cheeky tone), §3b full per-year card reskin. Optional tuning on
-  the tunnel: `GAP_VH` (breather length) + rail text max-width on narrow laptops.
+- **2026-07-11** — **§4 UFO companion — Phase 1 BUILT + verified** (the
+  temporal-probe drone, `components/TemporalProbe.jsx`, mounted only inside
+  `sections/TimeMachine.jsx` so it lives on `/time-machine` alone).
+  - **No 3D libs** (per the spec): one full-viewport Canvas2D sprite (a saucer
+    reskinned as a temporal probe — metallic hull, dome, ember core, rotating rim
+    lights, a 1px chromatic time-echo). Pseudo-depth via scale + a ground-shadow
+    blob. All motion is a hand-rolled **spring-damper integrator** in one rAF loop.
+  - **States shipped:** fly-in (off-screen → home, critically damped — the boundary
+    clamp is skipped during fly-in/escape so it enters smoothly) → idle hover (bob +
+    slow wander) → **beam-scan with element reciprocation** (a downward cone +
+    scanline; cheap point-in-cone tests against cached rects toggle `.tm-scanned` on
+    the title / cards / floor / rail — a cyan chromatic-split glow) → **drag with
+    resistance + break-free escape** (strain grows while you pin it and it bolts) →
+    **hit-recoil + anger** (poke it → impulse away, `anger` raises stiffness / lowers
+    damping / reddens the core / adds jitter, decays over time) → **context quips**.
+  - **Quips** authored in **all 10 voices** in character (`timeMachine.probe.quips.*`
+    — greet / scanTitle / scanCard / scanFloor / hit / angry / escape / idle, + a
+    `dismiss` label), cheeky and self-roasting, **never at the visitor**. Non-native
+    legible in `chronicle`/`plain`.
+  - **Sound:** four new intent-gated cues in `sound.js` — `probeAppear` (warp-in),
+    `probeScan` (sonar sweep), `probeHit` (metallic bonk), `probeEscape` (rising
+    whoosh). No continuous thruster bed (would be motion-sound, against TACTILE §0).
+  - **Guardrails (all met):** desktop + motion only (off on `(pointer: coarse)` +
+    `prefers-reduced-motion`); never blocks reading/clicks (`pointer-events:none`
+    canvas; a window-capture pointerdown only *swallows* when it lands on the craft);
+    a persistent dismiss chip that remembers (`localStorage` `tm-probe-dismissed`);
+    analytics `probe_summon` / `probe_hit` / `probe_escape` / `probe_dismiss`.
+  - **Verified** via headless CDP (build clean; canvas draws; fly-in trajectory clean
+    with no corner-bounce; greet + scan quips fire; title reciprocation glow; grab →
+    `drag`; poke → `anger`; dismiss removes + persists across reload; reduced-motion
+    skips entirely; no console errors). Note: headless throttles rAF to ~2fps, so the
+    physics runs in slow-motion there — the `dt` clamp (0.05) makes that safe; at real
+    60fps the fly-in is the ~1.5s arrival seen in the light/dark screenshots.
+- **2026-07-11** — **§4 UFO companion — Phase 2 BUILT + verified** (progressive,
+  layered onto Phase 1 in the same `components/TemporalProbe.jsx`). The owner's
+  Phase-2 list was `haptics / gyro / scroll-follow / failed-scans`; reconciled to
+  the platform the probe actually runs on (**desktop only** — off on coarse
+  pointer, so gyro/haptics as *mobile sensors* don't apply there):
+  - **Descent companion (scroll-follow):** the probe now RIDES the descent — an
+    active scroll tugs it along (a clamped velocity nudge, `S.scrollV`), and its
+    scan target is no longer random: it prefers the on-screen ruin **nearest the
+    viewport centre** that it hasn't scanned recently (`S.scannedAt` map), so it
+    "greets" each era card as you reach it. Verified: scroll a `.tm-exhibit` to
+    centre → the probe flies over and scans *that* card (screenshot: beam + the
+    card's cyan reciprocation ring + the `scanCard` quip).
+  - **Failed / frustrated scans:** a card scan has a ~34% chance to **glitch out
+    partway** — the beam cuts, the probe sputters (a physical recoil), the element
+    gets a harsher red chromatic stutter (`.tm-scanned--fail`, a brief CSS glitch
+    keyframe), the `glitch` cue plays, and it quips `scanFail` ("the ruin resists").
+    Verified firing end-to-end with the in-character quip.
+  - **Cursor-dodge (the desktop analog of gyro tilt, + the §4a "dodges your cursor"
+    promise):** the cursor is tracked at all times; in idle the probe **skitters
+    away** when the pointer drifts within ~140px — gentle and near-range, so a
+    deliberate poke still lands. Verified: craft pushed ~186px away from the cursor.
+  - **Haptics:** `navigator.vibrate` wired on poke (single) + escape (pattern) +
+    scan-fail — a progressive enhancement that's a **silent no-op on desktop/iOS**
+    (guarded, never throws). Meaningful only if the probe is ever run on an
+    Android/Chrome touch device (currently it isn't — see the open item below).
+  - New quip category `scanFail` authored in **all 10 voices**; build clean; no
+    console errors; Phase-1 behaviours (fly-in / greet / drag / hit / dismiss)
+    re-confirmed as a regression pass.
+- **2026-07-11** — **§4 UFO — owner feedback pass (living companion)**. Fixed the
+  clipped tip + made the probe genuinely reactive:
+  - **Quip tip no longer clips.** When the probe scanned near the top edge the
+    bubble ran off-screen (the feature "cut off"). It now flips **below** the craft
+    when it's near the top and is clamped within the viewport (x + y). Verified: a
+    top-edge scan (craft y=98) puts the bubble at y=129, fully visible.
+  - **Scan destination fixed** so it no longer hugs the very top: the craft holds a
+    comfortable altitude (`clamp(py-150, 96, H-150)`).
+  - **New scan targets:** the **side rail**, the **narrator (voice)** and the
+    **sound** control (via a small `data-probe-scan` hook on each — the only edits to
+    the shared global chrome). Each has its own voiced quip.
+  - **It knows what you're doing:** hovering a control makes the probe **fly over and
+    inspect it** (throttled `elementFromPoint` → `forceScanEl`); a **fast scroll**,
+    **climbing back toward the present**, or **going idle** each trigger a reaction
+    quip (interrupt-priority for the scroll ones, cooldown-gated so they never spam).
+  - **Wondrous scan:** an animated **lock-on reticle** (corner brackets + a sweeping
+    readout line) now frames the scanned element while the beam plays over it.
+  - **6 new quip categories** (`scanRail`, `scanVoice`, `scanSound`, `fastScroll`,
+    `backUp`, `bored`) authored in **all 10 voices**, written to feel personal and
+    reactive (e.g. voice → "you're gonna change my voice? after everything?"; idle →
+    "still there? I can hear you not scrolling"). Now **15 quip categories × 10
+    voices**. Verified end-to-end via headless CDP (bubble-flip, rail + sound scans,
+    hover-to-inspect, fast-scroll + back-up reactions all fire; build clean; no
+    console errors).
+- **2026-07-11** — **§4 UFO — dismiss is now reversible (owner feedback).** A
+  non-technical visitor could click the × not knowing what it did and lose the probe
+  "forever" (short of clearing browser data). Fixed: the dismiss is still **persisted**
+  (respects those who want it gone), but when dismissed the probe is replaced by a
+  small **recall chip** (bottom-left, clear of the rail + controls) — a collapsed
+  saucer glyph that expands to its voiced label ("Call the probe back") on hover and
+  flies the probe back in on click. `dismissed` moved to component state so recall
+  re-mounts it live; new `probe_recall` analytics event; `recall` label added in all
+  10 voices. Verified end-to-end via headless CDP: dismiss → chip appears + persists
+  across reload; recall → probe returns + flag cleared; no console errors.
+- **2026-07-11** — **§4 UFO — "make it feel alive" pass (owner feedback).** The
+  probe read as repetitive (same line each scan; a fixed title→rail→title loop) and
+  the scan sound was a toy-laser "pew". Fixed all three:
+  - **Behaviour variety (RDR2-ish).** Replaced the fixed scan-timer with an idle
+    **action scheduler** (`chooseAction`) that each beat picks — with a *varied*
+    cadence (2.6–8.5s) — among: scan a target, patrol to a new spot, muse in place, a
+    little physical **flourish** (a playful hop + tilt), or just hover quietly. It no
+    longer scans constantly (verified mode split: mostly idle, occasional scans).
+  - **No more deterministic target loop.** `pickScan` now **excludes the last-scanned
+    target** and picks **weighted-random** (favouring viewport-centre + not-recently-
+    scanned, with real randomness), so it never reads as title→rail→title. Verified:
+    zero back-to-back same-target repeats.
+  - **Not every scan narrates** (~⅔ speak; forced hover-scans always do), so it stops
+    announcing every move.
+  - **Way more lines, chosen randomly (no immediate repeat).** Expanded every quip
+    category across **all 10 voices** — `chronicle` (default) ~30→**80 lines**,
+    `plain` →56, each sealed voice →~33 (high-frequency categories like `scanCard` /
+    `idle` now 3–8 variations each). Verified live: the *same* action (e.g. scanning
+    the sound control) produced three different lines in one short run.
+  - **New scan sound.** `sound.js` `probeScan` rewritten from the pitched sine "pew"
+    to a **dark, subtle sensor sweep** (low sine body + a soft lowpassed downward wash
+    + a whisper of shimmer) and dropped from peak 0.09 → **0.05**, since it plays on
+    almost every scan and must never nag.
+- **2026-07-11** — **§4 UFO — "stay long enough to read" (owner feedback).** The
+  scan window was a fixed 2.4–3.4s while the quips need ~4–6s to read, so the probe
+  flew off mid-sentence. Now quip duration is **reading-time-based** (`readTime` ≈
+  180 wpm + a base, clamped 3.6–8.5s) and a **speaking scan holds its target for the
+  whole reading window + a beat** (`modeUntil = quipUntil + 500`), so it never leaves
+  before you've finished the line. Silent scans stay briefer. All other quips (greet,
+  reactions, hit/escape, fail) dropped their fixed short holds and now use reading
+  time too, so every line is legible. Verified: forced scans of longer lines now
+  linger ~7–8s (quip readable ~7s) vs the old ~3s.
+- **Open decision (mobile):** the probe is desktop-only by the Phase-1 guardrail
+  (drag/poke don't translate to touch). That leaves gyro/haptics inapplicable in
+  practice. If the owner wants a **touch variant** (a lean tap-to-poke + gyro-tilt
+  mode) to make those pay off, that's a deliberate scope-add — flagged, not assumed.
+- **Still queued (pick up next):** §2 temporal-echo motion language for the whole
+  page, §3b full per-year card reskin. Optional tuning on the tunnel: `GAP_VH`
+  (breather length) + rail text max-width on narrow laptops. Probe tuning knobs live
+  at the top of `TemporalProbe.jsx` (spring K/D, scan cadence, anger decay, fail
+  probability, dodge radius) if the feel needs adjusting.

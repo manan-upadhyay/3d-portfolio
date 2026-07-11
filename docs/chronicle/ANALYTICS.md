@@ -123,6 +123,17 @@ via autocapture — the list below is our *intentional* product events.)
 | `time_machine_exit` | TimeMachine rail (home action) | `from` | did they return from the Time Machine? |
 | `era_wake` | `EraExhibit` | `era` | **woke an old portfolio deploy iframe inside the card** |
 | `era_open` | `EraExhibit` | `era` | **opened an old portfolio deploy link in a new tab** |
+| `probe_summon` | `TemporalProbe` (on fly-in) | — | **the temporal-probe companion actually mounted** (desktop + motion only) |
+| `probe_hit` | `TemporalProbe` | — | poked the drone (deliberate play) — deduped once |
+| `probe_escape` | `TemporalProbe` | — | dragged it until it broke free — deduped once |
+| `probe_dismiss` | `TemporalProbe` (×) | `engaged`, `seconds` | **sent the probe away** — annoyance signal (did they play first / how soon) |
+| `probe_recall` | `TemporalProbe` (recall chip) | — | **brought a dismissed probe back** — regret / discoverability of the recall |
+
+> **Probe read.** `probe_hit` / `probe_escape` ÷ `probe_summon` = delight rate;
+> `probe_dismiss` ÷ `probe_summon` = annoyance rate; `probe_dismiss{engaged:false,
+> seconds:<small}` isolates *instant* dismissals (clicked × without ever playing —
+> the "this is in my way" cohort) from play-then-dismiss. `probe_recall` closes the
+> loop. The probe is desktop-only, so filter these by `input_type = fine`.
 
 > **Voices note.** All 10 voices (2 open + 8 sealed) are covered generically:
 > `voice_selected {voice}` and `voice_unlocked {voice}` carry the voice id, so

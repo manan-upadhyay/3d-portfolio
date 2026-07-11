@@ -299,6 +299,7 @@ const VoiceSwitcher = ({ activeId }) => {
         type="button"
         onClick={toggleMenu}
         data-cursor="hover"
+        data-probe-scan="voice"
         whileTap={{ scale: 0.88 }}
         transition={JELLY}
         aria-haspopup="menu"

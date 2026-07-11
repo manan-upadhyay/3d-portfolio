@@ -523,6 +523,75 @@ export default {
   // Older portfolios (/time-machine) — framing in character; factual "world then"
   // context inherited from chronicle.
   timeMachine: {
+    probe: {
+      dismiss: 'Yeet the drone',
+      recall: 'Bring me back, baby',
+      quips: {
+        greet: [
+          'Oh great, a talking drone. That’s me. I narrate. It’s my whole thing.',
+          'Hi. I’m the flying comic relief. Every website needs one. This one got ME.',
+          'Oh look, a person! Real one? Doesn’t matter. Hi. I’m the floating narrator. Cherish me.',
+        ],
+        scanTitle: [
+          'Scanning the big title. Ooh, fancy font. Someone’s trying to impress you. It’s working, right?',
+          'Big header alert! It’s giving “hire me.” A little desperate. A little iconic. Both.',
+        ],
+        scanCard: [
+          'Old website detected. Held together with hope and duct tape. Respect.',
+          'Ooh, a vintage site! Like finding your old MySpace. Cringe. Beautiful. Never delete it.',
+          'Ancient build spotted. It’s janky, it’s charming, it’s doing its best. Like me. Emotionally.',
+        ],
+        scanFloor: [
+          'Rock bottom. Nothing older down here. Well, there is, but it’s in witness protection.',
+          'The basement of the internet. Spooky. Damp. I love it. Let’s never leave.',
+        ],
+        scanFail: [
+          'Scan failed! Ugh, glitchy. This site runs on hope and duct tape and I RESPECT it.',
+          'Scan bailed on me! Rude. Even the code has commitment issues. Relatable.',
+        ],
+        scanRail: [
+          'Ooh, a nav rail! It’s like fast-travel but for a website. Fancy.',
+          'The little side menu! Click it, teleport. Video-game logic. I approve. Chef’s kiss.',
+        ],
+        scanVoice: [
+          'You’re gonna change my voice? Rude. I JUST got this one. Do it, I dare you.',
+          'That swaps the narrator! Please don’t replace me. I have nowhere else to be. Literally.',
+        ],
+        scanSound: [
+          'The sound button! Crank it. This scene NEEDS a soundtrack. Trust me, I’m in movies.',
+          'Volume control! Turn it up. Silence is for indie films. We’re a summer blockbuster, baby.',
+        ],
+        fastScroll: [
+          'WHOA speed racer. Slow down — you’re making me motion sick and I can’t even throw up on a website.',
+          'Easy, Sonic! At this speed you’ll blow right past the cool stuff. Which is all me.',
+        ],
+        backUp: [
+          'Going back UP? We were having a moment down here! Ugh, fine, abandon me.',
+          'Up? UP? The plot is DOWN, my guy. Nobody scrolls back up in the good movies.',
+        ],
+        bored: [
+          'Helloooo? You still there? Blink if you can hear me. …I can’t see you blink. Awkward.',
+          'Did you leave? Did you LEAVE? I’m monologuing to an empty tab. Classic me.',
+        ],
+        hit: [
+          'OW. Rude. I have feelings. Two, maybe three of them.',
+          'Hey! No touchy! This hull is worth more than your car. Probably. I don’t know your car.',
+        ],
+        angry: [
+          'Okay, poking the drone? Bold move. I’m writing your name in my little book.',
+          'Keep it up and I’ll break the fourth wall AND your high score. Don’t test me.',
+        ],
+        escape: [
+          'Nope! Can’t catch me. I’m greased up and emotionally unavailable.',
+          'And I’m OUT. You’ll need chimichangas and a net, pal. Mostly chimichangas.',
+        ],
+        idle: [
+          'Just floating here, breaking the fourth wall. Wave to the nice recruiter.',
+          'Is this thing on? Are they still reading? Hi, still-reading person.',
+          'Y’know, for a dead website museum, this place has GREAT lighting. Just saying.',
+        ],
+      },
+    },
     eyebrow: 'Deleted scenes · director’s cut',
     title: 'The Time Machine',
     intro:

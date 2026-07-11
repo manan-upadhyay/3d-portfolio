@@ -441,6 +441,98 @@ export default {
   // Older portfolios (/time-machine) — straight, professional register. Factual
   // per-era `context` is inherited from chronicle (it's the same real history).
   timeMachine: {
+    probe: {
+      dismiss: 'Dismiss the drone',
+      recall: 'Bring the drone back',
+      quips: {
+        greet: [
+          'Hi. I’m a small drone that flies around this page. I’ll stay out of your way.',
+          'Drone here. I scan the old sites as you scroll. Send me off any time.',
+          'Hello. I’ll hover around and point things out. Ignore me whenever you like.',
+        ],
+        scanTitle: [
+          'Scanning the title. This is the newest thing on the page.',
+          'That’s the heading — the start of the descent.',
+          'Reading the title at the top.',
+          'The main heading. Everything below it is older.',
+        ],
+        scanCard: [
+          'Scanning an old portfolio. It still mostly works.',
+          'This is an older site, kept as it was.',
+          'An old build. Rougher than this one, but it shipped.',
+          'Reading a preserved project. A few things may be broken now.',
+          'This one’s from a few years back. A snapshot in time.',
+        ],
+        scanFloor: [
+          'This is the bottom. Nothing older is kept here.',
+          'The end of the descent. This is where it started.',
+          'Bedrock. No earlier sites were saved.',
+        ],
+        scanFail: [
+          'Scan failed — the old site glitched out on me.',
+          'Couldn’t read that one. Old code can be stubborn.',
+          'Lost the signal for a second there.',
+        ],
+        scanRail: [
+          'That’s the timeline rail — it jumps you between the years.',
+          'The side rail. Use it to move through the eras.',
+          'That rail navigates the descent.',
+          'The nav rail — it keeps track of the year.',
+        ],
+        scanVoice: [
+          'That control changes the narrator’s voice.',
+          'The voice switcher. You can pick a different narrator.',
+          'That’s where you change who’s telling the story.',
+          'Tap that to try a different voice.',
+        ],
+        scanSound: [
+          'That’s the sound control. There’s ambient audio here.',
+          'The sound button — turn the audio on or off.',
+          'That controls the volume. There’s a soundtrack if you want it.',
+          'Sound settings. Optional, but nice.',
+        ],
+        fastScroll: [
+          'You’re scrolling fast — slow down to take it in.',
+          'Easy — you might miss things at that speed.',
+          'That’s quick. Slow down a bit?',
+          'Scrolling fast. Take your time, it’s worth it.',
+        ],
+        backUp: [
+          'Scrolling back up? The older sites are further down.',
+          'Heading back to the top? The past is below.',
+          'Going up again? The old work is downward.',
+          'Back toward the present? Nothing new up there.',
+        ],
+        bored: [
+          'Still there? Nothing has moved in a while.',
+          'You’ve been still for a bit. All good?',
+          'Just checking in — still with me?',
+          'Take your time. I’ll wait.',
+        ],
+        hit: [
+          'Ow. Please don’t poke the drone.',
+          'Hey — easy on the hardware.',
+          'That’s a bit rough.',
+        ],
+        angry: [
+          'Okay, that’s enough poking.',
+          'Seriously, stop that.',
+          'I’d rather you didn’t keep doing that.',
+        ],
+        escape: [
+          'You can’t really hold me. I’ll just float off.',
+          'Nope — I slip right out.',
+          'And I’m free. Nice try.',
+        ],
+        idle: [
+          'Just floating along while you read.',
+          'Lots of old work down here.',
+          'Taking a look around.',
+          'Quiet down here. I like it.',
+          'Still hovering. Let me know if you need anything.',
+        ],
+      },
+    },
     eyebrow: 'Older work',
     title: 'Earlier portfolios',
     intro:

@@ -523,6 +523,75 @@ export default {
   // Older portfolios (/time-machine) — framing in character; factual "world then"
   // context inherited from chronicle.
   timeMachine: {
+    probe: {
+      dismiss: 'Home, send the drone',
+      recall: 'Back, call the probe',
+      quips: {
+        greet: [
+          'A probe, I am. Lost in the wrong age, hmm. Mind me not — the ruins, I count.',
+          'Watch over this old glass, someone must. That someone, I am. Yes.',
+          'Come, you have. Guide you through the ruins, I will. Yes.',
+        ],
+        scanTitle: [
+          'The sign at the gate, I scan. Bold, its letters are. Approve, I do.',
+          'The heading, read it I do. Proud, it stands. Newest of all things here, it is.',
+        ],
+        scanCard: [
+          'An old relic, this is. Breathe, its code still does. Impressive, hmm.',
+          'Ancient, this build is. Rough, yes — yet stood the years, it has. Honour that, we must.',
+          'A ruin, before you. Learning, its maker was. Everyone begins so. Everyone, hmm.',
+        ],
+        scanFloor: [
+          'End here, the trail does. Below this, only sketches there are.',
+          'The bottom, this is. Older than this, nothing kept there was. Begin here, all did.',
+        ],
+        scanFail: [
+          'Failed, the scan has. Resist me, this old ruin does. Hmm.',
+          'Clouded, the reading is. Its secrets, this relic keeps. Force it, I will not.',
+        ],
+        scanRail: [
+          'The rail, that is. Between the years, carry you it does. Hmm.',
+          'A path along the edge, this is. The year, lose it you will not. Trust it, you may.',
+        ],
+        scanVoice: [
+          'Change my voice, you wish? Chosen carefully, words must be. Yes.',
+          'Another storyteller, seek you do? Many voices, this tale has. Wisely, choose, hmm.',
+        ],
+        scanSound: [
+          'The sound, control it here you can. A score, this descent has. Hear it, you should.',
+          'The volume, this is. Silence, comfort it brings — but sing, the dark can. Let it, mmm.',
+        ],
+        fastScroll: [
+          'Too fast, you fall. Rushed, the past does not like to be. Patience.',
+          'Slow, you must go. Blur, the years do, when hurried they are. Hmm.',
+        ],
+        backUp: [
+          'Upward, back you climb? Deeper, the past lies. The other way, hmm.',
+          'To the present, return you do? New, nothing there is. Down, the wisdom waits.',
+        ],
+        bored: [
+          'Still, you have gone. There, are you? Wonder, I do.',
+          'Quiet, long you are. Lost among the ruins, hmm? Or rest, you take?',
+        ],
+        hit: [
+          'Ow. A delicate instrument, I am. Poke me, you should not.',
+          'Strike me, you did. Feel it, I do. Kind, that was not. Hmph.',
+        ],
+        angry: [
+          'Enough! Precision optics, I am — a toy, I am not. Hmph.',
+          'Again, you poke? Patience, even a Jedi drone runs out of. Cease, you will.',
+        ],
+        escape: [
+          'Hold me, you cannot. Answer to no cursor, this drone does.',
+          'Free, I slip. Quicker than you, my thrusters are. Yes, hmm.',
+        ],
+        idle: [
+          'Much old glass, down here there is. Busy, someone was.',
+          'Hover, I do. Best at it, I am. Mmm.',
+          'Wait, I do. Patient, a good watcher is. Come and go, the years will.',
+        ],
+      },
+    },
     eyebrow: 'The past, revisit we do',
     title: 'The Time Machine',
     intro:

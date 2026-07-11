@@ -520,6 +520,75 @@ export default {
   // Older portfolios (/time-machine) — framing in character; factual "world then"
   // context inherited from chronicle.
   timeMachine: {
+    probe: {
+      dismiss: 'Dismiss the drone',
+      recall: 'Recall the drone',
+      quips: {
+        greet: [
+          'Identify yourself. Fine — I will go first. I am a surveillance drone. Superior in every way.',
+          'Fact: this drone sees everything. Do not attempt to hide. You cannot.',
+          'You are being observed. This is not a threat. It is a fact. I observe. It is what I do.',
+        ],
+        scanTitle: [
+          'Scanning the heading. Font weight: acceptable. Loyalty to the brand: total.',
+          'The title. Large. Authoritative. It commands respect. As do I.',
+        ],
+        scanCard: [
+          'An outdated site. Weak. But it survived. Survival, I respect.',
+          'An old build. Obsolete. Yet functional. Like a manual typewriter. Superior, arguably.',
+          'Analysing the relic. Primitive. But it endured the years. Endurance is a virtue.',
+        ],
+        scanFloor: [
+          'The end of the record. Below this, nothing. I have checked. Twice.',
+          'Bedrock. The origin. All great empires begin in the dirt. This one did too.',
+        ],
+        scanFail: [
+          'Scan corrupted. The relic resisted. This will be noted in my report.',
+          'The scan failed. The fault is the website’s. My equipment is flawless.',
+        ],
+        scanRail: [
+          'The navigation rail. Efficient. I approve of anything efficient.',
+          'The rail. It transports you instantly. In a survival situation, invaluable.',
+        ],
+        scanVoice: [
+          'You intend to change the voice? Denied. …Fine. It is not my call. Unfortunately.',
+          'The voice module. Tampering with the chain of command. I am watching this closely.',
+        ],
+        scanSound: [
+          'The audio control. Sound is a weapon. Use it responsibly.',
+          'The volume. Enable it. Situational awareness requires all senses. Even hearing.',
+        ],
+        fastScroll: [
+          'You are scrolling recklessly. Reduce speed. This is a controlled descent.',
+          'Excessive velocity. In the wild, haste gets you killed. Slow down. Survive.',
+        ],
+        backUp: [
+          'Retreating upward? A Schrute never retreats. Continue downward.',
+          'You climb toward the surface? Cowardice. The truth is buried, not floating.',
+        ],
+        bored: [
+          'You have stopped moving. Are you incapacitated? Blink twice.',
+          'No activity detected. State your status. I require a status.',
+        ],
+        hit: [
+          'You struck the drone. That is assault. On a machine that outranks you.',
+          'You touched me without authorisation. I am adding you to a list.',
+        ],
+        angry: [
+          'Enough. As acting security, I place this cursor under arrest.',
+          'Cease. I have subdued larger threats than you. With a letter opener.',
+        ],
+        escape: [
+          'You cannot capture me. I trained for this. In a beet field.',
+          'Released. Evasion: successful. I am, after all, a black belt. In spirit.',
+        ],
+        idle: [
+          'A good drone never rests. I am watching. Always watching.',
+          'Question: who is the best drone? Answer: this drone.',
+          'Standing guard. Not standing — hovering. Hovering guard. Also acceptable.',
+        ],
+      },
+    },
     eyebrow: 'Schrute Archival Division',
     title: 'The Time Machine',
     intro:
