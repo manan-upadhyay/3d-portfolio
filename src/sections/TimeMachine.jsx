@@ -2,7 +2,7 @@ import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { ChevronsDown } from 'lucide-react';
-import { EraExhibit, Fog, CompassRose, TimeRail } from '../components';
+import { EraExhibit, Fog, CompassRose, TimeRail, TemporalProbe } from '../components';
 import { archive, timeTunnel, PRESENT_YEAR } from '../constants';
 
 // Height (vh) of the fog "gap" before each card — the scroll room the right-edge
@@ -76,6 +76,10 @@ const TimeMachine = () => {
           cards so the live frames stay clean windows. */}
       <Fog density={density} />
       <div className="tm-grain" aria-hidden />
+
+      {/* The temporal-probe companion — flies over the descent, scans, reacts,
+          and quips (feedback §4). Self-guards: desktop + motion only, dismissible. */}
+      <TemporalProbe />
 
       {/* THRESHOLD — the present; the mouth of the descent. */}
       <section id="era-threshold" className="tm-stratum items-center text-center">

@@ -334,6 +334,35 @@ export default {
 
   // Older portfolios (/time-machine). Moo. (Factual context inherited from chronicle.)
   timeMachine: {
+    probe: {
+      dismiss: 'Moo moo',
+      recall: 'Moo moo moo',
+      quips: {
+        greet: [
+          'Moo! Moo moo moo, moo moo moo moo. Moo.',
+          'Moo moo moo — moo moo moo moo moo moo.',
+          'Moo moo! Moo — moo moo moo moo moo moo.',
+        ],
+        scanTitle: ['Moo moo moo. Moo!', 'Moo — moo moo moo moo.', 'Moo? Moo moo. Moo.'],
+        scanCard: ['Moo moo moo moo — moo moo moo.', 'Moo… moo moo moo moo moo.', 'Moo moo. Moo moo — moo.'],
+        scanFloor: ['Moo. Moo moo moo moo moo.', 'Moo moo — moo moo moo.'],
+        scanFail: ['Moo?! Moo moo — moo moo moo.', 'Moo… moo moo moo?'],
+        scanRail: ['Moo moo. Moo moo moo.', 'Moo — moo moo moo moo moo.'],
+        scanVoice: ['Moo? Moo moo moo moo!', 'Moo moo moo? Moo…'],
+        scanSound: ['Moo moo. Moo!', 'Moo — moo moo moo moo.'],
+        fastScroll: ['Mooooo! Moo moo moo.', 'Moo moo moo — moo!'],
+        backUp: ['Moo? Moo moo moo moo.', 'Moo — moo moo moo?'],
+        bored: ['Moo… moo moo moo?', 'Moo. Moo moo moo moo moo.'],
+        hit: ['Moo?! Moo moo moo.', 'MOO! Moo moo.'],
+        angry: ['MOO. Moo moo moo moo.', 'MOO MOO! Moo.'],
+        escape: ['Moo moo moo! Moo.', 'Moo! Moo moo moo moo.'],
+        idle: [
+          'Moo moo moo moo…',
+          'Moo. Moo moo moo moo moo.',
+          'Moo… moo. Moo moo.',
+        ],
+      },
+    },
     eyebrow: 'Moo moo',
     title: 'Moo',
     intro: 'Moo moo moo, moo moo moo moo. Moo moo — moo moo moo moo moo. Moo. (Moo moo moo moo moo.)',

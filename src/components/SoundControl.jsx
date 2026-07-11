@@ -188,6 +188,7 @@ const SoundControl = () => {
         animate={{ height: expanded ? EXPANDED_H : COLLAPSED }}
         transition={JELLY}
         className="soundpop w-12 relative overflow-hidden rounded-full"
+        data-probe-scan="sound"
         onMouseEnter={onEnter}
         onMouseLeave={() => { setExpanded(false); setDragging(false); }}
         onPointerDown={expanded ? onDown : undefined}

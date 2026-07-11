@@ -102,6 +102,7 @@ const SideRail = ({ items, activeId, actions = [], visible, ariaLabel, crestLabe
       onMouseEnter={() => setExpanded(true)}
       onMouseLeave={() => setExpanded(false)}
       className="hidden md:block fixed left-4 top-1/2 z-40"
+      data-probe-scan="rail"
       style={{ translateY: '-50%', pointerEvents: visible ? 'auto' : 'none' }}
       aria-hidden={!visible}
       aria-label={ariaLabel || 'Chapters'}

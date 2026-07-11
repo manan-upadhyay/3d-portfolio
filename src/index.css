@@ -5099,3 +5099,143 @@ h1, h2, h3, h4, h5, h6 {
   .time-machine { --age: 0.4 !important; }
   .tm-grain { display: none; }
 }
+
+/* ── The Temporal Probe — the /time-machine companion drone (feedback §4). ──
+   A full-viewport Canvas2D sprite that flies over the page. It never blocks
+   reading/clicks (pointer-events:none); only its own dismiss chip + the craft
+   hit-test (window pointerdown) are interactive. Desktop + motion only. */
+.tm-probe {
+  position: fixed;
+  inset: 0;
+  z-index: 60;              /* above content, below modal overlays */
+  pointer-events: none;
+}
+
+/* The context-quip bubble that follows the craft. */
+.tm-probe__quip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 61;
+  max-width: 240px;
+  padding: 8px 12px;
+  border-radius: 12px 12px 12px 3px;
+  background: color-mix(in srgb, var(--color-card-bg) 88%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-ember) 40%, var(--color-card-border));
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(8px);
+  color: var(--color-text);
+  font-size: 12.5px;
+  line-height: 1.35;
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  white-space: normal;
+}
+/* When the craft is near the top, the bubble flips BELOW it — move the little
+   tail corner to the top so it still points back at the craft. */
+.tm-probe__quip--below {
+  border-radius: 3px 12px 12px 12px;
+}
+
+/* Always-available dismiss chip, riding just off the craft. */
+.tm-probe__dismiss {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 61;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;   /* centre on the transform point */
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--color-text) 22%, transparent);
+  background: color-mix(in srgb, var(--color-card-bg) 80%, transparent);
+  color: var(--color-text-muted);
+  backdrop-filter: blur(6px);
+  opacity: 0.55;
+  transition: opacity 0.2s ease, color 0.2s ease, transform 0.1s linear;
+  cursor: pointer;
+}
+.tm-probe__dismiss:hover { opacity: 1; color: var(--color-text); }
+
+/* Recall chip — shown in place of the probe once it's been dismissed, so the
+   visitor can always bring it back (no clearing browser data). Collapsed to a
+   small saucer icon; expands to reveal its label on hover. Bottom-left, clear of
+   the side rail (left-centre) and the control cluster (bottom-right). */
+.tm-probe-recall {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  z-index: 45;
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  height: 40px;
+  padding: 0 9px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--color-ember) 32%, var(--color-card-border));
+  background: color-mix(in srgb, var(--color-card-bg) 85%, transparent);
+  backdrop-filter: blur(8px);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  transition: color 0.2s ease, border-color 0.2s ease, gap 0.25s ease, padding 0.25s ease;
+  animation: tm-recall-in 0.5s ease both;
+}
+.tm-probe-recall:hover {
+  color: var(--color-text);
+  border-color: color-mix(in srgb, var(--color-ember) 60%, transparent);
+  gap: 8px;
+  padding: 0 15px 0 9px;
+}
+.tm-probe-recall__glyph { width: 22px; height: 22px; flex-shrink: 0; }
+.tm-probe-recall__label {
+  max-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 0;
+  font-size: 12px;
+  transition: max-width 0.25s ease, opacity 0.2s ease;
+}
+.tm-probe-recall:hover .tm-probe-recall__label { max-width: 200px; opacity: 1; }
+@keyframes tm-recall-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.9); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) { .tm-probe-recall { animation: none; } }
+
+/* Reciprocation — an element the beam sweeps gets a brief temporal glitch/glow:
+   a cyan chromatic split + a scanned sheen. Cheap: text-shadow + outline, no
+   layout. Removed the instant the beam leaves. */
+.tm-scanned {
+  text-shadow:
+    -1.5px 0 rgba(255, 60, 90, 0.55),
+    1.5px 0 rgba(80, 210, 255, 0.55);
+  outline: 1px solid color-mix(in srgb, #78dcff 60%, transparent);
+  outline-offset: 3px;
+  transition: outline-color 0.2s ease;
+}
+.tm-exhibit.tm-scanned {
+  outline-offset: 0;
+  box-shadow: 0 0 0 1px color-mix(in srgb, #78dcff 70%, transparent),
+    0 0 34px color-mix(in srgb, #78dcff 30%, transparent);
+}
+
+/* A FAILED scan (the ruin resists) — a harsher red-biased glitch stutter, brief. */
+.tm-scanned--fail {
+  animation: tm-scan-fail 0.6s steps(2, end) 1;
+}
+@keyframes tm-scan-fail {
+  0%   { transform: translateX(0); text-shadow: -2px 0 rgba(255, 60, 90, 0.8), 2px 0 rgba(80, 210, 255, 0.5); }
+  30%  { transform: translateX(-3px); text-shadow: 4px 0 rgba(255, 60, 90, 0.95), -3px 0 rgba(80, 210, 255, 0.4); }
+  55%  { transform: translateX(3px); text-shadow: -4px 0 rgba(255, 60, 90, 0.9), 3px 0 rgba(80, 210, 255, 0.5); }
+  80%  { transform: translateX(-1px); text-shadow: 2px 0 rgba(255, 60, 90, 0.7), -2px 0 rgba(80, 210, 255, 0.4); }
+  100% { transform: translateX(0); text-shadow: none; }
+}
+.tm-exhibit.tm-scanned--fail {
+  box-shadow: 0 0 0 1px color-mix(in srgb, #ff3c5a 70%, transparent),
+    0 0 30px color-mix(in srgb, #ff3c5a 26%, transparent);
+}

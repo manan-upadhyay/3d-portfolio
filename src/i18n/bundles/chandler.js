@@ -523,6 +523,75 @@ export default {
   // Older portfolios (/time-machine) — framing in character; factual "world then"
   // context inherited from chronicle.
   timeMachine: {
+    probe: {
+      dismiss: 'Okay, bye drone',
+      recall: 'Okay fine, come back',
+      quips: {
+        greet: [
+          'Oh good, a drone. Could this website BE any more extra? Hi. I float and I judge.',
+          'I’m the flying commentary. Because what this page really needed was more of me.',
+          'Oh look, company. Could this website BE any more needy? Hi. I hover. I judge. It’s a whole thing.',
+        ],
+        scanTitle: [
+          'Scanning the giant title. Could that font BE any more confident?',
+          'Big header. Because nothing says “hire me” like enormous letters and crippling hope.',
+        ],
+        scanCard: [
+          'Ah, an old site. Held together like my life choices. Barely, and with charm.',
+          'Vintage website! The digital equivalent of finding your old yearbook photo. Yikes. Sweet. Both.',
+          'An old build. Could it BE any more of its era? It practically has frosted tips.',
+        ],
+        scanFloor: [
+          'This is the bottom. Nothing older. Could there BE a sadder little floor?',
+          'Rock bottom. I’d know — I have a timeshare here. Emotionally.',
+        ],
+        scanFail: [
+          'Scan failed. Could this ruin BE any more difficult? Rude.',
+          'And the scan died. Great. Even the code is ignoring me. Just like my — okay, moving on.',
+        ],
+        scanRail: [
+          'Oh, the nav rail. Could this site BE any more into itself? It teleports you. Whatever.',
+          'The little rail thing. It moves you around. Fine. Convenient. I’m still emotionally unavailable.',
+        ],
+        scanVoice: [
+          'You’re changing my voice? Could you BE any more done with me? We just met.',
+          'That swaps the narrator. Sure. Replace me. Everyone does. It’s a whole pattern, honestly.',
+        ],
+        scanSound: [
+          'The sound button. Sure, add a soundtrack to my existential website dread. Great.',
+          'Volume control. Could this descent BE any more dramatic? Fine, give it a theme song. Whatever.',
+        ],
+        fastScroll: [
+          'Whoa, could you scroll any FASTER? Slow down, some of us get website-sick.',
+          'Easy there, speed racer. Could you BE any more caffeinated? Slow down.',
+        ],
+        backUp: [
+          'Going back up? Could you BE any more commitment-phobic? …okay, that’s my thing, fair.',
+          'Up again? Make up your mind. Could this scrolling BE any more indecisive?',
+        ],
+        bored: [
+          'Hello? Could you BE any more not-scrolling? I’m dying up here. Metaphorically.',
+          'You’ve gone quiet. Was it me? It’s always me. Could it BE any more me?',
+        ],
+        hit: [
+          'Ow. Could you BE poking me any harder?',
+          'Hey! Personal space! Could this hull BE any more violated?',
+        ],
+        angry: [
+          'Okay, seriously? I’m a drone, not your stress ball.',
+          'Could you BE any more of a bully? I have feelings. Allegedly.',
+        ],
+        escape: [
+          'Yeah, no. You can’t hold me. I have commitment issues.',
+          'And I’m gone. Could I BE any harder to pin down? It’s my one skill.',
+        ],
+        idle: [
+          'Just hovering here, being emotionally unavailable. Could I BE any more on-brand?',
+          'So this is my life now. Floating over old websites. Cool. Cool cool cool.',
+          'Just me, the ruins, and my crushing sense of irony. Could this BE any cozier?',
+        ],
+      },
+    },
     eyebrow: 'Could these BE any older?',
     title: 'The Time Machine',
     intro:

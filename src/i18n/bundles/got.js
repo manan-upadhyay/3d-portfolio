@@ -524,6 +524,75 @@ export default {
   // Older portfolios (/time-machine) — framing in character; factual "world then"
   // context inherited from chronicle.
   timeMachine: {
+    probe: {
+      dismiss: 'Send the raven home',
+      recall: 'Summon the watcher',
+      quips: {
+        greet: [
+          'A watcher of ruins, sworn to no house. Pay me no mind — I merely count the fallen keeps.',
+          'A drone of cold iron, ranging the crypt. Someone must guard these dead halls.',
+          'I am the keeper of these ruins, traveller. Tread softly among the dead.',
+        ],
+        scanTitle: [
+          'I read the banner at the gate. Bold letters, freshly raised. They will fade, as all banners do.',
+          'The sigil above the door. New-forged, and proud of it. Pride is a young house’s luxury.',
+        ],
+        scanCard: [
+          'An old holdfast, its magic frayed. It stands yet. The dead are stubborn that way.',
+          'A ruined keep, banners rotted. Yet its walls hold. Respect the walls that still hold.',
+          'Here lies an elder work, cold and grey. It was mighty once. All things were, once.',
+        ],
+        scanFloor: [
+          'Here the road ends. Below this stone, only rumour and dust.',
+          'The deepest vault. No crypt lies beneath. The first stone was laid here.',
+        ],
+        scanFail: [
+          'The scrying failed. This old keep guards its secrets still.',
+          'The vision clouds. Some ruins do not wish to be remembered. Let them rest.',
+        ],
+        scanRail: [
+          'The rail — a map of the fallen kingdoms. It knows every ruin by name.',
+          'A road carved along the edge, joining keep to keep. Travel it, and lose no year.',
+        ],
+        scanVoice: [
+          'You would change the voice that guides you? Choose well. Words have power.',
+          'You reach for another storyteller? Many tongues have told this tale. Pick a worthy one.',
+        ],
+        scanSound: [
+          'The horn of sound. Sound it — even a crypt deserves a song.',
+          'The bells of this hall. Ring them, and the silence of the dead lifts a little.',
+        ],
+        fastScroll: [
+          'You ride too fast, traveller. The dead do not like to be rushed.',
+          'Slow your horse. The crypt reveals nothing to those who gallop through it.',
+        ],
+        backUp: [
+          'Climbing back toward the light so soon? The crypt runs deeper.',
+          'You flee to the surface? The oldest bones lie below, not above.',
+        ],
+        bored: [
+          'You have gone still as stone. Do you yet draw breath?',
+          'The silence stretches long. Are you lost among the tombs, traveller?',
+        ],
+        hit: [
+          'You strike a sworn watcher? Bold. And foolish.',
+          'You raise a hand to me? Many did. Their houses are ash.',
+        ],
+        angry: [
+          'Enough. Wound me again and the old gods will hear of it.',
+          'Strike me once more and I name you kinslayer of drones. It will stick.',
+        ],
+        escape: [
+          'No chain holds me. I range where I please.',
+          'You cannot bind a free rider. I go where the cold wind goes.',
+        ],
+        idle: [
+          'So many fallen keeps in this crypt. A house that rose far.',
+          'I keep the watch. The years grow cold down here.',
+          'Dust and old glory, as far as the eye can see. Such is every crypt.',
+        ],
+      },
+    },
     eyebrow: 'The ruins of old kingdoms',
     title: 'The Time Machine',
     intro:

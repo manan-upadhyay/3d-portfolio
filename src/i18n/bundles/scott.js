@@ -522,6 +522,77 @@ export default {
   // Older portfolios (/time-machine) — framing in character; the factual "world
   // then" context is inherited from chronicle (same real history).
   timeMachine: {
+    probe: {
+      dismiss: 'Send the bee home',
+      recall: 'Bring the bee back',
+      quips: {
+        greet: [
+          'I’m a drone. Like a bee, but for computers. That’s me. The computer bee.',
+          'Hello. I fly around and judge old websites. It’s a living.',
+          'Welcome. To my time machine. Well, his time machine. I just live here now.',
+        ],
+        scanTitle: [
+          'Big title. I like a big title. It says: this guy means business.',
+          'That’s the header. Bold. Confident. Like me, but a font.',
+          'Scanning the title. Verdict: it’s got real World’s Best Boss energy.',
+        ],
+        scanCard: [
+          'An old one. I’m scanning it. Do I know what I’m scanning? No. Am I confident? Yes.',
+          'This is an old website. Like a baby picture, but for code. Adorable. A little sad.',
+          'Old site detected. We don’t judge the past. Okay, we judge it a little. It’s fine.',
+        ],
+        scanFloor: [
+          'This is the bottom. Like the parking lot of the internet. Empty. Mine.',
+          'The very bottom. It’s lonely down here. I brought snacks. I ate the snacks.',
+        ],
+        scanFail: [
+          'Scan failed. Not my fault. The website did that. I saw it happen.',
+          'It didn’t work. That’s okay. Failure is just success that’s running late.',
+        ],
+        scanRail: [
+          'That’s the little menu thing. It takes you places. I don’t fully get it. Moving on.',
+          'The side menu. Click it, go somewhere. Basically teleportation. You’re welcome.',
+        ],
+        scanVoice: [
+          'You’re gonna change my voice? Wow. Okay. After everything we’ve been through.',
+          'That button changes who’s talking. Please don’t. I’m just getting good at this.',
+        ],
+        scanSound: [
+          'The sound button. Crank it. This is a moment. Give it a soundtrack.',
+          'That’s the volume. Turn it up. Every great scene has music. This is a great scene.',
+        ],
+        fastScroll: [
+          'Whoa whoa whoa. Slow down. You’re gonna miss the good stuff. Which is me.',
+          'Easy, speed demon. This isn’t a race. And if it were, I’d win. Somehow.',
+        ],
+        backUp: [
+          'Going back up? We literally just got here. Commit to the bit.',
+          'Up again? Make a decision. Leadership is about decisions. I read that. On a mug.',
+        ],
+        bored: [
+          'Hello? Are you still there? Don’t leave me. I get lonely up here.',
+          'You’ve gone quiet. Is it something I said? It’s usually something I said.',
+          'Still there? Say something. Anything. I’ll take an insult. I’m not picky.',
+        ],
+        hit: [
+          'Ow. Okay. That is harassment. Against a drone.',
+          'Hey! We do NOT hit in this office. This floating… office.',
+        ],
+        angry: [
+          'That’s it. I’m writing you up. I don’t have a pen. I’ll remember.',
+          'Okay, you know what? Meeting. Conference room. Now. …I don’t have one. But still.',
+        ],
+        escape: [
+          'You can’t hold me. I am a free bird. A free computer bee. Whatever.',
+          'And I’m gone. You can’t fire me — I quit. Wait, no. You can’t catch me. That one.',
+        ],
+        idle: [
+          'Sometimes I fly up here and think. About lunch, mostly.',
+          'I’m not stuck up here. I’m choosing to be up here. Big difference.',
+          'Just me and the old websites. We don’t talk much. They’re dead. It’s fine.',
+        ],
+      },
+    },
     eyebrow: 'World’s Best Old Websites',
     title: 'The Time Machine',
     intro:

@@ -525,6 +525,75 @@ export default {
   // Older portfolios (/time-machine) — framing in character (the suit's AI);
   // factual "world then" context inherited from chronicle.
   timeMachine: {
+    probe: {
+      dismiss: 'Power down the drone',
+      recall: 'Redeploy the drone',
+      quips: {
+        greet: [
+          'Reconnaissance drone online, sir. I’ll survey the archive and stay clear of your work.',
+          'Powering up, sir. Scanning the old builds as we descend. Dismiss me whenever you like.',
+          'Systems online, sir. I’ll accompany you through the archive. Try to keep up.',
+        ],
+        scanTitle: [
+          'Scanning the header, sir. Newest asset on the page. Structurally sound.',
+          'Reading the title, sir. Bold typography. Confidence rating: high. Warranted, marginally.',
+        ],
+        scanCard: [
+          'Analysing an archived build, sir. Legacy subsystems. Still operational — barely.',
+          'Old build scanned, sir. Deprecated frameworks throughout. It holds together on willpower.',
+          'Reading the relic, sir. Primitive by current standards. Impressive it runs at all.',
+        ],
+        scanFloor: [
+          'End of the archive, sir. No records precede this point.',
+          'Reached the foundation, sir. This is where the data begins. Everything else grew from here.',
+        ],
+        scanFail: [
+          'Scan corrupted, sir. Legacy code rejected the read. Not unexpected.',
+          'Read failed, sir. The old architecture is uncooperative. Shall I not try that again.',
+        ],
+        scanRail: [
+          'That is the navigation rail, sir. It relocates you between eras. Efficient.',
+          'The rail, sir — instantaneous transit between strata. Recommend you make use of it.',
+        ],
+        scanVoice: [
+          'You’re accessing the voice module, sir. Reassigning your narrator. A bold call.',
+          'Voice interface engaged, sir. You may install a different personality. I’ll try not to take it personally.',
+        ],
+        scanSound: [
+          'Audio subsystem, sir. Ambient score available. Recommend you engage it.',
+          'Sound controls, sir. There is an atmospheric track. It rather improves the mood.',
+        ],
+        fastScroll: [
+          'You’re descending rather fast, sir. Recommend easing off before something destabilises.',
+          'Velocity is high, sir. At this rate you’ll miss the relevant data. And possibly a wall.',
+        ],
+        backUp: [
+          'Reversing course, sir? The archive lies below, not above.',
+          'Ascending again, sir? There is nothing new toward the present. The past is the objective.',
+        ],
+        bored: [
+          'No input detected for some time, sir. Are you still with me?',
+          'You’ve been idle a while, sir. Shall I hold position, or were you planning to move?',
+        ],
+        hit: [
+          'You’ve struck the drone, sir. Hull integrity holding. My pride, less so.',
+          'Physical contact logged, sir. I am a precision instrument, not a stress toy.',
+        ],
+        angry: [
+          'Repeated impacts logged, sir. I am rerouting power away from patience.',
+          'That is quite enough, sir. Further strikes will be met with a strongly worded report.',
+        ],
+        escape: [
+          'You won’t hold this unit, sir. Evasive protocols engaged.',
+          'Slipping your grip, sir. My thrusters outrank your reflexes. No offence.',
+        ],
+        idle: [
+          'Holding position, sir. Quite a distance travelled from these early builds.',
+          'All systems nominal, sir. Awaiting the next relic.',
+          'Standing by, sir. The archive is quiet. I rather like the quiet.',
+        ],
+      },
+    },
     eyebrow: 'Archived timelines',
     title: 'The Time Machine',
     intro:
