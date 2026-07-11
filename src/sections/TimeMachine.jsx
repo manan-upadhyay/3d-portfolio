@@ -5,6 +5,17 @@ import { ChevronsDown } from 'lucide-react';
 import { EraExhibit, Fog, CompassRose, TimeRail, TemporalProbe } from '../components';
 import { archive, timeTunnel, PRESENT_YEAR } from '../constants';
 
+// ── Feature flags (kept simple so either can be turned back on in one line) ──
+// The temporal-probe companion is OFF for now — it pulled focus from the actual
+// old portfolios (too much noise). Flip to `true` to bring the drone back; it's
+// fully built and self-contained (components/TemporalProbe.jsx).
+const PROBE_ENABLED = false;
+// The "back in time" news timeline (the right-edge TimeTunnel/TimeRail that scrubs
+// through fog gaps between the cards) is OFF for now. It also owns the large empty
+// gap before the first card, so disabling it collapses that space and the cards
+// follow the hero directly. Flip to `true` to restore the news + its scroll gaps.
+const NEWS_ENABLED = false;
+
 // Height (vh) of the fog "gap" before each card — the scroll room the right-edge
 // TimeRail scrubs through for that year span. Roughly synced to the span size.
 const GAP_VH = [48, 52];
@@ -42,7 +53,7 @@ const TimeMachine = () => {
     () => typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches,
     [],
   );
-  const useRail = !coarse && !reduce;
+  const useRail = NEWS_ENABLED && !coarse && !reduce;
 
   // Drive `--age` (atmosphere) from overall descent progress. Cheap: one element,
   // rAF-throttled, transform/opacity only downstream.
@@ -78,8 +89,9 @@ const TimeMachine = () => {
       <div className="tm-grain" aria-hidden />
 
       {/* The temporal-probe companion — flies over the descent, scans, reacts,
-          and quips (feedback §4). Self-guards: desktop + motion only, dismissible. */}
-      <TemporalProbe />
+          and quips (feedback §4). Self-guards: desktop + motion only, dismissible.
+          Disabled for now via PROBE_ENABLED (flip the flag above to re-enable). */}
+      {PROBE_ENABLED && <TemporalProbe />}
 
       {/* THRESHOLD — the present; the mouth of the descent. */}
       <section id="era-threshold" className="tm-stratum items-center text-center">
@@ -119,7 +131,7 @@ const TimeMachine = () => {
               <div className="tm-gap-thread" />
             </div>
           )}
-          <section id={`era-${era.id}`} className="tm-stratum">
+          <section id={`era-${era.id}`} className="tm-stratum tm-stratum--card">
             <span aria-hidden className="pointer-events-none select-none absolute left-1/2 top-8 -translate-x-1/2 font-chronicle"
               style={{ fontSize: 'clamp(120px,26vw,340px)', lineHeight: 1, color: 'color-mix(in srgb, var(--color-text) 5%, transparent)' }}>
               {era.year}

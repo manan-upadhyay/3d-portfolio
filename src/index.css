@@ -4781,6 +4781,18 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: center;
   padding: clamp(64px, 12vh, 140px) clamp(20px, 6vw, 96px);
 }
+/* Card strata size to their CONTENT (no forced full-screen band + centering), so the
+   cards stack directly under the full-height hero instead of each sitting in a screen
+   of whitespace. The hero (#era-threshold) + floor (#era-floor) keep their full-height
+   "moment" band; only the exhibit cards tighten. (2026-07-11: news timeline disabled,
+   so the old scroll-room gaps are gone — this removes the remaining dead space.) */
+.tm-stratum--card {
+  min-height: auto;
+  justify-content: flex-start;
+  padding-top: clamp(44px, 8vh, 96px);
+  padding-bottom: clamp(44px, 8vh, 96px);
+}
+
 /* Mobile: don't force every section to a full screen (feedback 2026-07-11) — size
    to content with tight padding, so cards sit close together, not vh apart. */
 @media (max-width: 767px) {
