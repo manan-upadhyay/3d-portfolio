@@ -678,6 +678,18 @@ The "back in time" news went through several owner-driven reworks; final state:
   reactions, hit/escape, fail) dropped their fixed short holds and now use reading
   time too, so every line is legible. Verified: forced scans of longer lines now
   linger ~7–8s (quip readable ~7s) vs the old ~3s.
+- **2026-07-11** — **Probe + news timeline DISABLED (owner), spacing tightened.**
+  Both were pulling focus off the actual old portfolios. Turned off behind two
+  one-line flags at the top of `sections/TimeMachine.jsx` (`PROBE_ENABLED = false`,
+  `NEWS_ENABLED = false`) — both features are fully built and re-enable by flipping
+  the flag; nothing was deleted. Disabling the news timeline also removes its
+  right-edge `TimeRail` **and** the 48–52vh fog "scroll-room" gaps before each card,
+  which were the bulk of the empty space. Additionally, the exhibit-card strata
+  (`.tm-stratum--card`) now **size to their content** instead of a forced 100vh
+  centred band, so the cards stack directly under the hero. Result (verified
+  headless): the hero stays **full-height (100vh)**; the first card sits **0px**
+  after it and is ~17% from the top after a single viewport of scroll (was a full
+  empty screen + the news gap). The STRATA **fog/vignette atmosphere is kept**.
 - **Open decision (mobile):** the probe is desktop-only by the Phase-1 guardrail
   (drag/poke don't translate to touch). That leaves gyro/haptics inapplicable in
   practice. If the owner wants a **touch variant** (a lean tap-to-poke + gyro-tilt
