@@ -39,7 +39,7 @@ export const CONFIG = {
   detent: { peak: 0.085 },          // build-reel sprocket tick (per frame crossed)
   rewind: { peak: 0.12 },           // time-machine "wind back" — waking a ruin / crossing an era
   pageflip: { peak: 0.05 },         // time-tunnel — one soft page turn per year/event crossed
-  probeAppear: { peak: 0.10 },      // temporal-probe arrives — a rising warp shimmer
+  probeAppear: { peak: 0.07 },      // temporal-probe arrives — a soft dark "materialize" (no whoosh)
   probeScan: { peak: 0.05 },        // temporal-probe scan sweep — dark + very subtle (plays often)
   probeHit: { peak: 0.15 },         // temporal-probe poked — a hollow metallic bonk
   probeEscape: { peak: 0.13 },      // temporal-probe breaks free of a drag — a rising whoosh
@@ -321,13 +321,14 @@ const CUES = {
     blip(t0, { freq: 210, type: 'triangle', dur: 0.03, peak: CONFIG.pageflip.peak * 0.5, attack: 0.001 });
   },
 
-  // Temporal-probe arrival — a short rising "warp in": a sine glide up under a
-  // brightening filtered-noise shimmer. Fires once when the drone flies in.
+  // Temporal-probe arrival — a soft, dark "materialize": two detuned sines that
+  // rise and SETTLE into a held tone, over a faint low body as it arrives. No
+  // bright noise whoosh — it should read as the drone phasing in, not a UI swipe.
   probeAppear(t0) {
     const pk = CONFIG.probeAppear.peak;
-    blip(t0, { freq: 180, glideTo: 720, type: 'sine', dur: 0.42, peak: pk * 0.7, attack: 0.02 });
-    swoosh(t0, { dur: 0.4, peak: pk, type: 'highpass', from: 500, to: 3200, q: 0.5 });
-    blip(t0 + 0.32, { freq: 1046.5, type: 'sine', dur: 0.16, peak: pk * 0.4, attack: 0.006 }); // arrival chime
+    blip(t0, { freq: 200, glideTo: 520, type: 'sine', dur: 0.5, peak: pk, attack: 0.07 });
+    blip(t0, { freq: 200, glideTo: 520, type: 'sine', dur: 0.5, peak: pk * 0.45, attack: 0.07, detune: 9 });
+    blip(t0 + 0.1, { freq: 110, glideTo: 88, type: 'triangle', dur: 0.34, peak: pk * 0.55, attack: 0.03 }); // arrival body
   },
 
   // Temporal-probe scan — a DARK, subtle sensor sweep (deliberately NOT a pitched
