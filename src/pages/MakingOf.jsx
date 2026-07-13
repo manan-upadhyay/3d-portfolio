@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, History } from 'lucide-react';
-import { ErrorBoundary, SideRail } from '../components';
+import { ErrorBoundary, SideRail, Seo } from '../components';
 import { atelierActs } from '../constants';
 import { useActiveSection } from '../hooks/useActiveSection';
 import { scrollToSection } from '../lib/smoothScroll';
@@ -67,6 +67,11 @@ const MakingOf = () => {
   }, []);
   return (
     <main className="pt-20">
+      <Seo
+        path="/making-of"
+        title="The Atelier — Making of Manan Upadhyay's Portfolio"
+        description="Behind the Chronicle: the making-of Manan Upadhyay's portfolio — the build as a nine-scene film, the built-vs-cut ledger, and the craft decisions. A senior full-stack developer's process, in the open."
+      />
       {/* Desktop: the persistent acts rail (with a quiet "return" action). Mobile
           keeps the top return doorway below (the rail is desktop-only). */}
       <SideRail activeId={activeAct} items={railItems} actions={railActions} visible

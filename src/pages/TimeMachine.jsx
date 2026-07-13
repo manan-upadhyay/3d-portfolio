@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft } from 'lucide-react';
-import { ErrorBoundary, SideRail } from '../components';
+import { ErrorBoundary, SideRail, Seo } from '../components';
 import { eraActs } from '../constants';
 import { useActiveSection } from '../hooks/useActiveSection';
 import { scrollToSection } from '../lib/smoothScroll';
@@ -44,6 +44,11 @@ const TimeMachinePage = () => {
 
   return (
     <main className="pt-20">
+      <Seo
+        path="/time-machine"
+        title="The Time Machine — Manan Upadhyay's Earlier Portfolios"
+        description="Descend through Manan Upadhyay's earlier portfolios (2019, 2023), preserved as ruins. The evolution of a senior full-stack developer, dug up layer by layer."
+      />
       <SideRail activeId={activeEra} items={railItems} actions={railActions} visible
         ariaLabel={t('timeMachine.back')} crestLabel="Manan Upadhyay" />
 
