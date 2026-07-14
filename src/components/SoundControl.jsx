@@ -196,10 +196,20 @@ const SoundControl = () => {
         onPointerUp={expanded ? onUp : undefined}
         onPointerCancel={expanded ? onUp : undefined}
         onKeyDown={expanded ? onKey : undefined}
-        role={expanded ? 'slider' : undefined}
         tabIndex={expanded ? 0 : -1}
-        aria-label={t('sound.volume')}
-        aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(level * 100)}
+        /* The wrapper is only a slider while expanded; collapsed it's a plain
+           circle and the inner button owns the accessible name/interaction.
+           The aria-value and aria-label attributes are only valid alongside
+           role="slider", so gate the whole ARIA set on `expanded` — otherwise
+           the collapsed div carries value attributes with no matching role
+           (invalid ARIA). */
+        {...(expanded ? {
+          role: 'slider',
+          'aria-label': t('sound.volume'),
+          'aria-valuemin': 0,
+          'aria-valuemax': 100,
+          'aria-valuenow': Math.round(level * 100),
+        } : {})}
         style={{
           background: 'var(--color-card-bg)',
           border: '1px solid var(--color-card-border)',

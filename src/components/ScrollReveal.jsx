@@ -12,6 +12,9 @@ const STACK_QUERY = '(max-width: 1023px)';
 const ScrollReveal = ({
   children,
   className = '',
+  style,
+  as = 'div', // the rendered element — set e.g. "li" so the reveal wrapper can
+              // itself be a valid direct child of a <ul>/<ol> (no interposed div)
   direction = 'up', // 'up' | 'down' | 'left' | 'right' | 'fade'
   delay = 0,
   duration = 0.6,
@@ -19,6 +22,7 @@ const ScrollReveal = ({
   once = true,
   threshold = 0.1,
 }) => {
+  const MotionTag = motion[as] || motion.div;
   // Honor prefers-reduced-motion: reveals collapse to a simple opacity fade
   // (no transform), per the design system's motion-accessibility rule.
   const shouldReduce = useReducedMotion();
@@ -70,8 +74,9 @@ const ScrollReveal = ({
   };
 
   return (
-    <motion.div
+    <MotionTag
       className={`will-change-transform ${className}`}
+      style={style}
       initial={shouldReduce ? { opacity: 0 } : getInitialPosition()}
       whileInView={shouldReduce ? { opacity: 1 } : getFinalPosition()}
       viewport={{ once, amount: threshold }}
@@ -82,7 +87,7 @@ const ScrollReveal = ({
       }}
     >
       {children}
-    </motion.div>
+    </MotionTag>
   );
 };
 
