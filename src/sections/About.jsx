@@ -60,23 +60,25 @@ const About = () => {
         </h3>
         <ul style={{ borderBottom: '1px solid var(--color-card-border)' }}>
           {services.map((service, index) => (
-            <ScrollReveal key={service.iconKey} direction="up" delay={index * 0.06}>
-              <li
-                className="flex gap-5 md:gap-8 py-6 items-baseline"
-                style={{ borderTop: '1px solid var(--color-card-border)' }}
-              >
-                <span className="font-mono text-[13px] tabular-nums pt-1" style={{ color: 'var(--color-ember)' }}>
-                  {String(index + 1).padStart(2, '0')}
-                </span>
-                <div className="flex-1 md:grid md:grid-cols-[14rem_1fr] md:gap-8 md:items-baseline">
-                  <h4 className="font-chronicle font-semibold text-[clamp(20px,2vw,26px)] leading-tight" style={{ color: 'var(--color-text)' }}>
-                    {t(`about.services.${service.iconKey}.title`)}
-                  </h4>
-                  <p className="text-[14px] leading-[23px] mt-1.5 md:mt-0" style={{ color: 'var(--color-text-muted)' }}>
-                    {t(`about.services.${service.iconKey}.description`)}
-                  </p>
-                </div>
-              </li>
+            <ScrollReveal
+              key={service.iconKey}
+              as="li"
+              direction="up"
+              delay={index * 0.06}
+              className="flex gap-5 md:gap-8 py-6 items-baseline"
+              style={{ borderTop: '1px solid var(--color-card-border)' }}
+            >
+              <span className="font-mono text-[13px] tabular-nums pt-1" style={{ color: 'var(--color-ember)' }}>
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <div className="flex-1 md:grid md:grid-cols-[14rem_1fr] md:gap-8 md:items-baseline">
+                <h4 className="font-chronicle font-semibold text-[clamp(20px,2vw,26px)] leading-tight" style={{ color: 'var(--color-text)' }}>
+                  {t(`about.services.${service.iconKey}.title`)}
+                </h4>
+                <p className="text-[14px] leading-[23px] mt-1.5 md:mt-0" style={{ color: 'var(--color-text-muted)' }}>
+                  {t(`about.services.${service.iconKey}.description`)}
+                </p>
+              </div>
             </ScrollReveal>
           ))}
         </ul>

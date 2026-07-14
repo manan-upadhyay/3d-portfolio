@@ -8,6 +8,7 @@ import { mountAstrolabe } from '../lib/astrolabe';
 import { sound } from '../lib/sound';
 import { track } from '../lib/analytics';
 import CompassRose from '../components/CompassRose';
+import Seo from '../components/Seo';
 
 /**
  * The cinematic 404 — "Off the Map" (spec: docs/chronicle/sections/09).
@@ -70,22 +71,6 @@ const Void = () => {
     };
   }, [resolvedTheme]);
 
-  // Soft-404: the Vercel rewrite serves index.html with HTTP 200 for unknown
-  // paths, so tell crawlers not to index this. Title + noindex on mount, reverted
-  // on leave.
-  useEffect(() => {
-    const prevTitle = document.title;
-    document.title = '404 — Page not found';
-    const meta = document.createElement('meta');
-    meta.name = 'robots';
-    meta.content = 'noindex';
-    document.head.appendChild(meta);
-    return () => {
-      document.title = prevTitle;
-      meta.remove();
-    };
-  }, []);
-
   // Analytics: free telemetry on broken inbound links.
   useEffect(() => {
     track('void_view', { path: pathname });
@@ -107,6 +92,15 @@ const Void = () => {
 
   return (
     <main className="void-scene">
+      {/* Soft-404: the Vercel rewrite serves index.html with HTTP 200 for unknown
+          paths, so tell crawlers not to index this one. */}
+      <Seo
+        path={pathname}
+        title="404 — Off the Map | Manan Upadhyay"
+        description="This page has drifted off the map. Return to the Chronicle — the portfolio of Manan Upadhyay, Full Stack Developer."
+        noindex
+      />
+
       {/* Atmosphere — the uncharted sky + sparse starfield (dark skies only). */}
       <div className="void-sky" aria-hidden="true">
         {isDark && stars.map((s, i) => (

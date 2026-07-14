@@ -3,7 +3,7 @@ import { useOutletContext, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Map, Hammer, History } from 'lucide-react';
 import Hero from '../sections/Hero';
-import { ErrorBoundary, SideRail, MapOverlay, StickyCta } from '../components';
+import { ErrorBoundary, SideRail, MapOverlay, StickyCta, Seo } from '../components';
 import { chapterList } from '../constants';
 import { useExpedition } from '../hooks/useExpedition';
 import { restoreScroll, consumeSectionRequest, scrollToSection } from '../lib/smoothScroll';
@@ -93,6 +93,11 @@ const Chronicle = () => {
 
   return (
     <>
+      <Seo
+        path="/"
+        title="Manan Upadhyay — Full Stack Developer in Ahmedabad, India"
+        description="Manan Upadhyay — Senior Full Stack Developer (MERN, Next.js) in Ahmedabad, India, building scalable enterprise SaaS and cinematic, interactive web experiences. Enter the Chronicle."
+      />
       <SideRail activeId={activeId} items={railItems} actions={railActions} visible={activeId !== 'origin'} />
       <MapOverlay open={mapOpen} onClose={() => setMapOpen(false)} activeId={activeId} />
       <StickyCta activeId={activeId} />

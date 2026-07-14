@@ -1,5 +1,6 @@
 // Reusable UI components — shared across sections. Import via `from '../components'`.
 export { default as ChapterHeading } from './ChapterHeading';
+export { default as Seo } from './Seo';
 export { default as CommitGraph } from './CommitGraph';
 export { default as NdaSchematic } from './NdaSchematic';
 export { default as ClueUnlock } from './ClueUnlock';
